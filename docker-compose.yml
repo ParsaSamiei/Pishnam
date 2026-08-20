@@ -1,0 +1,115 @@
+name: pishnam
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pishnam
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pishnam}
+      POSTGRES_DB: pishnam
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pishnam"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [pishnam]
+
+  # One-off job: applies pending Prisma migrations, then exits. `web` waits
+  # for this to complete successfully before starting.
+  migrate:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile
+      target: builder
+    command: npx prisma migrate deploy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://pishnam:${POSTGRES_PASSWORD:-pishnam}@postgres:5432/pishnam?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [pishnam]
+
+  web:
+    # `image` lets production do `docker compose pull web` to grab the
+    # prebuilt image pushed by .github/workflows/deploy.yml; `build` is still
+    # here so local dev can run `docker compose up --build` against source
+    # instead. Update the path below if the GitHub repo ever moves.
+    image: ghcr.io/parsasamiei/pishnam:latest
+    build:
+      context: .
+      dockerfile: infra/Dockerfile
+      target: runner
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://pishnam:${POSTGRES_PASSWORD:-pishnam}@postgres:5432/pishnam?schema=public
+      UPLOADS_DIR: /app/uploads
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks: [pishnam]
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Self-hosted Umami analytics, per docs/09-analytics-i18n.md. Uses its own
+  # Postgres database (kept separate from the app DB deliberately -- an
+  # analytics outage/reset should never be able to touch app data).
+  umami_db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_POSTGRES_PASSWORD:-umami}
+      POSTGRES_DB: umami
+    volumes:
+      - umami_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [pishnam]
+
+  umami:
+    image: docker.umami.is/umami-software/umami:postgresql-latest
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_POSTGRES_PASSWORD:-umami}@umami_db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    depends_on:
+      umami_db:
+        condition: service_healthy
+    networks: [pishnam]
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./infra/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - uploads:/app/uploads:ro
+    depends_on:
+      - web
+      - umami
+    networks: [pishnam]
+
+networks:
+  pishnam:
+
+volumes:
+  postgres_data:
+  umami_postgres_data:
+  # Persistent, named volume for uploaded media -- MUST stay a named volume
+  # (not a bind mount into the container's writable layer) or uploads are
+  # lost on every rebuild. Back this up on the same schedule as postgres_data.
+  uploads:

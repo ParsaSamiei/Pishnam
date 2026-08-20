@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+/* Self-hosted variable fonts -- see docs/03-design-system.md ("Typography")
+   and docs/05-frontend-architecture.md ("self-hosted Vazirmatn via
+   next/font/local"). We use the @fontsource-variable packages instead of
+   next/font/google, since this environment can't reach Google Fonts' CDN;
+   the effect (self-hosted, no layout shift, variable weight) is identical. */
+@import "@fontsource-variable/vazirmatn";
+@import "@fontsource-variable/inter";
+
+/* ---------------------------------------------------------------------- */
+/* Design tokens -- source of truth: docs/03-design-system.md             */
+/* ---------------------------------------------------------------------- */
+
+:root,
+[data-theme="light"] {
+  --bg-page: #f2f2f0;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #e8e8e5;
+  --border: #dadad6;
+  --text-primary: #18222d;
+  --text-secondary: #4a5560;
+  --steel-accent: #3b5e82;
+}
+
+[data-theme="dark"] {
+  --bg-page: #18222d;
+  --bg-surface: #1f2a36;
+  --bg-surface-alt: #263241;
+  --border: #34424f;
+  --text-primary: #f2f2f0;
+  --text-secondary: #a9b4be;
+  --steel-accent: #6e8aa6;
+}
+
+@theme {
+  /* Brand anchors -- identical in both modes */
+  --color-pishnam-gold-500: #e6a817;
+  --color-pishnam-gold-600: #c9910e;
+  --color-pishnam-navy-900: #18222d;
+  --color-pishnam-steel-600: #3b5e82;
+  --color-pishnam-off-white: #f2f2f0;
+  --color-pishnam-danger: #e5001a;
+  --color-pishnam-success: #16a34a;
+
+  /* Mode-aware semantic tokens, mapped from the CSS custom properties above
+     so `bg-page`, `bg-surface`, `text-primary`, etc. become real Tailwind
+     utilities that respond to [data-theme]. */
+  --color-bg-page: var(--bg-page);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-alt: var(--bg-surface-alt);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-steel-accent: var(--steel-accent);
+
+  --font-fa: "Vazirmatn Variable", "Inter Variable", sans-serif;
+  --font-en: "Inter Variable", "Vazirmatn Variable", sans-serif;
+
+  /* Radix accordion (FAQ page) animates against its own reported content
+     height -- tailwindcss-animate doesn't ship this pair out of the box. */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  html[dir="rtl"] body {
+    font-family: var(--font-fa);
+  }
+
+  html[dir="ltr"] body {
+    font-family: var(--font-en);
+  }
+
+  body {
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
+  }
+
+  /* Persian reads more comfortably a touch larger than Latin body copy --
+     see docs/03-design-system.md ("Typography"). */
+  html[dir="rtl"] {
+    font-size: 17px;
+  }
+
+  ::selection {
+    background-color: var(--color-pishnam-gold-500);
+    color: var(--color-pishnam-navy-900);
+  }
+
+  /* Respect prefers-reduced-motion for the theme-switch transition. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+    }
+  }
+}

@@ -1,0 +1,77 @@
+# Pishnam — Admin Panel Spec
+
+## Decision: custom admin, not Strapi/headless CMS
+
+Reasoning (per your questions): content volume is small (dozens of items), it's a solo project
+with a single-repo requirement, and content is added manually rather than by a team of editors.
+A separate CMS service adds infrastructure, a second auth system, and upgrade overhead that isn't
+justified at this scale. A custom `/admin` section inside the same Next.js app, backed by Prisma,
+is faster to build and simpler to run.
+
+If content volume or team size grows significantly later (many editors, complex workflows,
+approval chains), revisit Strapi/Payload — the Prisma schema in `04-database-schema.md` is close
+enough to a headless-CMS content model that migrating later wouldn't mean starting over.
+
+## Auth
+
+- Single `AdminUser` table (see schema doc), not tied to any public-facing account system (there
+  are no public accounts in v1).
+- Email + password login, session via NextAuth.js (Credentials provider) or a lightweight custom
+  JWT/session-cookie implementation — NextAuth is recommended to avoid hand-rolling session
+  security.
+- Two roles to start: `owner` (full access) and `editor` (content CRUD, no user/role management).
+  Keep it simple — don't over-engineer permissions for a solo/small-team admin.
+- `/admin/**` routes gated in the root layout for that segment; redirect unauthenticated requests
+  to `/admin/login`.
+
+## What's editable (everything, per your answer)
+
+One admin section per content type from the schema:
+
+- Courses (+ their FA/EN translations, tier, topic tags, related achievements)
+- Class sessions (offline schedule — confirmed for v1)
+- Achievements
+- Team members
+- FAQs
+- Video entries (Aparat links)
+- Download resources — form includes a source toggle (upload a file → local disk storage, or
+  paste an
+  external link), a category dropdown (software & plugins / datasheets / books / posters /
+  component libraries), and a CAD-tool tag field shown only for the component-libraries category.
+  All downloads are public by default — no gating option needed.
+- Blog articles (+ FA/EN translations)
+- Job postings
+- **Leads** (all form submissions — enroll, sponsor, school, job, general contact) with status
+  (new/contacted/closed) so you can track follow-up without a separate CRM.
+
+## UI pattern
+
+Consistent CRUD pattern reused across every content type to minimize build effort:
+
+- List view: table with search/filter, sort by date/order, active/inactive toggle where relevant.
+- Create/edit view: form generated from a per-type field config (label, type, required) — build
+  one reusable `AdminForm` component driven by config rather than a bespoke form per type.
+- Rich text fields (course body, article body): a simple WYSIWYG (e.g. Tiptap) rather than raw
+  HTML/Markdown entry.
+- Image fields: upload widget → local disk storage (see frontend/database docs), with preview.
+  Every upload — regardless of content type — goes through the full security checklist in
+  `05-frontend-architecture.md` ("Upload security"): allowlisted types, verified content, random
+  filenames, size limits, no execute permissions on the stored file.
+- Bilingual fields: side-by-side FA/EN inputs (or tabs) in the same form, not separate forms per
+  locale — reduces the chance of forgetting to fill in one language.
+
+## Leads dashboard
+
+- Landing page of `/admin` shows recent leads across all types, with a prominent unread/new count
+  — this is the primary way you'll know a new lead came in, since there's no email notification.
+- Each lead: type, submitted fields, timestamp, status dropdown, optional internal note.
+- No email notification on new leads — the admin dashboard itself is the notification surface (see
+  below). Check the dashboard regularly rather than relying on an inbox alert; revisit if this
+  becomes impractical (e.g. an in-app unread badge is cheap to add later without email).
+
+## Explicitly out of scope for v1
+
+- No multi-level approval workflows.
+- No public user accounts or self-service anything.
+- No analytics dashboards inside admin (use Umami directly — see `09-analytics-i18n.md`).
+- No payment/order management (no payments exist).

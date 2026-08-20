@@ -1,0 +1,95 @@
+{
+  "brand": {
+    "name": "Pishnam",
+    "fullName": "Pishnam Robotics Researchers"
+  },
+  "nav": {
+    "about": "About",
+    "courses": "Courses",
+    "classes": "In-Person Classes",
+    "videos": "Videos",
+    "downloads": "Downloads",
+    "blog": "News",
+    "contact": "Contact",
+    "enroll": "Enroll",
+    "sponsors": "Sponsors",
+    "schools": "Schools",
+    "careers": "Careers",
+    "search": "Search",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "toggle": "Switch language",
+    "fa": "فارسی",
+    "en": "English"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Pishnam Robotics Researchers",
+      "title": "From your first circuit to a competition-ready robot",
+      "subtitle": "Progressive robotics, electronics, and AI education for students from elementary school through high school — taught by a team with national and international RoboCup results.",
+      "ctaPrimary": "Browse courses",
+      "ctaSecondary": "Enroll now"
+    },
+    "audiences": {
+      "title": "Where should you start?",
+      "subtitle": "Pick the path that matches your role.",
+      "parents": {
+        "title": "For Students & Parents",
+        "description": "Browse courses and tiers, check in-person class times, and start the enrollment process.",
+        "cta": "Browse courses & enroll"
+      },
+      "schools": {
+        "title": "For Schools",
+        "description": "Bring robotics programs into your school with a team that has a track record of running shared curricula.",
+        "cta": "Partner with us"
+      },
+      "sponsors": {
+        "title": "For Sponsors",
+        "description": "See Pishnam's competition achievements and learn about sponsorship opportunities.",
+        "cta": "Support Pishnam"
+      }
+    },
+    "achievements": {
+      "title": "Achievements",
+      "subtitle": "Our students' results at national and international RoboCup competitions.",
+      "viewAll": "View all achievements"
+    },
+    "news": {
+      "title": "News & Magazine",
+      "subtitle": "The latest news and educational notes from Pishnam.",
+      "viewAll": "View all news"
+    },
+    "videos": {
+      "title": "Educational Videos",
+      "subtitle": "A curated selection of Pishnam's Aparat content, organized by tier and topic.",
+      "viewAll": "View all videos"
+    },
+    "downloads": {
+      "title": "Download Center",
+      "subtitle": "Software, datasheets, books, competition posters, and part libraries — all free, no sign-up required.",
+      "viewAll": "Browse download center"
+    }
+  },
+  "footer": {
+    "tagline": "Progressive robotics and electronics education, from elementary school to international competitions.",
+    "sections": {
+      "explore": "Explore",
+      "about": "About Pishnam",
+      "legal": "Legal"
+    },
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "rightsReserved": "All rights reserved."
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "readMore": "Read more"
+  }
+}

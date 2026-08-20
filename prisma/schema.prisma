@@ -1,0 +1,257 @@
+// Pishnam -- Prisma schema
+// Source of truth: docs/04-database-schema.md -- keep both in sync when this file changes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Seed bootstraps the first AdminUser -- see prisma/seed.ts.
+
+enum Locale {
+  fa
+  en
+}
+
+enum Tier {
+  ELEMENTARY // ابتدایی
+  MIDDLE // متوسطه اول
+  HIGH_SCHOOL // متوسطه دوم
+  COMPETITIVE // پیشرفته / تیم مسابقات
+}
+
+enum LeadType {
+  ENROLL
+  CLASS_SEAT
+  SPONSOR
+  SCHOOL
+  JOB_APPLICATION
+  GENERAL_CONTACT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+enum DownloadCategory {
+  SOFTWARE // نرم‌افزار و افزونه‌ها (includes former "MBlock plugin" category)
+  DATASHEETS // دیتاشیت و مستندات فنی
+  BOOKS // کتاب و منابع آموزشی
+  POSTERS // پوستر مسابقات رباتیک
+  COMPONENT_LIBRARIES // کتابخانه قطعات CAD (merges former SolidWorks/Altium categories)
+}
+
+enum ResourceSource {
+  HOSTED // file uploaded to Pishnam's own storage
+  EXTERNAL // link out to a third-party site (e.g. official tool page)
+}
+
+enum AdminRole {
+  owner
+  editor
+}
+
+// Every content model with FA/EN text uses either:
+//  (a) parallel fields (titleFa/titleEn) for simple models, or
+//  (b) a Translation join table for rich-text-heavy models (Course, Article).
+// See docs/09-analytics-i18n.md for rationale.
+
+model Course {
+  id            String              @id @default(cuid())
+  slug          String              @unique
+  tier          Tier
+  topicTags     String[] // ["electronics","rescue-line", ...]
+  coverImage    String
+  order         Int                 @default(0)
+  active        Boolean             @default(true)
+  translations  CourseTranslation[]
+  classSessions ClassSession[]
+  achievements  Achievement[]       @relation("CourseAchievements")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([tier])
+  @@index([active])
+}
+
+model CourseTranslation {
+  id            String  @id @default(cuid())
+  course        Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId      String
+  locale        Locale
+  title         String
+  excerpt       String
+  body          String // rich text (stored as HTML string from Tiptap)
+  prerequisites String?
+
+  @@unique([courseId, locale])
+}
+
+model ClassSession {
+  id           String   @id @default(cuid())
+  course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId     String
+  weekday      Int // 0-6 (0 = Saturday, per Persian week -- see lib/format)
+  startTime    String // "16:00"
+  endTime      String
+  location     String
+  capacityNote String?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([courseId])
+  @@index([active])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  titleFa     String
+  titleEn     String
+  competition String // e.g. "RoboCup"
+  year        Int
+  result      String // e.g. "1st place, Rescue Line"
+  photo       String
+  courses     Course[] @relation("CourseAchievements")
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([year])
+  @@index([featured])
+}
+
+model TeamMember {
+  id     String  @id @default(cuid())
+  nameFa String
+  nameEn String
+  roleFa String
+  roleEn String
+  photo  String
+  bioFa  String?
+  bioEn  String?
+  order  Int     @default(0)
+}
+
+model Faq {
+  id         String @id @default(cuid())
+  category   String
+  questionFa String
+  questionEn String
+  answerFa   String
+  answerEn   String
+  order      Int    @default(0)
+
+  @@index([category])
+}
+
+model VideoEntry {
+  id          String   @id @default(cuid())
+  titleFa     String
+  titleEn     String
+  aparatUrl   String
+  thumbnail   String?
+  tierTags    Tier[]
+  topicTags   String[]
+  publishedAt DateTime
+
+  @@index([publishedAt])
+}
+
+model DownloadResource {
+  id            String           @id @default(cuid())
+  category      DownloadCategory
+  source        ResourceSource // HOSTED or EXTERNAL -- set per resource, both allowed
+  cadTool       String? // e.g. "SolidWorks" | "Altium" -- only used for
+  // COMPONENT_LIBRARIES category, replaces old separate categories
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  fileUrl       String // hosted file path OR external URL, per `source`
+  fileSizeBytes Int? // only relevant when source = HOSTED
+  createdAt     DateTime         @default(now())
+
+  @@index([category])
+}
+
+model Article {
+  id           String               @id @default(cuid())
+  slug         String               @unique
+  coverImage   String
+  tags         String[]
+  publishedAt  DateTime
+  translations ArticleTranslation[]
+
+  @@index([publishedAt])
+}
+
+model ArticleTranslation {
+  id        String  @id @default(cuid())
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
+  locale    Locale
+  title     String
+  excerpt   String
+  body      String
+
+  @@unique([articleId, locale])
+}
+
+model JobPosting {
+  id            String    @id @default(cuid())
+  titleFa       String
+  titleEn       String
+  descriptionFa String
+  descriptionEn String
+  active        Boolean   @default(true)
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([active])
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  type      LeadType
+  name      String
+  phone     String?
+  email     String?
+  message   String?
+  metadata  Json? // e.g. { courseSlug, tier } for enroll leads
+  status    LeadStatus @default(NEW)
+  note      String? // internal admin note
+  createdAt DateTime   @default(now())
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Admin auth (custom admin, not public accounts -- see docs/06-admin-panel.md)
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(editor)
+  createdAt    DateTime  @default(now())
+}
+
+// Audit log for every file upload -- required by the upload security
+// checklist in docs/05-frontend-architecture.md ("Log every upload").
+model UploadLog {
+  id             String   @id @default(cuid())
+  adminUserId    String
+  originalName   String
+  storedFilename String
+  mimeType       String
+  sizeBytes      Int
+  field          String // which form field this upload was for, e.g. "course.coverImage"
+  createdAt      DateTime @default(now())
+
+  @@index([adminUserId])
+}

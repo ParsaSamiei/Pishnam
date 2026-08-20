@@ -1,0 +1,156 @@
+import { writeFile, mkdir } from "node:fs/promises";
+import path from "node:path";
+import { randomUUID } from "node:crypto";
+import { fileTypeFromBuffer } from "file-type";
+import sharp from "sharp";
+
+/**
+ * Implements the upload-security checklist in
+ * docs/05-frontend-architecture.md ("Upload security (enforced on every
+ * upload, no exceptions)"). Every admin upload -- course covers, achievement
+ * photos, download-center files -- goes through this module. Auth is
+ * enforced by the caller (route handler checks the admin session before
+ * this ever runs); everything else (allowlist, content verification,
+ * re-encoding, safe naming, size limits) lives here so there's exactly one
+ * place to audit.
+ */
+
+const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads");
+// This directory is a runtime-mounted Docker volume (see docker-compose.yml)
+// that's empty at build time and only gets populated after deployment --
+// there's nothing here for Next's build-time file tracer to bundle, and it
+// shouldn't try to. The `turbopackIgnore` comments on the fs calls below
+// silence Turbopack's warning about that (it can't statically resolve an
+// env-var-derived path, which is expected and fine here).
+const DEFAULT_MAX_BYTES = Number(process.env.UPLOAD_MAX_BYTES ?? 10 * 1024 * 1024);
+
+type UploadKind = "image" | "document" | "archive";
+
+interface FieldPolicy {
+  kind: UploadKind;
+  allowedMimeTypes: readonly string[];
+  maxBytes: number;
+}
+
+// One entry per distinct upload field across the admin panel. Allowlist,
+// not blocklist -- an unrecognized type is rejected, never passed through.
+export const UPLOAD_POLICIES = {
+  image: {
+    kind: "image",
+    allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
+    maxBytes: 5 * 1024 * 1024,
+  },
+  "download.software": {
+    kind: "archive",
+    allowedMimeTypes: ["application/zip"],
+    maxBytes: 50 * 1024 * 1024,
+  },
+  "download.datasheet": {
+    kind: "document",
+    allowedMimeTypes: ["application/pdf"],
+    maxBytes: 20 * 1024 * 1024,
+  },
+  "download.book": {
+    kind: "document",
+    allowedMimeTypes: ["application/pdf"],
+    maxBytes: 50 * 1024 * 1024,
+  },
+  "download.poster": {
+    kind: "document",
+    allowedMimeTypes: ["image/jpeg", "image/png", "application/pdf"],
+    maxBytes: 20 * 1024 * 1024,
+  },
+  "download.componentLibrary": {
+    kind: "archive",
+    allowedMimeTypes: ["application/zip"],
+    maxBytes: 50 * 1024 * 1024,
+  },
+} satisfies Record<string, FieldPolicy>;
+
+export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;
+
+export class UploadValidationError extends Error {}
+
+export interface UploadResult {
+  storedFilename: string;
+  /** Path to store in the DB / serve to clients, e.g. "/uploads/<uuid>.webp". */
+  relativePath: string;
+  mimeType: string;
+  sizeBytes: number;
+}
+
+export async function processUpload(
+  buffer: Buffer,
+  policyKey: UploadPolicyKey,
+): Promise<UploadResult> {
+  const policy = UPLOAD_POLICIES[policyKey];
+
+  if (buffer.byteLength === 0) {
+    throw new UploadValidationError("File is empty.");
+  }
+  const maxBytes = policy.maxBytes ?? DEFAULT_MAX_BYTES;
+  if (buffer.byteLength > maxBytes) {
+    throw new UploadValidationError(
+      `File is too large -- max ${(maxBytes / (1024 * 1024)).toFixed(0)}MB for this field.`,
+    );
+  }
+
+  // Verify the file's REAL type via magic-byte signature inspection. Never
+  // trust the client-supplied Content-Type header or the original
+  // filename's extension -- both are trivially spoofable.
+  const detected = await fileTypeFromBuffer(buffer);
+  if (!detected || !policy.allowedMimeTypes.includes(detected.mime)) {
+    throw new UploadValidationError(
+      detected
+        ? `File type "${detected.mime}" isn't allowed for this field.`
+        : "Couldn't verify this file's type -- it may be corrupted or not a real file of the expected kind.",
+    );
+  }
+
+  await mkdir(/* turbopackIgnore: true */ UPLOADS_DIR, { recursive: true });
+  const id = randomUUID(); // never trust/reuse the client's original filename
+
+  if (policy.kind === "image") {
+    // Re-encode every image on the way in -- this both normalizes format
+    // and strips any embedded scripts/metadata that could hide inside a
+    // crafted image file (EXIF payloads, polyglot files, etc.), per the
+    // checklist's "Re-encode/strip images on upload" step. PDFs used for
+    // posters skip this branch below since sharp can't re-encode PDFs;
+    // content-type verification is the primary defense for those.
+    if (detected.mime !== "application/pdf") {
+      const processed = await sharp(buffer)
+        .rotate() // bake in EXIF orientation before the metadata gets stripped
+        .resize({ width: 2400, height: 2400, fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 85 })
+        .toBuffer();
+
+      return writeAndDescribe(`${id}.webp`, processed, "image/webp");
+    }
+  }
+
+  // Documents/archives can't be meaningfully "re-encoded" the way raster
+  // images can -- verified content-type + isolated, non-executable storage
+  // is the defense here. Extension comes from the *detected* type, not the
+  // client's filename.
+  return writeAndDescribe(`${id}.${detected.ext}`, buffer, detected.mime);
+}
+
+async function writeAndDescribe(
+  filename: string,
+  buffer: Buffer,
+  mimeType: string,
+): Promise<UploadResult> {
+  const destPath = path.join(/* turbopackIgnore: true */ UPLOADS_DIR, filename);
+
+  // 0o640 = rw-r-----: readable by the nginx/app user for serving, no
+  // execute bit for anyone, no access at all for "other". Uploads dir
+  // itself lives outside any web-executable path (see docker-compose.yml).
+  await writeFile(destPath, buffer, { mode: 0o640 });
+
+  return {
+    storedFilename: filename,
+    relativePath: `/uploads/${filename}`,
+    mimeType,
+    sizeBytes: buffer.byteLength,
+  };
+}

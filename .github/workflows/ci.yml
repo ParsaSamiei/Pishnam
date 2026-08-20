@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  # A real Postgres is spun up as a service below -- CI runs migrations
+  # against it so `prisma generate`/`validate` and any DB-touching tests
+  # exercise the real schema, not a stub.
+  DATABASE_URL: postgresql://pishnam:pishnam@localhost:5432/pishnam_test?schema=public
+  AUTH_SECRET: ci-placeholder-secret-not-used-in-production
+
+jobs:
+  lint-typecheck-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: pishnam
+          POSTGRES_PASSWORD: pishnam
+          POSTGRES_DB: pishnam_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U pishnam"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma schema validate
+        run: npx prisma validate
+
+      - name: Apply migrations to test DB
+        run: npx prisma migrate deploy
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit + component tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://pishnam.example
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: lint-typecheck-test
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: pishnam
+          POSTGRES_PASSWORD: pishnam
+          POSTGRES_DB: pishnam_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U pishnam"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply migrations
+        run: npx prisma migrate deploy
+
+      - name: Seed test admin
+        run: npm run db:seed
+        env:
+          SEED_ADMIN_EMAIL: e2e@pishnam.example
+          SEED_ADMIN_PASSWORD: e2e-test-password-not-real
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build
+        run: npm run build
+
+      - name: Run E2E smoke suite
+        run: npm run test:e2e
+        env:
+          E2E_ADMIN_EMAIL: e2e@pishnam.example
+          E2E_ADMIN_PASSWORD: e2e-test-password-not-real
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

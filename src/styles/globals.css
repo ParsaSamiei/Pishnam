@@ -79,6 +79,22 @@
       height: 0;
     }
   }
+
+  /* CircuitBackground (components/layout/circuit-background.tsx): a single
+     "powered" via pulses gently to suggest an active board rather than a
+     static print. Kept slow and low-amplitude; disabled under
+     prefers-reduced-motion below. */
+  --animate-circuit-pulse: circuit-pulse 3.2s ease-in-out infinite;
+
+  @keyframes circuit-pulse {
+    0%,
+    100% {
+      opacity: 0.85;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
 }
 
 @layer base {
@@ -116,6 +132,13 @@
       transition:
         background-color 0.2s ease,
         color 0.2s ease;
+    }
+  }
+
+  /* ...and for CircuitBackground's pulsing via. */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-circuit-pulse {
+      animation: none;
     }
   }
 }

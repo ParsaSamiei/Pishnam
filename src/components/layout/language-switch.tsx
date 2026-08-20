@@ -2,7 +2,6 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { Languages } from "lucide-react";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -27,9 +26,8 @@ export function LanguageSwitch() {
   }
 
   return (
-    <Button variant="ghost" size="sm" onClick={handleSwitch} aria-label={t("toggle")}>
-      <Languages aria-hidden="true" />
-      <span>{nextLocale === "fa" ? t("fa") : t("en")}</span>
+    <Button variant="ghost" size="icon" onClick={handleSwitch} aria-label={t("toggle")}>
+      <span className="text-sm font-semibold">{nextLocale === "fa" ? t("fa") : t("en")}</span>
     </Button>
   );
 }

@@ -8,6 +8,7 @@ import { AchievementsHighlight } from "@/components/home/achievements-highlight"
 import { NewsTeaserSection } from "@/components/home/news-teaser-section";
 import { VideosTeaserSection } from "@/components/home/videos-teaser-section";
 import { DownloadsTeaserSection } from "@/components/home/downloads-teaser-section";
+import { ScrollSpine } from "@/components/motion/scroll-spine";
 import { JsonLd } from "@/components/json-ld";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -33,12 +34,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           logo: `${siteUrl}/brand/pishnam-logo.png`,
         }}
       />
-      <HeroSection />
-      <AudienceEntrySection />
-      <AchievementsHighlight />
-      <NewsTeaserSection />
-      <VideosTeaserSection />
-      <DownloadsTeaserSection />
+      {/* One gold trace, drawn to match scroll depth, threads the sections
+          below into a single page -- each section marks its own seam with
+          `data-spine-node`. See components/motion/scroll-spine.tsx. */}
+      <ScrollSpine>
+        <HeroSection />
+        <AudienceEntrySection />
+        <AchievementsHighlight />
+        <NewsTeaserSection />
+        <VideosTeaserSection />
+        <DownloadsTeaserSection />
+      </ScrollSpine>
     </>
   );
 }

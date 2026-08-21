@@ -3,11 +3,15 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { motion } from "motion/react";
 import { Menu, Search } from "lucide-react";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useScrolledPast } from "@/components/motion/use-scrolled-past";
+import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
+import { SPRING } from "@/lib/motion";
 import { LanguageSwitch } from "./language-switch";
 import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
@@ -27,19 +31,38 @@ export function SiteHeader() {
   const tBrand = useTranslations("brand");
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const scrolled = useScrolledPast(80);
+  const reduced = useReducedMotionSafe();
 
   return (
-    <header className="border-border bg-bg-surface/90 sticky top-0 z-40 border-b backdrop-blur">
+    /* Condenses once the visitor is into the page. The outer box stays 4rem:
+       this header is `sticky`, so it still occupies layout space, and
+       animating its height would shorten the document and jump everything
+       below it up by the difference mid-scroll. The logo scale and the
+       surface/shadow shift carry the same signal with no layout shift. */
+    <header
+      className={cn(
+        "border-border bg-bg-surface/90 sticky top-0 z-40 border-b backdrop-blur",
+        "transition-[background-color,box-shadow] duration-300",
+        scrolled && "bg-bg-surface/95 shadow-md",
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          <Image
-            src="/brand/pishnam-logo.png"
-            alt=""
-            width={36}
-            height={40}
-            className="h-9 w-auto"
-            priority
-          />
+          <motion.span
+            className="flex items-center"
+            animate={reduced ? undefined : { scale: scrolled ? 0.88 : 1 }}
+            transition={SPRING}
+          >
+            <Image
+              src="/brand/pishnam-logo.png"
+              alt=""
+              width={36}
+              height={40}
+              className="h-9 w-auto"
+              priority
+            />
+          </motion.span>
           <span className="text-text-primary hidden text-base font-bold sm:inline">
             {tBrand("name")}
           </span>

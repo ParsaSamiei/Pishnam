@@ -26,8 +26,14 @@ export function LanguageSwitch() {
   }
 
   return (
-    <Button variant="ghost" size="icon" onClick={handleSwitch} aria-label={t("toggle")}>
-      <span className="text-sm font-semibold">{nextLocale === "fa" ? t("fa") : t("en")}</span>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={handleSwitch}
+      aria-label={t("toggle")}
+      className="w-auto cursor-pointer px-3 font-semibold"
+    >
+      {nextLocale === "fa" ? t("fa") : t("en")}
     </Button>
   );
 }

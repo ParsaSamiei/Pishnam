@@ -217,6 +217,19 @@ model AdminUser {
   role         String   @default("editor") // "owner" | "editor"
   createdAt    DateTime @default(now())
 }
+
+// Slides in the homepage hero carousel, ordered low to high. Zero rows is a
+// valid state — the hero falls back to its line-art board.
+model HeroSlide {
+  id        String   @id @default(cuid())
+  image     String   // /uploads/<uuid>.webp
+  altFa     String?  // blank falls back to the `home.hero.imageAlt` message
+  altEn     String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([order])
+}
 ```
 
 ## Notes
@@ -237,5 +250,11 @@ model AdminUser {
   path vs. a well-formed external URL) in the admin form.
 - **Search**: if/when free-text site search is added, use Postgres `tsvector` columns on
   `CourseTranslation`, `ArticleTranslation`, `Faq` rather than adding a new service.
+- **Hero slides are a collection, not settings** — `HeroSlide` is an ordered table managed from
+  `/admin/hero-slides` like any other content type, rather than image columns on a settings
+  singleton. "How many photos does the hero show?" is a question a table answers and a fixed set of
+  columns cannot; it also means adding a fourth photo needs no schema change. Alt text lives on the
+  slide because only whoever uploaded a photo can describe it. Zero rows renders the hero's own
+  fallback, so nothing has to be seeded.
 - **Migrations**: use `prisma migrate` from day one, committed to the repo, so schema evolves
   with version history.

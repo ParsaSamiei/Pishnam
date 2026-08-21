@@ -4,6 +4,8 @@ import { useCallback, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
+const STORAGE_KEY = "pishnam-theme";
+
 function subscribe(callback: () => void) {
   const observer = new MutationObserver(callback);
   observer.observe(document.documentElement, {
@@ -13,8 +15,38 @@ function subscribe(callback: () => void) {
   return () => observer.disconnect();
 }
 
+/**
+ * The same resolution the inline theme-script performs, for the one case where
+ * the attribute is not on the document yet. Kept in step with the `resolve()`
+ * copy in components/layout/theme-script.tsx by hand -- that one has to be a
+ * string in <head> to beat first paint, so it cannot import this.
+ */
+function resolveTheme(): Theme {
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored === "light" || stored === "dark") return stored;
+  } catch {
+    // Storage unavailable; fall through to the media query.
+  }
+
+  const mql =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-color-scheme: dark)")
+      : null;
+  if (!mql || typeof mql.matches !== "boolean") return "dark";
+  return mql.matches ? "dark" : "light";
+}
+
 function getSnapshot(): Theme {
-  return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  const applied = document.documentElement.getAttribute("data-theme");
+  if (applied === "light" || applied === "dark") return applied;
+
+  // Missing attribute: resolve it the way the inline script does instead of
+  // assuming dark. globals.css maps *no* attribute to the `:root` (light)
+  // tokens, so a blind "dark" fallback made the toggle contradict the page it
+  // was sitting on -- exactly the disagreement that showed up when React
+  // stripped the attribute off <html> during a locale change.
+  return resolveTheme();
 }
 
 // Matches theme-script.tsx's fallback so the very first client render (which
@@ -37,7 +69,7 @@ export function useTheme() {
 
   const setTheme = useCallback((next: Theme) => {
     document.documentElement.setAttribute("data-theme", next);
-    window.localStorage.setItem("pishnam-theme", next);
+    window.localStorage.setItem(STORAGE_KEY, next);
   }, []);
 
   const toggleTheme = useCallback(() => {

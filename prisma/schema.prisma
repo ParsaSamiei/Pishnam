@@ -241,6 +241,29 @@ model AdminUser {
   createdAt    DateTime  @default(now())
 }
 
+// Slides in the homepage hero carousel. A plain content collection rather than
+// a settings singleton: the hero holds any number of photos, and "how many
+// slides exist" is exactly the kind of thing an ordered table answers.
+// Zero rows is a valid, expected state -- the hero falls back to the line-art
+// board in components/home/hero-showcase.tsx.
+model HeroSlide {
+  id String @id @default(cuid())
+
+  // `/uploads/<uuid>.webp` path from /api/admin/upload.
+  image String
+  // Describes the photo for screen readers. Only the admin who uploaded it
+  // knows what it shows, so alt text is authored per slide; blank falls back
+  // to the generic `home.hero.imageAlt` string in src/messages/*.json.
+  altFa String?
+  altEn String?
+
+  // Carousel order, low to high -- same convention as TeamMember.order.
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([order])
+}
+
 // Audit log for every file upload -- required by the upload security
 // checklist in docs/05-frontend-architecture.md ("Log every upload").
 model UploadLog {

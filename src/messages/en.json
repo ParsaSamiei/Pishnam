@@ -32,10 +32,19 @@
   "home": {
     "hero": {
       "eyebrow": "Pishnam Robotics Researchers",
-      "title": "From your first circuit to a competition-ready robot",
+      "title": "From your first circuit to a <accent>competition-ready robot</accent>",
       "subtitle": "Progressive robotics, electronics, and AI education for students from elementary school through high school — taught by a team with national and international RoboCup results.",
       "ctaPrimary": "Browse courses",
-      "ctaSecondary": "Enroll now"
+      "ctaSecondary": "Enroll now",
+      "imageAlt": "The Pishnam robotics team",
+      "carousel": {
+        "label": "Pishnam photos",
+        "slide": "Photo",
+        "status": "Photo {current, number} of {total, number}",
+        "previous": "Previous photo",
+        "next": "Next photo",
+        "goTo": "Go to photo {index, number}"
+      }
     },
     "audiences": {
       "title": "Where should you start?",

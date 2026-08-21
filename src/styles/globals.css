@@ -22,6 +22,10 @@
   --text-primary: #18222d;
   --text-secondary: #4a5560;
   --steel-accent: #3b5e82;
+  /* Gold pooled under a card on hover -- see components/motion/card-hover.tsx.
+     Weaker in light mode: the same alpha that reads as a glow against navy
+     turns a white card's shadow muddy yellow against the off-white page. */
+  --card-hover-glow: rgb(230 168 23 / 0.3);
 }
 
 [data-theme="dark"] {
@@ -32,6 +36,7 @@
   --text-primary: #f2f2f0;
   --text-secondary: #a9b4be;
   --steel-accent: #6e8aa6;
+  --card-hover-glow: rgb(230 168 23 / 0.55);
 }
 
 @theme {
@@ -140,5 +145,47 @@
     .animate-circuit-pulse {
       animation: none;
     }
+
+    /* Belt-and-braces alongside the JS `useReducedMotion()` checks in
+       components/motion/*: even if a scroll-reveal wrapper renders its hidden
+       variant, the content stays visible and in place. */
+    [data-motion-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+
+  /* Scroll-reveal wrappers server-render their hidden variant (opacity: 0),
+     which would leave the homepage's headings and cards blank for a visitor
+     or crawler that never runs the JS. This resets them in exactly that case
+     -- see components/motion/reveal.tsx. */
+  @media (scripting: none) {
+    [data-motion-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+    }
+
+    /* The hero carousel's track is a native scroll container, so swiping and
+       trackpad scrolling work with no JS at all -- but its prev/next buttons
+       and dots are driven by scrollTo and would sit there doing nothing. Hide
+       the ones that can't work; the photos all stay reachable. */
+    [data-carousel-controls] {
+      display: none !important;
+    }
+  }
+}
+
+/* Scroll-snap tracks are scrolled by swipe, buttons, and arrow keys, so the
+   scrollbar is a third affordance for the same thing -- and an always-visible
+   one on Windows, where it eats 15px off the bottom of the frame. Scrolling
+   itself is untouched: this hides the bar, not the overflow. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

@@ -79,7 +79,7 @@ export function ImageUploadField({
       {value ? (
         <div className="relative w-40">
           <div className="border-border bg-bg-surface-alt relative aspect-square overflow-hidden rounded-lg border">
-            <Image src={value} alt="" fill className="object-cover" />
+            <Image src={value} alt="" fill sizes="160px" className="object-cover" />
           </div>
           <button
             type="button"

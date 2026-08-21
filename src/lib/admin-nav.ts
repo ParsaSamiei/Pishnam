@@ -12,6 +12,7 @@ import {
   Briefcase,
   Inbox,
   UserCog,
+  Images,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -30,6 +31,7 @@ export interface AdminNavItem {
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin", label: "داشبورد", icon: LayoutDashboard },
   { href: "/admin/leads", label: "درخواست‌ها", icon: Inbox },
+  { href: "/admin/hero-slides", label: "تصاویر صفحه اصلی", icon: Images },
   { href: "/admin/courses", label: "دوره‌ها", icon: GraduationCap },
   { href: "/admin/classes", label: "کلاس‌های حضوری", icon: CalendarDays },
   { href: "/admin/achievements", label: "افتخارات", icon: Trophy },

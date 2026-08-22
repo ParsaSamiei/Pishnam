@@ -33,10 +33,7 @@ export async function HeroSection() {
   }));
 
   return (
-    <section
-      data-spine-node
-      className="bg-pishnam-navy-900 text-pishnam-off-white relative overflow-hidden"
-    >
+    <section data-spine-node className="bg-bg-page text-text-primary relative overflow-hidden">
       {/* Subtle circuit-style backdrop -- purposeful color blocking per
           docs/03-design-system.md rather than a busy illustration. Drifts on
           scroll and routes a gold trace on load; see components/motion/
@@ -78,7 +75,7 @@ export async function HeroSection() {
               </h1>
             </StaggerItem>
             <StaggerItem variant="rise">
-              <p className="text-pishnam-off-white/75 mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
+              <p className="text-text-secondary mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
                 {t("subtitle")}
               </p>
             </StaggerItem>
@@ -101,9 +98,15 @@ export async function HeroSection() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="text-pishnam-off-white border-white/25 hover:border-white/40 hover:bg-white/10"
+                  className="group hover:border-pishnam-gold-500/60 hover:bg-pishnam-gold-500/12 hover:text-pishnam-gold-600"
                 >
-                  <Link href="/enroll">{t("ctaSecondary")}</Link>
+                  <Link href="/enroll">
+                    {t("ctaSecondary")}
+                    <ArrowRight
+                      aria-hidden="true"
+                      className="transition-transform duration-200 motion-safe:group-hover:translate-x-1 rtl:-scale-x-100 motion-safe:rtl:group-hover:-translate-x-1"
+                    />
+                  </Link>
                 </Button>
               </div>
             </StaggerItem>

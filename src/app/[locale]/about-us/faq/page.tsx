@@ -21,7 +21,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: locale === "fa" ? "سوالات متداول" : "FAQ",
-    alternates: buildAlternates("/about/faq"),
+    alternates: buildAlternates("/about-us/faq"),
   };
 }
 

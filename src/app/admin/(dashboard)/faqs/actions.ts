@@ -13,7 +13,7 @@ export interface FaqFormState {
 
 function revalidateFaqPages() {
   revalidatePath("/admin/faqs");
-  revalidatePath("/about/faq");
+  revalidatePath("/about-us/faq");
 }
 
 export async function createFaq(

@@ -13,7 +13,7 @@ export interface TeamMemberFormState {
 
 function revalidateTeamPages() {
   revalidatePath("/admin/team");
-  revalidatePath("/about/team");
+  revalidatePath("/about-us/team");
 }
 
 export async function createTeamMember(

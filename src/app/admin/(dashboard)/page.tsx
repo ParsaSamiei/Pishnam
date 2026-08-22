@@ -5,8 +5,9 @@ import { LeadStatusBadge, LeadTypeLabel } from "@/components/admin/lead-status-b
 import { formatDate } from "@/lib/format";
 
 export default async function AdminDashboardPage() {
-  const [newCount, recentLeads] = await Promise.all([
+  const [newCount, unreadFeedback, recentLeads] = await Promise.all([
     prisma.lead.count({ where: { status: "NEW" } }),
+    prisma.feedback.count({ where: { read: false } }),
     prisma.lead.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
   ]);
 
@@ -25,6 +26,14 @@ export default async function AdminDashboardPage() {
             <p className="text-pishnam-gold-600 mt-1 text-3xl font-bold">{newCount}</p>
           </CardContent>
         </Card>
+        <Link href="/admin/feedback" className="block cursor-pointer">
+          <Card className="hover:border-pishnam-gold-500/40 h-full transition-colors duration-200">
+            <CardContent className="p-5">
+              <p className="text-text-secondary text-sm">انتقادات خوانده‌نشده</p>
+              <p className="text-pishnam-gold-600 mt-1 text-3xl font-bold">{unreadFeedback}</p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       <div className="mt-8">

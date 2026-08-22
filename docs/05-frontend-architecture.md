@@ -65,7 +65,7 @@ pishnam/
 │   │   ├── home/ (AudienceEntryCard, AchievementsHighlight, ...)
 │   │   ├── course/
 │   │   ├── blog/
-│   │   ├── forms/ (LeadCaptureForm + variants)
+│   │   ├── forms/ (LeadCaptureForm, FeedbackForm + variants)
 │   │   ├── admin/ (DataTable, AdminForm, ...)
 │   │   └── ui/ (shadcn components)
 │   ├── lib/

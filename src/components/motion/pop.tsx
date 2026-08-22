@@ -17,7 +17,7 @@ interface PopProps {
  * around it inside a `StaggerItem`. It also makes it safe outside one: with no
  * `initial` inherited from a Motion parent there is no variant to resolve, so
  * the element simply renders in its final state. That matters because
- * `AchievementCard` is reused on /about/achievements, /sponsors and course
+ * `AchievementCard` is reused on /about-us/achievements, /sponsors and course
  * pages, none of which animate -- the badge must never be left invisible
  * waiting for a trigger that will not come.
  */

@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { DURATION, EASE_OUT } from "@/lib/motion";
+import { useTheme } from "@/lib/use-theme";
 
 /**
  * The hero's backdrop: the dotted board pattern from the original static
@@ -20,6 +21,7 @@ export function HeroBackdrop() {
   // which changes the set of style keys or attributes rendered on the server,
   // so there is nothing for hydration to disagree about.
   const reduced = useReducedMotion();
+  const { theme } = useTheme();
   const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -44,12 +46,21 @@ export function HeroBackdrop() {
         }}
       />
 
-      {/* Gives the band form. A single flat fill of navy-900 has no top or
-          bottom -- a faint lift under the header and a deepening toward the
-          seam make it read as a lit surface, which is also what lets the dot
-          field register at all without raising its opacity into visibility as
-          a pattern in its own right. */}
-      <div className="absolute inset-0 bg-linear-to-b from-white/[0.05] via-transparent to-black/30" />
+      {/* Gives the band form rather than leaving it a flat fill -- a faint
+          lift under the header and a deepening toward the seam read as a lit
+          surface, which is also what lets the dot field register at all
+          without raising its opacity into visibility as a pattern in its own
+          right. Tuned separately per theme: the dark version assumes a navy
+          floor with real headroom to deepen into; on the light (off-white)
+          page background the same 30% black falloff would just muddy it, so
+          that version leans much lighter. */}
+      <div
+        className={
+          theme === "dark"
+            ? "absolute inset-0 bg-linear-to-b from-white/[0.05] via-transparent to-black/30"
+            : "absolute inset-0 bg-linear-to-b from-black/[0.03] via-transparent to-black/[0.07]"
+        }
+      />
 
       {/* Steel wash in the far corner, on the axis the showcase does not
           occupy, so the two halves of the band are lit differently rather than

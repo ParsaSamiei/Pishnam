@@ -55,8 +55,19 @@ export function HeroShowcase({ slides }: HeroShowcaseProps) {
         className="border-pishnam-gold-500/25 pointer-events-none absolute -start-3 end-8 top-8 -bottom-3 rounded-2xl border"
       />
 
-      <TiltCard className="relative">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/12 bg-white/[0.04] shadow-[0_32px_64px_-32px_rgb(0_0_0/0.75)]">
+      {/* Tilt disabled on the carousel path: both it and Embla's drag track the
+          same mouse-move, and the panel tipping in 3D while someone drags
+          between slides reads as the two fighting each other. The hover lift
+          (`whileHover`, not gated by `tilt`) still applies either way. */}
+      <TiltCard className="relative" tilt={slides.length <= 1}>
+        {/* Explicit navy, not a tint relative to whatever sits behind the
+            panel: hero-section.tsx's background is theme-aware, and this
+            panel deliberately isn't (`docs/03-design-system.md`'s hardware
+            aesthetic holds regardless of the visitor's light/dark choice).
+            A translucent white overlay would leave almost no visible panel
+            on a light page, and PlaceholderBoard's off-white line-art below
+            needs a dark floor to read against either way. */}
+        <div className="bg-pishnam-navy-900 relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/12 shadow-[0_32px_64px_-32px_rgb(0_0_0/0.75)]">
           {slides.length > 1 ? (
             <HeroCarousel slides={slides} />
           ) : first ? (

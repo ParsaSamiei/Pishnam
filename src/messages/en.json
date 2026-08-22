@@ -4,13 +4,13 @@
     "fullName": "Pishnam Robotics Researchers"
   },
   "nav": {
-    "about": "About",
+    "about": "About us",
     "courses": "Courses",
     "classes": "In-Person Classes",
     "videos": "Videos",
     "downloads": "Downloads",
     "blog": "News",
-    "contact": "Contact",
+    "contact": "Contact us",
     "enroll": "Enroll",
     "sponsors": "Sponsors",
     "schools": "Schools",
@@ -43,7 +43,9 @@
         "status": "Photo {current, number} of {total, number}",
         "previous": "Previous photo",
         "next": "Next photo",
-        "goTo": "Go to photo {index, number}"
+        "goTo": "Go to photo {index, number}",
+        "pause": "Pause autoplay",
+        "play": "Play autoplay"
       }
     },
     "audiences": {

@@ -4,8 +4,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export function LanguageSwitch() {
+export function LanguageSwitch({ className }: { className?: string }) {
   const t = useTranslations("language");
   const locale = useLocale();
   const router = useRouter();
@@ -31,7 +32,7 @@ export function LanguageSwitch() {
       size="icon"
       onClick={handleSwitch}
       aria-label={t("toggle")}
-      className="w-auto cursor-pointer px-3 font-semibold"
+      className={cn("w-auto cursor-pointer px-3 font-semibold", className)}
     >
       {nextLocale === "fa" ? t("fa") : t("en")}
     </Button>

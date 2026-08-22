@@ -1,14 +1,16 @@
 # Pishnam — Information Architecture
 
 ## Design principle: audience-first homepage
+
 Unlike the current WordPress site (one long undifferentiated homepage feed), the new homepage
 should surface **distinct entry points per audience** near the top, above the general content
 feed:
+
 - "برای دانش‌آموزان و والدین" (For students & parents) → courses/tiers, enrollment.
 - "برای مدارس" (For schools) → partnership info, contact.
 - "برای حامیان" (For sponsors) → achievements, sponsorship inquiry.
-Then below: achievements highlight, latest news/blog, video hub teaser, downloads teaser — same
-spirit as current site, restructured.
+  Then below: achievements highlight, latest news/blog, video hub teaser, downloads teaser — same
+  spirit as current site, restructured.
 
 ## Sitemap (v1)
 
@@ -72,6 +74,7 @@ spirit as current site, restructured.
 ```
 
 ## Navigation structure recommendation
+
 Restructure the current 5-item deep mega-menu into **top-level groups that match audience intent**,
 max 2 levels deep:
 
@@ -85,18 +88,21 @@ This cuts the original ~5 mega-menus with 8–15 items each down to something sc
 reachable via footer/search for less-common needs (e.g. part libraries, old competition posters).
 
 ## Content types requiring admin CRUD
-| Type | Key fields |
-|---|---|
-| Course | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority |
-| ClassSession | course/tier ref, weekday, time, location, capacity note, active flag |
-| Achievement | title, competition name, year, result/rank, photo, related course tags |
-| TeamMember | name, role, photo, bio (short) |
-| FAQ | question, answer, category |
-| VideoEntry | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat) |
-| DownloadResource | title, category, file URL or external link, description |
-| Article (blog) | title, slug, cover image, body (rich text), tags, published date |
-| JobPosting | title, description, requirements, active flag, expiry date |
-| Lead/Inquiry submissions | type (enroll/class-seat/sponsor/school/job), form fields, submitted date, status (new/contacted/closed) |
+
+| Type                     | Key fields                                                                                                                         |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority |
+| ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                               |
+| Achievement              | title, competition name, year, result/rank, photo, related course tags                                                             |
+| TeamMember               | name, role, photo, bio (short)                                                                                                     |
+| FAQ                      | question, answer, category                                                                                                         |
+| VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                      |
+| DownloadResource         | title, category, file URL or external link, description                                                                            |
+| Article (blog)           | title, slug, cover image, body (rich text), tags, published date                                                                   |
+| JobPosting               | title, description, requirements, active flag, expiry date                                                                         |
+| Lead/Inquiry submissions | type (enroll/class-seat/sponsor/school/job), form fields, submitted date, status (new/contacted/closed)                            |
+| Feedback                 | optional name, message, submitted date, read flag — criticisms & suggestions from `/contact-us`                                    |
 
 ## Confirmed decisions
+
 - "کلاس‌های حضوری" (offline classes/schedule) is in scope for v1.

@@ -9,11 +9,26 @@ const nextConfig: NextConfig = {
 
   images: {
     // Uploaded media is served from our own /uploads route (local disk, see
-    // 05-frontend-architecture.md). No external remote patterns are enabled by
-    // default -- add explicit entries here only if a real external image host
-    // is introduced later.
-    remotePatterns: [],
+    // 05-frontend-architecture.md). Aparat's own domain is whitelisted so
+    // the auto-fetched video poster (see src/lib/aparat.ts,
+    // fetchAparatPoster) can render via next/image -- add further remote
+    // hosts here only if another real external image source is introduced.
+    remotePatterns: [
+      { protocol: "https", hostname: "aparat.com" },
+      { protocol: "https", hostname: "*.aparat.com" },
+    ],
     formats: ["image/avif", "image/webp"],
+  },
+
+  async redirects() {
+    return [
+      { source: "/about", destination: "/about-us", permanent: true },
+      { source: "/en/about", destination: "/en/about-us", permanent: true },
+      { source: "/about/:path*", destination: "/about-us/:path*", permanent: true },
+      { source: "/en/about/:path*", destination: "/en/about-us/:path*", permanent: true },
+      { source: "/contact", destination: "/contact-us", permanent: true },
+      { source: "/en/contact", destination: "/en/contact-us", permanent: true },
+    ];
   },
 
   async headers() {

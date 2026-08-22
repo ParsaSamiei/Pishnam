@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    alternates: buildAlternates("/about/achievements"),
+    alternates: buildAlternates("/about-us/achievements"),
     title: locale === "fa" ? "افتخارات و جوایز" : "Achievements & Awards",
   };
 }

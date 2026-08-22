@@ -11,11 +11,11 @@ const EXPLORE_LINKS = [
 ] as const;
 
 const ABOUT_LINKS = [
-  { href: "/about", key: "about" },
+  { href: "/about-us", key: "about" },
   { href: "/sponsors", key: "sponsors" },
   { href: "/schools", key: "schools" },
   { href: "/careers", key: "careers" },
-  { href: "/contact", key: "contact" },
+  { href: "/contact-us", key: "contact" },
 ] as const;
 
 export function SiteFooter() {

@@ -23,6 +23,7 @@ export type AnalyticsEvent =
   | "school_inquiry_submit"
   | "job_application_submit"
   | "contact_form_submit"
+  | "feedback_form_submit"
   | "video_play"
   | "download_click"
   | "language_switch";

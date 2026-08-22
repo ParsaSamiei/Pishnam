@@ -17,14 +17,24 @@ import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { href: "/about", key: "about" },
+  { href: "/about-us", key: "about" },
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },
   { href: "/videos", key: "videos" },
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },
-  { href: "/contact", key: "contact" },
+  { href: "/contact-us", key: "contact" },
 ] as const;
+
+/** Icon / outline controls in the header: gold wash instead of a near-invisible surface swap. */
+const headerControlClass =
+  "cursor-pointer transition-[background-color,border-color,color] duration-300 " +
+  "hover:border-pishnam-gold-500/45 hover:bg-pishnam-gold-500/12 hover:text-pishnam-gold-600";
+
+const headerNavLinkClass =
+  "rounded-md px-3 text-sm font-medium text-text-secondary transition-colors duration-300 " +
+  "hover:bg-pishnam-gold-500/12 hover:text-pishnam-gold-600 " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pishnam-gold-500 focus-visible:ring-offset-2";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
@@ -75,9 +85,11 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "text-text-secondary hover:bg-bg-surface-alt hover:text-text-primary rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                  active && "bg-bg-surface-alt text-text-primary",
+                  headerNavLinkClass,
+                  "py-2",
+                  active && "bg-pishnam-gold-500/12 text-pishnam-gold-600",
                 )}
               >
                 {t(item.key)}
@@ -91,19 +103,19 @@ export function SiteHeader() {
             variant="ghost"
             size="icon"
             aria-label={t("search")}
-            className="hidden sm:inline-flex"
+            className={cn("hidden sm:inline-flex", headerControlClass)}
           >
             <Search aria-hidden="true" />
           </Button>
-          <ThemeToggle />
-          <LanguageSwitch />
+          <ThemeToggle className={headerControlClass} />
+          <LanguageSwitch className={headerControlClass} />
           <Button asChild size="sm" className="hidden sm:inline-flex">
             <Link href="/enroll">{t("enroll")}</Link>
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className={cn("lg:hidden", headerControlClass)}
             aria-label={t("openMenu")}
             onClick={() => setMobileOpen(true)}
           >
@@ -118,16 +130,24 @@ export function SiteHeader() {
             <DialogTitle>{t("openMenu")}</DialogTitle>
           </VisuallyHidden>
           <nav className="mt-8 flex flex-col gap-1" aria-label="Mobile">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-text-primary hover:bg-bg-surface-alt rounded-md px-3 py-3 text-base font-medium"
-              >
-                {t(item.key)}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    headerNavLinkClass,
+                    "py-3 text-base",
+                    active && "bg-pishnam-gold-500/12 text-pishnam-gold-600",
+                  )}
+                >
+                  {t(item.key)}
+                </Link>
+              );
+            })}
             <Button asChild size="lg" className="mt-4">
               <Link href="/enroll" onClick={() => setMobileOpen(false)}>
                 {t("enroll")}

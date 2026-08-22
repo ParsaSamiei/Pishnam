@@ -4,6 +4,7 @@ import { useLocale } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { TiltCard } from "@/components/motion/tilt-card";
+import { AnimatedLinkContent } from "@/components/motion/animated-link";
 import { CardHoverRule, cardHoverClass, cardHoverIconClass } from "@/components/motion/card-hover";
 import { cn } from "@/lib/utils";
 
@@ -51,10 +52,9 @@ export function AudienceEntryCard({
               <h3 className="text-text-primary text-lg font-bold">{title}</h3>
               <p className="text-text-secondary mt-2 text-sm">{description}</p>
             </div>
-            <span className="text-pishnam-steel-600 inline-flex items-center gap-1.5 text-sm font-semibold">
+            <AnimatedLinkContent icon={<ArrowIcon aria-hidden="true" />} className="font-semibold">
               {cta}
-              <ArrowIcon className="size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5" />
-            </span>
+            </AnimatedLinkContent>
           </CardContent>
         </Card>
       </TiltCard>

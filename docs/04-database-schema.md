@@ -209,6 +209,15 @@ model Lead {
   createdAt DateTime   @default(now())
 }
 
+// Public "انتقادات و پیشنهادات" from /contact-us. Name is optional.
+model Feedback {
+  id        String   @id @default(cuid())
+  name      String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 // Admin auth (custom admin, not public accounts — see admin panel doc)
 model AdminUser {
   id           String   @id @default(cuid())
@@ -216,6 +225,18 @@ model AdminUser {
   passwordHash String
   role         String   @default("editor") // "owner" | "editor"
   createdAt    DateTime @default(now())
+}
+
+// One-row contact details (phones, email, FA/EN address, Google Maps embed).
+// Singleton: id is always "default"; first admin save creates the row.
+model ContactSettings {
+  id          String   @id @default("default")
+  phones      String[]
+  email       String?
+  addressFa   String?
+  addressEn   String?
+  mapEmbedUrl String?  // canonical https://www.google.com/maps/embed?... URL
+  updatedAt   DateTime @updatedAt
 }
 
 // Slides in the homepage hero carousel, ordered low to high. Zero rows is a
@@ -234,9 +255,9 @@ model HeroSlide {
 
 ## Notes
 
-- **No `User` model for students/parents in v1** — no accounts, no auth for the public. All
-  visitor interaction is via `Lead` (forms), which is enough given "no purchase or progress
-  tracking for now."
+- **No `User` model for students/parents in v1** — no accounts, no auth for the public. Visitor
+  interaction is via `Lead` (contact/enroll/etc. forms that expect a name and a way to reply) and
+  `Feedback` (anonymous-allowed criticisms and suggestions on `/contact-us`).
 - **Media**: `coverImage`/`photo`/`fileUrl` fields store paths — **using local disk storage for
   now** (see `05-frontend-architecture.md` for the volume setup), not S3/object storage. Revisit
   object storage (Cloudflare R2, MinIO, AWS S3) in a future version if the server moves to
@@ -250,6 +271,11 @@ model HeroSlide {
   path vs. a well-formed external URL) in the admin form.
 - **Search**: if/when free-text site search is added, use Postgres `tsvector` columns on
   `CourseTranslation`, `ArticleTranslation`, `Faq` rather than adding a new service.
+- **Contact details are a settings singleton** — `ContactSettings` is one row (`id = "default"`),
+  edited from `/admin/contact`, not a list of locations. Phone numbers are a `String[]` so several
+  can be shown; address is bilingual (`addressFa` / `addressEn`); `mapEmbedUrl` stores only a
+  canonical Google Maps embed URL (the admin form accepts a pasted iframe or URL and normalizes
+  it). Missing fields are omitted on `/contact` rather than falling back to placeholder copy.
 - **Hero slides are a collection, not settings** — `HeroSlide` is an ordered table managed from
   `/admin/hero-slides` like any other content type, rather than image columns on a settings
   singleton. "How many photos does the hero show?" is a question a table answers and a fixed set of

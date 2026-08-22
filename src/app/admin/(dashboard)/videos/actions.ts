@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { videoEntrySchema } from "@/lib/validation/video-entry";
+import { extractAparatHash, fetchAparatPoster } from "@/lib/aparat";
 import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
 
 export interface VideoEntryFormState {
@@ -17,6 +18,16 @@ function revalidateVideoPages() {
   revalidatePath("/en/videos");
   revalidatePath("/");
   revalidatePath("/en");
+}
+
+// If the admin left the thumbnail field empty (or cleared it), fall back to
+// Aparat's own poster for that video instead of showing a blank card until
+// the visitor presses play -- see docs/06-admin-panel.md and the form's
+// helper text, which both promise this behavior.
+async function resolveThumbnail(thumbnail: string, aparatUrl: string): Promise<string | null> {
+  if (thumbnail) return thumbnail;
+  const hash = extractAparatHash(aparatUrl);
+  return hash ? await fetchAparatPoster(hash) : null;
 }
 
 // Checkbox groups (tierTags) submit multiple values under the same
@@ -40,9 +51,14 @@ export async function createVideoEntry(
     return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
   }
 
-  const { publishedAt, thumbnail, ...rest } = parsed.data;
+  const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
   await prisma.videoEntry.create({
-    data: { ...rest, thumbnail: thumbnail || null, publishedAt: new Date(publishedAt) },
+    data: {
+      ...rest,
+      aparatUrl,
+      thumbnail: await resolveThumbnail(thumbnail ?? "", aparatUrl),
+      publishedAt: new Date(publishedAt),
+    },
   });
 
   revalidateVideoPages();
@@ -61,10 +77,15 @@ export async function updateVideoEntry(
     return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
   }
 
-  const { publishedAt, thumbnail, ...rest } = parsed.data;
+  const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
   await prisma.videoEntry.update({
     where: { id },
-    data: { ...rest, thumbnail: thumbnail || null, publishedAt: new Date(publishedAt) },
+    data: {
+      ...rest,
+      aparatUrl,
+      thumbnail: await resolveThumbnail(thumbnail ?? "", aparatUrl),
+      publishedAt: new Date(publishedAt),
+    },
   });
 
   revalidateVideoPages();

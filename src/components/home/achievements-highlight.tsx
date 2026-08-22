@@ -3,8 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
-import { Link } from "@/lib/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { AnimatedLink } from "@/components/motion/animated-link";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
 import { AchievementCard } from "./achievement-card";
@@ -39,12 +38,9 @@ export async function AchievementsHighlight() {
             </StaggerItem>
           </StaggerGroup>
           <Reveal delay={0.2}>
-            <Button asChild variant="link" className="gap-1.5">
-              <Link href="/about/achievements">
-                {t("viewAll")}
-                <ArrowIcon className="size-4" aria-hidden="true" />
-              </Link>
-            </Button>
+            <AnimatedLink href="/about-us/achievements" icon={<ArrowIcon aria-hidden="true" />}>
+              {t("viewAll")}
+            </AnimatedLink>
           </Reveal>
         </div>
 

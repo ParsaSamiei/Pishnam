@@ -232,6 +232,20 @@ model Lead {
   @@index([createdAt])
 }
 
+// Public "انتقادات و پیشنهادات" submissions from /contact-us. Separate from
+// Lead because name is optional (anonymous is allowed) and there is no
+// phone/email follow-up — staff just read the message in /admin/feedback.
+model Feedback {
+  id        String   @id @default(cuid())
+  name      String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([read])
+}
+
 // Admin auth (custom admin, not public accounts -- see docs/06-admin-panel.md)
 model AdminUser {
   id           String    @id @default(cuid())
@@ -239,6 +253,27 @@ model AdminUser {
   passwordHash String
   role         AdminRole @default(editor)
   createdAt    DateTime  @default(now())
+}
+
+// One-row site contact details, edited from /admin/contact. Unlike HeroSlide
+// this *is* a settings singleton: there is only one address/email/map to show,
+// so a table of rows would be the wrong shape. The id is always "default"
+// (see CONTACT_SETTINGS_ID); upsert creates the row on first save.
+model ContactSettings {
+  id String @id @default("default")
+
+  phones String[]
+  email  String?
+
+  addressFa String?
+  addressEn String?
+
+  // Canonical Google Maps embed URL only (https://www.google.com/maps/embed?...).
+  // The admin form accepts a full iframe snippet or a bare embed URL and
+  // normalizes it -- see src/lib/google-maps.ts.
+  mapEmbedUrl String?
+
+  updatedAt DateTime @updatedAt
 }
 
 // Slides in the homepage hero carousel. A plain content collection rather than

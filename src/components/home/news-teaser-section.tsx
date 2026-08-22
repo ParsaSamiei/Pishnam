@@ -2,8 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import type { AppLocale } from "@/lib/i18n/routing";
-import { Link } from "@/lib/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { AnimatedLink } from "@/components/motion/animated-link";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
 import { ArticleCard } from "@/components/blog/article-card";
@@ -47,12 +46,9 @@ export async function NewsTeaserSection() {
           </StaggerItem>
         </StaggerGroup>
         <Reveal delay={0.2}>
-          <Button asChild variant="link" className="gap-1.5">
-            <Link href="/blog">
-              {t("viewAll")}
-              <ArrowIcon className="size-4" aria-hidden="true" />
-            </Link>
-          </Button>
+          <AnimatedLink href="/blog" icon={<ArrowIcon aria-hidden="true" />}>
+            {t("viewAll")}
+          </AnimatedLink>
         </Reveal>
       </div>
 

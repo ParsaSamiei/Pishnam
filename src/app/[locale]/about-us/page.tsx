@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { buildAlternates } from "@/lib/i18n/alternates";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Trophy, Users, HelpCircle } from "lucide-react";
-import { setRequestLocale } from "next-intl/server";
-import { Link } from "@/lib/i18n/navigation";
+import { buildAlternates } from "@/lib/i18n/alternates";
 import { PageHeader } from "@/components/layout/page-header";
-import { Card, CardContent } from "@/components/ui/card";
+import { AudienceEntryCard } from "@/components/home/audience-entry-card";
 
 export async function generateMetadata({
   params,
@@ -13,7 +12,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    alternates: buildAlternates("/about"),
+    alternates: buildAlternates("/about-us"),
     title: locale === "fa" ? "درباره پیشنام" : "About Pishnam",
     description:
       locale === "fa"
@@ -26,29 +25,34 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const { locale } = await params;
   setRequestLocale(locale);
   const isFa = locale === "fa";
+  const tCommon = await getTranslations("common");
+  const learnMore = tCommon("learnMore");
 
   const links = [
     {
-      href: "/about/achievements" as const,
+      href: "/about-us/achievements" as const,
       icon: Trophy,
       title: isFa ? "افتخارات و جوایز" : "Achievements & Awards",
       body: isFa
         ? "نتایج تیم پیشنام در مسابقات ملی و بین‌المللی."
         : "Pishnam's results at national and international competitions.",
+      accent: "gold" as const,
     },
     {
-      href: "/about/team" as const,
+      href: "/about-us/team" as const,
       icon: Users,
       title: isFa ? "پرسنل" : "Team",
       body: isFa ? "مربیان و اعضای تیم پیشنام." : "Pishnam's instructors and team members.",
+      accent: "steel" as const,
     },
     {
-      href: "/about/faq" as const,
+      href: "/about-us/faq" as const,
       icon: HelpCircle,
       title: isFa ? "سوالات متداول" : "FAQ",
       body: isFa
         ? "پاسخ به پرسش‌های رایج درباره دوره‌ها و ثبت‌نام."
         : "Answers to common questions about courses and enrollment.",
+      accent: "gold" as const,
     },
   ];
 
@@ -74,17 +78,15 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <div className="grid gap-5 sm:grid-cols-3">
           {links.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <Card className="h-full transition-shadow hover:shadow-md">
-                <CardContent className="flex flex-col gap-3 p-6">
-                  <div className="bg-pishnam-gold-500/15 text-pishnam-gold-600 flex size-11 items-center justify-center rounded-lg">
-                    <link.icon className="size-5" aria-hidden="true" />
-                  </div>
-                  <h2 className="text-text-primary font-bold">{link.title}</h2>
-                  <p className="text-text-secondary text-sm">{link.body}</p>
-                </CardContent>
-              </Card>
-            </Link>
+            <AudienceEntryCard
+              key={link.href}
+              href={link.href}
+              icon={link.icon}
+              title={link.title}
+              description={link.body}
+              cta={learnMore}
+              accent={link.accent}
+            />
           ))}
         </div>
       </section>

@@ -5,7 +5,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/lib/use-theme";
 import { Button } from "@/components/ui/button";
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const t = useTranslations("theme");
   const { theme, toggleTheme } = useTheme();
 
@@ -15,7 +15,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={toggleTheme}
       aria-label={t("toggle")}
-      className="cursor-pointer"
+      className={className ?? "cursor-pointer"}
     >
       {theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
     </Button>

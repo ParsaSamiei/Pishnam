@@ -14,7 +14,7 @@ export interface AchievementFormState {
 function revalidateAchievementPages() {
   revalidatePath("/admin/achievements");
   revalidatePath("/"); // homepage featured-achievements teaser
-  revalidatePath("/about/achievements");
+  revalidatePath("/about-us/achievements");
   revalidatePath("/sponsors");
 }
 

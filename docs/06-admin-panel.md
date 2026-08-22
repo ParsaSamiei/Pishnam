@@ -43,6 +43,12 @@ One admin section per content type from the schema:
 - Job postings
 - **Leads** (all form submissions — enroll, sponsor, school, job, general contact) with status
   (new/contacted/closed) so you can track follow-up without a separate CRM.
+- **Feedback** (انتقادات و پیشنهادات from the public `/contact-us` page): name optional, message
+  required. Listed at `/admin/feedback` with unread/read status; not mixed into Leads because
+  there is no phone/email to follow up on.
+- **Contact details** (singleton, not a list): phone numbers (any number of them), email, FA/EN
+  address, and a Google Maps embed. Edited at `/admin/contact`; shown on the public `/contact`
+  page. Paste either the Maps “Embed a map” iframe or the embed URL itself.
 
 ## UI pattern
 

@@ -7,10 +7,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 // Every static (non-content-driven) public route, as a locale-neutral path.
 const STATIC_PATHS = [
   "",
-  "/about",
-  "/about/achievements",
-  "/about/team",
-  "/about/faq",
+  "/about-us",
+  "/about-us/achievements",
+  "/about-us/team",
+  "/about-us/faq",
   "/courses",
   "/classes",
   "/videos",
@@ -19,7 +19,7 @@ const STATIC_PATHS = [
   "/sponsors",
   "/schools",
   "/careers",
-  "/contact",
+  "/contact-us",
   "/enroll",
   "/privacy",
   "/terms",

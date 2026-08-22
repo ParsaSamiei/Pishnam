@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { TIERS, TIER_LABELS } from "@/lib/tier-labels";
 import type { VideoEntryFormState } from "@/app/admin/(dashboard)/videos/actions";
@@ -73,16 +74,23 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="aparatUrl">آدرس embed آپارات *</Label>
-        <Input
+        <Label htmlFor="aparatUrl">کد Embed آپارات *</Label>
+        <Textarea
           id="aparatUrl"
           name="aparatUrl"
           dir="ltr"
-          placeholder="https://www.aparat.com/video/video/embed/videohash/..."
+          rows={4}
+          placeholder={
+            '<div id="..."><script type="text/JavaScript" src="https://www.aparat.com/embed/xxxxx?..."></script></div>'
+          }
           defaultValue={defaultValues?.aparatUrl}
           required
           aria-invalid={Boolean(state.errors?.aparatUrl)}
         />
+        <p className="text-text-secondary text-xs">
+          کل کد embed را از صفحه اشتراک‌گذاری آپارات کپی و اینجا پیست کنید -- نیازی به تغییر آن
+          نیست.
+        </p>
         {state.errors?.aparatUrl && (
           <p className="text-pishnam-danger text-xs">{state.errors.aparatUrl}</p>
         )}

@@ -10,7 +10,7 @@
     "videos": "ویدیوها",
     "downloads": "مرکز دانلود",
     "blog": "اخبار",
-    "contact": "تماس",
+    "contact": "تماس با ما",
     "enroll": "ثبت‌نام",
     "sponsors": "حامیان",
     "schools": "مدارس",
@@ -43,7 +43,9 @@
         "status": "تصویر {current, number} از {total, number}",
         "previous": "تصویر قبلی",
         "next": "تصویر بعدی",
-        "goTo": "رفتن به تصویر {index, number}"
+        "goTo": "رفتن به تصویر {index, number}",
+        "pause": "توقف پخش خودکار",
+        "play": "شروع پخش خودکار"
       }
     },
     "audiences": {

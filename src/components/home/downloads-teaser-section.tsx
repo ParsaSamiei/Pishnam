@@ -1,7 +1,7 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "@/lib/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { AnimatedLink } from "@/components/motion/animated-link";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
@@ -28,12 +28,9 @@ export async function DownloadsTeaserSection() {
           </StaggerItem>
         </StaggerGroup>
         <Reveal delay={0.2}>
-          <Button asChild variant="link" className="gap-1.5">
-            <Link href="/downloads">
-              {t("viewAll")}
-              <ArrowIcon className="size-4" aria-hidden="true" />
-            </Link>
-          </Button>
+          <AnimatedLink href="/downloads" icon={<ArrowIcon aria-hidden="true" />}>
+            {t("viewAll")}
+          </AnimatedLink>
         </Reveal>
       </div>
 

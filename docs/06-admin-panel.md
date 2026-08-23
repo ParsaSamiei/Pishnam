@@ -36,9 +36,14 @@ One admin section per content type from the schema:
 - Video entries (Aparat links)
 - Download resources — form includes a source toggle (upload a file → local disk storage, or
   paste an
-  external link), a category dropdown (software & plugins / datasheets / books / posters /
-  component libraries), and a CAD-tool tag field shown only for the component-libraries category.
-  All downloads are public by default — no gating option needed.
+  external link), a category dropdown (datasheets / books / posters / component libraries), and a
+  CAD-tool tag field shown only for the component-libraries category. All downloads are public by
+  default — no gating option needed.
+- Software & plugins (`SoftwareProduct`) — a picture upload, slug (used as the public page's URL),
+  FA/EN title and description, and an active/order toggle. Each product gets its own public page.
+- Software files (`SoftwareRelease`) — one row per platform/version under a product: pick the
+  product from a dropdown, pick a platform (Windows/macOS/Linux/Web/Android/iOS/Other), a version
+  label, and the same upload-or-external-link toggle as download resources, plus per-release notes.
 - Blog articles (+ FA/EN translations)
 - Job postings
 - **Leads** (all form submissions — enroll, sponsor, school, job, general contact) with status

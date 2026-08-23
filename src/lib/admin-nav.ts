@@ -13,6 +13,8 @@ import {
   Inbox,
   UserCog,
   Images,
+  Package,
+  FileArchive,
   MapPin,
   MessageSquare,
 } from "lucide-react";
@@ -42,6 +44,8 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/team", label: "اعضای تیم", icon: Users },
   { href: "/admin/faqs", label: "سوالات متداول", icon: HelpCircle },
   { href: "/admin/videos", label: "ویدیوها", icon: Video },
+  { href: "/admin/software", label: "نرم‌افزار و افزونه‌ها", icon: Package },
+  { href: "/admin/software-releases", label: "فایل‌های نرم‌افزار", icon: FileArchive },
   { href: "/admin/downloads", label: "مرکز دانلود", icon: Download },
   { href: "/admin/articles", label: "اخبار", icon: Newspaper },
   { href: "/admin/jobs", label: "فرصت‌های شغلی", icon: Briefcase },

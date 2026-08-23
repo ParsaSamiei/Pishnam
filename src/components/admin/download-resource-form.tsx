@@ -32,7 +32,6 @@ interface DownloadResourceFormProps {
 }
 
 const CATEGORY_POLICY: Record<string, { policy: UploadPolicyKey; accept: string }> = {
-  SOFTWARE: { policy: "download.software", accept: ".zip" },
   DATASHEETS: { policy: "download.datasheet", accept: ".pdf" },
   BOOKS: { policy: "download.book", accept: ".pdf" },
   POSTERS: { policy: "download.poster", accept: ".pdf,image/jpeg,image/png" },
@@ -47,11 +46,11 @@ export function DownloadResourceForm({
   submitLabel,
 }: DownloadResourceFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
-  const [category, setCategory] = useState(defaultValues?.category ?? "SOFTWARE");
+  const [category, setCategory] = useState(defaultValues?.category ?? "DATASHEETS");
   const [source, setSource] = useState(defaultValues?.source ?? "HOSTED");
   const [fileSizeBytes, setFileSizeBytes] = useState(defaultValues?.fileSizeBytes ?? 0);
 
-  const uploadConfig = CATEGORY_POLICY[category] ?? CATEGORY_POLICY.SOFTWARE!;
+  const uploadConfig = CATEGORY_POLICY[category] ?? CATEGORY_POLICY.DATASHEETS!;
 
   return (
     <form action={formAction} className="flex max-w-2xl flex-col gap-5">

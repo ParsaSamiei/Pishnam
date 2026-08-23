@@ -7,14 +7,12 @@ import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { getDownloadCategory, downloadCategoryLabel } from "@/lib/download-categories";
 import { buildAlternates } from "@/lib/i18n/alternates";
+import { formatFileSize } from "@/lib/format";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-
-function formatFileSize(bytes: number | null): string {
-  if (!bytes) return "";
-  const mb = bytes / (1024 * 1024);
-  return mb >= 1 ? `${mb.toFixed(1)} MB` : `${(bytes / 1024).toFixed(0)} KB`;
-}
+import { TiltCard } from "@/components/motion/tilt-card";
+import { CardHoverRule, cardHoverClass, cardHoverIconClass } from "@/components/motion/card-hover";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -61,50 +59,58 @@ export default async function DownloadCategoryPage({
             {resources.map((resource) => {
               const isExternal = resource.source === "EXTERNAL";
               return (
-                <Card key={resource.id}>
-                  <CardContent className="flex items-center gap-4 p-5">
-                    <div className="bg-pishnam-gold-500/15 text-pishnam-gold-600 flex size-11 shrink-0 items-center justify-center rounded-lg">
-                      {isExternal ? (
-                        <ExternalLink className="size-5" aria-hidden="true" />
-                      ) : (
-                        <Download className="size-5" aria-hidden="true" />
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-text-primary font-bold">
-                        {pickLocaleField(resource.titleFa, resource.titleEn, appLocale)}
-                      </p>
-                      {(resource.descriptionFa || resource.descriptionEn) && (
-                        <p className="text-text-secondary mt-0.5 line-clamp-2 text-sm">
-                          {pickLocaleField(
-                            resource.descriptionFa,
-                            resource.descriptionEn,
-                            appLocale,
-                          )}
-                        </p>
-                      )}
-                      <div className="text-text-secondary mt-1 flex flex-wrap gap-2 text-xs">
-                        {resource.cadTool && (
-                          <span className="bg-bg-surface-alt rounded-full px-2 py-0.5">
-                            {resource.cadTool}
-                          </span>
+                <TiltCard key={resource.id} tilt={false}>
+                  <Card className={cardHoverClass}>
+                    <CardHoverRule />
+                    <CardContent className="flex items-center gap-4 p-5">
+                      <div
+                        className={cn(
+                          "bg-pishnam-gold-500/15 text-pishnam-gold-600 flex size-11 shrink-0 items-center justify-center rounded-lg",
+                          cardHoverIconClass,
                         )}
-                        {!isExternal && resource.fileSizeBytes && (
-                          <span>{formatFileSize(resource.fileSizeBytes)}</span>
+                      >
+                        {isExternal ? (
+                          <ExternalLink className="size-5" aria-hidden="true" />
+                        ) : (
+                          <Download className="size-5" aria-hidden="true" />
                         )}
                       </div>
-                    </div>
-                    <a
-                      href={resource.fileUrl}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                      download={!isExternal}
-                      className="bg-pishnam-gold-500 text-pishnam-navy-900 hover:bg-pishnam-gold-600 shrink-0 rounded-md px-4 py-2 text-sm font-semibold transition-colors"
-                    >
-                      {isExternal ? (isFa ? "مشاهده" : "Visit") : isFa ? "دانلود" : "Download"}
-                    </a>
-                  </CardContent>
-                </Card>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-text-primary font-bold">
+                          {pickLocaleField(resource.titleFa, resource.titleEn, appLocale)}
+                        </p>
+                        {(resource.descriptionFa || resource.descriptionEn) && (
+                          <p className="text-text-secondary mt-0.5 line-clamp-2 text-sm">
+                            {pickLocaleField(
+                              resource.descriptionFa,
+                              resource.descriptionEn,
+                              appLocale,
+                            )}
+                          </p>
+                        )}
+                        <div className="text-text-secondary mt-1 flex flex-wrap gap-2 text-xs">
+                          {resource.cadTool && (
+                            <span className="bg-bg-surface-alt rounded-full px-2 py-0.5">
+                              {resource.cadTool}
+                            </span>
+                          )}
+                          {!isExternal && resource.fileSizeBytes && (
+                            <span>{formatFileSize(resource.fileSizeBytes)}</span>
+                          )}
+                        </div>
+                      </div>
+                      <a
+                        href={resource.fileUrl}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        download={!isExternal}
+                        className="bg-pishnam-gold-500 text-pishnam-navy-900 hover:bg-pishnam-gold-600 shrink-0 rounded-md px-4 py-2 text-sm font-semibold transition-colors"
+                      >
+                        {isExternal ? (isFa ? "مشاهده" : "Visit") : isFa ? "دانلود" : "Download"}
+                      </a>
+                    </CardContent>
+                  </Card>
+                </TiltCard>
               );
             })}
           </div>

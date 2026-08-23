@@ -24,3 +24,10 @@ export const WEEKDAY_LABELS: Record<AppLocale, string[]> = {
 export function formatWeekday(weekday: number, locale: AppLocale): string {
   return WEEKDAY_LABELS[locale][weekday] ?? "";
 }
+
+/** Shared by every download-center listing (flat resources + software releases). */
+export function formatFileSize(bytes: number | null | undefined): string {
+  if (!bytes) return "";
+  const mb = bytes / (1024 * 1024);
+  return mb >= 1 ? `${mb.toFixed(1)} MB` : `${(bytes / 1024).toFixed(0)} KB`;
+}

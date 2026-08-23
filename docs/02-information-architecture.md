@@ -39,10 +39,16 @@ feed:
 │    not a raw unfiltered feed)
 │
 ├── مرکز دانلود               downloads (grouped by category)
-│   └── /downloads/[category]                            [content type: DownloadResource]
-│       categories (renamed/consolidated from the old WP site):
-│         - software        نرم‌افزار و افزونه‌ها      (Software & Plugins — merges old
-│                                                        "software" + "MBlock plugin" categories)
+│   ├── /downloads/software                          [content type: SoftwareProduct]
+│   │   نرم‌افزار و افزونه‌ها (Software & Plugins) — each app/plugin has its own picture
+│   │   and its own page (/downloads/software/[slug]) listing every platform-specific
+│   │   file or link for it (e.g. Windows build, macOS build), each with its own version
+│   │   label, size/link, and notes  [content type: SoftwareRelease, child of SoftwareProduct]
+│   │   (previously a flat DownloadResource category — split out because a single
+│   │   flat row can't represent "one app, several platform builds")
+│   └── /downloads/[category]                        [content type: DownloadResource]
+│       remaining flat, single-file-per-item categories (renamed/consolidated from the
+│       old WP site):
 │         - datasheets       دیتاشیت و مستندات فنی      (Datasheets & Technical Docs)
 │         - books            کتاب و منابع آموزشی        (Books & Learning Resources)
 │         - posters          پوستر مسابقات رباتیک       (Competition Posters)
@@ -89,19 +95,21 @@ reachable via footer/search for less-common needs (e.g. part libraries, old comp
 
 ## Content types requiring admin CRUD
 
-| Type                     | Key fields                                                                                                                         |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority |
-| ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                               |
-| Achievement              | title, competition name, year, result/rank, photo, related course tags                                                             |
-| TeamMember               | name, role, photo, bio (short)                                                                                                     |
-| FAQ                      | question, answer, category                                                                                                         |
-| VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                      |
-| DownloadResource         | title, category, file URL or external link, description                                                                            |
-| Article (blog)           | title, slug, cover image, body (rich text), tags, published date                                                                   |
-| JobPosting               | title, description, requirements, active flag, expiry date                                                                         |
-| Lead/Inquiry submissions | type (enroll/class-seat/sponsor/school/job), form fields, submitted date, status (new/contacted/closed)                            |
-| Feedback                 | optional name, message, submitted date, read flag — criticisms & suggestions from `/contact-us`                                    |
+| Type                     | Key fields                                                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority   |
+| ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                                 |
+| Achievement              | title, competition name, year, result/rank, photo, related course tags                                                               |
+| TeamMember               | name, role, photo, bio (short)                                                                                                       |
+| FAQ                      | question, answer, category                                                                                                           |
+| VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                        |
+| DownloadResource         | title, category (datasheets/books/posters/component-libraries), file URL or external link, description                               |
+| SoftwareProduct          | slug, picture, title, description, order/active — one per app/plugin, has its own public page                                        |
+| SoftwareRelease          | product ref, platform (Windows/macOS/Linux/Web/Android/iOS/Other), version label, file URL or external link, size, per-release notes |
+| Article (blog)           | title, slug, cover image, body (rich text), tags, published date                                                                     |
+| JobPosting               | title, description, requirements, active flag, expiry date                                                                           |
+| Lead/Inquiry submissions | type (enroll/class-seat/sponsor/school/job), form fields, submitted date, status (new/contacted/closed)                              |
+| Feedback                 | optional name, message, submitted date, read flag — criticisms & suggestions from `/contact-us`                                      |
 
 ## Confirmed decisions
 

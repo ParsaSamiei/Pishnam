@@ -47,7 +47,8 @@ enum LeadStatus {
 }
 
 enum DownloadCategory {
-  SOFTWARE              // نرم‌افزار و افزونه‌ها (includes former "MBlock plugin" category)
+  // SOFTWARE used to live here; it now has its own SoftwareProduct/
+  // SoftwareRelease models below (see there for why).
   DATASHEETS            // دیتاشیت و مستندات فنی
   BOOKS                 // کتاب و منابع آموزشی
   POSTERS               // پوستر مسابقات رباتیک
@@ -57,6 +58,16 @@ enum DownloadCategory {
 enum ResourceSource {
   HOSTED    // file uploaded to Pishnam's own storage
   EXTERNAL  // link out to a third-party site (e.g. official tool page)
+}
+
+enum SoftwarePlatform {
+  WINDOWS
+  MACOS
+  LINUX
+  WEB
+  ANDROID
+  IOS
+  OTHER
 }
 
 // Every content model with FA/EN text uses either:
@@ -165,6 +176,43 @@ model DownloadResource {
   createdAt     DateTime         @default(now())
 }
 
+// A single app or plugin in the download center (e.g. "mBlock", "Arduino IDE
+// driver pack") — gets its own public page at /downloads/software/[slug].
+// Split out of DownloadResource because one flat row can't hold both a
+// picture and several platform-specific files under the same product.
+model SoftwareProduct {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  image         String   // admin-uploaded cover picture, shown on the grid and the product page
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  order         Int      @default(0)
+  active        Boolean  @default(true)
+  releases      SoftwareRelease[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// One downloadable file or link for a SoftwareProduct, scoped to a specific
+// platform/version — e.g. "Windows, v2.3.1" and "macOS, v2.3.1" are two rows
+// under the same product, each with its own file/link and notes.
+model SoftwareRelease {
+  id            String           @id @default(cuid())
+  product       SoftwareProduct  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId     String
+  platform      SoftwarePlatform
+  versionLabel  String           // e.g. "v2.3.1", "Build 114"
+  source        ResourceSource   // same HOSTED/EXTERNAL convention as DownloadResource
+  fileUrl       String
+  fileSizeBytes Int?
+  notesFa       String?          // requirements, changelog, install notes for this specific release
+  notesEn       String?
+  order         Int              @default(0)
+  createdAt     DateTime         @default(now())
+}
+
 model Article {
   id           String   @id @default(cuid())
   slug         String   @unique
@@ -268,7 +316,12 @@ model HeroSlide {
   are `HOSTED` (real files, potentially large — installers, part libraries) and others are
   `EXTERNAL` (links out), size hosted files appropriately in mind on the local volume rather than
   the app's own writable layer, and validate `fileUrl` differently depending on `source` (uploaded
-  path vs. a well-formed external URL) in the admin form.
+  path vs. a well-formed external URL) in the admin form. Same public, no-gating rule applies to
+  `SoftwareProduct`/`SoftwareRelease`.
+- **Software & Plugins gets its own two-tier model** — one `SoftwareProduct` per app/plugin (with
+  a picture and its own page) and one `SoftwareRelease` row per platform/version under it (e.g.
+  Windows + macOS builds of the same app). This is the one download-center category that isn't a
+  flat DownloadResource list, because a single row can't represent "one product, several files."
 - **Search**: if/when free-text site search is added, use Postgres `tsvector` columns on
   `CourseTranslation`, `ArticleTranslation`, `Faq` rather than adding a new service.
 - **Contact details are a settings singleton** — `ContactSettings` is one row (`id = "default"`),

@@ -40,7 +40,9 @@ enum LeadStatus {
 }
 
 enum DownloadCategory {
-  SOFTWARE // نرم‌افزار و افزونه‌ها (includes former "MBlock plugin" category)
+  // SOFTWARE lived here before it got its own SoftwareProduct/SoftwareRelease
+  // models below (each app/plugin needed a picture + its own page + several
+  // per-platform files, which a flat DownloadResource row can't represent).
   DATASHEETS // دیتاشیت و مستندات فنی
   BOOKS // کتاب و منابع آموزشی
   POSTERS // پوستر مسابقات رباتیک
@@ -50,6 +52,16 @@ enum DownloadCategory {
 enum ResourceSource {
   HOSTED // file uploaded to Pishnam's own storage
   EXTERNAL // link out to a third-party site (e.g. official tool page)
+}
+
+enum SoftwarePlatform {
+  WINDOWS
+  MACOS
+  LINUX
+  WEB
+  ANDROID
+  IOS
+  OTHER
 }
 
 enum AdminRole {
@@ -177,6 +189,50 @@ model DownloadResource {
   createdAt     DateTime         @default(now())
 
   @@index([category])
+}
+
+// A single app or plugin in the download center (e.g. "mBlock", "Arduino IDE
+// driver pack") -- gets its own public page at /downloads/software/[slug].
+// One product can have several SoftwareRelease rows (Windows build, macOS
+// build, ...), which a flat DownloadResource row couldn't represent.
+model SoftwareProduct {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  // `/uploads/<uuid>.webp` from /api/admin/upload -- shown as the product's
+  // cover picture on both the software grid and its own page.
+  image         String
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  order         Int      @default(0)
+  active        Boolean  @default(true)
+
+  releases  SoftwareRelease[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([active])
+}
+
+// One downloadable file or link for a SoftwareProduct, tied to a specific
+// platform/version -- e.g. "Windows, v2.3.1" and "macOS, v2.3.1" are two
+// separate rows under the same product.
+model SoftwareRelease {
+  id            String           @id @default(cuid())
+  product       SoftwareProduct  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId     String
+  platform      SoftwarePlatform
+  versionLabel  String // e.g. "v2.3.1", "Build 114"
+  source        ResourceSource // HOSTED or EXTERNAL -- same convention as DownloadResource
+  fileUrl       String // hosted file path OR external URL, per `source`
+  fileSizeBytes Int? // only relevant when source = HOSTED
+  notesFa       String? // e.g. requirements, changelog snippet, install note -- specific to this release
+  notesEn       String?
+  order         Int              @default(0)
+  createdAt     DateTime         @default(now())
+
+  @@index([productId])
 }
 
 model Article {

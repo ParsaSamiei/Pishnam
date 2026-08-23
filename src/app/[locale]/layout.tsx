@@ -8,6 +8,7 @@ import { ThemeScript } from "@/components/layout/theme-script";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CircuitBackground } from "@/components/layout/circuit-background";
+import { BrandCursor } from "@/components/layout/brand-cursor";
 import { AnalyticsScript } from "@/components/analytics-script";
 import "@/styles/globals.css";
 
@@ -86,6 +87,7 @@ export default async function LocaleLayout({
       </head>
       <body className="flex min-h-screen flex-col antialiased">
         <CircuitBackground />
+        <BrandCursor />
         <NextIntlClientProvider>
           {/* relative + z-10: an explicit stacking context for all page
               content, so it reliably paints above the fixed
@@ -94,7 +96,7 @@ export default async function LocaleLayout({
           <div className="relative z-10 flex flex-1 flex-col">
             <a
               href="#main-content"
-              className="focus:bg-pishnam-gold-500 focus:text-pishnam-navy-900 sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2"
+              className="focus:bg-pishnam-gold-500 focus:text-pishnam-navy-900 sr-only focus:not-sr-only focus:absolute focus:inset-s-4 focus:top-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2"
             >
               {locale === "fa" ? "رفتن به محتوای اصلی" : "Skip to main content"}
             </a>

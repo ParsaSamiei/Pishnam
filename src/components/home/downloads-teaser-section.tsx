@@ -9,7 +9,7 @@ import { TiltCard } from "@/components/motion/tilt-card";
 import { CardHoverRule, cardHoverClass, cardHoverIconClass } from "@/components/motion/card-hover";
 import { cn } from "@/lib/utils";
 import type { AppLocale } from "@/lib/i18n/routing";
-import { DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
+import { DOWNLOAD_CATEGORIES, SOFTWARE_DOWNLOAD_TILE } from "@/lib/download-categories";
 
 export async function DownloadsTeaserSection() {
   const t = await getTranslations("home.downloads");
@@ -35,29 +35,33 @@ export async function DownloadsTeaserSection() {
       </div>
 
       <StaggerGroup className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {DOWNLOAD_CATEGORIES.map(({ slug, icon: Icon, labelFa, labelEn }) => (
-          <StaggerItem key={slug} className="h-full">
-            <Link href={`/downloads/${slug}`} className="block h-full cursor-pointer">
-              {/* Lift only -- five tiles tilting independently reads as noise. */}
-              <TiltCard className="h-full" tilt={false}>
-                <Card className={cn("flex h-full flex-col items-start gap-3 p-5", cardHoverClass)}>
-                  <CardHoverRule />
-                  <div
-                    className={cn(
-                      "bg-pishnam-steel-600/15 text-pishnam-steel-600 flex size-10 items-center justify-center rounded-lg",
-                      cardHoverIconClass,
-                    )}
+        {[SOFTWARE_DOWNLOAD_TILE, ...DOWNLOAD_CATEGORIES].map(
+          ({ slug, icon: Icon, labelFa, labelEn }) => (
+            <StaggerItem key={slug} className="h-full">
+              <Link href={`/downloads/${slug}`} className="block h-full cursor-pointer">
+                {/* Lift only -- five tiles tilting independently reads as noise. */}
+                <TiltCard className="h-full" tilt={false}>
+                  <Card
+                    className={cn("flex h-full flex-col items-start gap-3 p-5", cardHoverClass)}
                   >
-                    <Icon className="size-5" aria-hidden="true" />
-                  </div>
-                  <span className="text-text-primary text-sm font-semibold">
-                    {locale === "fa" ? labelFa : labelEn}
-                  </span>
-                </Card>
-              </TiltCard>
-            </Link>
-          </StaggerItem>
-        ))}
+                    <CardHoverRule />
+                    <div
+                      className={cn(
+                        "bg-pishnam-steel-600/15 text-pishnam-steel-600 flex size-10 items-center justify-center rounded-lg",
+                        cardHoverIconClass,
+                      )}
+                    >
+                      <Icon className="size-5" aria-hidden="true" />
+                    </div>
+                    <span className="text-text-primary text-sm font-semibold">
+                      {locale === "fa" ? labelFa : labelEn}
+                    </span>
+                  </Card>
+                </TiltCard>
+              </Link>
+            </StaggerItem>
+          ),
+        )}
       </StaggerGroup>
     </section>
   );

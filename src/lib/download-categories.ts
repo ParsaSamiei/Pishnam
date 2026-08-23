@@ -2,17 +2,25 @@ import type { LucideIcon } from "lucide-react";
 import { Code2, FileText, BookOpen, Trophy, Boxes } from "lucide-react";
 import type { AppLocale } from "./i18n/routing";
 
+// "Software & Plugins" used to be a value in `enum DownloadCategory` with a
+// flat DownloadResource row per item. It now has its own SoftwareProduct /
+// SoftwareRelease models (see prisma/schema.prisma) so each app/plugin can
+// have a picture and its own page listing several platform-specific files --
+// see src/app/[locale]/downloads/software/. This constant is kept separate
+// from DOWNLOAD_CATEGORIES below (which now only covers the flat,
+// single-file-per-item categories) purely for the public /downloads index
+// tile, which still wants to list software first alongside the others.
+export const SOFTWARE_DOWNLOAD_TILE = {
+  slug: "software",
+  icon: Code2,
+  labelFa: "نرم‌افزار و افزونه‌ها",
+  labelEn: "Software & Plugins",
+} as const;
+
 // Mirrors `enum DownloadCategory` in prisma/schema.prisma. URL slugs are
 // kebab-case per docs/02-information-architecture.md
 // ("/downloads/[category]").
 export const DOWNLOAD_CATEGORIES = [
-  {
-    slug: "software",
-    value: "SOFTWARE",
-    icon: Code2,
-    labelFa: "نرم‌افزار و افزونه‌ها",
-    labelEn: "Software & Plugins",
-  },
   {
     slug: "datasheets",
     value: "DATASHEETS",

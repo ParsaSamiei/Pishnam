@@ -15,6 +15,7 @@ const STATIC_PATHS = [
   "/classes",
   "/videos",
   "/downloads",
+  "/downloads/software",
   "/blog",
   "/sponsors",
   "/schools",
@@ -45,7 +46,7 @@ function buildEntry(path: string, lastModified?: Date): MetadataRoute.Sitemap[nu
 // entry's own `alternates.languages` communicates the fa/en pair to crawlers
 // rather than listing every URL twice as separate top-level entries.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [courses, articles] = await Promise.all([
+  const [courses, articles, softwareProducts] = await Promise.all([
     prisma.course.findMany({
       where: { active: true },
       select: { slug: true, updatedAt: true },
@@ -54,6 +55,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { publishedAt: { lte: new Date() } },
       select: { slug: true, publishedAt: true },
     }),
+    prisma.softwareProduct.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    }),
   ]);
 
   const entries: MetadataRoute.Sitemap = [
@@ -61,6 +66,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...DOWNLOAD_CATEGORIES.map((category) => buildEntry(`/downloads/${category.slug}`)),
     ...courses.map((course) => buildEntry(`/courses/${course.slug}`, course.updatedAt)),
     ...articles.map((article) => buildEntry(`/blog/${article.slug}`, article.publishedAt)),
+    ...softwareProducts.map((product) =>
+      buildEntry(`/downloads/software/${product.slug}`, product.updatedAt),
+    ),
   ];
 
   return entries;

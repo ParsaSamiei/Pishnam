@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const CATEGORIES = ["DATASHEETS", "BOOKS", "POSTERS", "COMPONENT_LIBRARIES"] as const;
+const CATEGORIES = ["DATASHEETS", "BOOKS", "COMPONENT_LIBRARIES"] as const;
 const SOURCES = ["HOSTED", "EXTERNAL"] as const;
 
 export const downloadResourceSchema = z

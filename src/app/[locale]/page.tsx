@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/lib/i18n/routing";
 import { HeroSection } from "@/components/home/hero-section";
 import { AudienceEntrySection } from "@/components/home/audience-entry-section";
+import { RelatedSitesBanner } from "@/components/home/related-sites-banner";
 import { AchievementsHighlight } from "@/components/home/achievements-highlight";
 import { NewsTeaserSection } from "@/components/home/news-teaser-section";
 import { VideosTeaserSection } from "@/components/home/videos-teaser-section";
@@ -44,6 +45,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <ScrollSpine>
         <HeroSection />
         <AudienceEntrySection />
+        <RelatedSitesBanner />
         <AchievementsHighlight />
         <NewsTeaserSection />
         <VideosTeaserSection />

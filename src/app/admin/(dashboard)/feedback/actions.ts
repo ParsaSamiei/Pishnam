@@ -13,6 +13,8 @@ const updateFeedbackSchema = z.object({
 function revalidateFeedback() {
   revalidatePath("/admin/feedback");
   revalidatePath("/admin");
+  revalidatePath("/feedback");
+  revalidatePath("/en/feedback");
 }
 
 export async function updateFeedback(formData: FormData): Promise<void> {

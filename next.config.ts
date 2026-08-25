@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: "standalone", // smaller production image, see infra/Dockerfile
 
+  // Next 16 blocks cross-origin access to /_next/* in dev by default. Opening
+  // the site as http://127.0.0.1:3000 while the server binds on localhost (or
+  // vice versa) 403s the client chunks -- and the brand cursor never hydrates.
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
+
   images: {
     // Uploaded media is served from our own /uploads route (local disk, see
     // 05-frontend-architecture.md). Aparat's own domain is whitelisted so

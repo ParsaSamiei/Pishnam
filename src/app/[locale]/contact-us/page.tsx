@@ -4,7 +4,6 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { setRequestLocale } from "next-intl/server";
 import { PageHeader } from "@/components/layout/page-header";
 import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
-import { FeedbackForm } from "@/components/forms/feedback-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { JsonLd } from "@/components/json-ld";
 import { getContactSettings } from "@/lib/contact-settings";
@@ -174,45 +173,6 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             />
           </div>
         ) : null}
-
-        <section className="mt-16" aria-labelledby="feedback-heading">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2
-              id="feedback-heading"
-              className="text-text-primary text-2xl font-bold tracking-tight"
-            >
-              {isFa ? "انتقادات و پیشنهادات" : "Feedback & suggestions"}
-            </h2>
-            <p className="text-text-secondary mt-2 text-sm leading-relaxed sm:text-base">
-              {isFa
-                ? "نظر، انتقاد یا پیشنهادتان را بنویسید. نوشتن نام اختیاری است."
-                : "Share a comment, criticism, or suggestion. Your name is optional."}
-            </p>
-          </div>
-          <Card className="mx-auto mt-8 max-w-2xl">
-            <CardContent className="p-6 sm:p-8">
-              <FeedbackForm
-                nameLabel={isFa ? "نام" : "Name"}
-                nameHint={
-                  isFa
-                    ? "اختیاری — می‌توانید ناشناس بفرستید."
-                    : "Optional — you can submit anonymously."
-                }
-                messageLabel={isFa ? "متن انتقاد یا پیشنهاد *" : "Your feedback *"}
-                messagePlaceholder={
-                  isFa ? "هر چه به ذهنتان می‌رسد بنویسید…" : "Write whatever you'd like us to know…"
-                }
-                submitLabel={isFa ? "ارسال" : "Submit"}
-                successTitle={isFa ? "با تشکر از پیام شما" : "Thank you for your message"}
-                successBody={
-                  isFa
-                    ? "انتقاد یا پیشنهادتان ثبت شد و توسط تیم پیشنام خوانده می‌شود."
-                    : "Your feedback has been received and will be read by the Pishnam team."
-                }
-              />
-            </CardContent>
-          </Card>
-        </section>
       </div>
     </>
   );

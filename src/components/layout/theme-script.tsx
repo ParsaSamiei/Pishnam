@@ -1,3 +1,5 @@
+"use client";
+
 // Resolution logic per docs/03-design-system.md:
 //   1. Check prefers-color-scheme.
 //   2. If it resolves, use that.
@@ -55,7 +57,18 @@ const THEME_SCRIPT = `
 })();
 `;
 
+declare global {
+  interface Window {
+    __pishnamThemeGuard?: boolean;
+  }
+}
+
 export function ThemeScript() {
+  // Must be a Client Component so `typeof window` is evaluated on the client.
+  // As a Server Component, this always serialized as text/javascript; React 19
+  // then warns when it creates that executable <script> during soft navigations
+  // (e.g. locale changes remounting the root layout).
+  //
   // `text/javascript` on the server, so the browser runs this during HTML
   // parsing as it must; `text/plain` on the client, which is what silences
   // React's "encountered a script tag while rendering" warning -- it only

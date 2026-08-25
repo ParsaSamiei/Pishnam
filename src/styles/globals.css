@@ -190,20 +190,26 @@
   }
 }
 
-/* Brand cursor -- public locale layout only. Hidden on touch, reduced-motion,
-   and forced-colors; native I-beam / iframe cursors are restored via
-   data-mode rather than faked. See components/layout/brand-cursor.tsx. */
+/* Brand cursor -- hide the OS pointer while the brand cursor is live.
+   Text inputs and iframes temporarily restore it via data-mode. */
 @media (hover: hover) and (pointer: fine) {
-  body:has(
-    [data-brand-cursor-root]:not([data-mode="text"]):not([data-mode="native"]):not(
-        [data-mode="hidden"]
-      )
+  html:has(
+    [data-brand-cursor-root][data-live="true"]:not([data-mode="text"]):not(
+        [data-mode="native"]
+      ):not([data-mode="hidden"])
   ),
-  body:has(
-      [data-brand-cursor-root]:not([data-mode="text"]):not([data-mode="native"]):not(
-          [data-mode="hidden"]
-        )
+  html:has(
+      [data-brand-cursor-root][data-live="true"]:not([data-mode="text"]):not(
+          [data-mode="native"]
+        ):not([data-mode="hidden"])
     )
+    body,
+  html:has(
+      [data-brand-cursor-root][data-live="true"]:not([data-mode="text"]):not(
+          [data-mode="native"]
+        ):not([data-mode="hidden"])
+    )
+    body
     * {
     cursor: none !important;
   }

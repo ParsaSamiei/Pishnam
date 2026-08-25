@@ -36,9 +36,16 @@ One admin section per content type from the schema:
 - Video entries (Aparat links)
 - Download resources — form includes a source toggle (upload a file → local disk storage, or
   paste an
-  external link), a category dropdown (datasheets / books / posters / component libraries), and a
+  external link), a category dropdown (datasheets / books / component libraries), and a
   CAD-tool tag field shown only for the component-libraries category. All downloads are public by
   default — no gating option needed.
+- Competitions — slug, FA/EN title, optional year, active/order. Parent of leagues.
+- Leagues — belongs to a competition; FA/EN title, slug unique per competition, active/order.
+- Poster categories — belongs to a league; FA/EN title, slug unique per league, active/order.
+  Categories can differ between competitions and between leagues.
+- Competition posters — belongs to a poster category; preview image, FA/EN title/description,
+  hosted file or external link, active/order. Public page at `/downloads/posters` groups by
+  competition → league → category.
 - Software & plugins (`SoftwareProduct`) — a picture upload, slug (used as the public page's URL),
   FA/EN title and description, and an active/order toggle. Each product gets its own public page.
 - Software files (`SoftwareRelease`) — one row per platform/version under a product: pick the

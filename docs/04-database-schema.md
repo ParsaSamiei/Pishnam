@@ -49,9 +49,9 @@ enum LeadStatus {
 enum DownloadCategory {
   // SOFTWARE used to live here; it now has its own SoftwareProduct/
   // SoftwareRelease models below (see there for why).
+  // POSTERS moved to CompetitionPoster under Competition → League → PosterCategory.
   DATASHEETS            // دیتاشیت و مستندات فنی
   BOOKS                 // کتاب و منابع آموزشی
-  POSTERS               // پوستر مسابقات رباتیک
   COMPONENT_LIBRARIES   // کتابخانه قطعات CAD (merges former SolidWorks/Altium categories)
 }
 
@@ -174,6 +174,73 @@ model DownloadResource {
   fileUrl       String           // hosted file path OR external URL, per `source`
   fileSizeBytes Int?             // only relevant when source = HOSTED
   createdAt     DateTime         @default(now())
+}
+
+// Competition posters used to be flat DownloadResource rows (category =
+// POSTERS). They now follow Competition → League → PosterCategory →
+// CompetitionPoster so admins can manage categories per competition and
+// league, and the public /downloads/posters page can group accordingly.
+model Competition {
+  id      String  @id @default(cuid())
+  slug    String  @unique
+  titleFa String
+  titleEn String
+  year    Int?
+  order   Int     @default(0)
+  active  Boolean @default(true)
+  leagues League[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model League {
+  id            String      @id @default(cuid())
+  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  competitionId String
+  slug          String
+  titleFa       String
+  titleEn       String
+  order         Int         @default(0)
+  active        Boolean     @default(true)
+  categories    PosterCategory[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([competitionId, slug])
+}
+
+model PosterCategory {
+  id       String @id @default(cuid())
+  league   League @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  leagueId String
+  slug     String
+  titleFa  String
+  titleEn  String
+  order    Int    @default(0)
+  active   Boolean @default(true)
+  posters  CompetitionPoster[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([leagueId, slug])
+}
+
+model CompetitionPoster {
+  id            String         @id @default(cuid())
+  category      PosterCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    String
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  previewImage  String
+  source        ResourceSource
+  fileUrl       String
+  fileSizeBytes Int?
+  order         Int            @default(0)
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 // A single app or plugin in the download center (e.g. "mBlock", "Arduino IDE

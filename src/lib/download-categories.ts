@@ -17,6 +17,17 @@ export const SOFTWARE_DOWNLOAD_TILE = {
   labelEn: "Software & Plugins",
 } as const;
 
+// Competition posters used to be flat DownloadResource rows (POSTERS). They
+// now live under Competition → League → PosterCategory → CompetitionPoster
+// so admins can manage categories per competition and league. Kept as a
+// separate tile constant for the same reason as SOFTWARE_DOWNLOAD_TILE.
+export const POSTERS_DOWNLOAD_TILE = {
+  slug: "posters",
+  icon: Trophy,
+  labelFa: "پوستر مسابقات رباتیک",
+  labelEn: "Competition Posters",
+} as const;
+
 // Mirrors `enum DownloadCategory` in prisma/schema.prisma. URL slugs are
 // kebab-case per docs/02-information-architecture.md
 // ("/downloads/[category]").
@@ -34,13 +45,6 @@ export const DOWNLOAD_CATEGORIES = [
     icon: BookOpen,
     labelFa: "کتاب و منابع آموزشی",
     labelEn: "Books & Resources",
-  },
-  {
-    slug: "posters",
-    value: "POSTERS",
-    icon: Trophy,
-    labelFa: "پوستر مسابقات رباتیک",
-    labelEn: "Competition Posters",
   },
   {
     slug: "component-libraries",

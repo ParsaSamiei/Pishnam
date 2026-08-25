@@ -66,13 +66,14 @@ export function LeadCaptureForm({
   }
 
   return (
-    <form action={formAction} className="flex flex-col gap-4" noValidate>
+    <form action={formAction} className="relative flex min-w-0 flex-col gap-4" noValidate>
       <input type="hidden" name="type" value={leadType} />
 
-      {/* Honeypot: invisible to sighted users and screen readers, removed
-          from tab order. Real users never touch it; bots that blindly fill
-          every input do. */}
-      <div className="absolute start-[-9999px]" aria-hidden="true">
+      {/* Honeypot: zero-size clip in place — off-canvas left/start offsets expand page scroll. */}
+      <div
+        className="pointer-events-none absolute top-0 left-0 h-0 w-0 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
         <label htmlFor="lead-website">Website</label>
         <input id="lead-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>

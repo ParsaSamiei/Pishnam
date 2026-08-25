@@ -11,10 +11,14 @@
     "downloads": "Downloads",
     "blog": "News",
     "contact": "Contact us",
+    "feedback": "Feedback & suggestions",
     "enroll": "Enroll",
     "sponsors": "Sponsors",
     "schools": "Schools",
     "careers": "Careers",
+    "pishtalk": "Pishtalk",
+    "pishcup": "PishCup",
+    "opensInNewTab": "opens in a new tab",
     "search": "Search",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
@@ -86,6 +90,22 @@
       "title": "Download Center",
       "subtitle": "Software, datasheets, books, competition posters, and part libraries — all free, no sign-up required.",
       "viewAll": "Browse download center"
+    },
+    "related": {
+      "title": "Beyond the classroom",
+      "subtitle": "Compete and connect across the Pishnam ecosystem — the same team, two destinations.",
+      "pishcup": {
+        "eyebrow": "Competition",
+        "title": "PishCup",
+        "description": "Pishnam's robotics competition arena — leagues, seasons, and the path to the podium.",
+        "cta": "Open PishCup"
+      },
+      "pishtalk": {
+        "eyebrow": "Community",
+        "title": "Pishtalk",
+        "description": "A home for AI and robotics engineers — share ideas, ask questions, grow together.",
+        "cta": "Open Pishtalk"
+      }
     }
   },
   "footer": {
@@ -93,8 +113,11 @@
     "sections": {
       "explore": "Explore",
       "about": "About Pishnam",
+      "related": "Related sites",
       "legal": "Legal"
     },
+    "pishtalkBlurb": "Community for AI and robotics engineers",
+    "pishcupBlurb": "Competition run by Pishnam",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "rightsReserved": "All rights reserved."

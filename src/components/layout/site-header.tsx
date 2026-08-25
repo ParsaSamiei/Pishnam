@@ -3,15 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { motion } from "motion/react";
-import { Menu, Search } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { ExternalLink, Menu, Search, X } from "lucide-react";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useScrolledPast } from "@/components/motion/use-scrolled-past";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
-import { SPRING } from "@/lib/motion";
+import { useIsRtl } from "@/components/motion/use-is-rtl";
+import { DURATION, EASE_OUT, SPRING, directionSign } from "@/lib/motion";
 import { LanguageSwitch } from "./language-switch";
 import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,11 @@ const NAV_ITEMS = [
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },
   { href: "/contact-us", key: "contact" },
+] as const;
+
+const EXTERNAL_LINKS = [
+  { href: "https://pishcup.com", key: "pishcup" },
+  { href: "https://pishtalk.com", key: "pishtalk" },
 ] as const;
 
 /** Icon / outline controls in the header: gold wash instead of a near-invisible surface swap. */
@@ -43,6 +49,10 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const scrolled = useScrolledPast(80);
   const reduced = useReducedMotionSafe();
+  const isRtl = useIsRtl();
+  // Panel parks off the inline-start edge: left in LTR, right in Persian.
+  const drawerOffscreenX = `${-100 * directionSign(isRtl)}%`;
+  const drawerTransition = reduced ? { duration: 0 } : { duration: DURATION.fast, ease: EASE_OUT };
 
   return (
     /* Condenses once the visitor is into the page. The outer box stays 4rem:
@@ -78,7 +88,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary">
           {NAV_ITEMS.map((item) => {
             const active = pathname === item.href;
             return (
@@ -88,7 +98,7 @@ export function SiteHeader() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   headerNavLinkClass,
-                  "py-2",
+                  "cursor-pointer py-2",
                   active && "bg-pishnam-gold-500/12 text-pishnam-gold-600",
                 )}
               >
@@ -96,6 +106,23 @@ export function SiteHeader() {
               </Link>
             );
           })}
+          <span className="bg-border mx-1 h-4 w-px shrink-0" aria-hidden="true" />
+          {EXTERNAL_LINKS.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${t(item.key)} (${t("opensInNewTab")})`}
+              className={cn(
+                headerNavLinkClass,
+                "inline-flex cursor-pointer items-center gap-1.5 py-2",
+              )}
+            >
+              {t(item.key)}
+              <ExternalLink className="size-3.5 opacity-60" aria-hidden="true" />
+            </a>
+          ))}
         </nav>
 
         <div className="flex items-center gap-1">
@@ -115,7 +142,7 @@ export function SiteHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className={cn("lg:hidden", headerControlClass)}
+            className={cn("xl:hidden", headerControlClass)}
             aria-label={t("openMenu")}
             onClick={() => setMobileOpen(true)}
           >
@@ -124,38 +151,84 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <Dialog open={mobileOpen} onOpenChange={setMobileOpen}>
-        <DialogContent className="data-[state=closed]:slide-out-to-start data-[state=open]:slide-in-from-start start-0 top-0 h-full max-w-xs translate-x-0 translate-y-0 rounded-none border-0 border-e sm:max-w-sm">
-          <VisuallyHidden>
-            <DialogTitle>{t("openMenu")}</DialogTitle>
-          </VisuallyHidden>
-          <nav className="mt-8 flex flex-col gap-1" aria-label="Mobile">
-            {NAV_ITEMS.map((item) => {
-              const active = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    headerNavLinkClass,
-                    "py-3 text-base",
-                    active && "bg-pishnam-gold-500/12 text-pishnam-gold-600",
-                  )}
+      <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
+        <AnimatePresence>
+          {mobileOpen ? (
+            <Dialog.Portal forceMount key="mobile-nav">
+              <Dialog.Overlay asChild forceMount>
+                <motion.div
+                  className="bg-pishnam-navy-900/60 fixed inset-0 z-50 backdrop-blur-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={drawerTransition}
+                />
+              </Dialog.Overlay>
+              <Dialog.Content asChild forceMount>
+                <motion.div
+                  className="border-border bg-bg-surface fixed start-0 top-0 z-50 flex h-dvh max-h-dvh w-full max-w-xs flex-col overflow-y-auto border-e p-6 shadow-lg outline-none sm:max-w-sm"
+                  initial={{ x: drawerOffscreenX }}
+                  animate={{ x: 0 }}
+                  exit={{ x: drawerOffscreenX }}
+                  transition={drawerTransition}
                 >
-                  {t(item.key)}
-                </Link>
-              );
-            })}
-            <Button asChild size="lg" className="mt-4">
-              <Link href="/enroll" onClick={() => setMobileOpen(false)}>
-                {t("enroll")}
-              </Link>
-            </Button>
-          </nav>
-        </DialogContent>
-      </Dialog>
+                  <VisuallyHidden>
+                    <Dialog.Title>{t("openMenu")}</Dialog.Title>
+                  </VisuallyHidden>
+                  <Dialog.Close className="focus:ring-pishnam-gold-500 absolute end-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:outline-none">
+                    <X className="size-4" />
+                    <span className="sr-only">Close</span>
+                  </Dialog.Close>
+                  <nav className="mt-8 flex flex-col gap-1" aria-label="Mobile">
+                    {NAV_ITEMS.map((item) => {
+                      const active = pathname === item.href;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          aria-current={active ? "page" : undefined}
+                          className={cn(
+                            headerNavLinkClass,
+                            "cursor-pointer py-3 text-base",
+                            active && "bg-pishnam-gold-500/12 text-pishnam-gold-600",
+                          )}
+                        >
+                          {t(item.key)}
+                        </Link>
+                      );
+                    })}
+                    <div className="border-border my-2 border-t pt-2">
+                      {EXTERNAL_LINKS.map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${t(item.key)} (${t("opensInNewTab")})`}
+                          onClick={() => setMobileOpen(false)}
+                          className={cn(
+                            headerNavLinkClass,
+                            "inline-flex w-full cursor-pointer items-center justify-between gap-2 py-3 text-base",
+                          )}
+                        >
+                          {t(item.key)}
+                          <ExternalLink className="size-4 opacity-60" aria-hidden="true" />
+                        </a>
+                      ))}
+                    </div>
+                    <Button asChild size="lg" className="mt-4">
+                      <Link href="/enroll" onClick={() => setMobileOpen(false)}>
+                        {t("enroll")}
+                      </Link>
+                    </Button>
+                  </nav>
+                </motion.div>
+              </Dialog.Content>
+            </Dialog.Portal>
+          ) : null}
+        </AnimatePresence>
+      </Dialog.Root>
     </header>
   );
 }

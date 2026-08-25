@@ -34,7 +34,6 @@ interface DownloadResourceFormProps {
 const CATEGORY_POLICY: Record<string, { policy: UploadPolicyKey; accept: string }> = {
   DATASHEETS: { policy: "download.datasheet", accept: ".pdf" },
   BOOKS: { policy: "download.book", accept: ".pdf" },
-  POSTERS: { policy: "download.poster", accept: ".pdf,image/jpeg,image/png" },
   COMPONENT_LIBRARIES: { policy: "download.componentLibrary", accept: ".zip" },
 };
 

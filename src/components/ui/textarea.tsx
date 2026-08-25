@@ -8,7 +8,11 @@ const Textarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      "border-border bg-bg-surface text-text-primary flex w-full rounded-md border px-3 py-2 text-sm",
+      // `block` + `min-w-0`: avoid `display:flex` (breaks RTL placeholder
+      // layout in some engines) and flex-item min-content blowouts that
+      // widen the page past the viewport. Do not use overflow-x-clip —
+      // it chops the start of RTL placeholder glyphs at non-100% zoom.
+      "border-border bg-bg-surface text-text-primary block w-full min-w-0 rounded-md border px-3 py-2 text-start text-sm",
       "placeholder:text-text-secondary",
       "focus-visible:ring-pishnam-gold-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
       "disabled:cursor-not-allowed disabled:opacity-50",

@@ -46,12 +46,14 @@ feed:
 │   │   label, size/link, and notes  [content type: SoftwareRelease, child of SoftwareProduct]
 │   │   (previously a flat DownloadResource category — split out because a single
 │   │   flat row can't represent "one app, several platform builds")
+│   ├── /downloads/posters                           [content type: CompetitionPoster]
+│   │   پوستر مسابقات رباتیک — filtered by competition → league → poster category
+│   │   (admin-managed taxonomy; previously a flat DownloadResource POSTERS category)
 │   └── /downloads/[category]                        [content type: DownloadResource]
 │       remaining flat, single-file-per-item categories (renamed/consolidated from the
 │       old WP site):
 │         - datasheets       دیتاشیت و مستندات فنی      (Datasheets & Technical Docs)
 │         - books            کتاب و منابع آموزشی        (Books & Learning Resources)
-│         - posters          پوستر مسابقات رباتیک       (Competition Posters)
 │         - component-libraries  کتابخانه قطعات CAD     (Component Libraries — merges old
 │                                                        "SolidWorks library" + "Altium library"
 │                                                        into one category, distinguished by a
@@ -103,7 +105,11 @@ reachable via footer/search for less-common needs (e.g. part libraries, old comp
 | TeamMember               | name, role, photo, bio (short)                                                                                                       |
 | FAQ                      | question, answer, category                                                                                                           |
 | VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                        |
-| DownloadResource         | title, category (datasheets/books/posters/component-libraries), file URL or external link, description                               |
+| DownloadResource         | title, category (datasheets/books/component-libraries), file URL or external link, description                                       |
+| Competition              | slug, title, optional year, active/order — parent of leagues                                                                         |
+| League                   | competition ref, slug, title, active/order — parent of poster categories                                                             |
+| PosterCategory           | league ref, slug, title, active/order — groups posters within a league                                                               |
+| CompetitionPoster        | category ref, preview image, title, description, file URL or external link, active/order                                             |
 | SoftwareProduct          | slug, picture, title, description, order/active — one per app/plugin, has its own public page                                        |
 | SoftwareRelease          | product ref, platform (Windows/macOS/Linux/Web/Android/iOS/Other), version label, file URL or external link, size, per-release notes |
 | Article (blog)           | title, slug, cover image, body (rich text), tags, published date                                                                     |

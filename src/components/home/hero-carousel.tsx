@@ -345,7 +345,7 @@ export function HeroCarousel({ slides }: { slides: HeroCarouselSlide[] }) {
                   // of the fonts and the page's own JS in the queue, to show
                   // one.
                   priority={index === 0}
-                  className="object-cover"
+                  className="object-contain"
                   sizes={SIZES}
                 />
                 {(slide.title || slide.description) && (

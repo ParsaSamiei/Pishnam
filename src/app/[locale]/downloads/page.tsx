@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { buildAlternates } from "@/lib/i18n/alternates";
 import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { DOWNLOAD_CATEGORIES, SOFTWARE_DOWNLOAD_TILE } from "@/lib/download-categories";
+import {
+  DOWNLOAD_CATEGORIES,
+  POSTERS_DOWNLOAD_TILE,
+  SOFTWARE_DOWNLOAD_TILE,
+} from "@/lib/download-categories";
 import { Link } from "@/lib/i18n/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,22 +38,28 @@ export default async function DownloadsPage({ params }: { params: Promise<{ loca
   const isFa = locale === "fa";
   const ChevronIcon = isFa ? ChevronLeft : ChevronRight;
 
-  const [counts, softwareCount] = await Promise.all([
+  const [counts, softwareCount, postersCount] = await Promise.all([
     prisma.downloadResource.groupBy({ by: ["category"], _count: true }),
     prisma.softwareProduct.count({ where: { active: true } }),
+    prisma.competitionPoster.count({ where: { active: true } }),
   ]);
   const countByCategory = new Map<string, number>(counts.map((c) => [c.category, c._count]));
 
-  // Software & Plugins now has its own SoftwareProduct model (each product
-  // gets its own page with per-platform files), so it isn't part of
-  // DOWNLOAD_CATEGORIES/downloadResource counts below -- it's prepended here
-  // to keep the same tile order visitors saw before.
+  // Software & posters have dedicated models (richer than flat DownloadResource),
+  // so they aren't part of DOWNLOAD_CATEGORIES/downloadResource counts -- they're
+  // prepended here to keep a stable tile order for visitors.
   const tiles = [
     {
       slug: SOFTWARE_DOWNLOAD_TILE.slug,
       icon: SOFTWARE_DOWNLOAD_TILE.icon,
       label: isFa ? SOFTWARE_DOWNLOAD_TILE.labelFa : SOFTWARE_DOWNLOAD_TILE.labelEn,
       count: softwareCount,
+    },
+    {
+      slug: POSTERS_DOWNLOAD_TILE.slug,
+      icon: POSTERS_DOWNLOAD_TILE.icon,
+      label: isFa ? POSTERS_DOWNLOAD_TILE.labelFa : POSTERS_DOWNLOAD_TILE.labelEn,
+      count: postersCount,
     },
     ...DOWNLOAD_CATEGORIES.map((category) => ({
       slug: category.slug,

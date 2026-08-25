@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { useBrandCursorEnabled } from "./use-brand-cursor";
 
 const TRAIL = 5;
@@ -28,6 +29,16 @@ function modeFromTarget(target: EventTarget | null): Mode {
   return "idle";
 }
 
+const subscribeNowhere = () => () => {};
+/** False during SSR / hydration; true after the client commits. */
+function useIsClient() {
+  return useSyncExternalStore(
+    subscribeNowhere,
+    () => true,
+    () => false,
+  );
+}
+
 /**
  * Public-site cursor: a miniature of the Pishnam robot badge that replaces
  * the OS pointer on fine-pointer desktops. Eyes lean with movement, a gold
@@ -35,18 +46,22 @@ function modeFromTarget(target: EventTarget | null): Mode {
  * a press pulse fires on click -- the same navy / gold / steel language as
  * CircuitBackground and the logo.
  *
- * Rendering is DOM-direct after mount so pointer frames never go through
- * React. Native I-beam and iframe cursors are restored rather than faked.
+ * Portaled to `document.body` with an extreme z-index so page chrome
+ * (`relative z-10`, sticky header `z-40`, dialogs `z-50`) cannot bury it.
+ * Native I-beam and iframe cursors are restored rather than faked.
  */
 export function BrandCursor() {
+  const isClient = useIsClient();
   const enabled = useBrandCursorEnabled();
   const rootRef = useRef<HTMLDivElement>(null);
   const faceRef = useRef<HTMLDivElement>(null);
   const coreRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
 
+  const active = isClient && enabled;
+
   useEffect(() => {
-    if (!enabled) return;
+    if (!active) return;
 
     const rootEl = rootRef.current;
     const faceEl = faceRef.current;
@@ -84,14 +99,14 @@ export function BrandCursor() {
 
     function applyModeFrom(target: EventTarget | null) {
       if (!visible) {
-        setMode("hidden");
+        setMode("idle");
         return;
       }
       setMode(modeFromTarget(target));
     }
 
     function onMove(event: PointerEvent) {
-      if (event.pointerType !== "mouse") return;
+      if (event.pointerType === "touch") return;
       destX = event.clientX;
       destY = event.clientY;
       if (!visible) {
@@ -107,12 +122,12 @@ export function BrandCursor() {
     }
 
     function onOver(event: PointerEvent) {
-      if (event.pointerType !== "mouse") return;
+      if (event.pointerType === "touch") return;
       applyModeFrom(event.target);
     }
 
     function onDown(event: PointerEvent) {
-      if (event.pointerType !== "mouse" || !visible) return;
+      if (event.pointerType === "touch" || !visible) return;
       pressed = true;
       root.dataset.pressed = "true";
       root.classList.remove("is-clicking");
@@ -121,7 +136,7 @@ export function BrandCursor() {
     }
 
     function onUp(event: PointerEvent) {
-      if (event.pointerType !== "mouse") return;
+      if (event.pointerType === "touch") return;
       pressed = false;
       delete root.dataset.pressed;
       applyModeFrom(event.target);
@@ -131,8 +146,14 @@ export function BrandCursor() {
       visible = false;
       pressed = false;
       delete root.dataset.pressed;
+      face.style.opacity = "0";
       setMode("hidden");
     }
+
+    // Hide the OS pointer for the whole session while this cursor is mounted.
+    // Mode switches to "text" / "native" temporarily restore it via CSS.
+    root.dataset.live = "true";
+    root.dataset.mode = "idle";
 
     function tick(now: number) {
       raf = requestAnimationFrame(tick);
@@ -194,23 +215,27 @@ export function BrandCursor() {
 
     return () => {
       cancelAnimationFrame(raf);
+      delete root.dataset.live;
+      root.dataset.mode = "hidden";
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerover", onOver);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       document.documentElement.removeEventListener("mouseleave", onLeave);
     };
-  }, [enabled]);
+  }, [active]);
 
-  if (!enabled) return null;
+  if (!active) return null;
 
-  return (
+  return createPortal(
     <div
       ref={rootRef}
       data-brand-cursor-root=""
-      data-mode="hidden"
+      data-live="false"
+      data-mode="idle"
       aria-hidden="true"
-      className="brand-cursor pointer-events-none fixed inset-0 z-200 overflow-hidden"
+      className="brand-cursor pointer-events-none fixed inset-0"
+      style={{ zIndex: 2147483646 }}
     >
       <div ref={trailRef} className="brand-cursor-trail">
         {Array.from({ length: TRAIL }, (_, i) => (
@@ -224,7 +249,8 @@ export function BrandCursor() {
           <RobotMark />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

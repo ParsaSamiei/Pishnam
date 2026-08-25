@@ -86,7 +86,7 @@ export function HeroShowcase({ slides }: HeroShowcaseProps) {
               // the LCP candidate: `priority` preloads it rather than letting
               // it queue behind the lazy-loading default.
               priority
-              className="object-cover"
+              className="object-contain"
               sizes={SIZES}
             />
           ) : (

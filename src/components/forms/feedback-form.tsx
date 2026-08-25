@@ -13,7 +13,8 @@ interface FeedbackFormProps {
   nameLabel: string;
   nameHint: string;
   messageLabel: string;
-  messagePlaceholder: string;
+  messageHint?: string;
+  messagePlaceholder?: string;
   submitLabel: string;
   successTitle: string;
   successBody: string;
@@ -25,6 +26,7 @@ export function FeedbackForm({
   nameLabel,
   nameHint,
   messageLabel,
+  messageHint,
   messagePlaceholder,
   submitLabel,
   successTitle,
@@ -52,13 +54,17 @@ export function FeedbackForm({
   }
 
   return (
-    <form action={formAction} className="relative flex flex-col gap-4" noValidate>
-      <div className="absolute start-[-9999px]" aria-hidden="true">
+    <form action={formAction} className="relative flex min-w-0 flex-col gap-4" noValidate>
+      {/* Honeypot: zero-size clip in place — off-canvas left/start offsets expand page scroll. */}
+      <div
+        className="pointer-events-none absolute top-0 left-0 h-0 w-0 overflow-hidden opacity-0"
+        aria-hidden="true"
+      >
         <label htmlFor="feedback-website">Website</label>
         <input id="feedback-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex min-w-0 flex-col gap-1.5">
         <Label htmlFor="feedback-name">{nameLabel}</Label>
         <Input
           id="feedback-name"
@@ -75,7 +81,7 @@ export function FeedbackForm({
         ) : null}
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex min-w-0 flex-col gap-1.5">
         <Label htmlFor="feedback-message">{messageLabel}</Label>
         <Textarea
           id="feedback-message"
@@ -83,8 +89,14 @@ export function FeedbackForm({
           required
           rows={6}
           placeholder={messagePlaceholder}
+          aria-describedby={messageHint ? "feedback-message-hint" : undefined}
           aria-invalid={Boolean(state.errors?.message)}
         />
+        {messageHint ? (
+          <p id="feedback-message-hint" className="text-text-secondary text-xs">
+            {messageHint}
+          </p>
+        ) : null}
         {state.errors?.message ? (
           <p className="text-pishnam-danger text-xs">{state.errors.message}</p>
         ) : null}

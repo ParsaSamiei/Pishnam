@@ -1,7 +1,10 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink } from "lucide-react";
+import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
+import { getContactSettings } from "@/lib/contact-settings";
 import { Link } from "@/lib/i18n/navigation";
+import { getSocialLinks } from "@/lib/social-channels";
 
 const EXPLORE_LINKS = [
   { href: "/courses", key: "courses" },
@@ -15,7 +18,7 @@ const ABOUT_LINKS = [
   { href: "/about-us", key: "about" },
   { href: "/sponsors", key: "sponsors" },
   { href: "/schools", key: "schools" },
-  { href: "/careers", key: "careers" },
+  // { href: "/careers", key: "careers" },
   { href: "/contact-us", key: "contact" },
   { href: "/feedback", key: "feedback" },
 ] as const;
@@ -36,9 +39,12 @@ const RELATED_LINKS = [
 const footerLinkClass =
   "text-pishnam-off-white/70 hover:text-pishnam-gold-500 cursor-pointer text-sm transition-colors duration-200";
 
-export function SiteFooter() {
-  const t = useTranslations();
+export async function SiteFooter() {
+  const t = await getTranslations();
+  const locale = await getLocale();
+  const isFa = locale === "fa";
   const year = new Date().getFullYear();
+  const socialLinks = getSocialLinks(await getContactSettings());
 
   return (
     <footer className="border-border bg-pishnam-navy-900 text-pishnam-off-white border-t">
@@ -114,6 +120,30 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
+
+          {socialLinks.length > 0 ? (
+            <div className="mt-6 border-t border-white/10 pt-3">
+              <p className="text-pishnam-off-white/45 text-xs leading-none">{t("footer.follow")}</p>
+              <ul className="mt-1.5 flex flex-wrap items-center gap-0.5">
+                {socialLinks.map((link) => {
+                  const label = isFa ? link.labelFa : link.labelEn;
+                  return (
+                    <li key={link.id}>
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${label} (${t("nav.opensInNewTab")})`}
+                        className="text-pishnam-off-white/50 hover:text-pishnam-gold-500 inline-flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors duration-200"
+                      >
+                        <SocialChannelIcon id={link.id} className="size-4" />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </div>
 

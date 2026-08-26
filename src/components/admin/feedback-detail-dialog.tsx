@@ -21,6 +21,9 @@ interface FeedbackDetailDialogProps {
     name: string | null;
     message: string;
     read: boolean;
+    approved: boolean;
+    likeCount: number;
+    dislikeCount: number;
     createdAt: Date;
   };
   trigger: React.ReactNode;
@@ -56,10 +59,14 @@ export function FeedbackDetailDialog({ feedback, trigger }: FeedbackDetailDialog
           </p>
         </div>
 
+        <p className="text-text-secondary text-xs">
+          رأی عمومی: {feedback.likeCount} موافق · {feedback.dislikeCount} مخالف
+        </p>
+
         <form action={handleSubmit} className="border-border flex flex-col gap-3 border-t pt-4">
           <input type="hidden" name="id" value={feedback.id} />
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor={`read-${feedback.id}`}>وضعیت</Label>
+            <Label htmlFor={`read-${feedback.id}`}>وضعیت خواندن</Label>
             <NativeSelect
               id={`read-${feedback.id}`}
               name="read"
@@ -68,6 +75,20 @@ export function FeedbackDetailDialog({ feedback, trigger }: FeedbackDetailDialog
               <option value="false">خوانده‌نشده</option>
               <option value="true">خوانده‌شده</option>
             </NativeSelect>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor={`approved-${feedback.id}`}>نمایش عمومی</Label>
+            <NativeSelect
+              id={`approved-${feedback.id}`}
+              name="approved"
+              defaultValue={feedback.approved ? "true" : "false"}
+            >
+              <option value="false">منتشر نشده</option>
+              <option value="true">منتشر شده</option>
+            </NativeSelect>
+            <p className="text-text-secondary text-xs">
+              در صورت انتشار، پیام در صفحه انتقادات و پیشنهادات برای همه نمایش داده می‌شود.
+            </p>
           </div>
           <Button type="submit" disabled={isPending} className="cursor-pointer self-end">
             {isPending ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}

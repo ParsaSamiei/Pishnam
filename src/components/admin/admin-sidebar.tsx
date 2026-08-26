@@ -15,8 +15,16 @@ export function AdminSidebar({ userEmail, role }: { userEmail: string; role: str
   return (
     <aside className="border-border bg-bg-surface flex h-screen w-64 shrink-0 flex-col border-e">
       <div className="border-border flex items-center gap-2 border-b px-5 py-4">
-        <Image src="/brand/pishnam-logo.png" alt="" width={28} height={31} className="h-7 w-auto" />
-        <span className="text-text-primary font-bold">پنل مدیریت</span>
+        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="پیشنام">
+          <Image
+            src="/brand/pishnam-logo.png"
+            alt=""
+            width={28}
+            height={31}
+            className="h-7 w-auto"
+          />
+          <span className="text-text-primary font-bold">پنل مدیریت</span>
+        </Link>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">

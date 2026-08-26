@@ -6,7 +6,9 @@ import { PageHeader } from "@/components/layout/page-header";
 import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { JsonLd } from "@/components/json-ld";
+import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { getContactSettings } from "@/lib/contact-settings";
+import { getSocialLinks } from "@/lib/social-channels";
 
 export async function generateMetadata({
   params,
@@ -42,9 +44,12 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     (isFa ? settings?.addressEn : settings?.addressFa) ||
     null;
   const mapEmbedUrl = settings?.mapEmbedUrl ?? null;
-  const hasDetails = phones.length > 0 || Boolean(email) || Boolean(address);
+  const socialLinks = getSocialLinks(settings);
+  const hasDetails =
+    phones.length > 0 || Boolean(email) || Boolean(address) || socialLinks.length > 0;
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const sameAs = socialLinks.map((link) => link.href);
 
   return (
     <>
@@ -59,6 +64,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             ...(email ? { email } : {}),
             ...(phones.length ? { telephone: phones } : {}),
             ...(address ? { address: { "@type": "PostalAddress", streetAddress: address } } : {}),
+            ...(sameAs.length ? { sameAs } : {}),
           },
         }}
       />
@@ -138,6 +144,33 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                           {address}
                         </p>
                       </div>
+                    </div>
+                  ) : null}
+
+                  {socialLinks.length > 0 ? (
+                    <div>
+                      <p className="text-text-primary text-sm font-semibold">
+                        {isFa ? "شبکه‌های اجتماعی" : "Social networks"}
+                      </p>
+                      <ul className="mt-3 flex flex-wrap gap-2">
+                        {socialLinks.map((link) => {
+                          const label = isFa ? link.labelFa : link.labelEn;
+                          return (
+                            <li key={link.id}>
+                              <a
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`${label}${isFa ? " (در تب جدید باز می‌شود)" : " (opens in a new tab)"}`}
+                                className="border-border bg-surface text-text-secondary hover:border-pishnam-gold-500/50 hover:text-pishnam-gold-600 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors duration-200"
+                              >
+                                <SocialChannelIcon id={link.id} className="size-4 shrink-0" />
+                                <span>{label}</span>
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </div>
                   ) : null}
                 </CardContent>

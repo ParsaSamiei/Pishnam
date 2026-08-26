@@ -61,17 +61,33 @@ export default async function AdminFeedbackPage() {
             {
               header: "وضعیت",
               cell: (row) => (
-                <span
-                  className={cn(
-                    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold",
-                    row.read
-                      ? "bg-bg-surface-alt text-text-secondary"
-                      : "bg-pishnam-gold-500/15 text-pishnam-gold-600",
-                  )}
-                >
-                  {row.read ? "خوانده‌شده" : "جدید"}
+                <div className="flex flex-wrap gap-1.5">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                      row.read
+                        ? "bg-bg-surface-alt text-text-secondary"
+                        : "bg-pishnam-gold-500/15 text-pishnam-gold-600",
+                    )}
+                  >
+                    {row.read ? "خوانده‌شده" : "جدید"}
+                  </span>
+                  {row.approved ? (
+                    <span className="bg-pishnam-success/15 text-pishnam-success inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold">
+                      منتشر شده
+                    </span>
+                  ) : null}
+                </div>
+              ),
+            },
+            {
+              header: "رأی",
+              cell: (row) => (
+                <span className="text-text-secondary text-xs tabular-nums">
+                  {row.likeCount} / {row.dislikeCount}
                 </span>
               ),
+              className: "text-text-secondary",
             },
             {
               header: "",

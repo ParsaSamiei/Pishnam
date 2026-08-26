@@ -342,8 +342,9 @@ model AdminUser {
   createdAt    DateTime @default(now())
 }
 
-// One-row contact details (phones, email, FA/EN address, Google Maps embed).
-// Singleton: id is always "default"; first admin save creates the row.
+// One-row contact details (phones, email, FA/EN address, Google Maps embed,
+// social profile URLs). Singleton: id is always "default"; first admin save
+// creates the row.
 model ContactSettings {
   id          String   @id @default("default")
   phones      String[]
@@ -351,6 +352,11 @@ model ContactSettings {
   addressFa   String?
   addressEn   String?
   mapEmbedUrl String?  // canonical https://www.google.com/maps/embed?... URL
+  telegramUrl  String?
+  baleUrl      String?
+  youtubeUrl   String?
+  aparatUrl    String?
+  instagramUrl String?
   updatedAt   DateTime @updatedAt
 }
 

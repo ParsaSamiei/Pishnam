@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { FileUploadField } from "@/components/admin/file-upload-field";
 import { SOFTWARE_PLATFORMS } from "@/lib/software-platforms";
+import { DOWNLOAD_ACCEPT } from "@/lib/upload-policies";
 import type { SoftwareReleaseFormState } from "@/app/admin/(dashboard)/software-releases/actions";
 
 interface SoftwareReleaseFormProps {
@@ -121,7 +122,7 @@ export function SoftwareReleaseForm({
             name="fileUrl"
             label="فایل *"
             policy="download.software"
-            accept=".zip"
+            accept={DOWNLOAD_ACCEPT}
             field="softwareRelease.fileUrl"
             defaultValue={defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined}
             required

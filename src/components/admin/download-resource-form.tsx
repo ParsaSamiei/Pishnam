@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { FileUploadField } from "@/components/admin/file-upload-field";
 import { DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
-import type { UploadPolicyKey } from "@/lib/upload";
+import { DOWNLOAD_ACCEPT, type UploadPolicyKey } from "@/lib/upload-policies";
 import type { DownloadResourceFormState } from "@/app/admin/(dashboard)/downloads/actions";
 
 interface DownloadResourceFormProps {
@@ -32,9 +32,9 @@ interface DownloadResourceFormProps {
 }
 
 const CATEGORY_POLICY: Record<string, { policy: UploadPolicyKey; accept: string }> = {
-  DATASHEETS: { policy: "download.datasheet", accept: ".pdf" },
-  BOOKS: { policy: "download.book", accept: ".pdf" },
-  COMPONENT_LIBRARIES: { policy: "download.componentLibrary", accept: ".zip" },
+  DATASHEETS: { policy: "download.datasheet", accept: DOWNLOAD_ACCEPT },
+  BOOKS: { policy: "download.book", accept: DOWNLOAD_ACCEPT },
+  COMPONENT_LIBRARIES: { policy: "download.componentLibrary", accept: DOWNLOAD_ACCEPT },
 };
 
 const initialState: DownloadResourceFormState = { status: "idle" };

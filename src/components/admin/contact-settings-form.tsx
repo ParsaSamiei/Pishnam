@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { ContactSettingsFormState } from "@/app/admin/(dashboard)/contact/actions";
+import { SOCIAL_CHANNELS } from "@/lib/social-channels";
 
 interface ContactSettingsFormProps {
   action: (
@@ -19,6 +20,11 @@ interface ContactSettingsFormProps {
     addressFa: string | null;
     addressEn: string | null;
     mapEmbedUrl: string | null;
+    telegramUrl: string | null;
+    baleUrl: string | null;
+    youtubeUrl: string | null;
+    aparatUrl: string | null;
+    instagramUrl: string | null;
   };
 }
 
@@ -168,6 +174,34 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
           />
         </div>
       ) : null}
+
+      <fieldset className="flex flex-col gap-4">
+        <legend className="text-text-primary text-sm font-semibold">شبکه‌های اجتماعی</legend>
+        <p className="text-text-secondary text-xs">
+          لینک پروفایل پیشنام در تلگرام، بله، یوتیوب، آپارات و اینستاگرام. فیلدهای خالی در صفحه تماس
+          نشان داده نمی‌شوند.
+        </p>
+        {SOCIAL_CHANNELS.map((channel) => {
+          const error = state.errors?.[channel.field];
+          return (
+            <div key={channel.field} className="flex flex-col gap-1.5">
+              <Label htmlFor={channel.field}>
+                {channel.labelFa} ({channel.labelEn})
+              </Label>
+              <Input
+                id={channel.field}
+                name={channel.field}
+                type="url"
+                dir="ltr"
+                placeholder={channel.placeholder}
+                defaultValue={defaultValues?.[channel.field] ?? ""}
+                aria-invalid={Boolean(error)}
+              />
+              {error ? <p className="text-pishnam-danger text-xs">{error}</p> : null}
+            </div>
+          );
+        })}
+      </fieldset>
 
       <div className="flex gap-3">
         <Button type="submit" disabled={isPending} className="cursor-pointer">

@@ -10,6 +10,34 @@ const optionalText = (max: number) =>
     .or(z.literal(""))
     .transform((val) => (val ? val : null));
 
+const optionalHttpsUrl = z
+  .string()
+  .trim()
+  .optional()
+  .or(z.literal(""))
+  .transform((val, ctx) => {
+    if (!val) return null;
+    if (val.length > 500) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "لینک خیلی طولانی است." });
+      return z.NEVER;
+    }
+    let parsed: URL;
+    try {
+      parsed = new URL(val);
+    } catch {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "لینک معتبر نیست." });
+      return z.NEVER;
+    }
+    if (parsed.protocol !== "https:") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "لینک باید با https:// شروع شود.",
+      });
+      return z.NEVER;
+    }
+    return parsed.toString();
+  });
+
 export const contactSettingsSchema = z.object({
   phones: z
     .union([z.string(), z.array(z.string())])
@@ -55,6 +83,11 @@ export const contactSettingsSchema = z.object({
       }
       return embedUrl;
     }),
+  telegramUrl: optionalHttpsUrl,
+  baleUrl: optionalHttpsUrl,
+  youtubeUrl: optionalHttpsUrl,
+  aparatUrl: optionalHttpsUrl,
+  instagramUrl: optionalHttpsUrl,
 });
 
 export type ContactSettingsFormValues = z.infer<typeof contactSettingsSchema>;

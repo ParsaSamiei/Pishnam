@@ -369,18 +369,44 @@ model Lead {
   @@index([createdAt])
 }
 
-// Public "انتقادات و پیشنهادات" submissions from /contact-us. Separate from
+// Public "انتقادات و پیشنهادات" submissions from /feedback. Separate from
 // Lead because name is optional (anonymous is allowed) and there is no
-// phone/email follow-up — staff just read the message in /admin/feedback.
+// phone/email follow-up — staff read/moderate in /admin/feedback.
+// `approved` is independent of `read`: admins can publish a message for the
+// public wall without (or after) marking it read. Votes are guest-scoped via
+// an IP-bound HMAC voter key; one vote per message per client IP, switchable.
 model Feedback {
-  id        String   @id @default(cuid())
-  name      String?
-  message   String
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id           String         @id @default(cuid())
+  name         String?
+  message      String
+  read         Boolean        @default(false)
+  approved     Boolean        @default(false)
+  likeCount    Int            @default(0)
+  dislikeCount Int            @default(0)
+  createdAt    DateTime       @default(now())
+  votes        FeedbackVote[]
 
   @@index([createdAt])
   @@index([read])
+  @@index([approved, createdAt])
+}
+
+enum FeedbackVoteValue {
+  like
+  dislike
+}
+
+model FeedbackVote {
+  id         String             @id @default(cuid())
+  feedbackId String
+  voterKey   String
+  value      FeedbackVoteValue
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  feedback   Feedback           @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+
+  @@unique([feedbackId, voterKey])
+  @@index([feedbackId])
 }
 
 // Admin auth (custom admin, not public accounts -- see docs/06-admin-panel.md)
@@ -409,6 +435,13 @@ model ContactSettings {
   // The admin form accepts a full iframe snippet or a bare embed URL and
   // normalizes it -- see src/lib/google-maps.ts.
   mapEmbedUrl String?
+
+  // Public social profile URLs shown on /contact-us (empty = hidden).
+  telegramUrl  String?
+  baleUrl      String?
+  youtubeUrl   String?
+  aparatUrl    String?
+  instagramUrl String?
 
   updatedAt DateTime @updatedAt
 }

@@ -1,8 +1,18 @@
+import "server-only";
+
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
 import sharp from "sharp";
+import { UPLOAD_POLICIES, type UploadPolicyKey } from "@/lib/upload-policies";
+
+export {
+  DOWNLOAD_ACCEPT,
+  DOWNLOAD_CENTER_MIME_TYPES,
+  UPLOAD_POLICIES,
+  type UploadPolicyKey,
+} from "@/lib/upload-policies";
 
 /**
  * Implements the upload-security checklist in
@@ -13,6 +23,9 @@ import sharp from "sharp";
  * this ever runs); everything else (allowlist, content verification,
  * re-encoding, safe naming, size limits) lives here so there's exactly one
  * place to audit.
+ *
+ * Client components must import constants from `@/lib/upload-policies`
+ * instead of this file -- sharp and fs are Node-only.
  */
 
 const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads");
@@ -23,51 +36,6 @@ const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads
 // silence Turbopack's warning about that (it can't statically resolve an
 // env-var-derived path, which is expected and fine here).
 const DEFAULT_MAX_BYTES = Number(process.env.UPLOAD_MAX_BYTES ?? 10 * 1024 * 1024);
-
-type UploadKind = "image" | "document" | "archive";
-
-interface FieldPolicy {
-  kind: UploadKind;
-  allowedMimeTypes: readonly string[];
-  maxBytes: number;
-}
-
-// One entry per distinct upload field across the admin panel. Allowlist,
-// not blocklist -- an unrecognized type is rejected, never passed through.
-export const UPLOAD_POLICIES = {
-  image: {
-    kind: "image",
-    allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
-    maxBytes: 5 * 1024 * 1024,
-  },
-  "download.software": {
-    kind: "archive",
-    allowedMimeTypes: ["application/zip"],
-    maxBytes: 50 * 1024 * 1024,
-  },
-  "download.datasheet": {
-    kind: "document",
-    allowedMimeTypes: ["application/pdf"],
-    maxBytes: 20 * 1024 * 1024,
-  },
-  "download.book": {
-    kind: "document",
-    allowedMimeTypes: ["application/pdf"],
-    maxBytes: 50 * 1024 * 1024,
-  },
-  "download.poster": {
-    kind: "document",
-    allowedMimeTypes: ["image/jpeg", "image/png", "application/pdf"],
-    maxBytes: 20 * 1024 * 1024,
-  },
-  "download.componentLibrary": {
-    kind: "archive",
-    allowedMimeTypes: ["application/zip"],
-    maxBytes: 50 * 1024 * 1024,
-  },
-} satisfies Record<string, FieldPolicy>;
-
-export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;
 
 export class UploadValidationError extends Error {}
 
@@ -97,9 +65,14 @@ export async function processUpload(
 
   // Verify the file's REAL type via magic-byte signature inspection. Never
   // trust the client-supplied Content-Type header or the original
-  // filename's extension -- both are trivially spoofable.
-  const detected = await fileTypeFromBuffer(buffer);
-  if (!detected || !policy.allowedMimeTypes.includes(detected.mime)) {
+  // filename's extension -- both are trivially spoofable. Plain text is the
+  // one exception: it has no reliable magic bytes, so we fall back to a
+  // UTF-8 / no-null-byte check when the policy allows text/plain.
+  const fromMagic = await fileTypeFromBuffer(buffer);
+  const allowedMimes = policy.allowedMimeTypes as readonly string[];
+  const detected =
+    fromMagic ?? (allowedMimes.includes("text/plain") ? tryDetectPlainText(buffer) : null);
+  if (!detected || !allowedMimes.includes(detected.mime)) {
     throw new UploadValidationError(
       detected
         ? `File type "${detected.mime}" isn't allowed for this field.`
@@ -131,8 +104,23 @@ export async function processUpload(
   // Documents/archives can't be meaningfully "re-encoded" the way raster
   // images can -- verified content-type + isolated, non-executable storage
   // is the defense here. Extension comes from the *detected* type, not the
-  // client's filename.
+  // client's filename (file-type may return compound exts like "tar.gz").
   return writeAndDescribe(`${id}.${detected.ext}`, buffer, detected.mime);
+}
+
+/**
+ * Plain-text fallback for policies that allow text/plain. Rejects anything
+ * with a null byte (typical of binaries) or that isn't valid UTF-8 -- we
+ * never trust the client extension alone.
+ */
+function tryDetectPlainText(buffer: Buffer): { ext: string; mime: string } | null {
+  if (buffer.includes(0)) return null;
+  try {
+    new TextDecoder("utf-8", { fatal: true }).decode(buffer);
+  } catch {
+    return null;
+  }
+  return { ext: "txt", mime: "text/plain" };
 }
 
 async function writeAndDescribe(

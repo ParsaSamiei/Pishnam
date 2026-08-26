@@ -12,6 +12,7 @@ import { DownloadsTeaserSection } from "@/components/home/downloads-teaser-secti
 import { ScrollSpine } from "@/components/motion/scroll-spine";
 import { JsonLd } from "@/components/json-ld";
 import { getContactSettings } from "@/lib/contact-settings";
+import { getSocialLinks } from "@/lib/social-channels";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -23,6 +24,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "brand" });
   const contact = await getContactSettings();
+  const sameAs = getSocialLinks(contact).map((link) => link.href);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -37,6 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           logo: `${siteUrl}/brand/pishnam-logo.png`,
           ...(contact?.email ? { email: contact.email } : {}),
           ...(contact?.phones.length ? { telephone: contact.phones } : {}),
+          ...(sameAs.length ? { sameAs } : {}),
         }}
       />
       {/* One gold trace, drawn to match scroll depth, threads the sections

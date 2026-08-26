@@ -41,6 +41,12 @@ export async function generateMetadata({
     // buildAlternates() -- see lib/i18n/alternates.ts for why a single
     // shared value here would be wrong for anything but "/".
     alternates: buildAlternates(""),
+    icons: {
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      ],
+    },
     openGraph: {
       type: "website",
       siteName: t("fullName"),

@@ -8,6 +8,7 @@ import { requireAdminSession } from "@/lib/actions/admin-guard";
 const updateFeedbackSchema = z.object({
   id: z.string().min(1),
   read: z.enum(["true", "false"]),
+  approved: z.enum(["true", "false"]),
 });
 
 function revalidateFeedback() {
@@ -23,12 +24,16 @@ export async function updateFeedback(formData: FormData): Promise<void> {
   const parsed = updateFeedbackSchema.safeParse({
     id: formData.get("id"),
     read: formData.get("read"),
+    approved: formData.get("approved"),
   });
   if (!parsed.success) return;
 
   await prisma.feedback.update({
     where: { id: parsed.data.id },
-    data: { read: parsed.data.read === "true" },
+    data: {
+      read: parsed.data.read === "true",
+      approved: parsed.data.approved === "true",
+    },
   });
 
   revalidateFeedback();

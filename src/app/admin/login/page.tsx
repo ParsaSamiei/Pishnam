@@ -14,7 +14,7 @@ export default async function AdminLoginPage({
 }: {
   searchParams: Promise<{ callbackUrl?: string }>;
 }) {
-  // Middleware no longer handles this redirect (see middleware.ts) -- an
+  // Proxy no longer handles this redirect (see proxy.ts) -- an
   // already-authenticated visitor landing here gets sent straight to the
   // dashboard instead of seeing the login form again.
   const session = await auth();

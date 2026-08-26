@@ -70,16 +70,16 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2">
           <motion.span
-            className="flex items-center"
+            className={cn("relative flex items-center overflow-hidden", !reduced && "logo-shine")}
             animate={reduced ? undefined : { scale: scrolled ? 0.88 : 1 }}
             transition={SPRING}
           >
             <Image
               src="/brand/pishnam-logo.png"
               alt=""
-              width={36}
-              height={40}
-              className="h-9 w-auto"
+              width={40}
+              height={44}
+              className="relative h-10 w-auto"
               priority
             />
           </motion.span>
@@ -166,7 +166,7 @@ export function SiteHeader() {
               </Dialog.Overlay>
               <Dialog.Content asChild forceMount>
                 <motion.div
-                  className="border-border bg-bg-surface fixed start-0 top-0 z-50 flex h-dvh max-h-dvh w-full max-w-xs flex-col overflow-y-auto border-e p-6 shadow-lg outline-none sm:max-w-sm"
+                  className="border-border bg-bg-surface fixed inset-s-0 top-0 z-50 flex h-dvh max-h-dvh w-full max-w-xs flex-col overflow-y-auto border-e p-6 shadow-lg outline-none sm:max-w-sm"
                   initial={{ x: drawerOffscreenX }}
                   animate={{ x: 0 }}
                   exit={{ x: drawerOffscreenX }}
@@ -175,7 +175,7 @@ export function SiteHeader() {
                   <VisuallyHidden>
                     <Dialog.Title>{t("openMenu")}</Dialog.Title>
                   </VisuallyHidden>
-                  <Dialog.Close className="focus:ring-pishnam-gold-500 absolute end-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:outline-none">
+                  <Dialog.Close className="focus:ring-pishnam-gold-500 absolute inset-e-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:outline-none">
                     <X className="size-4" />
                     <span className="sr-only">Close</span>
                   </Dialog.Close>

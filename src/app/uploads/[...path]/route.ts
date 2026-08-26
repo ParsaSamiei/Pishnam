@@ -21,7 +21,18 @@ const EXT_TO_CONTENT_TYPE: Record<string, string> = {
   ".jpeg": "image/jpeg",
   ".png": "image/png",
   ".pdf": "application/pdf",
+  ".epub": "application/epub+zip",
+  ".txt": "text/plain; charset=utf-8",
   ".zip": "application/zip",
+  ".rar": "application/x-rar-compressed",
+  ".7z": "application/x-7z-compressed",
+  ".tar": "application/x-tar",
+  ".gz": "application/gzip",
+  ".bz2": "application/x-bzip2",
+  ".xz": "application/x-xz",
+  ".dmg": "application/x-apple-diskimage",
+  ".exe": "application/x-msdownload",
+  ".apk": "application/vnd.android.package-archive",
 };
 
 export async function GET(

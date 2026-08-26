@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 
 /**
- * Edge-safe subset of the NextAuth config -- imported by middleware.ts.
+ * Edge-safe subset of the NextAuth config -- kept separate from Node-only auth.ts.
  *
  * Deliberately excludes the Credentials provider (it needs bcryptjs + Prisma,
  * neither of which run on the Edge runtime). The real provider is registered

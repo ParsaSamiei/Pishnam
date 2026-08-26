@@ -22,8 +22,8 @@ const HASH_PATTERNS = [
 
 export function extractAparatHash(input: string): string | null {
   for (const pattern of HASH_PATTERNS) {
-    const match = input.match(pattern);
-    if (match) return match[1];
+    const hash = input.match(pattern)?.[1];
+    if (hash) return hash;
   }
   return null;
 }

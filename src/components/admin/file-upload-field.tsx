@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { FileText, Loader2, Upload, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import type { UploadPolicyKey } from "@/lib/upload";
+import type { UploadPolicyKey } from "@/lib/upload-policies";
 
 interface FileUploadFieldProps {
   /** Form field name -- the resulting `/uploads/<uuid>.ext` path submits under this name. */
@@ -23,9 +23,9 @@ interface FileUploadFieldProps {
 
 /**
  * Same upload pipeline as ImageUploadField (always through
- * /api/admin/upload -> src/lib/upload.ts), but for non-image download-center
- * resources (PDFs, ZIPs) that don't get a thumbnail preview -- shows the
- * stored filename instead.
+ * /api/admin/upload -> src/lib/upload.ts), but for download-center resources
+ * (archives, installers, PDFs, etc.) that don't get a thumbnail preview --
+ * shows the stored filename instead.
  */
 export function FileUploadField({
   name,

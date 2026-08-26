@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: "standalone", // smaller production image, see infra/Dockerfile
 
+  // Prisma talks to Neon through PgBouncer with a tiny client pool
+  // (see src/lib/prisma.ts). Default static concurrency (8 pages/worker)
+  // queues past pool_timeout and fails the build with P2024. Keep this
+  // low so each worker serializes DB-backed prerenders; retries cover
+  // Neon cold-start blips.
+  experimental: {
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationRetryCount: 3,
+  },
+
   // Next 16 blocks cross-origin access to /_next/* in dev by default. Opening
   // the site as http://127.0.0.1:3000 while the server binds on localhost (or
   // vice versa) 403s the client chunks -- and the brand cursor never hydrates.

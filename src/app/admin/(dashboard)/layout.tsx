@@ -4,7 +4,7 @@ import { AdminSidebar } from "@/components/admin/admin-sidebar";
 
 export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   // This is now the primary auth gate for the whole /admin/(dashboard)
-  // tree -- middleware.ts handles locale routing only (see its comment for
+  // tree -- proxy.ts handles locale routing only (see its comment for
   // why admin auth moved out of it). Every server action under here also
   // independently re-checks the session via requireAdminSession()/
   // requireOwnerSession(), so protection doesn't rest on this file alone.

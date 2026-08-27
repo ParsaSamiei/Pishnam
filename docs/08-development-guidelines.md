@@ -25,7 +25,10 @@ Docker/infra config — per your single-repo requirement. No separate CMS repo.
 - **E2E smoke tests** (Playwright): the handful of flows that must never break — homepage loads in
   both locales, a course page renders, the enroll form submits successfully, admin login works.
   Don't aim for exhaustive E2E coverage; a small, high-value smoke suite is enough for one
-  developer to maintain.
+  developer to maintain. **Not yet written** — this is the target, not the current state: there is
+  no `playwright.config.ts` and no specs, and the CI job that would have run them was removed for
+  that reason (see the comment at the bottom of `.github/workflows/ci.yml`). The four flows above
+  are the scope to build when it's picked up.
 - Skip: heavy visual regression tooling, contract testing, etc. — not justified at this scale.
 
 ## Git conventions

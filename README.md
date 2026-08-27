@@ -46,19 +46,19 @@ generate`/`migrate` will fail with a 403 on that fetch -- allow the domain,
 
 ## Scripts
 
-| Command                           | What it does                                 |
-| --------------------------------- | -------------------------------------------- |
-| `npm run dev`                     | Start the dev server (Turbopack)             |
-| `npm run build`                   | Production build                             |
-| `npm run lint` / `lint:fix`       | ESLint (Next.js + jsx-a11y)                  |
-| `npm run format` / `format:check` | Prettier (with Tailwind class sorting)       |
-| `npm run typecheck`               | `tsc --noEmit`                               |
-| `npm run test` / `test:watch`     | Vitest (unit + component)                    |
-| `npm run test:e2e`                | Playwright smoke suite                       |
-| `npm run prisma:migrate`          | Create + apply a new migration (dev)         |
-| `npm run prisma:deploy`           | Apply pending migrations (prod/CI)           |
-| `npm run prisma:studio`           | Prisma's DB browser GUI                      |
-| `npm run db:seed`                 | Bootstrap the first `AdminUser` (see `.env`) |
+| Command                           | What it does                                  |
+| --------------------------------- | --------------------------------------------- |
+| `npm run dev`                     | Start the dev server (Turbopack)              |
+| `npm run build`                   | Production build                              |
+| `npm run lint` / `lint:fix`       | ESLint (Next.js + jsx-a11y)                   |
+| `npm run format` / `format:check` | Prettier (with Tailwind class sorting)        |
+| `npm run typecheck`               | `tsc --noEmit`                                |
+| `npm run test` / `test:watch`     | Vitest (unit + component)                     |
+| `npm run test:e2e`                | Playwright — no suite written yet (see below) |
+| `npm run prisma:migrate`          | Create + apply a new migration (dev)          |
+| `npm run prisma:deploy`           | Apply pending migrations (prod/CI)            |
+| `npm run prisma:studio`           | Prisma's DB browser GUI                       |
+| `npm run db:seed`                 | Bootstrap the first `AdminUser` (see `.env`)  |
 
 Husky + lint-staged run ESLint/Prettier on staged files automatically at commit time.
 
@@ -90,8 +90,14 @@ Uploaded files (course covers, achievement photos, download-center resources) ar
 **local disk**, in a named Docker volume (`uploads`) -- never in the app's writable container
 layer, or they'd be lost on every redeploy. Every upload goes through the checklist in
 `docs/05-frontend-architecture.md` (`src/lib/upload.ts`): admin-auth-only, allowlisted types,
-magic-byte content verification (not filename/Content-Type), image re-encoding via `sharp`,
-random filenames, no execute permission on the volume, rate-limited, and logged (`UploadLog`).
+magic-byte content verification (not filename/Content-Type), image re-encoding via `jimp`,
+random filenames, no execute permission on uploaded files, rate-limited, and logged (`UploadLog`).
+
+Stored images come out as JPEG, or PNG when the source has real transparency. `jimp` ships no
+WebP codec, which is also why `image/webp` is not an accepted upload type; it replaced `sharp`
+because sharp's prebuilt binaries need an x86-64-v2 CPU that the production host doesn't have.
+Removing sharp also means Next's Image Optimization is off (`images.unoptimized` in
+`next.config.ts`) — it only runs on sharp. Uploads are capped at 2400px on the long edge instead.
 
 In production, nginx serves `/uploads/*` directly from the shared volume (`infra/nginx.conf`).
 `src/app/uploads/[...path]/route.ts` is a dev-only fallback so uploads are viewable without
@@ -129,8 +135,13 @@ inside it as another website rather than getting a second analytics stack of its
 ### CI/CD (`.github/workflows/`)
 
 - **`ci.yml`** -- every PR and push to `main`: install, `prisma validate`, migrate a throwaway
-  test DB, lint, format check, typecheck, unit/component tests, build, then a Playwright smoke
-  suite against a real build.
+  test DB, lint, format check, typecheck, unit/component tests, build.
+
+  No E2E step. `@playwright/test` is installed and `npm run test:e2e` exists, but the suite
+  itself has not been written -- there is no `playwright.config.ts` and no specs, so the command
+  currently fails. The CI job that ran it was removed rather than left permanently red; the
+  comment at the bottom of `ci.yml` lists what restoring it takes.
+
 - **`deploy.yml`** -- on push to `main` (or manual dispatch): builds the web image (and the
   `migrator` image, only when its inputs actually changed), `docker save`s them, streams them to
   the server over SSH, retags to `:current`, and rolls the stack at `/opt/pishnam`. Finishes by

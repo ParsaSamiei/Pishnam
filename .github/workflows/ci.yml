@@ -67,59 +67,27 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://pishnam.example
 
-  e2e:
-    runs-on: ubuntu-latest
-    needs: lint-typecheck-test
-
-    services:
-      postgres:
-        image: postgres:17-alpine
-        env:
-          POSTGRES_USER: pishnam
-          POSTGRES_PASSWORD: pishnam
-          POSTGRES_DB: pishnam_test
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U pishnam"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Apply migrations
-        run: npx prisma migrate deploy
-
-      - name: Seed test admin
-        run: npm run db:seed
-        env:
-          SEED_ADMIN_EMAIL: e2e@pishnam.example
-          SEED_ADMIN_PASSWORD: e2e-test-password-not-real
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Build
-        run: npm run build
-
-      - name: Run E2E smoke suite
-        run: npm run test:e2e
-        env:
-          E2E_ADMIN_EMAIL: e2e@pishnam.example
-          E2E_ADMIN_PASSWORD: e2e-test-password-not-real
-
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
+# There was an `e2e` job here. It was removed because it could never pass: it
+# ran `npm run test:e2e` (`playwright test`), but the suite it was meant to run
+# does not exist yet -- there is no playwright.config.ts and no spec files. With
+# no config telling it otherwise, `playwright test` globbed up the Vitest
+# component test (src/components/admin/rich-text-editor.test.tsx) and died on
+# "Vitest cannot be imported in a CommonJS module using require()". A check that
+# is red on every commit regardless of the commit teaches you to ignore CI, so
+# it is better absent than permanently failing.
+#
+# Restoring it needs three things, in this order:
+#   1. playwright.config.ts -- set `testDir` to a directory of its own (e.g.
+#      ./e2e) so it can never pick up Vitest files again, plus a `webServer`
+#      block so the suite starts the built app itself.
+#   2. Actual specs. docs/08-development-guidelines.md names the intended
+#      scope: homepage in both locales, a course page, the enroll form, admin
+#      login. Deliberately small.
+#   3. This job back. Recover it from git history rather than rewriting it
+#      (`git log --diff-filter=D -p -- .github/workflows/ci.yml`) -- it was
+#      complete and correct apart from having no suite to run: postgres service,
+#      migrate, seed a test admin via SEED_ADMIN_EMAIL/SEED_ADMIN_PASSWORD,
+#      install chromium, build, run, and upload playwright-report/ on failure.
+#
+# `@playwright/test` and the `test:e2e` script are deliberately left in place so
+# restoring is only the work above.

@@ -1,7 +1,7 @@
 /**
  * Client-safe upload allowlists and policy keys.
  *
- * Keep this module free of Node-only imports (sharp, fs, etc.) so admin
+ * Keep this module free of Node-only imports (jimp, fs, etc.) so admin
  * form components can share the same constants the server enforces.
  */
 

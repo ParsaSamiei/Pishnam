@@ -82,9 +82,26 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Uploads directory: created here so it exists with correct ownership even
-# before the named volume is mounted over it; no execute bit, per the
-# upload-security checklist in docs/05-frontend-architecture.md.
-RUN mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads && chmod 750 /app/uploads
+# before the named volume is mounted over it. Docker seeds a fresh named
+# volume from this path, so this mode is what a new environment inherits.
+#
+# 755, not 750. The nginx container mounts this same volume read-only and
+# serves /uploads/ from it (infra/nginx.conf), but nginx's *worker* processes
+# drop to user `nginx` (uid 101) -- only the master stays root. With 750 and
+# owner nextjs:nodejs (1001), those workers cannot even traverse the
+# directory, so every uploaded file answers 403 "Permission denied" instead of
+# being served. Group-sharing the gid instead does not work: nginx calls
+# initgroups() when it drops privileges, which discards any supplementary
+# group added via compose `group_add`.
+#
+# This still satisfies item 7 of the upload-security checklist in
+# docs/05-frontend-architecture.md ("no execute permission"). That rule is
+# about uploaded *files* not being executable or interpreted: files land 644
+# (see src/lib/upload.ts), nginx serves them as inert statics with a fixed
+# Content-Type plus nosniff, and its location block denies script extensions
+# outright. On a directory the x bit is search/traverse permission, not
+# "executable" -- withholding it blocks the web server, not an attacker.
+RUN mkdir -p /app/uploads && chown nextjs:nodejs /app/uploads && chmod 755 /app/uploads
 
 USER nextjs
 EXPOSE 3000

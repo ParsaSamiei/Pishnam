@@ -130,10 +130,19 @@ async function writeAndDescribe(
 ): Promise<UploadResult> {
   const destPath = path.join(/* turbopackIgnore: true */ UPLOADS_DIR, filename);
 
-  // 0o640 = rw-r-----: readable by the nginx/app user for serving, no
-  // execute bit for anyone, no access at all for "other". Uploads dir
-  // itself lives outside any web-executable path (see docker-compose.yml).
-  await writeFile(destPath, buffer, { mode: 0o640 });
+  // 0o644 = rw-r--r--: no execute bit for anyone, which is what item 7 of the
+  // upload-security checklist in docs/05-frontend-architecture.md requires.
+  //
+  // Not 0o640. That assumed nginx and the app share a user or group, but they
+  // are separate containers: the app is nextjs (uid 1001) while nginx's worker
+  // processes drop to uid 101, so the group bit never reached nginx and every
+  // uploaded file was served as 403 "Permission denied". The o+r bit is what
+  // lets nginx read the volume it mounts read-only to serve /uploads/.
+  //
+  // Withholding o+r was not protecting anything: these files are served to
+  // anonymous visitors over HTTP by design, and the volume is only reachable
+  // by root on the host and by the two containers that mount it.
+  await writeFile(destPath, buffer, { mode: 0o644 });
 
   return {
     storedFilename: filename,

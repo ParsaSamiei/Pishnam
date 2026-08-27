@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
   // queues past pool_timeout and fails the build with P2024. Keep this
   // low so each worker serializes DB-backed prerenders; retries cover
   // Neon cold-start blips.
+  //
+  // Largely vestigial since the self-hosted deploy: no DB-backed route is
+  // prerendered any more (see the `dynamic` note in src/app/[locale]/
+  // layout.tsx), so this now only governs /robots.txt, the icons and the
+  // manifest. Kept because it still applies if a cached, prerendered route
+  // is reintroduced.
   experimental: {
     staticGenerationMaxConcurrency: 1,
     staticGenerationRetryCount: 3,

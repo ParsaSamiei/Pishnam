@@ -47,6 +47,12 @@ function buildEntry(path: string, lastModified?: Date): MetadataRoute.Sitemap[nu
 // between fa/en (only the /en prefix differs, see lib/i18n/routing.ts), each
 // entry's own `alternates.languages` communicates the fa/en pair to crawlers
 // rather than listing every URL twice as separate top-level entries.
+// Generated per request: the queries below need a live database, and the
+// image is built in CI where there is none (see the note in
+// src/app/[locale]/layout.tsx). It also keeps the sitemap current as content
+// is published, rather than frozen at whatever existed on deploy day.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [courses, articles, softwareProducts] = await Promise.all([
     prisma.course.findMany({

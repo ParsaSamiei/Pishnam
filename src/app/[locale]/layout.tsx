@@ -12,6 +12,31 @@ import { BrandCursor } from "@/components/layout/brand-cursor";
 import { AnalyticsScript } from "@/components/analytics-script";
 import "@/styles/globals.css";
 
+/**
+ * Rendered per request rather than prerendered at build time.
+ *
+ * Every page under this layout is database-backed, because <SiteFooter />
+ * calls getContactSettings(). This app was originally built for Vercel +
+ * Neon, where `next build` runs against a live database (hence
+ * staticGenerationMaxConcurrency in next.config.ts). Self-hosted, the image
+ * is built in GitHub Actions -- see .github/workflows/deploy.yml -- which
+ * has no database and cannot reach the production one, so prerendering here
+ * would either fail the build or bake placeholder content into the image.
+ *
+ * The per-request cost is small: getContactSettings is wrapped in
+ * unstable_cache (revalidate 3600, plus a tag the admin invalidates), so the
+ * footer's query is not repeated on every request. The upside is that admin
+ * edits reach visitors immediately instead of waiting on revalidation.
+ *
+ * Valid because Cache Components is not enabled -- `dynamic` is removed when
+ * it is. See node_modules/next/dist/docs/01-app/02-guides/
+ * caching-without-cache-components.md, "Route segment config".
+ */
+export const dynamic = "force-dynamic";
+
+// Inert while `dynamic` is "force-dynamic" (nothing is prerendered), but kept
+// so the locale set stays declared in one place and static generation works
+// again if this route ever stops depending on the database.
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -81,7 +106,9 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Enables static rendering for this locale's server components.
+  // Makes the locale available to next-intl's server APIs for this request.
+  // (Its usual purpose -- enabling static rendering -- does not apply here;
+  // see the `dynamic` note above.)
   setRequestLocale(locale);
 
   const dir = localeDirection[locale as AppLocale];

@@ -81,10 +81,19 @@ services:
         condition: service_completed_successfully
     networks: [pishnam]
     healthcheck:
+      # 127.0.0.1, NOT localhost. The image's /etc/hosts maps localhost to
+      # both 127.0.0.1 and ::1; busybox wget tries ::1 first, and the Next
+      # standalone server binds IPv4 only (HOSTNAME=0.0.0.0, per
+      # node_modules/next/dist/docs/01-app/03-api-reference/05-config/
+      # 01-next-config-js/output.md). So `localhost` is refused and the
+      # container sits "unhealthy" while serving traffic perfectly well --
+      # which is exactly what happened on the first deploy.
+      #
       # /robots.txt, not / -- it is a route handler (src/app/robots.ts) that
-      # always answers 200, whereas `/` depends on next-intl locale routing
-      # and is not a reliable liveness signal.
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/robots.txt"]
+      # answers 200 without touching the database, whereas `/` needs both
+      # next-intl locale routing and a DB query. This is a liveness probe: it
+      # should go red when the process is down, not when Postgres hiccups.
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/robots.txt"]
       interval: 30s
       timeout: 5s
       retries: 3

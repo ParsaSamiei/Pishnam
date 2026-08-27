@@ -16,8 +16,8 @@ sync with `prisma/schema.prisma` and this README as things change.
 - **Auth**: NextAuth.js v5 (Credentials), admin-only -- no public accounts
 - **Styling**: Tailwind CSS v4, hand-rolled shadcn-style primitives (Radix UI + CVA)
 - **Rich text**: Tiptap (course/article bodies)
-- **Analytics**: self-hosted Umami
-- **Infra**: Docker Compose (Postgres, Next.js, nginx, Umami), GitHub Actions CI/CD
+- **Analytics**: self-hosted Umami (shared instance, see [Deployment](#deployment))
+- **Infra**: Docker Compose (Postgres, Next.js, nginx), GitHub Actions CI/CD
 
 ## Getting started (local dev)
 
@@ -99,27 +99,70 @@ running the full nginx stack locally.
 
 ## Deployment
 
-`docker-compose.yml` runs the full stack: Postgres, one-off `migrator` and `seeder` jobs (apply
-pending Prisma migrations and optionally bootstrap the first admin, then exit — `web` waits for
-both), the Next.js app, nginx, and self-hosted Umami (with its own separate Postgres instance).
+`docker-compose.yml` runs the full stack: Postgres, a one-off `migrator` job (applies pending
+Prisma migrations then bootstraps the first admin, both idempotent — `web` waits for it to exit
+0), the Next.js app, and nginx.
 
 ```bash
 cp .env.example .env   # fill in real values
 docker compose up -d --build
 ```
 
-CI/CD (`.github/workflows/`):
+### Production host
+
+The app shares a VPS with two other Docker stacks (pishtalk, iranopen-insitu) behind a single
+host nginx that owns `:80`/`:443`. Two constraints follow from that, and both are load-bearing:
+
+- **Nothing in this compose project may bind `:80`.** Our nginx takes `:8081`; the host vhost in
+  `infra/nginx-host.conf` proxies to it as `default_server`, which is what makes the app answer on
+  the bare server IP. Neither pre-existing vhost declares `default_server`, so both of their
+  domains keep matching by name and are unaffected.
+- **Images are never pulled on the server.** Only ~1 in 5 TLS handshakes from that host to
+  ghcr.io complete, so a registry pull cannot reliably fetch a multi-layer image. CI builds on
+  GitHub and streams the result in over SSH. Building _on_ the server is equally out — 3.8 GB of
+  RAM with two other apps resident leaves no headroom for `next build`.
+
+Analytics reuses the Umami instance the pishtalk stack already runs (`127.0.0.1:3001`, exposed at
+`/analytics` by the host nginx). One Umami instance hosts many websites, so Pishnam is registered
+inside it as another website rather than getting a second analytics stack of its own.
+
+### CI/CD (`.github/workflows/`)
 
 - **`ci.yml`** -- every PR and push to `main`: install, `prisma validate`, migrate a throwaway
   test DB, lint, format check, typecheck, unit/component tests, build, then a Playwright smoke
   suite against a real build.
-- **`deploy.yml`** -- after `ci.yml` succeeds on `main`: builds the production, migrator, and
-  seeder images, pushes them to GHCR, then SSHes into the VPS to pull the new images and roll the
-  stack (`docker compose pull` + `up -d` at `/opt/pishnam`). Requires these GitHub Actions
-  secrets: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY` (same as PishTalk).
+- **`deploy.yml`** -- on push to `main` (or manual dispatch): builds the web image (and the
+  `migrator` image, only when its inputs actually changed), `docker save`s them, streams them to
+  the server over SSH, retags to `:current`, and rolls the stack at `/opt/pishnam`. Finishes by
+  polling `/robots.txt` through the published port and failing the job if the stack never answers.
 
-Swap the SSH-deploy step in `deploy.yml` for something else (e.g. a managed container host) if
-the target platform ever changes -- nothing else depends on it.
+  Required Actions secrets: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`.
+  Optional Actions _variables_: `UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`.
+
+`/opt/pishnam/.env` is managed by hand on the server and deliberately not synced by CI — it holds
+the real secrets. Only `docker-compose.yml` and `infra/nginx.conf` are copied up on each deploy.
+
+### Build-time vs runtime config
+
+`NEXT_PUBLIC_*` values are frozen into the bundle by `next build`, server-side code included
+(`next/dist/docs/01-app/02-guides/environment-variables.md`). They are passed as Docker build args
+by the deploy workflow, **not** read from the server's `.env`. Practical consequence: pointing the
+site at a real domain instead of the bare IP means editing `SITE_URL` in `deploy.yml` and
+redeploying — an `.env` change alone will silently do nothing.
+
+### Rolling back
+
+Every deploy leaves its image tagged with the commit SHA, so rolling back is a retag:
+
+```bash
+cd /opt/pishnam
+docker image ls pishnam-web                       # pick a previous SHA
+docker tag pishnam-web:<sha> pishnam-web:current
+docker compose up -d web
+```
+
+Note this rolls back code only. If the bad deploy applied a migration, reverse that separately —
+`prisma migrate deploy` has no down-migrations.
 
 ## Content model & translations
 

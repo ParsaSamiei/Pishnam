@@ -180,6 +180,14 @@ jobs:
             echo "--- migrator output ---"
             docker compose logs --no-color --tail=30 migrator || true
 
+            # Compose only re-runs the migrator when its image changed, and the
+            # image tag is a hash of prisma/ + the lockfile -- so "unchanged
+            # image" does mean "no new migrations". Assert it directly anyway,
+            # to cover the cases that reasoning does not: a wiped volume, or a
+            # migration that failed on an earlier deploy.
+            echo "--- migration status ---"
+            docker compose run --rm --no-deps migrator npx prisma migrate status
+
             # Checked through the published port rather than against the web
             # container directly, so this exercises the real path: host ->
             # nginx container -> web.

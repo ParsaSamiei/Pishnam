@@ -21,6 +21,14 @@ ENV AUTH_SECRET="build-time-placeholder"
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
+# --- migrator: one-off job, applies pending Prisma migrations --------------
+FROM builder AS migrator
+CMD ["npx", "prisma", "migrate", "deploy"]
+
+# --- seeder: one-off job, bootstraps the first admin if env vars are set ---
+FROM builder AS seeder
+CMD ["npx", "prisma", "db", "seed"]
+
 # --- runner: minimal production image --------------------------------------
 FROM node:22-alpine AS runner
 WORKDIR /app
@@ -28,7 +36,7 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 nextjs
+  && adduser --system --uid 1001 --ingroup nodejs nextjs
 
 # Standalone output already includes a minimal node_modules + server.js.
 COPY --from=builder /app/public ./public

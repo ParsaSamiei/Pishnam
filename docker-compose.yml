@@ -17,20 +17,32 @@ services:
       retries: 10
     networks: [pishnam]
 
-  # One-off job: applies pending Prisma migrations, then exits. `web` waits
-  # for this to complete successfully before starting.
-  migrate:
+  migrator:
+    image: ghcr.io/parsasamiei/pishnam:migrator
     build:
       context: .
       dockerfile: infra/Dockerfile
-      target: builder
-    command: npx prisma migrate deploy
+      target: migrator
     env_file: .env
     environment:
       DATABASE_URL: postgresql://pishnam:${POSTGRES_PASSWORD:-pishnam}@postgres:5432/pishnam?schema=public
     depends_on:
       postgres:
         condition: service_healthy
+    networks: [pishnam]
+
+  seeder:
+    image: ghcr.io/parsasamiei/pishnam:seeder
+    build:
+      context: .
+      dockerfile: infra/Dockerfile
+      target: seeder
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://pishnam:${POSTGRES_PASSWORD:-pishnam}@postgres:5432/pishnam?schema=public
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
     networks: [pishnam]
 
   web:
@@ -51,7 +63,7 @@ services:
     volumes:
       - uploads:/app/uploads
     depends_on:
-      migrate:
+      seeder:
         condition: service_completed_successfully
     networks: [pishnam]
     healthcheck:

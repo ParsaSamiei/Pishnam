@@ -99,9 +99,9 @@ running the full nginx stack locally.
 
 ## Deployment
 
-`docker-compose.yml` runs the full stack: Postgres, a one-off `migrate` job (applies pending
-Prisma migrations, then exits -- `web` waits for it), the Next.js app, nginx, and self-hosted
-Umami (with its own separate Postgres instance).
+`docker-compose.yml` runs the full stack: Postgres, one-off `migrator` and `seeder` jobs (apply
+pending Prisma migrations and optionally bootstrap the first admin, then exit — `web` waits for
+both), the Next.js app, nginx, and self-hosted Umami (with its own separate Postgres instance).
 
 ```bash
 cp .env.example .env   # fill in real values
@@ -113,9 +113,10 @@ CI/CD (`.github/workflows/`):
 - **`ci.yml`** -- every PR and push to `main`: install, `prisma validate`, migrate a throwaway
   test DB, lint, format check, typecheck, unit/component tests, build, then a Playwright smoke
   suite against a real build.
-- **`deploy.yml`** -- after `ci.yml` succeeds on `main`: builds the production image, pushes to
-  GHCR, then SSHes into the VPS to `git pull`, pull the new image, run migrations, and roll the
-  stack. Requires these GitHub Actions secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.
+- **`deploy.yml`** -- after `ci.yml` succeeds on `main`: builds the production, migrator, and
+  seeder images, pushes them to GHCR, then SSHes into the VPS to pull the new images and roll the
+  stack (`docker compose pull` + `up -d` at `/opt/pishnam`). Requires these GitHub Actions
+  secrets: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY` (same as PishTalk).
 
 Swap the SSH-deploy step in `deploy.yml` for something else (e.g. a managed container host) if
 the target platform ever changes -- nothing else depends on it.

@@ -75,7 +75,7 @@ export function ScrollSpine({ children }: { children: React.ReactNode }) {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 start-1 hidden w-4 sm:block lg:start-2"
+        className="pointer-events-none absolute inset-y-0 inset-s-1 hidden w-4 sm:block lg:inset-s-2"
       >
         {/* No `vector-effect: non-scaling-stroke` on these lines, deliberately.
             Motion drives `pathLength` through `stroke-dasharray` normalized by

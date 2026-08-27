@@ -23,7 +23,7 @@ export default async function AdminContactPage({
       ) : null}
       <div className="mt-6">
         <ContactSettingsForm
-          key={settings?.updatedAt.toISOString() ?? "empty"}
+          key={settings ? new Date(settings.updatedAt).toISOString() : "empty"}
           action={updateContactSettings}
           defaultValues={
             settings

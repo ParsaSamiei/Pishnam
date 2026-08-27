@@ -43,16 +43,16 @@ Docker/infra config — per your single-repo requirement. No separate CMS repo.
 ```
 .github/workflows/
 ├── ci.yml       # on PR + push to main: install, lint, typecheck, unit+component tests, build
-└── deploy.yml   # on push to main (after ci.yml passes): build Docker image, push to registry,
-                 # deploy (target platform TBD — VPS via SSH, or a managed container host)
+└── deploy.yml   # after ci.yml passes on main: build app/migrator/seeder images, push to GHCR,
+                 # SSH to /opt/pishnam and `docker compose pull && up -d`
 ```
 
 - `ci.yml` should run Prisma migration checks (`prisma migrate diff` / `validate`) so schema drift
   is caught before deploy.
-- `deploy.yml` builds the production Docker image (see frontend/infra docs), runs
-  `prisma migrate deploy` against the production DB, then rolls out the new container.
-- Secrets (DB URL, admin session secret, etc.) stored in GitHub Actions
-  secrets, injected at build/deploy time — never committed.
+- `deploy.yml` builds three production images (app, migrator, seeder), pushes them to GHCR, then
+  SSHes into the VPS to pull and restart the stack — same shape as PishTalk's deploy.
+- GitHub Actions secrets for SSH: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`. App secrets live in
+  the server's `/opt/pishnam/.env`, not in the workflow.
 
 ## Environment management
 

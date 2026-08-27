@@ -19,15 +19,50 @@ RUN npx prisma generate
 ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
 ENV AUTH_SECRET="build-time-placeholder"
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# NEXT_PUBLIC_* is frozen into the bundle by `next build` -- it is NOT read
+# from the environment at runtime, on the server side either (see
+# node_modules/next/dist/docs/01-app/02-guides/environment-variables.md,
+# "Bundling Environment Variables for the Browser"). Without this arg,
+# robots.ts / sitemap.ts / metadataBase all fall back to their
+# `?? "http://localhost:3000"` default and ship localhost URLs to production.
+#
+# Consequence to remember: changing the public site URL (e.g. when the real
+# domain replaces the bare IP) requires a REBUILD, not just an .env edit.
+ARG NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+# Same build-time-freezing applies to the analytics vars. Both are optional --
+# components/analytics-script.tsx renders nothing unless both are set.
+ARG NEXT_PUBLIC_UMAMI_SCRIPT_URL=""
+ENV NEXT_PUBLIC_UMAMI_SCRIPT_URL=${NEXT_PUBLIC_UMAMI_SCRIPT_URL}
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID=""
+ENV NEXT_PUBLIC_UMAMI_WEBSITE_ID=${NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+
 RUN npm run build
 
-# --- migrator: one-off job, applies pending Prisma migrations --------------
-FROM builder AS migrator
-CMD ["npx", "prisma", "migrate", "deploy"]
-
-# --- seeder: one-off job, bootstraps the first admin if env vars are set ---
-FROM builder AS seeder
-CMD ["npx", "prisma", "db", "seed"]
+# --- migrator: one-off job -- applies migrations, then bootstraps the admin -
+#
+# Built FROM deps, NOT FROM builder. `FROM builder` drags in the full source
+# tree and .next output, which made the old migrator/seeder images 2.66 GB
+# EACH -- see them still sitting on the server as ghcr.io/parsasamiei/
+# pishtalk:{migrator,seeder}. This stage needs none of that: only
+# node_modules (deps already has the prisma CLI, tsx and bcryptjs, since
+# `npm ci` there installs devDependencies too) plus the prisma directory.
+#
+# Prisma client is generated here rather than copied from builder -- a
+# cross-stage COPY of node_modules/.prisma has to stay manually in sync with
+# whatever the generator emits, and silently breaks when that changes.
+#
+# Migrate and seed are one image (and one container run) because the seed is
+# idempotent -- prisma/seed.ts no-ops when the admin already exists, and skips
+# entirely when SEED_ADMIN_* are unset -- so there is nothing to be gained
+# from keeping them separately schedulable.
+FROM deps AS migrator
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY prisma ./prisma
+RUN npx prisma generate
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed"]
 
 # --- runner: minimal production image --------------------------------------
 FROM node:22-alpine AS runner

@@ -4,7 +4,7 @@ import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
-import sharp from "sharp";
+import { Jimp, JimpMime } from "jimp";
 import { UPLOAD_POLICIES, type UploadPolicyKey } from "@/lib/upload-policies";
 
 export {
@@ -25,7 +25,15 @@ export {
  * place to audit.
  *
  * Client components must import constants from `@/lib/upload-policies`
- * instead of this file -- sharp and fs are Node-only.
+ * instead of this file -- jimp and fs are Node-only.
+ *
+ * Image re-encoding uses jimp, not sharp. sharp's prebuilt binaries require
+ * an x86-64-v2 CPU, and the production host predates that: sharp loads fine
+ * in development on macOS but throws "Unsupported CPU: Prebuilt binaries for
+ * Linux x64 require v2 microarchitecture" on the server, so every image
+ * upload answered 500 there. jimp is pure JavaScript, so it has no CPU
+ * baseline or native build to go wrong. The trade-offs that follow from it
+ * are noted at the re-encode call below.
  */
 
 const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads");
@@ -36,6 +44,11 @@ const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads
 // silence Turbopack's warning about that (it can't statically resolve an
 // env-var-derived path, which is expected and fine here).
 const DEFAULT_MAX_BYTES = Number(process.env.UPLOAD_MAX_BYTES ?? 10 * 1024 * 1024);
+
+/** Longest edge kept for stored images; larger uploads are scaled down to fit. */
+const MAX_IMAGE_DIMENSION = 2400;
+/** Matches the quality sharp was configured with, so stored sizes stay comparable. */
+const JPEG_QUALITY = 85;
 
 export class UploadValidationError extends Error {}
 
@@ -87,17 +100,42 @@ export async function processUpload(
     // Re-encode every image on the way in -- this both normalizes format
     // and strips any embedded scripts/metadata that could hide inside a
     // crafted image file (EXIF payloads, polyglot files, etc.), per the
-    // checklist's "Re-encode/strip images on upload" step. PDFs used for
-    // posters skip this branch below since sharp can't re-encode PDFs;
-    // content-type verification is the primary defense for those.
+    // checklist's "Re-encode/strip images on upload" step. Decoding to a raw
+    // bitmap and encoding back out is what strips it: nothing from the
+    // original container survives the round trip. The PDF guard is defensive
+    // only -- no policy with kind "image" allows application/pdf.
     if (detected.mime !== "application/pdf") {
-      const processed = await sharp(buffer)
-        .rotate() // bake in EXIF orientation before the metadata gets stripped
-        .resize({ width: 2400, height: 2400, fit: "inside", withoutEnlargement: true })
-        .webp({ quality: 85 })
-        .toBuffer();
+      // Jimp.read() bakes in EXIF orientation for us (it calls
+      // attemptExifRotate internally -- see @jimp/core/dist/commonjs/
+      // index.js, fromBuffer), which is what sharp's .rotate() did here
+      // before. Without it, phone photos would be stored sideways once the
+      // EXIF tag is dropped.
+      const image = await Jimp.read(buffer);
 
-      return writeAndDescribe(`${id}.webp`, processed, "image/webp");
+      // Only ever shrink. scaleToFit() enlarges a small image to fill the
+      // box, which sharp's `withoutEnlargement: true` prevented -- without
+      // this guard a 40px logo would be blown up to 2400px.
+      if (image.bitmap.width > MAX_IMAGE_DIMENSION || image.bitmap.height > MAX_IMAGE_DIMENSION) {
+        image.scaleToFit({ w: MAX_IMAGE_DIMENSION, h: MAX_IMAGE_DIMENSION });
+      }
+
+      // Output format is chosen per image because jimp has no WebP encoder
+      // (JimpMime is bmp/gif/jpeg/png/tiff only), so the single .webp output
+      // sharp produced is not available. Transparency decides it: PNG is
+      // lossless and keeps the alpha channel that logos and badges need,
+      // while JPEG is several times smaller for photographs, which is what
+      // course covers and achievement photos actually are. hasAlpha()
+      // reports real transparency rather than merely an alpha channel, so
+      // an opaque PNG still takes the JPEG path.
+      if (image.hasAlpha()) {
+        return writeAndDescribe(`${id}.png`, await image.getBuffer(JimpMime.png), "image/png");
+      }
+
+      return writeAndDescribe(
+        `${id}.jpg`,
+        await image.getBuffer(JimpMime.jpeg, { quality: JPEG_QUALITY }),
+        "image/jpeg",
+      );
     }
   }
 

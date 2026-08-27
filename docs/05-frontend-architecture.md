@@ -112,9 +112,12 @@ files, everything that goes through the admin panel:
 3. **Verify actual file content, not just the extension** — check the file's real MIME type via
    magic-byte/signature inspection (e.g. `file-type` package), not the client-supplied
    `Content-Type` header or filename extension, which are trivially spoofable.
-4. **Re-encode/strip images on upload** — run uploaded images through a processing step (e.g.
-   `sharp`) that re-encodes them; this both normalizes format/size and strips embedded scripts/
-   metadata that could hide in a crafted image file.
+4. **Re-encode/strip images on upload** — run uploaded images through a processing step (`jimp`)
+   that re-encodes them; this both normalizes format/size and strips embedded scripts/
+   metadata that could hide in a crafted image file. Stored output is JPEG, or PNG when the
+   source has real transparency — `jimp` has no WebP codec, which is also why `image/webp` is
+   not an accepted upload type. It replaced `sharp` because sharp's prebuilt binaries require an
+   x86-64-v2 CPU that the production host does not have; see `src/lib/upload.ts`.
 5. **Enforce a max file size per field** — reject oversized uploads before they hit disk (both at
    the reverse-proxy level and in the app), sized appropriately per content type (photos vs. part
    library archives).

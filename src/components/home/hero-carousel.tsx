@@ -12,7 +12,7 @@ import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-saf
 
 export interface HeroCarouselSlide {
   id: string;
-  /** `/uploads/<uuid>.webp` path from HeroSlide.image. */
+  /** `/uploads/<uuid>.{jpg,png}` path from HeroSlide.image. */
   image: string;
   /** Already resolved for the active locale by the server -- see hero-section.tsx. */
   alt: string;

@@ -48,7 +48,14 @@ export const DOWNLOAD_ACCEPT =
 export const UPLOAD_POLICIES = {
   image: {
     kind: "image",
-    allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
+    // No image/webp. Every image is re-encoded on upload (upload.ts), and the
+    // re-encoder is jimp, which ships no WebP codec -- its formats are
+    // bmp/gif/jpeg/png/tiff. Accepting WebP here would let the admin pick a
+    // file the server then rejects. The alternative, storing WebP without
+    // re-encoding, would exempt it from the "no exceptions" re-encode rule in
+    // the upload-security checklist, so the format is dropped instead.
+    // Re-add it together with a WebP decoder, not on its own.
+    allowedMimeTypes: ["image/jpeg", "image/png"],
     maxBytes: 5 * 1024 * 1024,
   },
   "download.software": {
@@ -79,3 +86,11 @@ export const UPLOAD_POLICIES = {
 } satisfies Record<string, FieldPolicy>;
 
 export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;
+
+/**
+ * Browser `accept` attribute for the admin image picker, derived from the
+ * `image` policy rather than written out by hand, so the file dialog can never
+ * offer a format the server rejects. It previously hardcoded image/webp, which
+ * is no longer accepted -- see the note on the policy above.
+ */
+export const IMAGE_ACCEPT = UPLOAD_POLICIES.image.allowedMimeTypes.join(",");

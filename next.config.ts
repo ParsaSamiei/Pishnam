@@ -29,16 +29,36 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost"],
 
   images: {
-    // Uploaded media is served from our own /uploads route (local disk, see
-    // 05-frontend-architecture.md). Aparat's own domain is whitelisted so
-    // the auto-fetched video poster (see src/lib/aparat.ts,
-    // fetchAparatPoster) can render via next/image -- add further remote
-    // hosts here only if another real external image source is introduced.
+    // Next's Image Optimization is disabled because it can only run on sharp
+    // ("The only additional dependency is the `sharp` package, which is
+    // required for Image Optimization" -- node_modules/next/dist/docs/01-app/
+    // 02-guides/deploying-to-platforms.md), and sharp cannot run on this
+    // server: its prebuilt Linux x64 binaries require an x86-64-v2 CPU and
+    // this host is older than that. The package is gone (see src/lib/upload.ts,
+    // which re-encodes uploads with jimp instead), so there is no optimizer
+    // left to call.
+    //
+    // Leaving optimization on without sharp meant /_next/image quietly
+    // returned the untouched original -- a 512px source requested at w=64 came
+    // back as the full 22 KB file. Declaring `unoptimized` makes that the
+    // documented behaviour rather than an undefined fallback, and stops the
+    // server spending CPU on requests it cannot fulfil.
+    //
+    // next/image still works everywhere it is used: width/height still reserve
+    // layout, lazy loading still applies. What is lost is per-viewport
+    // resizing, which is mitigated at the source -- uploads are capped at
+    // 2400px and re-encoded on the way in.
+    unoptimized: true,
+
+    // Kept for the day this runs somewhere sharp works (a newer host, or a
+    // CDN in front): re-enabling optimization is then a one-line change and
+    // the remote allowlist is still correct. remotePatterns is only consulted
+    // by the optimizer, so while `unoptimized` is set the Aparat poster in
+    // src/lib/aparat.ts loads directly.
     remotePatterns: [
       { protocol: "https", hostname: "aparat.com" },
       { protocol: "https", hostname: "*.aparat.com" },
     ],
-    formats: ["image/avif", "image/webp"],
   },
 
   async redirects() {

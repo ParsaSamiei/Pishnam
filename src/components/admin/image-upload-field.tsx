@@ -4,10 +4,11 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { Loader2, Upload, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { IMAGE_ACCEPT } from "@/lib/upload-policies";
 import { cn } from "@/lib/utils";
 
 interface ImageUploadFieldProps {
-  /** Form field name -- the resulting `/uploads/<uuid>.webp` path submits under this name. */
+  /** Form field name -- the resulting `/uploads/<uuid>.{jpg,png}` path submits under this name. */
   name: string;
   label: string;
   /** Existing image path, for edit forms. */
@@ -109,7 +110,7 @@ export function ImageUploadField({
             ref={inputRef}
             id={fieldId}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept={IMAGE_ACCEPT}
             className="hidden"
             onChange={handleFileChange}
             disabled={isUploading}

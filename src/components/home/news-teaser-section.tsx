@@ -35,37 +35,39 @@ export async function NewsTeaserSection() {
   if (withTranslation.length === 0) return null;
 
   return (
-    <section data-spine-node className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <StaggerGroup>
-          <StaggerItem variant="heading">
-            <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{t("title")}</h2>
-          </StaggerItem>
-          <StaggerItem variant="rise">
-            <p className="text-text-secondary mt-2">{t("subtitle")}</p>
-          </StaggerItem>
-        </StaggerGroup>
-        <Reveal delay={0.2}>
-          <AnimatedLink href="/blog" icon={<ArrowIcon aria-hidden="true" />}>
-            {t("viewAll")}
-          </AnimatedLink>
-        </Reveal>
-      </div>
+    <div className="bg-bg-surface-alt">
+      <section data-spine-node className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <StaggerGroup>
+            <StaggerItem variant="heading">
+              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{t("title")}</h2>
+            </StaggerItem>
+            <StaggerItem variant="rise">
+              <p className="text-text-secondary mt-2">{t("subtitle")}</p>
+            </StaggerItem>
+          </StaggerGroup>
+          <Reveal delay={0.2}>
+            <AnimatedLink href="/blog" icon={<ArrowIcon aria-hidden="true" />}>
+              {t("viewAll")}
+            </AnimatedLink>
+          </Reveal>
+        </div>
 
-      <StaggerGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {withTranslation.map(({ article, translation }) => (
-          <StaggerItem key={article.id} className="h-full">
-            <ArticleCard
-              slug={article.slug}
-              title={translation.title}
-              excerpt={translation.excerpt}
-              coverImage={article.coverImage}
-              publishedAt={article.publishedAt}
-              locale={locale}
-            />
-          </StaggerItem>
-        ))}
-      </StaggerGroup>
-    </section>
+        <StaggerGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {withTranslation.map(({ article, translation }) => (
+            <StaggerItem key={article.id} className="h-full">
+              <ArticleCard
+                slug={article.slug}
+                title={translation.title}
+                excerpt={translation.excerpt}
+                coverImage={article.coverImage}
+                publishedAt={article.publishedAt}
+                locale={locale}
+              />
+            </StaggerItem>
+          ))}
+        </StaggerGroup>
+      </section>
+    </div>
   );
 }

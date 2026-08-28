@@ -34,6 +34,8 @@ export default async function AdminLoginPage({
             width={56}
             height={62}
             className="h-14 w-auto"
+            priority
+            loading="eager"
           />
           <div>
             <h1 className="text-text-primary text-lg font-bold">پنل مدیریت پیشنام</h1>

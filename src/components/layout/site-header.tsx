@@ -81,6 +81,7 @@ export function SiteHeader() {
               height={44}
               className="relative h-10 w-auto"
               priority
+              loading="eager"
             />
           </motion.span>
           <span className="text-text-primary hidden text-base font-bold sm:inline">

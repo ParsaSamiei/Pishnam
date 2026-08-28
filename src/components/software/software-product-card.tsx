@@ -28,31 +28,29 @@ export function SoftwareProductCard({
       <TiltCard className="h-full" tilt={false}>
         <Card className={cn("h-full overflow-hidden p-0", cardHoverClass)}>
           <CardHoverRule />
-          <div className="bg-bg-surface-alt relative aspect-16/10 w-full overflow-hidden">
+          <div className="bg-bg-surface-alt relative aspect-square w-full overflow-hidden">
             {image ? (
               <Image
                 src={image}
                 alt=""
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(min-width: 1024px) 380px, 100vw"
+                className="object-contain p-5"
+                sizes="(min-width: 1280px) 240px, (min-width: 1024px) 280px, 50vw"
               />
             ) : (
               <div className="text-text-secondary flex h-full items-center justify-center">
-                <Package className="size-8" aria-hidden="true" />
+                <Package className="size-7" aria-hidden="true" />
               </div>
             )}
             {releaseCount > 0 && (
-              <span className="bg-pishnam-navy-900/85 text-pishnam-off-white absolute inset-s-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold">
+              <span className="bg-pishnam-navy-900/85 text-pishnam-off-white absolute inset-s-2 top-2 rounded-full px-2 py-0.5 text-[11px] font-semibold">
                 {releaseCountLabel}
               </span>
             )}
           </div>
-          <CardContent className="p-5">
-            <h3 className="text-text-primary font-bold">{title}</h3>
-            {excerpt && (
-              <p className="text-text-secondary mt-1.5 line-clamp-2 text-sm">{excerpt}</p>
-            )}
+          <CardContent className="p-4">
+            <h3 className="text-text-primary text-sm font-bold">{title}</h3>
+            {excerpt && <p className="text-text-secondary mt-1 line-clamp-2 text-xs">{excerpt}</p>}
           </CardContent>
         </Card>
       </TiltCard>

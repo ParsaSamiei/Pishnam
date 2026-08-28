@@ -21,9 +21,38 @@ sync with `prisma/schema.prisma` and this README as things change.
 
 ## Getting started (local dev)
 
+There are two ways to run local dev, differing only in which database `DATABASE_URL` points at.
+
+**Against the production database (the usual setup).** You develop against the real content,
+so the admin panel has actual rows to edit and the site renders what the live site renders.
+
 ```bash
 npm install
-cp .env.example .env      # fill in DATABASE_URL at minimum
+cp .env.example .env      # option A -- fill in PASS from the server, see below
+
+# The server publishes its postgres container on its own loopback only, so the
+# tunnel is the only route in. Leave this running in its own terminal.
+npm run db:tunnel          # localhost:5434 -> 127.0.0.1:5433 on the server
+
+npm run dev                # http://localhost:3000
+```
+
+The password is the server's `POSTGRES_PASSWORD`, which lives only in `/opt/pishnam/.env`
+(hand-managed, deliberately never synced by CI):
+
+```bash
+ssh pishnam 'grep POSTGRES_PASSWORD /opt/pishnam/.env'
+```
+
+> **This is production data.** Reads are free, but anything you change in the admin panel is
+> live immediately, and `prisma migrate dev` may offer to _reset_ the database. Against this URL
+> use `npm run prisma:deploy` (apply only); write new migrations against a throwaway DB first.
+
+**Against a throwaway database.** No tunnel, nothing to break — but an empty site until you seed.
+
+```bash
+npm install
+cp .env.example .env      # switch DATABASE_URL to option B
 
 # Local Postgres via Docker (or point DATABASE_URL at your own instance)
 docker compose up -d postgres
@@ -36,6 +65,12 @@ npm run dev                # http://localhost:3000
 ```
 
 Admin panel: `http://localhost:3000/admin/login`.
+
+> **Note on reaching the server**: TCP 22 accepts but the SSH banner exchange times out on some
+> networks — the same filtering that makes ghcr.io pulls fail _from_ the box (see
+> `.github/workflows/deploy.yml`). It is not the server being down; retrying gets through, usually
+> within a few tries. `npm run db:tunnel` retries for you and reconnects if the tunnel drops
+> mid-session.
 
 > **Note on this checkout**: `npx prisma generate` needs to reach
 > `binaries.prisma.sh` to download its query-engine binary. If you're behind a
@@ -59,6 +94,7 @@ generate`/`migrate` will fail with a 403 on that fetch -- allow the domain,
 | `npm run prisma:deploy`           | Apply pending migrations (prod/CI)            |
 | `npm run prisma:studio`           | Prisma's DB browser GUI                       |
 | `npm run db:seed`                 | Bootstrap the first `AdminUser` (see `.env`)  |
+| `npm run db:tunnel`               | SSH tunnel to the production Postgres         |
 
 Husky + lint-staged run ESLint/Prettier on staged files automatically at commit time.
 
@@ -131,6 +167,26 @@ host nginx that owns `:80`/`:443`. Two constraints follow from that, and both ar
 Analytics reuses the Umami instance the pishtalk stack already runs (`127.0.0.1:3001`, exposed at
 `/analytics` by the host nginx). One Umami instance hosts many websites, so Pishnam is registered
 inside it as another website rather than getting a second analytics stack of its own.
+
+### Reaching the production database
+
+`docker-compose.yml` publishes the postgres container on **`127.0.0.1:5433`** on the server — the
+host's loopback, never `0.0.0.0`. Nothing reaches it from the internet; the only route in from a
+dev machine is an SSH tunnel (`npm run db:tunnel`, or by hand:
+`ssh -N -L 5434:localhost:5433 pishnam@194.180.11.200`).
+
+The port numbers are one along from pishtalk's on both ends, so both tunnels can be open at once:
+
+|          | server           | dev machine      |
+| -------- | ---------------- | ---------------- |
+| pishtalk | `127.0.0.1:5432` | `localhost:5433` |
+| pishnam  | `127.0.0.1:5433` | `localhost:5434` |
+
+Picking the same local port as pishtalk would be worse than it looks: `ssh -L` would fail to bind
+and, without `ExitOnForwardFailure`, stay up with no forwarding at all — leaving Prisma pointed at
+pishtalk's database. `infra/db-tunnel.sh` sets that option and pre-checks the port.
+
+For a shell on the box instead, `docker compose exec postgres psql -U pishnam` needs none of this.
 
 ### CI/CD (`.github/workflows/`)
 

@@ -53,7 +53,7 @@ export default async function SoftwareDownloadsPage({
             {isFa ? "هنوز نرم‌افزاری ثبت نشده است." : "No software has been added yet."}
           </p>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {products.map((product) => (
               <SoftwareProductCard
                 key={product.id}

@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { MapPin, MessageCircle, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
-import { Button } from "@/components/ui/button";
+import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
 import {
   Dialog,
   DialogContent,
@@ -24,20 +25,14 @@ function toPersianDigits(value: string): string {
   return value.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)] ?? d);
 }
 
-function toGoogleMapsUrl(address: string): string {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-}
-
 type FloatingContactButtonProps = {
   address: string | null;
-  mapsQuery: string | null;
   phones: string[];
   socialLinks: SocialLink[];
 };
 
 export function FloatingContactButton({
   address,
-  mapsQuery,
   phones,
   socialLinks,
 }: FloatingContactButtonProps) {
@@ -46,6 +41,7 @@ export function FloatingContactButton({
   const tFooter = useTranslations("footer");
   const locale = useLocale();
   const isFa = locale === "fa";
+  const reduced = useReducedMotionSafe();
   const [open, setOpen] = useState(false);
 
   const hasContent = Boolean(address) || phones.length > 0 || socialLinks.length > 0;
@@ -54,22 +50,42 @@ export function FloatingContactButton({
 
   return (
     <>
-      <Button
+      <button
         type="button"
-        variant="default"
-        size="icon"
         aria-label={t("floatingContact.open")}
+        aria-haspopup="dialog"
+        aria-expanded={open}
         onClick={() => setOpen(true)}
         className={cn(
-          "fixed bottom-20 z-30 size-11 rounded-full",
-          "inset-e-4 sm:inset-e-6",
-          "ring-pishnam-gold-500/15 shadow-[0_0_6px_1px_rgb(230_168_23_/_0.18)] ring-1",
-          "hover:shadow-[0_0_8px_2px_rgb(230_168_23_/_0.28)]",
-          "transition-[opacity,transform] duration-300 motion-reduce:transition-none",
+          "group fixed bottom-20 z-30 flex cursor-pointer flex-col items-center gap-2",
+          "inset-e-4 border-0 bg-transparent p-0 sm:inset-e-6",
+          "focus-visible:ring-pishnam-gold-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
         )}
       >
-        <MessageCircle aria-hidden="true" className="size-5" />
-      </Button>
+        <div className={cn(!reduced && "animate-contact-label-bounce")}>
+          <div className="relative">
+            <span className="bg-pishnam-gold-500 text-pishnam-navy-900 block rounded-full px-4 py-1.5 text-sm font-semibold whitespace-nowrap shadow-[0_4px_14px_rgb(0_0_0_/_0.14)]">
+              {t("floatingContact.open")}
+            </span>
+            <span
+              aria-hidden="true"
+              className="border-t-pishnam-gold-500 absolute start-1/2 -bottom-1.5 size-0 -translate-x-1/2 border-x-[7px] border-t-[8px] border-x-transparent"
+            />
+          </div>
+        </div>
+
+        <span className="relative flex size-14 items-center justify-center">
+          {!reduced ? (
+            <span
+              aria-hidden="true"
+              className="bg-pishnam-gold-500/35 animate-contact-pulse-ring absolute inset-0 rounded-full"
+            />
+          ) : null}
+          <span className="bg-pishnam-gold-500 group-hover:bg-pishnam-gold-600 relative flex size-14 items-center justify-center rounded-full shadow-[0_4px_16px_rgb(230_168_23_/_0.35)] transition-colors duration-200">
+            <MessageCircle aria-hidden="true" className="text-pishnam-navy-900 size-6" />
+          </span>
+        </span>
+      </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
@@ -79,25 +95,20 @@ export function FloatingContactButton({
           </DialogHeader>
 
           <div className="flex flex-col gap-5">
-            {address && mapsQuery ? (
+            {address ? (
               <div className="flex items-start gap-3">
                 <MapPin
                   className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
                   aria-hidden="true"
                 />
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-text-primary text-sm font-semibold">
                     {t("floatingContact.address")}
                   </p>
-                  <a
-                    href={toGoogleMapsUrl(mapsQuery)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${address} (${tNav("opensInNewTab")})`}
-                    className="text-text-secondary hover:text-pishnam-gold-600 mt-1 block cursor-pointer text-sm leading-snug whitespace-pre-line transition-colors duration-200"
-                  >
-                    {address}
-                  </a>
+                  <AddressMapLinks
+                    address={address}
+                    addressClassName="text-text-secondary hover:text-pishnam-gold-600 mt-1 block text-sm leading-snug transition-colors duration-200"
+                  />
                 </div>
               </div>
             ) : null}

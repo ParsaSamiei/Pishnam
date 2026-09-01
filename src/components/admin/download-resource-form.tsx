@@ -13,13 +13,20 @@ import { DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
 import { DOWNLOAD_ACCEPT, type UploadPolicyKey } from "@/lib/upload-policies";
 import type { DownloadResourceFormState } from "@/app/admin/(dashboard)/downloads/actions";
 
+type CustomSectionOption = {
+  id: string;
+  titleFa: string;
+};
+
 interface DownloadResourceFormProps {
   action: (
     prevState: DownloadResourceFormState,
     formData: FormData,
   ) => Promise<DownloadResourceFormState>;
+  customSections?: CustomSectionOption[];
   defaultValues?: {
-    category: string;
+    category: string | null;
+    sectionId: string | null;
     source: string;
     cadTool: string | null;
     titleFa: string;
@@ -36,9 +43,17 @@ const CATEGORY_POLICY: Record<string, { policy: UploadPolicyKey; accept: string 
   DATASHEETS: { policy: "download.datasheet", accept: DOWNLOAD_ACCEPT },
   BOOKS: { policy: "download.book", accept: DOWNLOAD_ACCEPT },
   COMPONENT_LIBRARIES: { policy: "download.componentLibrary", accept: DOWNLOAD_ACCEPT },
+  CUSTOM: { policy: "download.datasheet", accept: DOWNLOAD_ACCEPT },
 };
 
 const initialState: DownloadResourceFormState = { status: "idle" };
+
+function resolveTarget(defaultValues?: DownloadResourceFormProps["defaultValues"]): string {
+  if (defaultValues?.sectionId) {
+    return `section:${defaultValues.sectionId}`;
+  }
+  return defaultValues?.category ?? "DATASHEETS";
+}
 
 type DownloadResourceFormFieldsProps = Omit<DownloadResourceFormProps, "action"> & {
   state: DownloadResourceFormState;
@@ -47,40 +62,54 @@ type DownloadResourceFormFieldsProps = Omit<DownloadResourceFormProps, "action">
 };
 
 function DownloadResourceFormFields({
+  customSections = [],
   defaultValues,
   submitLabel,
   state,
   field,
   isPending,
 }: DownloadResourceFormFieldsProps) {
-  const [category, setCategory] = useState(() =>
-    field("category", defaultValues?.category ?? "DATASHEETS"),
-  );
+  const [target, setTarget] = useState(() => field("target", resolveTarget(defaultValues)));
   const [source, setSource] = useState(() => field("source", defaultValues?.source ?? "HOSTED"));
   const [fileSizeBytes, setFileSizeBytes] = useState(() =>
     Number(field("fileSizeBytes", defaultValues?.fileSizeBytes ?? 0)),
   );
 
-  const uploadConfig = CATEGORY_POLICY[category] ?? CATEGORY_POLICY.DATASHEETS!;
+  const isCustomSection = target.startsWith("section:");
+  const policyKey = isCustomSection ? "CUSTOM" : target;
+  const uploadConfig = CATEGORY_POLICY[policyKey] ?? CATEGORY_POLICY.DATASHEETS!;
 
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="category">دسته‌بندی *</Label>
+          <Label htmlFor="target">دسته‌بندی *</Label>
           <NativeSelect
-            id="category"
-            name="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            id="target"
+            name="target"
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
             required
+            aria-invalid={Boolean(state.errors?.target)}
           >
             {DOWNLOAD_CATEGORIES.map((cat) => (
               <option key={cat.value} value={cat.value}>
                 {cat.labelFa}
               </option>
             ))}
+            {customSections.length > 0 && (
+              <optgroup label="بخش‌های سفارشی">
+                {customSections.map((section) => (
+                  <option key={section.id} value={`section:${section.id}`}>
+                    {section.titleFa}
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </NativeSelect>
+          {state.errors?.target && (
+            <p className="text-pishnam-danger text-xs">{state.errors.target}</p>
+          )}
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="source">نوع منبع *</Label>
@@ -97,7 +126,7 @@ function DownloadResourceFormFields({
         </div>
       </div>
 
-      {category === "COMPONENT_LIBRARIES" && (
+      {target === "COMPONENT_LIBRARIES" && (
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="cadTool">نرم‌افزار CAD</Label>
           <Input
@@ -116,7 +145,7 @@ function DownloadResourceFormFields({
             label="فایل *"
             policy={uploadConfig.policy}
             accept={uploadConfig.accept}
-            field={`download.${category.toLowerCase()}`}
+            field={`download.${policyKey.toLowerCase()}`}
             defaultValue={field(
               "fileUrl",
               defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined,
@@ -212,6 +241,7 @@ function DownloadResourceFormFields({
 
 export function DownloadResourceForm({
   action,
+  customSections,
   defaultValues,
   submitLabel,
 }: DownloadResourceFormProps) {
@@ -224,6 +254,7 @@ export function DownloadResourceForm({
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <DownloadResourceFormFields
         key={formKey}
+        customSections={customSections}
         defaultValues={defaultValues}
         submitLabel={submitLabel}
         state={state}

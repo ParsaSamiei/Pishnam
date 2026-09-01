@@ -49,6 +49,17 @@ enum DownloadCategory {
   COMPONENT_LIBRARIES // کتابخانه قطعات CAD (merges former SolidWorks/Altium categories)
 }
 
+// Each value maps to a public /downloads/* route and its backing content model.
+// CUSTOM sections use an admin-chosen slug and optional DownloadResource rows.
+enum DownloadSectionType {
+  SOFTWARE
+  POSTERS
+  DATASHEETS
+  BOOKS
+  COMPONENT_LIBRARIES
+  CUSTOM
+}
+
 enum ResourceSource {
   HOSTED // file uploaded to Pishnam's own storage
   EXTERNAL // link out to a third-party site (e.g. official tool page)
@@ -178,9 +189,31 @@ model VideoEntry {
   @@index([publishedAt])
 }
 
+// Tiles on the public /downloads landing page. Admins can enable/disable,
+// reorder, and relabel each section without code changes.
+model DownloadSection {
+  id          String              @id @default(cuid())
+  sectionType DownloadSectionType
+  slug        String              @unique
+  titleFa     String
+  titleEn     String
+  iconKey     String              @default("file-text")
+  order       Int                 @default(0)
+  active      Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  resources DownloadResource[]
+
+  @@index([active, order])
+  @@index([sectionType])
+}
+
 model DownloadResource {
-  id            String           @id @default(cuid())
-  category      DownloadCategory
+  id            String            @id @default(cuid())
+  category      DownloadCategory?
+  sectionId     String?
+  section       DownloadSection?  @relation(fields: [sectionId], references: [id], onDelete: SetNull)
   source        ResourceSource // HOSTED or EXTERNAL -- set per resource, both allowed
   cadTool       String? // e.g. "SolidWorks" | "Altium" -- only used for
   // COMPONENT_LIBRARIES category, replaces old separate categories
@@ -193,6 +226,7 @@ model DownloadResource {
   createdAt     DateTime         @default(now())
 
   @@index([category])
+  @@index([sectionId])
 }
 
 // Competition posters used to be flat DownloadResource rows (category =

@@ -21,7 +21,7 @@ function subscribe(callback: () => void) {
  * copy in components/layout/theme-script.tsx by hand -- that one has to be a
  * string in <head> to beat first paint, so it cannot import this.
  */
-function resolveTheme(): Theme {
+export function resolveTheme(): Theme {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored === "light" || stored === "dark") return stored;
@@ -35,6 +35,12 @@ function resolveTheme(): Theme {
       : null;
   if (!mql || typeof mql.matches !== "boolean") return "dark";
   return mql.matches ? "dark" : "light";
+}
+
+/** Re-apply the resolved theme to `<html>`. Safe to call after soft navigations. */
+export function applyResolvedTheme() {
+  if (typeof document === "undefined") return;
+  document.documentElement.setAttribute("data-theme", resolveTheme());
 }
 
 function getSnapshot(): Theme {

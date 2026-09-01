@@ -33,8 +33,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     (isFa ? contact?.addressFa : contact?.addressEn) ||
     (isFa ? contact?.addressEn : contact?.addressFa) ||
     null;
-  const mapsQuery = contact?.addressEn || contact?.addressFa || address;
-
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   return (
@@ -65,7 +63,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </ScrollSpine>
       <FloatingContactButton
         address={address}
-        mapsQuery={mapsQuery}
         phones={contact?.phones ?? []}
         socialLinks={socialLinks}
       />

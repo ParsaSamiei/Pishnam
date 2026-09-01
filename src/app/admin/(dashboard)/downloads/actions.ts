@@ -30,7 +30,7 @@ export async function createDownloadResource(
     return formErrorFromIssues(parsed.error.issues, formData);
   }
 
-  const { cadTool, descriptionFa, descriptionEn, ...rest } = parsed.data;
+  const { cadTool, descriptionFa, descriptionEn, target: _target, ...rest } = parsed.data;
   await prisma.downloadResource.create({
     data: {
       ...rest,

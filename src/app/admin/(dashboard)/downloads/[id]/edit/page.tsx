@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { DownloadResourceForm } from "@/components/admin/download-resource-form";
+import { getCustomDownloadSections } from "@/lib/download-sections";
 import { updateDownloadResource } from "../../actions";
 
 export default async function EditDownloadResourcePage({
@@ -18,6 +19,7 @@ export default async function EditDownloadResourcePage({
   }
 
   const boundUpdate = updateDownloadResource.bind(null, id);
+  const customSections = await getCustomDownloadSections();
 
   return (
     <div>
@@ -32,6 +34,7 @@ export default async function EditDownloadResourcePage({
       <div className="mt-6">
         <DownloadResourceForm
           action={boundUpdate}
+          customSections={customSections}
           submitLabel="ذخیره تغییرات"
           defaultValues={resource}
         />

@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { JsonLd } from "@/components/json-ld";
+import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { getContactSettings } from "@/lib/contact-settings";
 import { getSocialLinks } from "@/lib/social-channels";
@@ -136,13 +137,14 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                         className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
                         aria-hidden="true"
                       />
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <p className="text-text-primary text-sm font-semibold">
                           {isFa ? "آدرس" : "Address"}
                         </p>
-                        <p className="reading-copy text-text-secondary mt-1 text-sm whitespace-pre-line">
-                          {address}
-                        </p>
+                        <AddressMapLinks
+                          address={address}
+                          addressClassName="reading-copy text-text-secondary hover:text-pishnam-gold-600 mt-1 text-sm transition-colors duration-200"
+                        />
                       </div>
                     </div>
                   ) : null}

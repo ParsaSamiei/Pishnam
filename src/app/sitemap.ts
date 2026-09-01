@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
-import { DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
+import { resolveDownloadSectionSlug } from "@/lib/download-sections";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -54,7 +54,7 @@ function buildEntry(path: string, lastModified?: Date): MetadataRoute.Sitemap[nu
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [courses, articles, softwareProducts] = await Promise.all([
+  const [courses, articles, softwareProducts, downloadSections] = await Promise.all([
     prisma.course.findMany({
       where: { active: true },
       select: { slug: true, updatedAt: true },
@@ -67,11 +67,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { active: true },
       select: { slug: true, updatedAt: true },
     }),
+    prisma.downloadSection.findMany({
+      where: { active: true },
+      select: { slug: true, sectionType: true, updatedAt: true },
+    }),
   ]);
+
+  const activeDownloadPaths = downloadSections.map(
+    (section) => `/downloads/${resolveDownloadSectionSlug(section)}`,
+  );
 
   const entries: MetadataRoute.Sitemap = [
     ...STATIC_PATHS.map((path) => buildEntry(path)),
-    ...DOWNLOAD_CATEGORIES.map((category) => buildEntry(`/downloads/${category.slug}`)),
+    ...activeDownloadPaths.map((path) => buildEntry(path)),
     ...courses.map((course) => buildEntry(`/courses/${course.slug}`, course.updatedAt)),
     ...articles.map((article) => buildEntry(`/blog/${article.slug}`, article.publishedAt)),
     ...softwareProducts.map((product) =>

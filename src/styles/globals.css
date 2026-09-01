@@ -100,6 +100,31 @@
       opacity: 1;
     }
   }
+
+  /* FloatingContactButton: label bounces gently; icon ring pulses outward. */
+  --animate-contact-label-bounce: contact-label-bounce 3s ease-in-out infinite;
+  --animate-contact-pulse-ring: contact-pulse-ring 2.4s ease-out infinite;
+
+  @keyframes contact-label-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes contact-pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.45;
+    }
+    100% {
+      transform: scale(1.55);
+      opacity: 0;
+    }
+  }
 }
 
 /* Header logo: a quiet diagonal sheen that drifts across the mark now and
@@ -244,6 +269,11 @@ html[dir="rtl"] .skeleton-shine::after {
      skeleton shimmer. */
   @media (prefers-reduced-motion: reduce) {
     .animate-circuit-pulse {
+      animation: none;
+    }
+
+    .animate-contact-label-bounce,
+    .animate-contact-pulse-ring {
       animation: none;
     }
 

@@ -134,5 +134,23 @@
   "common": {
     "learnMore": "Learn more",
     "readMore": "Read more"
+  },
+  "notFound": {
+    "eyebrow": "Open circuit",
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or may have been moved. Check the address, or return to a known route.",
+    "home": "Back to homepage",
+    "contact": "Contact us",
+    "quickLinksLabel": "Popular destinations",
+    "courses": "Browse courses",
+    "enroll": "Enroll now",
+    "faq": "FAQ"
+  },
+  "mapNavigation": {
+    "chooseApp": "Choose navigation app",
+    "googleMaps": "Google Maps",
+    "balad": "Balad",
+    "neshan": "Neshan",
+    "openIn": "Open in {service}"
   }
 }

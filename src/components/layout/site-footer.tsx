@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink, MapPin, Phone } from "lucide-react";
+import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { APP_VERSION } from "@/lib/app-version";
 import { getContactSettings } from "@/lib/contact-settings";
@@ -13,10 +14,6 @@ function toTelHref(phone: string): string {
 
 function toPersianDigits(value: string): string {
   return value.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)] ?? d);
-}
-
-function toGoogleMapsUrl(address: string): string {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 }
 
 const EXPLORE_LINKS = [
@@ -63,7 +60,6 @@ export async function SiteFooter() {
     (isFa ? settings?.addressFa : settings?.addressEn) ||
     (isFa ? settings?.addressEn : settings?.addressFa) ||
     null;
-  const mapsQuery = settings?.addressEn || settings?.addressFa || address;
   const phones = settings?.phones ?? [];
 
   return (
@@ -87,17 +83,13 @@ export async function SiteFooter() {
             <span className="text-base font-bold">{t("brand.name")}</span>
           </div>
           <p className="text-pishnam-off-white/70 mt-3 max-w-sm text-sm">{t("footer.tagline")}</p>
-          {address && mapsQuery ? (
-            <a
-              href={toGoogleMapsUrl(mapsQuery)}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${address} (${t("nav.opensInNewTab")})`}
-              className="text-pishnam-off-white/60 hover:text-pishnam-gold-500 mt-3 flex max-w-sm cursor-pointer items-start gap-1.5 text-sm leading-snug transition-colors duration-200"
-            >
-              <MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />
-              <span className="whitespace-pre-line">{address}</span>
-            </a>
+          {address ? (
+            <AddressMapLinks
+              address={address}
+              className="mt-3 max-w-sm"
+              addressClassName="text-pishnam-off-white/60 hover:text-pishnam-gold-500 text-sm leading-snug transition-colors duration-200"
+              icon={<MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />}
+            />
           ) : null}
           {phones.length > 0 ? (
             <ul className="text-pishnam-off-white/60 mt-2 flex max-w-sm flex-col gap-1.5 text-sm">

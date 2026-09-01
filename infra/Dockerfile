@@ -5,7 +5,12 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
 COPY package.json package-lock.json ./
-RUN npm ci
+# `postinstall` is `prisma generate`, which needs prisma/schema.prisma. That
+# file is copied in the builder and migrator stages, which generate the client
+# themselves. Skipping lifecycle scripts here keeps this layer keyed only to
+# the lockfile (and also skips `prepare`/husky, which has nothing to do in
+# an image build).
+RUN npm ci --ignore-scripts
 
 # --- builder: generate Prisma client + build the Next.js app --------------
 FROM node:22-alpine AS builder

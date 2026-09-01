@@ -18,6 +18,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
+  { href: "/", key: "home" },
   { href: "/about-us", key: "about" },
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },

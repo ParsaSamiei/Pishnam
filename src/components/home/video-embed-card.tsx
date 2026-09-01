@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AppVideoPlayer } from "@/components/media/app-video-player";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,43 +12,63 @@ import { track } from "@/lib/analytics";
 
 interface VideoEmbedCardProps {
   title: string;
-  aparatUrl: string;
   thumbnail: string | null;
+  aparatUrl?: string | null;
+  hostedVideo?: string | null;
   topicTags?: string[];
+  /** When false, only the player is shown (e.g. on a course detail page). */
+  showTitle?: boolean;
 }
 
 /**
- * Renders a static thumbnail + play button until clicked -- the iframe embed
- * (and Aparat's player script) only mounts on interaction, per the perf
- * target in docs/05-frontend-architecture.md ("lazy-loaded... don't load
- * iframe until in viewport / user interaction").
+ * Renders a static thumbnail + play button until clicked -- Aparat iframes and
+ * hosted `<video>` elements only mount on interaction, per the perf target in
+ * docs/05-frontend-architecture.md.
  */
-export function VideoEmbedCard({ title, aparatUrl, thumbnail, topicTags }: VideoEmbedCardProps) {
+export function VideoEmbedCard({
+  title,
+  thumbnail,
+  aparatUrl,
+  hostedVideo,
+  topicTags,
+  showTitle = true,
+}: VideoEmbedCardProps) {
   const [playing, setPlaying] = useState(false);
+  const isHosted = Boolean(hostedVideo);
 
   function handlePlay() {
     setPlaying(true);
-    track("video_play", { title, topic: topicTags?.join(",") });
+    track("video_play", {
+      title,
+      topic: topicTags?.join(","),
+      source: isHosted ? "hosted" : "aparat",
+    });
   }
 
   const card = (
     <Card className={cn("overflow-hidden p-0", cardHoverClass)}>
       <CardHoverRule />
-      {/* `overflow-hidden` so the thumbnail's hover zoom crops inside the frame
-          instead of bleeding a sliver over the title below. */}
       <div className="bg-pishnam-navy-900 relative aspect-video w-full overflow-hidden">
         {playing ? (
-          <iframe
-            src={aparatUrl}
-            title={title}
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            className="absolute inset-0 h-full w-full"
-          />
+          isHosted ? (
+            <AppVideoPlayer
+              src={hostedVideo!}
+              poster={thumbnail}
+              title={title}
+              autoPlay
+              className="absolute inset-0 h-full w-full"
+              videoClassName="absolute inset-0 h-full w-full object-contain"
+            />
+          ) : (
+            <iframe
+              src={aparatUrl!}
+              title={title}
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              className="absolute inset-0 h-full w-full"
+            />
+          )
         ) : (
-          // No `group` of its own: the Card owns it via `cardHoverClass`, so the
-          // thumbnail and badge react to the whole card the way the news card's
-          // cover reacts to its link -- including a hover that starts on the title.
           <button
             type="button"
             onClick={handlePlay}
@@ -65,24 +86,25 @@ export function VideoEmbedCard({ title, aparatUrl, thumbnail, topicTags }: Video
                 className="object-cover opacity-90 transition-transform duration-300 group-hover:scale-105"
                 sizes="(min-width: 1024px) 380px, 100vw"
               />
+            ) : isHosted ? (
+              <div
+                aria-hidden="true"
+                className="from-pishnam-navy-900 via-pishnam-navy-800 to-pishnam-navy-900 absolute inset-0 bg-gradient-to-br"
+              />
             ) : null}
-            {/* Grows but does not tip: `cardHoverIconClass` on a round badge
-                leaves the play glyph looking crooked rather than tilted. */}
             <span className="bg-pishnam-gold-500 text-pishnam-navy-900 relative flex size-14 items-center justify-center rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
               <Play className="size-6 fill-current" aria-hidden="true" />
             </span>
           </button>
         )}
       </div>
-      <CardContent className="p-4">
-        <h3 className="text-text-primary line-clamp-2 font-bold">{title}</h3>
-      </CardContent>
+      {showTitle && (
+        <CardContent className="p-4">
+          <h3 className="text-text-primary line-clamp-2 font-bold">{title}</h3>
+        </CardContent>
+      )}
     </Card>
   );
 
-  // Before play, the card is a thumbnail like any other and lifts like one.
-  // After, the lift is dropped: nudging a mounted player when the pointer
-  // crosses it turns its controls into a moving target. `tilt` stays off
-  // either way -- rotating a 16/9 video frame reads as skew, not depth.
   return playing ? card : <TiltCard tilt={false}>{card}</TiltCard>;
 }

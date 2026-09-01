@@ -21,6 +21,11 @@ export default async function AdminVideosPage() {
           getRowKey={(row) => row.id}
           emptyMessage="هنوز ویدیویی ثبت نشده است."
           columns={[
+            {
+              header: "منبع",
+              cell: (row) => (row.hostedVideo ? "سرور" : "آپارات"),
+              className: "text-text-secondary",
+            },
             { header: "عنوان", cell: (row) => row.titleFa },
             {
               header: "تاریخ انتشار",

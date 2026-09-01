@@ -35,8 +35,8 @@ export async function NewsTeaserSection() {
   if (withTranslation.length === 0) return null;
 
   return (
-    <div className="bg-bg-surface-alt">
-      <section data-spine-node className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <section data-spine-node className="bg-bg-surface-alt py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <StaggerGroup>
             <StaggerItem variant="heading">
@@ -67,7 +67,7 @@ export async function NewsTeaserSection() {
             </StaggerItem>
           ))}
         </StaggerGroup>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }

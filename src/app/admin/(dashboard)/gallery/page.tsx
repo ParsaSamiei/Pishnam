@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Pencil } from "lucide-react";
+import { Pencil, Play } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { AdminListHeader } from "@/components/admin/admin-list-header";
 import { DataTable } from "@/components/admin/data-table";
@@ -15,31 +15,51 @@ export default async function AdminGalleryPage() {
 
   const images = rows.map((image, index) => ({
     ...image,
-    label: image.altFa ?? image.captionFa ?? `تصویر ${index + 1}`,
+    label: image.altFa ?? image.captionFa ?? `مورد ${index + 1}`,
   }));
 
   return (
     <div>
-      <AdminListHeader title="گالری تصاویر" newHref="/admin/gallery/new" newLabel="افزودن تصویر" />
+      <AdminListHeader title="گالری" newHref="/admin/gallery/new" newLabel="افزودن مورد" />
       <p className="text-text-secondary mt-2 text-sm">
-        تصاویر گالری عمومی سایت. در صفحه اصلی به‌صورت اسلایدشو و در صفحه گالری به‌صورت شبکه نمایش
-        داده می‌شوند.
+        تصاویر و ویدیوهای گالری عمومی سایت. در صفحه اصلی به‌صورت اسلایدشو و در صفحه گالری به‌صورت
+        شبکه نمایش داده می‌شوند.
       </p>
 
       <Card className="mt-6 overflow-hidden p-0">
         <DataTable
           rows={images}
           getRowKey={(row) => row.id}
-          emptyMessage="هنوز تصویری ثبت نشده است."
+          emptyMessage="هنوز موردی در گالری ثبت نشده است."
           columns={[
             {
-              header: "تصویر",
+              header: "پیش‌نمایش",
               className: "w-28",
               cell: (row) => (
                 <div className="border-border bg-bg-surface-alt relative h-14 w-20 overflow-hidden rounded-md border">
-                  <Image src={row.image} alt="" fill className="object-cover" sizes="80px" />
+                  {row.mediaType === "VIDEO" ? (
+                    row.image ? (
+                      <Image src={row.image} alt="" fill className="object-cover" sizes="80px" />
+                    ) : (
+                      <div className="bg-pishnam-navy-900 flex h-full w-full items-center justify-center">
+                        <Play className="text-pishnam-gold-500 size-4" aria-hidden="true" />
+                      </div>
+                    )
+                  ) : row.image ? (
+                    <Image src={row.image} alt="" fill className="object-cover" sizes="80px" />
+                  ) : null}
+                  {row.mediaType === "VIDEO" && (
+                    <span className="bg-pishnam-gold-500 text-pishnam-navy-900 absolute end-1 bottom-1 rounded px-1 text-[9px] font-bold">
+                      ویدیو
+                    </span>
+                  )}
                 </div>
               ),
+            },
+            {
+              header: "نوع",
+              cell: (row) => (row.mediaType === "VIDEO" ? "ویدیو" : "تصویر"),
+              className: "text-text-secondary",
             },
             {
               header: "متن جایگزین",

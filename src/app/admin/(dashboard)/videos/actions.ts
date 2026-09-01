@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { videoEntrySchema } from "@/lib/validation/video-entry";
-import { extractAparatHash, fetchAparatPoster } from "@/lib/aparat";
+import { resolveAparatThumbnail } from "@/lib/aparat";
 import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
 export type VideoEntryFormState = AdminFormState;
@@ -18,19 +18,38 @@ function revalidateVideoPages() {
   revalidatePath("/en");
 }
 
-// If the admin left the thumbnail field empty (or cleared it), fall back to
-// Aparat's own poster for that video instead of showing a blank card until
-// the visitor presses play -- see docs/06-admin-panel.md and the form's
-// helper text, which both promise this behavior.
-async function resolveThumbnail(thumbnail: string, aparatUrl: string): Promise<string | null> {
-  if (thumbnail) return thumbnail;
-  const hash = extractAparatHash(aparatUrl);
-  return hash ? await fetchAparatPoster(hash) : null;
+async function resolveVideoEntryFields({
+  aparatUrl,
+  hostedVideo,
+  thumbnail,
+}: {
+  aparatUrl: string | null;
+  hostedVideo: string | null;
+  thumbnail: string | null;
+}) {
+  if (hostedVideo) {
+    return {
+      aparatUrl: null,
+      hostedVideo,
+      thumbnail: thumbnail || null,
+    };
+  }
+
+  if (aparatUrl) {
+    return {
+      aparatUrl,
+      hostedVideo: null,
+      thumbnail: await resolveAparatThumbnail(thumbnail ?? "", aparatUrl),
+    };
+  }
+
+  return {
+    aparatUrl: null,
+    hostedVideo: null,
+    thumbnail: null,
+  };
 }
 
-// Checkbox groups (tierTags) submit multiple values under the same
-// FormData key -- Object.fromEntries() would silently drop all but the
-// last one, so tierTags is read via getAll() and spliced in instead.
 function parseVideoForm(formData: FormData) {
   return videoEntrySchema.safeParse({
     ...Object.fromEntries(formData),
@@ -49,12 +68,13 @@ export async function createVideoEntry(
     return formErrorFromIssues(parsed.error.issues, formData);
   }
 
-  const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
+  const { publishedAt, thumbnail, aparatUrl, hostedVideo, ...rest } = parsed.data;
+  const videoFields = await resolveVideoEntryFields({ aparatUrl, hostedVideo, thumbnail });
+
   await prisma.videoEntry.create({
     data: {
       ...rest,
-      aparatUrl,
-      thumbnail: await resolveThumbnail(thumbnail ?? "", aparatUrl),
+      ...videoFields,
       publishedAt: new Date(publishedAt),
     },
   });
@@ -75,13 +95,14 @@ export async function updateVideoEntry(
     return formErrorFromIssues(parsed.error.issues, formData);
   }
 
-  const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
+  const { publishedAt, thumbnail, aparatUrl, hostedVideo, ...rest } = parsed.data;
+  const videoFields = await resolveVideoEntryFields({ aparatUrl, hostedVideo, thumbnail });
+
   await prisma.videoEntry.update({
     where: { id },
     data: {
       ...rest,
-      aparatUrl,
-      thumbnail: await resolveThumbnail(thumbnail ?? "", aparatUrl),
+      ...videoFields,
       publishedAt: new Date(publishedAt),
     },
   });

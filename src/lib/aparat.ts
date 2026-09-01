@@ -57,3 +57,13 @@ export async function fetchAparatPoster(hash: string): Promise<string | null> {
     return null;
   }
 }
+
+/** Custom upload wins; otherwise pull Aparat's poster for the embed URL. */
+export async function resolveAparatThumbnail(
+  thumbnail: string,
+  aparatUrl: string,
+): Promise<string | null> {
+  if (thumbnail) return thumbnail;
+  const hash = extractAparatHash(aparatUrl);
+  return hash ? await fetchAparatPoster(hash) : null;
+}

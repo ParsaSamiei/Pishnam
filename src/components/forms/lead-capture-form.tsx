@@ -32,6 +32,8 @@ interface LeadCaptureFormProps {
   successBody?: string;
   messageLabel?: string;
   messagePlaceholder?: string;
+  submitDisabled?: boolean;
+  hiddenFields?: Record<string, string>;
 }
 
 const initialState: SubmitLeadState = { status: "idle" };
@@ -45,6 +47,8 @@ export function LeadCaptureForm({
   successBody,
   messageLabel,
   messagePlaceholder,
+  submitDisabled = false,
+  hiddenFields = {},
 }: LeadCaptureFormProps) {
   const locale = useLocale();
   const isFa = locale === "fa";
@@ -90,6 +94,9 @@ export function LeadCaptureForm({
     >
       <input type="hidden" name="type" value={leadType} />
       <input type="hidden" name="locale" value={locale} />
+      {Object.entries(hiddenFields).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
 
       {/* Honeypot: zero-size clip in place — off-canvas left/start offsets expand page scroll. */}
       <div
@@ -202,7 +209,7 @@ export function LeadCaptureForm({
         </p>
       )}
 
-      <Button type="submit" size="lg" disabled={isPending} className="mt-2">
+      <Button type="submit" size="lg" disabled={isPending || submitDisabled} className="mt-2">
         {isPending && <Loader2 className="animate-spin" aria-hidden="true" />}
         {submitLabel}
       </Button>

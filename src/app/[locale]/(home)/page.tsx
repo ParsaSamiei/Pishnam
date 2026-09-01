@@ -6,6 +6,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { AudienceEntrySection } from "@/components/home/audience-entry-section";
 import { RelatedSitesBanner } from "@/components/home/related-sites-banner";
 import { AchievementsHighlight } from "@/components/home/achievements-highlight";
+import { MediaMentionsSection } from "@/components/home/media-mentions-section";
 import { NewsTeaserSection } from "@/components/home/news-teaser-section";
 import { VideosTeaserSection } from "@/components/home/videos-teaser-section";
 import { GalleryTeaserSection } from "@/components/home/gallery-teaser-section";
@@ -58,10 +59,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <AudienceEntrySection />
         <RelatedSitesBanner />
         <AchievementsHighlight />
-        <NewsTeaserSection />
-        <VideosTeaserSection />
         <GalleryTeaserSection />
+        <VideosTeaserSection />
+        <NewsTeaserSection />
         <DownloadsTeaserSection />
+        <MediaMentionsSection />
       </ScrollSpine>
       <div className="fixed inset-e-4 bottom-6 z-30 flex flex-col items-center gap-3 sm:inset-e-6">
         <FloatingContactButton

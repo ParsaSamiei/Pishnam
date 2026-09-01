@@ -5,6 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { createLeadFormSchema, type LeadFormLocale } from "@/lib/validation/lead";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import {
+  getEnrollmentGuidelines,
+  getEnrollmentGuidelinesVersion,
+  isEnrollmentGuidelinesGateActive,
+} from "@/lib/enrollment-guidelines";
+import {
   formActionError,
   formActionErrorWithMessage,
   type PreservedFormState,
@@ -13,6 +18,7 @@ import {
 export type SubmitLeadState = PreservedFormState;
 
 const METADATA_PREFIX = "metadata.";
+const GUIDELINES_REQUIRED_TYPES = new Set(["ENROLL", "CLASS_SEAT"]);
 
 export async function submitLead(
   _prevState: SubmitLeadState,
@@ -45,6 +51,26 @@ export async function submitLead(
     return formActionError(errors, formData);
   }
 
+  const enrollmentGuidelines = GUIDELINES_REQUIRED_TYPES.has(parsed.data.type)
+    ? await getEnrollmentGuidelines()
+    : null;
+  const guidelinesGateActive = isEnrollmentGuidelinesGateActive(enrollmentGuidelines, locale);
+
+  if (guidelinesGateActive && enrollmentGuidelines) {
+    const acknowledged = formData.get("guidelinesAcknowledged");
+    const submittedVersion = formData.get("guidelinesVersion");
+    const currentVersion = getEnrollmentGuidelinesVersion(enrollmentGuidelines);
+
+    if (acknowledged !== "true" || submittedVersion !== currentVersion) {
+      return formActionErrorWithMessage(
+        locale === "fa"
+          ? "لطفاً راهنمای ثبت‌نام را بخوانید و تأیید کنید."
+          : "Please read and acknowledge the enrollment guidelines before submitting.",
+        formData,
+      );
+    }
+  }
+
   const ip = getClientIp(await headers());
   const limitResult = rateLimit(`lead:${parsed.data.type}:${ip}`, 5, 10 * 60 * 1000);
   if (!limitResult.success) {
@@ -65,6 +91,11 @@ export async function submitLead(
     if (key.startsWith(METADATA_PREFIX) && typeof value === "string" && value.trim()) {
       metadata[key.slice(METADATA_PREFIX.length)] = value.trim();
     }
+  }
+
+  if (guidelinesGateActive && enrollmentGuidelines) {
+    metadata.guidelinesVersion = getEnrollmentGuidelinesVersion(enrollmentGuidelines);
+    metadata.guidelinesAcknowledged = "true";
   }
 
   await prisma.lead.create({

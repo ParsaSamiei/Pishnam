@@ -91,6 +91,12 @@ model Course {
   tier          Tier
   topicTags     String[] // ["electronics","rescue-line", ...]
   coverImage    String
+  // Optional Aparat embed URL (canonical form from lib/aparat.ts) shown on the
+  // public course page. Paste the share/embed snippet in admin -- not a hosted file.
+  aparatUrl       String?
+  // Self-hosted video at `/uploads/<uuid>.{mp4,webm}` -- mutually exclusive with aparatUrl.
+  hostedVideo     String?
+  videoThumbnail  String? // custom poster; falls back to Aparat's poster when empty
   order         Int                 @default(0)
   active        Boolean             @default(true)
   translations  CourseTranslation[]
@@ -180,7 +186,8 @@ model VideoEntry {
   id          String   @id @default(cuid())
   titleFa     String
   titleEn     String
-  aparatUrl   String
+  aparatUrl   String? // canonical Aparat embed URL -- mutually exclusive with hostedVideo
+  hostedVideo String? // `/uploads/<uuid>.{mp4,webm}` when self-hosted
   thumbnail   String?
   tierTags    Tier[]
   topicTags   String[]
@@ -354,6 +361,25 @@ model SoftwareRelease {
   @@index([productId])
 }
 
+// Third-party press coverage linking out to external news articles. Managed in
+// /admin/media-mentions; surfaced on the homepage and at /press.
+model MediaMention {
+  id           String   @id @default(cuid())
+  outletNameFa String
+  outletNameEn String
+  headlineFa   String
+  headlineEn   String
+  url          String // external article URL
+  logo         String // `/uploads/<uuid>.webp` outlet mark
+  publishedAt  DateTime
+  order        Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([active, order])
+  @@index([publishedAt])
+}
+
 model Article {
   id           String               @id @default(cuid())
   slug         String               @unique
@@ -456,6 +482,27 @@ model AdminUser {
   createdAt    DateTime  @default(now())
 }
 
+// One-row enrollment guidelines shown before ENROLL and CLASS_SEAT forms.
+// Admins edit bilingual rich text from /admin/enrollment-guidelines; when
+// `active` and body content exist, applicants must scroll through and
+// acknowledge before submitting.
+model EnrollmentGuidelines {
+  id String @id @default("default")
+
+  active Boolean @default(true)
+
+  titleFa String @default("راهنمای ثبت‌نام")
+  titleEn String @default("Before you apply")
+
+  introFa String @default("لطفاً موارد زیر را با دقت بخوانید تا از شرایط کلاس‌ها و قوانین پیشنام آگاه شوید.")
+  introEn String @default("Please read the following so you know what to expect from Pishnam classes and how we work together.")
+
+  bodyFa String @default("")
+  bodyEn String @default("")
+
+  updatedAt DateTime @updatedAt
+}
+
 // One-row site contact details, edited from /admin/contact. Unlike HeroSlide
 // this *is* a settings singleton: there is only one address/email/map to show,
 // so a table of rows would be the wrong shape. The id is always "default"
@@ -507,16 +554,23 @@ model HeroSlide {
   @@index([order])
 }
 
-// Public photo gallery -- workshops, competitions, team moments. Managed in
-// /admin/gallery; surfaced as a carousel teaser on the homepage and a full
-// grid with lightbox at /gallery.
+enum GalleryMediaType {
+  IMAGE
+  VIDEO
+}
+
+// Public media gallery -- photos and videos. Managed in /admin/gallery;
+// surfaced as a carousel teaser on the homepage and a full grid with lightbox
+// at /gallery.
 model GalleryImage {
   id String @id @default(cuid())
 
-  image String
+  mediaType GalleryMediaType @default(IMAGE)
+  image     String? // photo asset, or optional poster for videos
+  video     String? // `/uploads/<uuid>.{mp4,webm}` when mediaType = VIDEO
   altFa String?
   altEn String?
-  // Optional caption shown under the photo in the lightbox.
+  // Optional caption shown under the media in the lightbox.
   captionFa String?
   captionEn String?
 

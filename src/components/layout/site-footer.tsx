@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink, MapPin, Phone } from "lucide-react";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
@@ -20,7 +21,8 @@ const EXPLORE_LINKS = [
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },
   { href: "/gallery", key: "gallery" },
-  { href: "/videos", key: "videos" },
+  // { href: "/videos", key: "videos" },
+  { href: "/press", key: "press" },
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },
 ] as const;
@@ -68,17 +70,13 @@ export async function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8">
         <div className="md:col-span-2 lg:col-span-2">
           <div className="flex items-center gap-2">
-            {/* Native img: same src as the header logo; with images.unoptimized
-                both resolve to /brand/pishnam-logo.png and next/image's dev
-                LCP map keeps only one entry per URL -- the footer (lazy)
-                overwrote the header (eager) and re-fired the warning. */}
-            <img
+            <Image
               src="/brand/pishnam-logo.png"
               alt={t("brand.fullName")}
               width={36}
               height={40}
               loading="lazy"
-              decoding="async"
+              fetchPriority="low"
               className="h-9 w-auto"
             />
             <span className="text-base font-bold">{t("brand.name")}</span>

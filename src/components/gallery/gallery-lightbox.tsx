@@ -7,10 +7,13 @@ import { useTranslations } from "next-intl";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useIsRtl } from "@/components/motion/use-is-rtl";
+import { GalleryVideoPlayer } from "./gallery-video-player";
 
 export interface GalleryLightboxItem {
   id: string;
-  image: string;
+  mediaType: "IMAGE" | "VIDEO";
+  image: string | null;
+  video: string | null;
   alt: string;
   caption: string | null;
 }
@@ -61,6 +64,8 @@ export function GalleryLightbox({ items, openIndex, onOpenChange }: GalleryLight
 
   if (!current) return null;
 
+  const isVideo = current.mediaType === "VIDEO" && current.video;
+
   return (
     <Dialog open={open} onOpenChange={(next) => !next && onOpenChange(null)}>
       <DialogContent
@@ -76,21 +81,36 @@ export function GalleryLightbox({ items, openIndex, onOpenChange }: GalleryLight
         ) : null}
 
         <div className="relative flex flex-col gap-3">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-black/40 sm:aspect-[16/10]">
-            <Image
-              src={current.image}
-              alt={current.alt}
-              fill
-              className="object-contain"
-              sizes="(min-width: 1024px) 80vw, 100vw"
-              priority
-            />
+          <div
+            className={cn(
+              "relative w-full overflow-hidden rounded-xl bg-black/40",
+              isVideo ? "aspect-video sm:aspect-video" : "aspect-[4/3] sm:aspect-[16/10]",
+            )}
+          >
+            {isVideo ? (
+              <GalleryVideoPlayer
+                key={current.id}
+                src={current.video!}
+                poster={current.image}
+                title={current.alt}
+                active={open}
+              />
+            ) : current.image ? (
+              <Image
+                src={current.image}
+                alt={current.alt}
+                fill
+                className="object-contain"
+                sizes="(min-width: 1024px) 80vw, 100vw"
+                priority
+              />
+            ) : null}
 
             <button
               type="button"
               onClick={() => onOpenChange(null)}
               aria-label={t("close")}
-              className="text-pishnam-off-white bg-pishnam-navy-900/80 hover:bg-pishnam-navy-900/90 focus-visible:outline-pishnam-gold-500 absolute end-3 top-3 flex size-10 cursor-pointer items-center justify-center rounded-full ring-1 ring-white/20 backdrop-blur-sm transition duration-200 hover:ring-white/40 focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-pishnam-off-white bg-pishnam-navy-900/80 hover:bg-pishnam-navy-900/90 focus-visible:outline-pishnam-gold-500 absolute end-3 top-3 z-10 flex size-10 cursor-pointer items-center justify-center rounded-full ring-1 ring-white/20 backdrop-blur-sm transition duration-200 hover:ring-white/40 focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <X className="size-5" aria-hidden="true" />
             </button>
@@ -150,7 +170,7 @@ function NavButton({
       onClick={onClick}
       aria-label={label}
       className={cn(
-        "absolute top-1/2 -translate-y-1/2",
+        "absolute top-1/2 z-10 -translate-y-1/2",
         "text-pishnam-off-white bg-pishnam-navy-900/80 flex size-10 items-center justify-center rounded-full ring-1 ring-white/20 backdrop-blur-sm ring-inset sm:size-11",
         "hover:bg-pishnam-navy-900/90 cursor-pointer transition duration-200 hover:ring-white/40",
         "focus-visible:outline-pishnam-gold-500 focus-visible:outline-2 focus-visible:outline-offset-2",

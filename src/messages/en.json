@@ -4,6 +4,7 @@
     "fullName": "Pishnam Robotics Researchers"
   },
   "nav": {
+    "home": "Home",
     "about": "About us",
     "courses": "Courses",
     "classes": "In-Person Classes",
@@ -11,6 +12,7 @@
     "gallery": "Gallery",
     "downloads": "Downloads",
     "blog": "News",
+    "press": "In the Media",
     "contact": "Contact us",
     "feedback": "Feedback & Suggestions",
     "enroll": "Enroll",
@@ -77,6 +79,11 @@
       "subtitle": "Our students' results at national and international RoboCup competitions.",
       "viewAll": "View all achievements"
     },
+    "mediaMentions": {
+      "title": "Pishnam in the Media",
+      "subtitle": "Press reports and news coverage about Pishnam's work and achievements.",
+      "viewAll": "View all press coverage"
+    },
     "news": {
       "title": "News & Magazine",
       "subtitle": "The latest news and educational notes from Pishnam.",
@@ -132,19 +139,28 @@
   },
   "gallery": {
     "meta": {
-      "title": "Photo Gallery",
-      "description": "Photos from workshops, competitions, and team activities at Pishnam."
+      "title": "Gallery",
+      "description": "Photos and videos from workshops, competitions, and team activities at Pishnam."
     },
-    "title": "Photo Gallery",
+    "title": "Gallery",
     "subtitle": "Moments from workshops, competitions, and team activities at Pishnam.",
-    "empty": "No photos have been added to the gallery yet.",
+    "empty": "No items have been added to the gallery yet.",
+    "openItem": "Open",
     "openPhoto": "Open photo",
+    "videoBadge": "Video",
+    "playVideo": "Play video",
     "lightbox": {
       "close": "Close",
-      "previous": "Previous photo",
-      "next": "Next photo",
+      "previous": "Previous item",
+      "next": "Next item",
       "status": "{current, number} of {total, number}"
     }
+  },
+  "press": {
+    "title": "Pishnam in the Media",
+    "subtitle": "Press reports and news coverage about Pishnam's work and achievements.",
+    "empty": "No press coverage has been added yet.",
+    "read": "Read on outlet site"
   },
   "footer": {
     "tagline": "Progressive robotics and electronics education, from elementary school to international competitions.",
@@ -182,5 +198,19 @@
     "balad": "Balad",
     "neshan": "Neshan",
     "openIn": "Open in {service}"
+  },
+  "videoPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "playbackSpeed": "Playback speed",
+    "speed": "{rate}x",
+    "seek": "Seek",
+    "volume": "Volume",
+    "skipBack": "Rewind 5 seconds",
+    "skipForward": "Forward 5 seconds"
   }
 }

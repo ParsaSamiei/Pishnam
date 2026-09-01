@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ImageUploadField } from "@/components/admin/image-upload-field";
+import { GalleryMediaFields, type GalleryMediaType } from "@/components/admin/gallery-media-fields";
 import type { GalleryImageFormState } from "@/app/admin/(dashboard)/gallery/actions";
 
 interface GalleryImageFormProps {
   action: (prevState: GalleryImageFormState, formData: FormData) => Promise<GalleryImageFormState>;
   defaultValues?: {
-    image: string;
+    mediaType?: GalleryMediaType;
+    image: string | null;
+    video: string | null;
     altFa: string | null;
     altEn: string | null;
     captionFa: string | null;
@@ -30,21 +32,21 @@ export function GalleryImageForm({ action, defaultValues, submitLabel }: Gallery
     initialState,
   );
 
+  const inferredMediaType: GalleryMediaType =
+    defaultValues?.mediaType ?? (defaultValues?.video ? "VIDEO" : "IMAGE");
+
   return (
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <ImageUploadField
-          name="image"
-          label="تصویر"
-          field="galleryImage.image"
-          defaultValue={field("image", defaultValues?.image)}
-          required
-          error={state.errors?.image}
-        />
-        <p className="text-text-secondary text-xs leading-relaxed">
-          تصویر افقی یا مربعی با حداقل ۱۲۰۰ پیکسل در ضلع بزرگ‌تر.
-        </p>
-      </div>
+      <GalleryMediaFields
+        defaultMediaType={field("mediaType", inferredMediaType) as GalleryMediaType}
+        image={field("image", defaultValues?.image ?? "")}
+        video={field("video", defaultValues?.video ?? "")}
+        errors={{
+          mediaType: state.errors?.mediaType,
+          image: state.errors?.image,
+          video: state.errors?.video,
+        }}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
@@ -83,7 +85,7 @@ export function GalleryImageForm({ action, defaultValues, submitLabel }: Gallery
             id="captionFa"
             name="captionFa"
             rows={3}
-            placeholder="توضیح اختیاری که زیر تصویر در گالری نمایش داده می‌شود."
+            placeholder="توضیح اختیاری که زیر رسانه در گالری نمایش داده می‌شود."
             defaultValue={field("captionFa", defaultValues?.captionFa ?? "")}
             aria-invalid={Boolean(state.errors?.captionFa)}
           />
@@ -98,7 +100,7 @@ export function GalleryImageForm({ action, defaultValues, submitLabel }: Gallery
             name="captionEn"
             dir="ltr"
             rows={3}
-            placeholder="Optional caption shown below the photo in the gallery."
+            placeholder="Optional caption shown below the media in the gallery."
             defaultValue={field("captionEn", defaultValues?.captionEn ?? "")}
             aria-invalid={Boolean(state.errors?.captionEn)}
           />
@@ -122,7 +124,7 @@ export function GalleryImageForm({ action, defaultValues, submitLabel }: Gallery
           <p className="text-pishnam-danger text-xs">{state.errors.order}</p>
         ) : (
           <p className="text-text-secondary text-xs">
-            تصاویر از کوچک به بزرگ مرتب می‌شوند. کوچک‌ترین عدد ابتدا نمایش داده می‌شود.
+            موارد از کوچک به بزرگ مرتب می‌شوند. کوچک‌ترین عدد ابتدا نمایش داده می‌شود.
           </p>
         )}
       </div>

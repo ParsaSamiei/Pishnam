@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
@@ -11,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useIsRtl } from "@/components/motion/use-is-rtl";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
 import { GalleryLightbox, type GalleryLightboxItem } from "./gallery-lightbox";
+import { GalleryMediaThumb } from "./gallery-media-thumb";
 
 const SIZES = "(min-width: 1024px) 22vw, (min-width: 640px) 32vw, 55vw";
 const DRAG_THRESHOLD_PX = 8;
@@ -152,16 +152,15 @@ export function GalleryCarousel({ items }: { items: GalleryLightboxItem[] }) {
                   onPointerUp={slideClick.onPointerUp}
                   onPointerCancel={slideClick.onPointerUp}
                   onClick={() => slideClick.onClick(index)}
-                  aria-label={`${tGallery("openPhoto")}: ${item.alt}`}
-                  className="border-pishnam-gold-500/30 bg-bg-surface-alt focus-visible:outline-pishnam-gold-500 relative aspect-[3/2] w-full max-w-[280px] cursor-pointer overflow-hidden rounded-lg border shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-none"
+                  aria-label={`${tGallery("openItem")}: ${item.alt}`}
+                  className="border-pishnam-gold-500/30 bg-bg-surface-alt focus-visible:outline-pishnam-gold-500 group relative aspect-[3/2] w-full max-w-[280px] cursor-pointer overflow-hidden rounded-lg border shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-none"
                 >
-                  <Image
-                    src={item.image}
-                    alt={item.alt}
-                    fill
-                    priority={index === 0}
-                    className="pointer-events-none object-contain"
+                  <GalleryMediaThumb
+                    item={item}
                     sizes={SIZES}
+                    priority={index === 0}
+                    className="absolute inset-0"
+                    imageClassName="pointer-events-none"
                   />
                   <div
                     aria-hidden="true"

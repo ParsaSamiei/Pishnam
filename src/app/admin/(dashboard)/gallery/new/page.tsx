@@ -13,9 +13,9 @@ export default function NewGalleryImagePage() {
         <ArrowRight className="size-4" aria-hidden="true" />
         بازگشت به گالری
       </Link>
-      <h1 className="text-text-primary text-2xl font-bold">افزودن تصویر جدید</h1>
+      <h1 className="text-text-primary text-2xl font-bold">افزودن مورد جدید</h1>
       <div className="mt-6">
-        <GalleryImageForm action={createGalleryImage} submitLabel="ثبت تصویر" />
+        <GalleryImageForm action={createGalleryImage} submitLabel="ثبت مورد" />
       </div>
     </div>
   );

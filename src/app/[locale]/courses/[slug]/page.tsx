@@ -11,6 +11,8 @@ import { Link } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { RichText } from "@/components/rich-text";
 import { AchievementCard } from "@/components/home/achievement-card";
+import { VideoEmbedCard } from "@/components/home/video-embed-card";
+import { HostedVideoPlayer } from "@/components/courses/hosted-video-player";
 import { JsonLd } from "@/components/json-ld";
 
 async function getCourse(slug: string, locale: AppLocale) {
@@ -107,6 +109,29 @@ export default async function CourseDetailPage({
 
       <div className="mx-auto grid max-w-4xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-3 lg:px-8">
         <div className="lg:col-span-2">
+          {(course.aparatUrl || course.hostedVideo) && (
+            <div className="mb-8">
+              <h2 className="text-text-primary mb-4 text-lg font-bold">
+                {isFa ? "ویدیو معرفی" : "Course video"}
+              </h2>
+              {course.hostedVideo ? (
+                <HostedVideoPlayer
+                  src={course.hostedVideo}
+                  poster={course.videoThumbnail}
+                  title={translation.title}
+                />
+              ) : (
+                <VideoEmbedCard
+                  title={translation.title}
+                  aparatUrl={course.aparatUrl!}
+                  thumbnail={course.videoThumbnail}
+                  topicTags={course.topicTags}
+                  showTitle={false}
+                />
+              )}
+            </div>
+          )}
+
           <RichText html={translation.body} />
 
           {translation.prerequisites && (

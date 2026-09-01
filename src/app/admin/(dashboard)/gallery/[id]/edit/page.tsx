@@ -28,7 +28,7 @@ export default async function EditGalleryImagePage({
         <ArrowRight className="size-4" aria-hidden="true" />
         بازگشت به گالری
       </Link>
-      <h1 className="text-text-primary text-2xl font-bold">ویرایش تصویر</h1>
+      <h1 className="text-text-primary text-2xl font-bold">ویرایش مورد گالری</h1>
       <div className="mt-6">
         <GalleryImageForm action={boundUpdate} defaultValues={image} submitLabel="ذخیره تغییرات" />
       </div>

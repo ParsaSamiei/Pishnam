@@ -7,6 +7,7 @@ import { AnimatedLink } from "@/components/motion/animated-link";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
 import { GalleryCarousel } from "@/components/gallery/gallery-carousel";
+import { toGalleryLightboxItem } from "@/lib/gallery";
 
 export async function GalleryTeaserSection() {
   const t = await getTranslations("home.gallery");
@@ -22,12 +23,12 @@ export async function GalleryTeaserSection() {
 
   if (images.length === 0) return null;
 
-  const slides = images.map((image) => ({
-    id: image.id,
-    image: image.image,
-    alt: pickLocaleField(image.altFa, image.altEn, locale) ?? fallbackAlt,
-    caption: pickLocaleField(image.captionFa, image.captionEn, locale),
-  }));
+  const slides = images.map((image) =>
+    toGalleryLightboxItem(image, {
+      alt: pickLocaleField(image.altFa, image.altEn, locale) ?? fallbackAlt,
+      caption: pickLocaleField(image.captionFa, image.captionEn, locale),
+    }),
+  );
 
   return (
     <section data-spine-node className="py-16">

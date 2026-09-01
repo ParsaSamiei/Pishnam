@@ -6,6 +6,7 @@ import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { PageHeader } from "@/components/layout/page-header";
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
+import { toGalleryLightboxItem } from "@/lib/gallery";
 
 export async function generateMetadata({
   params,
@@ -33,12 +34,12 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
     orderBy: [{ order: "asc" }, { createdAt: "asc" }],
   });
 
-  const items = images.map((image) => ({
-    id: image.id,
-    image: image.image,
-    alt: pickLocaleField(image.altFa, image.altEn, appLocale) ?? fallbackAlt,
-    caption: pickLocaleField(image.captionFa, image.captionEn, appLocale),
-  }));
+  const items = images.map((image) =>
+    toGalleryLightboxItem(image, {
+      alt: pickLocaleField(image.altFa, image.altEn, appLocale) ?? fallbackAlt,
+      caption: pickLocaleField(image.captionFa, image.captionEn, appLocale),
+    }),
+  );
 
   return (
     <>
@@ -48,7 +49,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
         {items.length === 0 ? (
           <p className="text-text-secondary text-center">{t("empty")}</p>
         ) : (
-          <GalleryGrid items={items} openLabel={t("openPhoto")} />
+          <GalleryGrid items={items} openLabel={t("openItem")} />
         )}
       </div>
     </>

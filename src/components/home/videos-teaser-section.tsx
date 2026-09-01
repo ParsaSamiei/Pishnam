@@ -16,6 +16,15 @@ export async function VideosTeaserSection() {
   const videos = await prisma.videoEntry.findMany({
     orderBy: { publishedAt: "desc" },
     take: 3,
+    select: {
+      id: true,
+      titleFa: true,
+      titleEn: true,
+      aparatUrl: true,
+      hostedVideo: true,
+      thumbnail: true,
+      topicTags: true,
+    },
   });
 
   if (videos.length === 0) return null;
@@ -45,6 +54,7 @@ export async function VideosTeaserSection() {
               <VideoEmbedCard
                 title={pickLocaleField(video.titleFa, video.titleEn, locale)}
                 aparatUrl={video.aparatUrl}
+                hostedVideo={video.hostedVideo}
                 thumbnail={video.thumbnail}
                 topicTags={video.topicTags}
               />

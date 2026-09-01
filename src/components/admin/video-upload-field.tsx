@@ -3,13 +3,16 @@
 import { useRef, useState } from "react";
 import { Loader2, Upload, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import type { UploadPolicyKey } from "@/lib/upload-policies";
 import { VIDEO_ACCEPT } from "@/lib/upload-policies";
+import { AppVideoPlayer } from "@/components/media/app-video-player";
 import { cn } from "@/lib/utils";
 
 interface VideoUploadFieldProps {
   name: string;
   label: string;
   field: string;
+  policy?: UploadPolicyKey;
   defaultValue?: string;
   required?: boolean;
   error?: string;
@@ -19,6 +22,7 @@ export function VideoUploadField({
   name,
   label,
   field,
+  policy = "course.video",
   defaultValue,
   required,
   error,
@@ -38,7 +42,7 @@ export function VideoUploadField({
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("policy", "course.video");
+    formData.append("policy", policy);
     formData.append("field", field);
 
     try {
@@ -67,13 +71,12 @@ export function VideoUploadField({
 
       {value ? (
         <div className="border-border bg-bg-surface-alt flex flex-col gap-3 rounded-lg border p-3">
-          {/* Admin preview only; uploaded videos do not include caption tracks. */}
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <video
+          <AppVideoPlayer
             src={value}
-            controls
+            title={label}
             preload="metadata"
-            className="bg-pishnam-navy-900 aspect-video w-full rounded-md"
+            className="rounded-md"
+            videoClassName="aspect-video w-full rounded-md"
           />
           <div className="flex items-center justify-between gap-2">
             <span dir="ltr" className="text-text-secondary truncate text-xs">

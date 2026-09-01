@@ -1,3 +1,5 @@
+import { AppVideoPlayer } from "@/components/media/app-video-player";
+
 interface HostedVideoPlayerProps {
   src: string;
   poster?: string | null;
@@ -6,17 +8,13 @@ interface HostedVideoPlayerProps {
 
 export function HostedVideoPlayer({ src, poster, title }: HostedVideoPlayerProps) {
   return (
-    <div className="border-border bg-pishnam-navy-900 overflow-hidden rounded-xl border">
-      {/* Hosted course videos do not ship with caption tracks yet. */}
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video
+    <div className="border-border overflow-hidden rounded-xl border">
+      <AppVideoPlayer
         src={src}
-        controls
-        playsInline
-        preload="metadata"
-        poster={poster ?? undefined}
+        poster={poster}
+        title={title}
         className="aspect-video w-full"
-        aria-label={title}
+        videoClassName="aspect-video w-full"
       />
     </div>
   );

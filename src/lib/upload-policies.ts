@@ -93,6 +93,16 @@ export const UPLOAD_POLICIES = {
     allowedMimeTypes: ["video/mp4", "video/webm"],
     maxBytes: 100 * 1024 * 1024,
   },
+  "gallery.video": {
+    kind: "video",
+    allowedMimeTypes: ["video/mp4", "video/webm"],
+    maxBytes: 100 * 1024 * 1024,
+  },
+  "video.hosted": {
+    kind: "video",
+    allowedMimeTypes: ["video/mp4", "video/webm"],
+    maxBytes: 100 * 1024 * 1024,
+  },
 } satisfies Record<string, FieldPolicy>;
 
 export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;

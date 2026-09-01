@@ -18,9 +18,38 @@ function revalidateVideoPages() {
   revalidatePath("/en");
 }
 
-// Checkbox groups (tierTags) submit multiple values under the same
-// FormData key -- Object.fromEntries() would silently drop all but the
-// last one, so tierTags is read via getAll() and spliced in instead.
+async function resolveVideoEntryFields({
+  aparatUrl,
+  hostedVideo,
+  thumbnail,
+}: {
+  aparatUrl: string | null;
+  hostedVideo: string | null;
+  thumbnail: string | null;
+}) {
+  if (hostedVideo) {
+    return {
+      aparatUrl: null,
+      hostedVideo,
+      thumbnail: thumbnail || null,
+    };
+  }
+
+  if (aparatUrl) {
+    return {
+      aparatUrl,
+      hostedVideo: null,
+      thumbnail: await resolveAparatThumbnail(thumbnail ?? "", aparatUrl),
+    };
+  }
+
+  return {
+    aparatUrl: null,
+    hostedVideo: null,
+    thumbnail: null,
+  };
+}
+
 function parseVideoForm(formData: FormData) {
   return videoEntrySchema.safeParse({
     ...Object.fromEntries(formData),
@@ -39,12 +68,13 @@ export async function createVideoEntry(
     return formErrorFromIssues(parsed.error.issues, formData);
   }
 
-  const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
+  const { publishedAt, thumbnail, aparatUrl, hostedVideo, ...rest } = parsed.data;
+  const videoFields = await resolveVideoEntryFields({ aparatUrl, hostedVideo, thumbnail });
+
   await prisma.videoEntry.create({
     data: {
       ...rest,
-      aparatUrl,
-      thumbnail: await resolveAparatThumbnail(thumbnail ?? "", aparatUrl),
+      ...videoFields,
       publishedAt: new Date(publishedAt),
     },
   });
@@ -65,13 +95,14 @@ export async function updateVideoEntry(
     return formErrorFromIssues(parsed.error.issues, formData);
   }
 
-  const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
+  const { publishedAt, thumbnail, aparatUrl, hostedVideo, ...rest } = parsed.data;
+  const videoFields = await resolveVideoEntryFields({ aparatUrl, hostedVideo, thumbnail });
+
   await prisma.videoEntry.update({
     where: { id },
     data: {
       ...rest,
-      aparatUrl,
-      thumbnail: await resolveAparatThumbnail(thumbnail ?? "", aparatUrl),
+      ...videoFields,
       publishedAt: new Date(publishedAt),
     },
   });

@@ -21,8 +21,8 @@ export async function generateMetadata({
     title: locale === "fa" ? "ویدیوهای آموزشی" : "Educational Videos",
     description:
       locale === "fa"
-        ? "گزیده‌ای از محتوای آموزشی پیشنام در آپارات."
-        : "A curated selection of Pishnam's educational Aparat content.",
+        ? "گزیده‌ای از محتوای آموزشی پیشنام."
+        : "A curated selection of Pishnam's educational content.",
   };
 }
 
@@ -55,8 +55,8 @@ export default async function VideosPage({
         title={isFa ? "ویدیوهای آموزشی" : "Educational Videos"}
         subtitle={
           isFa
-            ? "محتوای آموزشی پیشنام در آپارات، دسته‌بندی‌شده بر اساس سطح و موضوع."
-            : "Pishnam's Aparat content, organized by tier and topic."
+            ? "محتوای آموزشی پیشنام، دسته‌بندی‌شده بر اساس سطح و موضوع."
+            : "Pishnam's educational content, organized by tier and topic."
         }
       />
 
@@ -104,6 +104,7 @@ export default async function VideosPage({
                 key={video.id}
                 title={pickLocaleField(video.titleFa, video.titleEn, appLocale)}
                 aparatUrl={video.aparatUrl}
+                hostedVideo={video.hostedVideo}
                 thumbnail={video.thumbnail}
                 topicTags={video.topicTags}
               />

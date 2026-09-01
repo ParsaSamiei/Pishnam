@@ -132,17 +132,20 @@
   },
   "gallery": {
     "meta": {
-      "title": "Photo Gallery",
-      "description": "Photos from workshops, competitions, and team activities at Pishnam."
+      "title": "Gallery",
+      "description": "Photos and videos from workshops, competitions, and team activities at Pishnam."
     },
-    "title": "Photo Gallery",
+    "title": "Gallery",
     "subtitle": "Moments from workshops, competitions, and team activities at Pishnam.",
-    "empty": "No photos have been added to the gallery yet.",
+    "empty": "No items have been added to the gallery yet.",
+    "openItem": "Open",
     "openPhoto": "Open photo",
+    "videoBadge": "Video",
+    "playVideo": "Play video",
     "lightbox": {
       "close": "Close",
-      "previous": "Previous photo",
-      "next": "Next photo",
+      "previous": "Previous item",
+      "next": "Next item",
       "status": "{current, number} of {total, number}"
     }
   },
@@ -182,5 +185,19 @@
     "balad": "Balad",
     "neshan": "Neshan",
     "openIn": "Open in {service}"
+  },
+  "videoPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "playbackSpeed": "Playback speed",
+    "speed": "{rate}x",
+    "seek": "Seek",
+    "volume": "Volume",
+    "skipBack": "Rewind 5 seconds",
+    "skipForward": "Forward 5 seconds"
   }
 }

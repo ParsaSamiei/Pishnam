@@ -186,7 +186,8 @@ model VideoEntry {
   id          String   @id @default(cuid())
   titleFa     String
   titleEn     String
-  aparatUrl   String
+  aparatUrl   String? // canonical Aparat embed URL -- mutually exclusive with hostedVideo
+  hostedVideo String? // `/uploads/<uuid>.{mp4,webm}` when self-hosted
   thumbnail   String?
   tierTags    Tier[]
   topicTags   String[]
@@ -534,16 +535,23 @@ model HeroSlide {
   @@index([order])
 }
 
-// Public photo gallery -- workshops, competitions, team moments. Managed in
-// /admin/gallery; surfaced as a carousel teaser on the homepage and a full
-// grid with lightbox at /gallery.
+enum GalleryMediaType {
+  IMAGE
+  VIDEO
+}
+
+// Public media gallery -- photos and videos. Managed in /admin/gallery;
+// surfaced as a carousel teaser on the homepage and a full grid with lightbox
+// at /gallery.
 model GalleryImage {
   id String @id @default(cuid())
 
-  image String
+  mediaType GalleryMediaType @default(IMAGE)
+  image     String? // photo asset, or optional poster for videos
+  video     String? // `/uploads/<uuid>.{mp4,webm}` when mediaType = VIDEO
   altFa String?
   altEn String?
-  // Optional caption shown under the photo in the lightbox.
+  // Optional caption shown under the media in the lightbox.
   captionFa String?
   captionEn String?
 

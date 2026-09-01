@@ -28,6 +28,7 @@ const EXPLORE_LINKS = [
 const ABOUT_LINKS = [
   { href: "/about-us", key: "about" },
   { href: "/sponsors", key: "sponsors" },
+  { href: "/schools", key: "schools" },
   { href: "/careers", key: "careers" },
   { href: "/contact-us", key: "contact" },
   { href: "/feedback", key: "feedback" },

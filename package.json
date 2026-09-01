@@ -1,6 +1,6 @@
 {
   "name": "pishnam",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "private": true,
   "engines": {
     "node": ">=20"
@@ -52,6 +52,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel": "^8.6.0",
+    "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-react": "^8.5.2",
     "file-type": "^22.0.2",
     "isomorphic-dompurify": "^3.22.0",

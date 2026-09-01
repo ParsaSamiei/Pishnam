@@ -21,7 +21,7 @@ export function CourseCard({ slug, title, excerpt, coverImage, tierLabel }: Cour
               src={coverImage}
               alt=""
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-contain"
               sizes="(min-width: 1024px) 380px, 100vw"
             />
           ) : (

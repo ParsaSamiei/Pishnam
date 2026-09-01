@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,24 +35,33 @@ interface SoftwareReleaseFormProps {
 
 const initialState: SoftwareReleaseFormState = { status: "idle" };
 
-export function SoftwareReleaseForm({
-  action,
+type SoftwareReleaseFormFieldsProps = Omit<SoftwareReleaseFormProps, "action"> & {
+  state: SoftwareReleaseFormState;
+  field: ReturnType<typeof usePreservedFormAction<SoftwareReleaseFormState>>["field"];
+  isPending: boolean;
+};
+
+function SoftwareReleaseFormFields({
   products,
   defaultValues,
   submitLabel,
-}: SoftwareReleaseFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
-  const [source, setSource] = useState(defaultValues?.source ?? "HOSTED");
-  const [fileSizeBytes, setFileSizeBytes] = useState(defaultValues?.fileSizeBytes ?? 0);
+  state,
+  field,
+  isPending,
+}: SoftwareReleaseFormFieldsProps) {
+  const [source, setSource] = useState(() => field("source", defaultValues?.source ?? "HOSTED"));
+  const [fileSizeBytes, setFileSizeBytes] = useState(() =>
+    Number(field("fileSizeBytes", defaultValues?.fileSizeBytes ?? 0)),
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="productId">نرم‌افزار *</Label>
         <NativeSelect
           id="productId"
           name="productId"
-          defaultValue={defaultValues?.productId}
+          defaultValue={field("productId", defaultValues?.productId)}
           required
           aria-invalid={Boolean(state.errors?.productId)}
         >
@@ -75,7 +85,7 @@ export function SoftwareReleaseForm({
           <NativeSelect
             id="platform"
             name="platform"
-            defaultValue={defaultValues?.platform ?? SOFTWARE_PLATFORMS[0].value}
+            defaultValue={field("platform", defaultValues?.platform ?? SOFTWARE_PLATFORMS[0].value)}
             required
           >
             {SOFTWARE_PLATFORMS.map((platform) => (
@@ -92,7 +102,7 @@ export function SoftwareReleaseForm({
             name="versionLabel"
             dir="ltr"
             placeholder="v2.3.1"
-            defaultValue={defaultValues?.versionLabel}
+            defaultValue={field("versionLabel", defaultValues?.versionLabel)}
             required
             aria-invalid={Boolean(state.errors?.versionLabel)}
           />
@@ -124,7 +134,10 @@ export function SoftwareReleaseForm({
             policy="download.software"
             accept={DOWNLOAD_ACCEPT}
             field="softwareRelease.fileUrl"
-            defaultValue={defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined,
+            )}
             required
             error={state.errors?.fileUrl}
             onUploaded={(result) => setFileSizeBytes(result.sizeBytes)}
@@ -139,7 +152,10 @@ export function SoftwareReleaseForm({
             name="fileUrl"
             dir="ltr"
             placeholder="https://..."
-            defaultValue={defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined,
+            )}
             required
             aria-invalid={Boolean(state.errors?.fileUrl)}
           />
@@ -157,7 +173,7 @@ export function SoftwareReleaseForm({
             name="notesFa"
             rows={3}
             placeholder="نیازمندی‌ها، تغییرات این نسخه و ..."
-            defaultValue={defaultValues?.notesFa ?? ""}
+            defaultValue={field("notesFa", defaultValues?.notesFa ?? "")}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -168,7 +184,7 @@ export function SoftwareReleaseForm({
             dir="ltr"
             rows={3}
             placeholder="Requirements, changelog, etc."
-            defaultValue={defaultValues?.notesEn ?? ""}
+            defaultValue={field("notesEn", defaultValues?.notesEn ?? "")}
           />
         </div>
       </div>
@@ -180,7 +196,7 @@ export function SoftwareReleaseForm({
           name="order"
           type="number"
           min={0}
-          defaultValue={defaultValues?.order ?? 0}
+          defaultValue={field("order", defaultValues?.order ?? 0)}
         />
       </div>
 
@@ -190,6 +206,32 @@ export function SoftwareReleaseForm({
           {submitLabel}
         </Button>
       </div>
+    </>
+  );
+}
+
+export function SoftwareReleaseForm({
+  action,
+  products,
+  defaultValues,
+  submitLabel,
+}: SoftwareReleaseFormProps) {
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  return (
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <SoftwareReleaseFormFields
+        key={formKey}
+        products={products}
+        defaultValues={defaultValues}
+        submitLabel={submitLabel}
+        state={state}
+        field={field}
+        isPending={isPending}
+      />
     </form>
   );
 }

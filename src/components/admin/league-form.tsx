@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,16 +25,19 @@ interface LeagueFormProps {
 const initialState: LeagueFormState = { status: "idle" };
 
 export function LeagueForm({ action, competitions, defaultValues, submitLabel }: LeagueFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="competitionId">مسابقه *</Label>
         <NativeSelect
           id="competitionId"
           name="competitionId"
-          defaultValue={defaultValues?.competitionId}
+          defaultValue={field("competitionId", defaultValues?.competitionId)}
           required
           aria-invalid={Boolean(state.errors?.competitionId)}
         >
@@ -59,7 +62,7 @@ export function LeagueForm({ action, competitions, defaultValues, submitLabel }:
           name="slug"
           dir="ltr"
           placeholder="rescue-line"
-          defaultValue={defaultValues?.slug}
+          defaultValue={field("slug", defaultValues?.slug)}
           required
           aria-invalid={Boolean(state.errors?.slug)}
         />
@@ -72,7 +75,7 @@ export function LeagueForm({ action, competitions, defaultValues, submitLabel }:
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -86,7 +89,7 @@ export function LeagueForm({ action, competitions, defaultValues, submitLabel }:
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -103,7 +106,7 @@ export function LeagueForm({ action, competitions, defaultValues, submitLabel }:
           name="order"
           type="number"
           min={0}
-          defaultValue={defaultValues?.order ?? 0}
+          defaultValue={field("order", defaultValues?.order ?? 0)}
         />
       </div>
 
@@ -111,7 +114,7 @@ export function LeagueForm({ action, competitions, defaultValues, submitLabel }:
         <input
           type="checkbox"
           name="active"
-          defaultChecked={defaultValues?.active ?? true}
+          defaultChecked={checked("active", defaultValues?.active ?? true)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش در مرکز دانلود

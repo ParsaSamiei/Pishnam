@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,21 +26,21 @@ interface VideoEntryFormProps {
 
 const initialState: VideoEntryFormState = { status: "idle" };
 
-function toDateInputValue(date?: Date): string {
-  if (!date) return new Date().toISOString().slice(0, 10);
-  return date.toISOString().slice(0, 10);
-}
-
 export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntryFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, multiValueField } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  const tierTags = multiValueField("tierTags", defaultValues?.tierTags ?? []);
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <ImageUploadField
         name="thumbnail"
         label="تصویر بندانگشتی (اختیاری -- در صورت خالی بودن، بندانگشتی خود آپارات نمایش داده می‌شود)"
         field="video.thumbnail"
-        defaultValue={defaultValues?.thumbnail ?? undefined}
+        defaultValue={field("thumbnail", defaultValues?.thumbnail ?? undefined)}
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -49,7 +49,7 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -63,7 +63,7 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -83,7 +83,7 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
           placeholder={
             '<div id="..."><script type="text/JavaScript" src="https://www.aparat.com/embed/xxxxx?..."></script></div>'
           }
-          defaultValue={defaultValues?.aparatUrl}
+          defaultValue={field("aparatUrl", defaultValues?.aparatUrl)}
           required
           aria-invalid={Boolean(state.errors?.aparatUrl)}
         />
@@ -105,7 +105,7 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
                 type="checkbox"
                 name="tierTags"
                 value={tierValue}
-                defaultChecked={defaultValues?.tierTags.includes(tierValue) ?? false}
+                defaultChecked={tierTags.includes(tierValue)}
                 className="border-border accent-pishnam-gold-500 size-4 rounded"
               />
               {TIER_LABELS.fa[tierValue]}
@@ -120,7 +120,7 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
           id="topicTags"
           name="topicTags"
           dir="ltr"
-          defaultValue={defaultValues?.topicTags.join(", ")}
+          defaultValue={field("topicTags", defaultValues?.topicTags.join(", "))}
         />
       </div>
 
@@ -131,7 +131,7 @@ export function VideoEntryForm({ action, defaultValues, submitLabel }: VideoEntr
           name="publishedAt"
           type="date"
           dir="ltr"
-          defaultValue={toDateInputValue(defaultValues?.publishedAt)}
+          defaultValue={field("publishedAt", defaultValues?.publishedAt)}
           required
         />
       </div>

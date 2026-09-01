@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,15 +34,18 @@ export function SoftwareProductForm({
   defaultValues,
   submitLabel,
 }: SoftwareProductFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <ImageUploadField
         name="image"
         label="تصویر نرم‌افزار"
         field="softwareProduct.image"
-        defaultValue={defaultValues?.image}
+        defaultValue={field("image", defaultValues?.image)}
         required
         error={state.errors?.image}
       />
@@ -54,7 +57,7 @@ export function SoftwareProductForm({
           name="slug"
           dir="ltr"
           placeholder="mblock"
-          defaultValue={defaultValues?.slug}
+          defaultValue={field("slug", defaultValues?.slug)}
           required
           aria-invalid={Boolean(state.errors?.slug)}
         />
@@ -70,7 +73,7 @@ export function SoftwareProductForm({
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -84,7 +87,7 @@ export function SoftwareProductForm({
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -101,7 +104,7 @@ export function SoftwareProductForm({
             id="descriptionFa"
             name="descriptionFa"
             rows={4}
-            defaultValue={defaultValues?.descriptionFa ?? ""}
+            defaultValue={field("descriptionFa", defaultValues?.descriptionFa ?? "")}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -111,7 +114,7 @@ export function SoftwareProductForm({
             name="descriptionEn"
             dir="ltr"
             rows={4}
-            defaultValue={defaultValues?.descriptionEn ?? ""}
+            defaultValue={field("descriptionEn", defaultValues?.descriptionEn ?? "")}
           />
         </div>
       </div>
@@ -123,7 +126,7 @@ export function SoftwareProductForm({
           name="order"
           type="number"
           min={0}
-          defaultValue={defaultValues?.order ?? 0}
+          defaultValue={field("order", defaultValues?.order ?? 0)}
         />
       </div>
 
@@ -131,7 +134,7 @@ export function SoftwareProductForm({
         <input
           type="checkbox"
           name="active"
-          defaultChecked={defaultValues?.active ?? true}
+          defaultChecked={checked("active", defaultValues?.active ?? true)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش در مرکز دانلود

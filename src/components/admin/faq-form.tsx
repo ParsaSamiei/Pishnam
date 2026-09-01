@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,10 +24,13 @@ interface FaqFormProps {
 const initialState: FaqFormState = { status: "idle" };
 
 export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="category">دسته‌بندی *</Label>
@@ -35,7 +38,7 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
             id="category"
             name="category"
             placeholder="ثبت‌نام"
-            defaultValue={defaultValues?.category}
+            defaultValue={field("category", defaultValues?.category)}
             required
           />
           {state.errors?.category && (
@@ -49,7 +52,7 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
             name="order"
             type="number"
             min={0}
-            defaultValue={defaultValues?.order ?? 0}
+            defaultValue={field("order", defaultValues?.order ?? 0)}
           />
         </div>
       </div>
@@ -59,7 +62,7 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
         <Input
           id="questionFa"
           name="questionFa"
-          defaultValue={defaultValues?.questionFa}
+          defaultValue={field("questionFa", defaultValues?.questionFa)}
           required
         />
         {state.errors?.questionFa && (
@@ -72,7 +75,7 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
           id="answerFa"
           name="answerFa"
           rows={3}
-          defaultValue={defaultValues?.answerFa}
+          defaultValue={field("answerFa", defaultValues?.answerFa)}
           required
         />
         {state.errors?.answerFa && (
@@ -86,7 +89,7 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
           id="questionEn"
           name="questionEn"
           dir="ltr"
-          defaultValue={defaultValues?.questionEn}
+          defaultValue={field("questionEn", defaultValues?.questionEn)}
           required
         />
         {state.errors?.questionEn && (
@@ -100,7 +103,7 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
           name="answerEn"
           dir="ltr"
           rows={3}
-          defaultValue={defaultValues?.answerEn}
+          defaultValue={field("answerEn", defaultValues?.answerEn)}
           required
         />
         {state.errors?.answerEn && (

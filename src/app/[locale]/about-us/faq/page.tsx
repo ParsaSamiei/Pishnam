@@ -82,7 +82,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: st
                       <AccordionTrigger>
                         {pickLocaleField(faq.questionFa, faq.questionEn, appLocale)}
                       </AccordionTrigger>
-                      <AccordionContent>
+                      <AccordionContent className="reading-copy leading-relaxed">
                         {pickLocaleField(faq.answerFa, faq.answerEn, appLocale)}
                       </AccordionContent>
                     </AccordionItem>

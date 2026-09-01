@@ -87,7 +87,7 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
                       <h3 className="text-text-primary font-bold">
                         {pickLocaleField(job.titleFa, job.titleEn, appLocale)}
                       </h3>
-                      <p className="text-text-secondary mt-1.5 text-sm whitespace-pre-line">
+                      <p className="reading-copy text-text-secondary mt-1.5 text-sm whitespace-pre-line">
                         {pickLocaleField(job.descriptionFa, job.descriptionEn, appLocale)}
                       </p>
                     </div>

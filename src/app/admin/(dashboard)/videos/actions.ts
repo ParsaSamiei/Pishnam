@@ -1,16 +1,14 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { videoEntrySchema } from "@/lib/validation/video-entry";
 import { extractAparatHash, fetchAparatPoster } from "@/lib/aparat";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface VideoEntryFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type VideoEntryFormState = AdminFormState;
 
 function revalidateVideoPages() {
   revalidatePath("/admin/videos");
@@ -48,7 +46,7 @@ export async function createVideoEntry(
 
   const parsed = parseVideoForm(formData);
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;
@@ -74,7 +72,7 @@ export async function updateVideoEntry(
 
   const parsed = parseVideoForm(formData);
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { publishedAt, thumbnail, aparatUrl, ...rest } = parsed.data;

@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,21 +52,32 @@ interface CompetitionPosterFormProps {
 
 const initialState: CompetitionPosterFormState = { status: "idle" };
 
-export function CompetitionPosterForm({
-  action,
+type CompetitionPosterFormFieldsProps = Omit<CompetitionPosterFormProps, "action"> & {
+  state: CompetitionPosterFormState;
+  field: ReturnType<typeof usePreservedFormAction<CompetitionPosterFormState>>["field"];
+  checked: ReturnType<typeof usePreservedFormAction<CompetitionPosterFormState>>["checked"];
+  isPending: boolean;
+};
+
+function CompetitionPosterFormFields({
   competitions,
   leagues,
   categories,
   defaultValues,
   submitLabel,
-}: CompetitionPosterFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
-  const [competitionId, setCompetitionId] = useState(
-    defaultValues?.competitionId ?? competitions[0]?.id ?? "",
+  state,
+  field,
+  checked,
+  isPending,
+}: CompetitionPosterFormFieldsProps) {
+  const [competitionId, setCompetitionId] = useState(() =>
+    field("competitionId", defaultValues?.competitionId ?? competitions[0]?.id ?? ""),
   );
-  const [leagueId, setLeagueId] = useState(defaultValues?.leagueId ?? "");
-  const [source, setSource] = useState(defaultValues?.source ?? "HOSTED");
-  const [fileSizeBytes, setFileSizeBytes] = useState(defaultValues?.fileSizeBytes ?? 0);
+  const [leagueId, setLeagueId] = useState(() => field("leagueId", defaultValues?.leagueId ?? ""));
+  const [source, setSource] = useState(() => field("source", defaultValues?.source ?? "HOSTED"));
+  const [fileSizeBytes, setFileSizeBytes] = useState(() =>
+    Number(field("fileSizeBytes", defaultValues?.fileSizeBytes ?? 0)),
+  );
 
   const filteredLeagues = useMemo(
     () => leagues.filter((league) => league.competitionId === competitionId),
@@ -89,7 +101,7 @@ export function CompetitionPosterForm({
       : (filteredCategories[0]?.id ?? "");
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <>
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="competitionId">مسابقه *</Label>
@@ -137,7 +149,7 @@ export function CompetitionPosterForm({
             id="categoryId"
             name="categoryId"
             key={effectiveLeagueId}
-            defaultValue={defaultCategoryId}
+            defaultValue={field("categoryId", defaultCategoryId)}
             required
             disabled={filteredCategories.length === 0}
             aria-invalid={Boolean(state.errors?.categoryId)}
@@ -161,7 +173,7 @@ export function CompetitionPosterForm({
         name="previewImage"
         label="تصویر پیش‌نمایش"
         field="competitionPoster.previewImage"
-        defaultValue={defaultValues?.previewImage}
+        defaultValue={field("previewImage", defaultValues?.previewImage)}
         required
         error={state.errors?.previewImage}
       />
@@ -188,7 +200,10 @@ export function CompetitionPosterForm({
             policy="download.poster"
             accept=".pdf,image/jpeg,image/png"
             field="competitionPoster.fileUrl"
-            defaultValue={defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined,
+            )}
             required
             error={state.errors?.fileUrl}
             onUploaded={(result) => setFileSizeBytes(result.sizeBytes)}
@@ -203,7 +218,10 @@ export function CompetitionPosterForm({
             name="fileUrl"
             dir="ltr"
             placeholder="https://..."
-            defaultValue={defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined,
+            )}
             required
             aria-invalid={Boolean(state.errors?.fileUrl)}
           />
@@ -219,7 +237,7 @@ export function CompetitionPosterForm({
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -233,7 +251,7 @@ export function CompetitionPosterForm({
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -250,7 +268,7 @@ export function CompetitionPosterForm({
             id="descriptionFa"
             name="descriptionFa"
             rows={3}
-            defaultValue={defaultValues?.descriptionFa ?? ""}
+            defaultValue={field("descriptionFa", defaultValues?.descriptionFa ?? "")}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -260,7 +278,7 @@ export function CompetitionPosterForm({
             name="descriptionEn"
             dir="ltr"
             rows={3}
-            defaultValue={defaultValues?.descriptionEn ?? ""}
+            defaultValue={field("descriptionEn", defaultValues?.descriptionEn ?? "")}
           />
         </div>
       </div>
@@ -272,7 +290,7 @@ export function CompetitionPosterForm({
           name="order"
           type="number"
           min={0}
-          defaultValue={defaultValues?.order ?? 0}
+          defaultValue={field("order", defaultValues?.order ?? 0)}
         />
       </div>
 
@@ -280,7 +298,7 @@ export function CompetitionPosterForm({
         <input
           type="checkbox"
           name="active"
-          defaultChecked={defaultValues?.active ?? true}
+          defaultChecked={checked("active", defaultValues?.active ?? true)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش در مرکز دانلود
@@ -292,6 +310,37 @@ export function CompetitionPosterForm({
           {submitLabel}
         </Button>
       </div>
+    </>
+  );
+}
+
+export function CompetitionPosterForm({
+  action,
+  competitions,
+  leagues,
+  categories,
+  defaultValues,
+  submitLabel,
+}: CompetitionPosterFormProps) {
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  return (
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <CompetitionPosterFormFields
+        key={formKey}
+        competitions={competitions}
+        leagues={leagues}
+        categories={categories}
+        defaultValues={defaultValues}
+        submitLabel={submitLabel}
+        state={state}
+        field={field}
+        checked={checked}
+        isPending={isPending}
+      />
     </form>
   );
 }

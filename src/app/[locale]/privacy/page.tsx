@@ -24,7 +24,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
     <>
       <PageHeader title={isFa ? "حریم خصوصی" : "Privacy Policy"} />
       <div className="text-text-secondary mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 leading-relaxed">
+        <div className="reading-copy flex flex-col gap-4 leading-relaxed">
           <p>
             {isFa
               ? "پیشنام اطلاعاتی را که از طریق فرم‌های ثبت‌نام، تماس، درخواست همکاری با مدارس و درخواست‌های شغلی ارسال می‌کنید (شامل نام، شماره تماس، ایمیل و پیام شما) صرفاً برای پیگیری همان درخواست ذخیره و استفاده می‌کند."

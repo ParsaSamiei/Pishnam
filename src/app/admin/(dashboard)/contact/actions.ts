@@ -1,16 +1,14 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { contactSettingsSchema } from "@/lib/validation/contact-settings";
 import { CONTACT_SETTINGS_CACHE_TAG, CONTACT_SETTINGS_ID } from "@/lib/contact-settings";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface ContactSettingsFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type ContactSettingsFormState = AdminFormState;
 
 function parseContactForm(formData: FormData) {
   return contactSettingsSchema.safeParse({
@@ -37,7 +35,7 @@ export async function updateContactSettings(
 
   const parsed = parseContactForm(formData);
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.contactSettings.upsert({

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { getUploadsDir } from "@/lib/uploads-dir";
 
 /**
  * Serves files from UPLOADS_DIR under the public `/uploads/*` path.
@@ -13,7 +14,7 @@ import path from "node:path";
  * locally, and as a defense-in-depth fallback.
  */
 
-const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads");
+const UPLOADS_DIR = getUploadsDir();
 
 const EXT_TO_CONTENT_TYPE: Record<string, string> = {
   ".webp": "image/webp",

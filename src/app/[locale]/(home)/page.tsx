@@ -10,6 +10,8 @@ import { NewsTeaserSection } from "@/components/home/news-teaser-section";
 import { VideosTeaserSection } from "@/components/home/videos-teaser-section";
 import { DownloadsTeaserSection } from "@/components/home/downloads-teaser-section";
 import { ScrollSpine } from "@/components/motion/scroll-spine";
+import { FloatingContactButton } from "@/components/home/floating-contact-button";
+import { ScrollToTopButton } from "@/components/home/scroll-to-top-button";
 import { JsonLd } from "@/components/json-ld";
 import { getContactSettings } from "@/lib/contact-settings";
 import { getSocialLinks } from "@/lib/social-channels";
@@ -24,7 +26,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "brand" });
   const contact = await getContactSettings();
-  const sameAs = getSocialLinks(contact).map((link) => link.href);
+  const socialLinks = getSocialLinks(contact);
+  const sameAs = socialLinks.map((link) => link.href);
+  const isFa = locale === "fa";
+  const address =
+    (isFa ? contact?.addressFa : contact?.addressEn) ||
+    (isFa ? contact?.addressEn : contact?.addressFa) ||
+    null;
+  const mapsQuery = contact?.addressEn || contact?.addressFa || address;
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -54,6 +63,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <VideosTeaserSection />
         <DownloadsTeaserSection />
       </ScrollSpine>
+      <FloatingContactButton
+        address={address}
+        mapsQuery={mapsQuery}
+        phones={contact?.phones ?? []}
+        socialLinks={socialLinks}
+      />
+      <ScrollToTopButton />
     </>
   );
 }

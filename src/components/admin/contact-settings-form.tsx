@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useId, useState } from "react";
+import { useId, useState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,12 +31,29 @@ interface ContactSettingsFormProps {
 
 const initialState: ContactSettingsFormState = { status: "idle" };
 
-export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+type ContactSettingsFormFieldsProps = Omit<ContactSettingsFormProps, "action"> & {
+  state: ContactSettingsFormState;
+  field: ReturnType<typeof usePreservedFormAction<ContactSettingsFormState>>["field"];
+  multiValueField: ReturnType<
+    typeof usePreservedFormAction<ContactSettingsFormState>
+  >["multiValueField"];
+  isPending: boolean;
+};
+
+function ContactSettingsFormFields({
+  defaultValues,
+  state,
+  field,
+  multiValueField,
+  isPending,
+}: ContactSettingsFormFieldsProps) {
   const phoneIdPrefix = useId();
   const [phoneRows, setPhoneRows] = useState(() => {
-    const values = defaultValues?.phones.length ? defaultValues.phones : [""];
-    return values.map((value, index) => ({ id: `${phoneIdPrefix}-${index}`, value }));
+    const phones = multiValueField(
+      "phones",
+      defaultValues?.phones.length ? defaultValues.phones : [""],
+    );
+    return phones.map((value, index) => ({ id: `${phoneIdPrefix}-${index}`, value }));
   });
 
   function addPhone() {
@@ -54,7 +72,7 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
   }
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <>
       <fieldset className="flex flex-col gap-3">
         <legend className="text-text-primary text-sm font-semibold">شماره‌های تلفن</legend>
         <p className="text-text-secondary text-xs">
@@ -108,7 +126,7 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
           type="email"
           dir="ltr"
           placeholder="info@pishnam.ir"
-          defaultValue={defaultValues?.email ?? ""}
+          defaultValue={field("email", defaultValues?.email ?? "")}
           aria-invalid={Boolean(state.errors?.email)}
         />
         {state.errors?.email && <p className="text-pishnam-danger text-xs">{state.errors.email}</p>}
@@ -120,7 +138,7 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
           id="addressFa"
           name="addressFa"
           rows={3}
-          defaultValue={defaultValues?.addressFa ?? ""}
+          defaultValue={field("addressFa", defaultValues?.addressFa ?? "")}
           aria-invalid={Boolean(state.errors?.addressFa)}
         />
         {state.errors?.addressFa && (
@@ -135,7 +153,7 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
           name="addressEn"
           dir="ltr"
           rows={3}
-          defaultValue={defaultValues?.addressEn ?? ""}
+          defaultValue={field("addressEn", defaultValues?.addressEn ?? "")}
           aria-invalid={Boolean(state.errors?.addressEn)}
         />
         {state.errors?.addressEn && (
@@ -151,7 +169,7 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
           dir="ltr"
           rows={4}
           placeholder='<iframe src="https://www.google.com/maps/embed?pb=..." ...></iframe>'
-          defaultValue={defaultValues?.mapEmbedUrl ?? ""}
+          defaultValue={field("mapEmbedUrl", defaultValues?.mapEmbedUrl ?? "")}
           aria-invalid={Boolean(state.errors?.mapEmbedUrl)}
         />
         <p className="text-text-secondary text-xs">
@@ -194,7 +212,7 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
                 type="url"
                 dir="ltr"
                 placeholder={channel.placeholder}
-                defaultValue={defaultValues?.[channel.field] ?? ""}
+                defaultValue={field(channel.field, defaultValues?.[channel.field] ?? "")}
                 aria-invalid={Boolean(error)}
               />
               {error ? <p className="text-pishnam-danger text-xs">{error}</p> : null}
@@ -209,6 +227,26 @@ export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFo
           ذخیره اطلاعات تماس
         </Button>
       </div>
+    </>
+  );
+}
+
+export function ContactSettingsForm({ action, defaultValues }: ContactSettingsFormProps) {
+  const { state, formAction, isPending, formKey, field, multiValueField } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  return (
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <ContactSettingsFormFields
+        key={formKey}
+        defaultValues={defaultValues}
+        state={state}
+        field={field}
+        multiValueField={multiValueField}
+        isPending={isPending}
+      />
     </form>
   );
 }

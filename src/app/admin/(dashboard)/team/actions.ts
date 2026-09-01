@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { teamMemberSchema } from "@/lib/validation/team-member";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface TeamMemberFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type TeamMemberFormState = AdminFormState;
 
 function revalidateTeamPages() {
   revalidatePath("/admin/team");
@@ -24,11 +22,16 @@ export async function createTeamMember(
 
   const parsed = teamMemberSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.teamMember.create({
-    data: { ...parsed.data, bioFa: parsed.data.bioFa || null, bioEn: parsed.data.bioEn || null },
+    data: {
+      ...parsed.data,
+      bioFa: parsed.data.bioFa || null,
+      bioEn: parsed.data.bioEn || null,
+      resume: parsed.data.resume || null,
+    },
   });
   revalidateTeamPages();
   redirect("/admin/team");
@@ -43,12 +46,17 @@ export async function updateTeamMember(
 
   const parsed = teamMemberSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.teamMember.update({
     where: { id },
-    data: { ...parsed.data, bioFa: parsed.data.bioFa || null, bioEn: parsed.data.bioEn || null },
+    data: {
+      ...parsed.data,
+      bioFa: parsed.data.bioFa || null,
+      bioEn: parsed.data.bioEn || null,
+      resume: parsed.data.resume || null,
+    },
   });
   revalidateTeamPages();
   redirect("/admin/team");

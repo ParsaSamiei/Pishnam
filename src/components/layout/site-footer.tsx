@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink, MapPin, Phone } from "lucide-react";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
+import { APP_VERSION } from "@/lib/app-version";
 import { getContactSettings } from "@/lib/contact-settings";
 import { Link } from "@/lib/i18n/navigation";
 import { getSocialLinks } from "@/lib/social-channels";
@@ -71,11 +71,17 @@ export async function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-5 lg:px-8">
         <div className="md:col-span-2 lg:col-span-2">
           <div className="flex items-center gap-2">
-            <Image
+            {/* Native img: same src as the header logo; with images.unoptimized
+                both resolve to /brand/pishnam-logo.png and next/image's dev
+                LCP map keeps only one entry per URL -- the footer (lazy)
+                overwrote the header (eager) and re-fired the warning. */}
+            <img
               src="/brand/pishnam-logo.png"
               alt={t("brand.fullName")}
               width={36}
               height={40}
+              loading="lazy"
+              decoding="async"
               className="h-9 w-auto"
             />
             <span className="text-base font-bold">{t("brand.name")}</span>
@@ -200,7 +206,10 @@ export async function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="text-pishnam-off-white/60 mx-auto flex max-w-7xl flex-col-reverse items-center justify-between gap-3 px-4 py-5 text-xs sm:flex-row sm:px-6 lg:px-8">
           <p>
-            &copy; {year} {t("brand.fullName")} — {t("footer.rightsReserved")}
+            &copy; {year} {t("brand.fullName")} — {t("footer.rightsReserved")}{" "}
+            <span className="text-pishnam-off-white/40 tabular-nums" dir="ltr">
+              v{APP_VERSION}
+            </span>
           </p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-pishnam-gold-500 cursor-pointer">

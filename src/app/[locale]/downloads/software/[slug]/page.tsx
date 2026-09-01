@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { buildAlternates } from "@/lib/i18n/alternates";
-import { formatFileSize } from "@/lib/format";
+import { formatFileSize, isDirectDownloadLink } from "@/lib/format";
 import { getSoftwarePlatform, softwarePlatformLabel } from "@/lib/software-platforms";
 import { Card, CardContent } from "@/components/ui/card";
 import { TiltCard } from "@/components/motion/tilt-card";
@@ -91,7 +91,11 @@ export default async function SoftwareProductPage({
       </div>
 
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        {description && <p className="text-text-secondary max-w-2xl">{description}</p>}
+        {description && (
+          <p className="reading-copy text-text-secondary max-w-2xl leading-relaxed">
+            {description}
+          </p>
+        )}
 
         <h2 className="text-text-primary mt-8 text-lg font-bold">
           {isFa ? "دانلود" : "Downloads"}
@@ -106,7 +110,7 @@ export default async function SoftwareProductPage({
         ) : (
           <div className="mt-4 flex flex-col gap-3">
             {product.releases.map((release) => {
-              const isExternal = release.source === "EXTERNAL";
+              const isDirectDownload = isDirectDownloadLink(release.fileUrl, release.source);
               const platform = getSoftwarePlatform(release.platform);
               const PlatformIcon = platform?.icon;
               const notes = pickLocaleField(release.notesFa, release.notesEn, appLocale);
@@ -134,7 +138,7 @@ export default async function SoftwareProductPage({
                         {notes && (
                           <p className="text-text-secondary mt-0.5 line-clamp-2 text-sm">{notes}</p>
                         )}
-                        {!isExternal && release.fileSizeBytes && (
+                        {isDirectDownload && release.fileSizeBytes && (
                           <p className="text-text-secondary mt-1 text-xs">
                             {formatFileSize(release.fileSizeBytes)}
                           </p>
@@ -142,12 +146,18 @@ export default async function SoftwareProductPage({
                       </div>
                       <ReleaseDownloadButton
                         href={release.fileUrl}
-                        isExternal={isExternal}
+                        isDirectDownload={isDirectDownload}
                         productTitle={title}
                         platformLabel={softwarePlatformLabel(release.platform, appLocale)}
                         versionLabel={release.versionLabel}
                         label={
-                          isExternal ? (isFa ? "مشاهده" : "Visit") : isFa ? "دانلود" : "Download"
+                          isDirectDownload
+                            ? isFa
+                              ? "دانلود"
+                              : "Download"
+                            : isFa
+                              ? "مشاهده"
+                              : "Visit"
                         }
                       />
                     </CardContent>

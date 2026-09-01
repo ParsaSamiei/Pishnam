@@ -138,15 +138,19 @@ model Achievement {
 }
 
 model TeamMember {
-  id     String  @id @default(cuid())
-  nameFa String
-  nameEn String
-  roleFa String
-  roleEn String
-  photo  String
-  bioFa  String?
-  bioEn  String?
-  order  Int     @default(0)
+  id                     String    @id @default(cuid())
+  nameFa                 String
+  nameEn                 String
+  roleFa                 String
+  roleEn                 String
+  photo                  String
+  bioFa                  String?
+  bioEn                  String?
+  resume                 String?
+  collaborationStartDate DateTime?
+  isAlumni               Boolean   @default(false)
+  isVisible              Boolean   @default(true)
+  order                  Int       @default(0)
 }
 
 model Faq {

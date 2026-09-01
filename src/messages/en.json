@@ -106,6 +106,14 @@
         "description": "A home for AI and robotics engineers — share ideas, ask questions, grow together.",
         "cta": "Open Pishtalk"
       }
+    },
+    "scrollToTop": "Back to top",
+    "floatingContact": {
+      "open": "Contact us",
+      "title": "Get in touch",
+      "description": "Reach the Pishnam team by phone, visit us, or follow us online.",
+      "address": "Address",
+      "phone": "Phone"
     }
   },
   "footer": {

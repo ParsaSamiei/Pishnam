@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,20 +23,23 @@ interface JobPostingFormProps {
 
 const initialState: JobPostingFormState = { status: "idle" };
 
-function toDateInputValue(date: Date | null | undefined): string {
-  if (!date) return "";
-  return date.toISOString().slice(0, 10);
-}
-
 export function JobPostingForm({ action, defaultValues, submitLabel }: JobPostingFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="titleFa">عنوان (فارسی) *</Label>
-          <Input id="titleFa" name="titleFa" defaultValue={defaultValues?.titleFa} required />
+          <Input
+            id="titleFa"
+            name="titleFa"
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
+            required
+          />
           {state.errors?.titleFa && (
             <p className="text-pishnam-danger text-xs">{state.errors.titleFa}</p>
           )}
@@ -47,7 +50,7 @@ export function JobPostingForm({ action, defaultValues, submitLabel }: JobPostin
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
           />
           {state.errors?.titleEn && (
@@ -62,7 +65,7 @@ export function JobPostingForm({ action, defaultValues, submitLabel }: JobPostin
           id="descriptionFa"
           name="descriptionFa"
           rows={4}
-          defaultValue={defaultValues?.descriptionFa}
+          defaultValue={field("descriptionFa", defaultValues?.descriptionFa)}
           required
         />
         {state.errors?.descriptionFa && (
@@ -76,7 +79,7 @@ export function JobPostingForm({ action, defaultValues, submitLabel }: JobPostin
           name="descriptionEn"
           dir="ltr"
           rows={4}
-          defaultValue={defaultValues?.descriptionEn}
+          defaultValue={field("descriptionEn", defaultValues?.descriptionEn)}
           required
         />
         {state.errors?.descriptionEn && (
@@ -92,14 +95,14 @@ export function JobPostingForm({ action, defaultValues, submitLabel }: JobPostin
             name="expiresAt"
             type="date"
             dir="ltr"
-            defaultValue={toDateInputValue(defaultValues?.expiresAt)}
+            defaultValue={field("expiresAt", defaultValues?.expiresAt ?? undefined)}
           />
         </div>
         <label className="text-text-primary flex items-center gap-2 self-end pb-2.5 text-sm">
           <input
             type="checkbox"
             name="active"
-            defaultChecked={defaultValues?.active ?? true}
+            defaultChecked={checked("active", defaultValues?.active ?? true)}
             className="border-border accent-pishnam-gold-500 size-4 rounded"
           />
           فعال (نمایش در صفحه فرصت‌های شغلی)

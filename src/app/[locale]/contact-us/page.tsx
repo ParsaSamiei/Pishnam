@@ -140,7 +140,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                         <p className="text-text-primary text-sm font-semibold">
                           {isFa ? "آدرس" : "Address"}
                         </p>
-                        <p className="text-text-secondary mt-1 text-sm whitespace-pre-line">
+                        <p className="reading-copy text-text-secondary mt-1 text-sm whitespace-pre-line">
                           {address}
                         </p>
                       </div>

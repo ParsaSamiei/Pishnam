@@ -1,12 +1,12 @@
 {
   "name": "pishnam",
-  "version": "0.1.0",
+  "version": "1.1.8",
   "private": true,
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "prisma generate && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -23,6 +23,7 @@
     "prisma:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "db:tunnel": "bash infra/db-tunnel.sh",
+    "postinstall": "prisma generate",
     "prepare": "husky"
   },
   "dependencies": {

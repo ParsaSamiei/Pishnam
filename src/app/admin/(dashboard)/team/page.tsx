@@ -22,6 +22,28 @@ export default async function AdminTeamPage() {
           columns={[
             { header: "نام", cell: (row) => row.nameFa },
             { header: "سمت", cell: (row) => row.roleFa, className: "text-text-secondary" },
+            {
+              header: "وضعیت",
+              cell: (row) => (
+                <div className="flex flex-wrap gap-1">
+                  {row.isAlumni && (
+                    <span className="bg-pishnam-steel-600/15 text-pishnam-steel-600 rounded px-2 py-0.5 text-xs">
+                      alumni
+                    </span>
+                  )}
+                  {!row.isVisible && (
+                    <span className="bg-pishnam-danger/10 text-pishnam-danger rounded px-2 py-0.5 text-xs">
+                      مخفی
+                    </span>
+                  )}
+                  {row.isVisible && !row.isAlumni && (
+                    <span className="bg-pishnam-gold-500/15 text-pishnam-gold-700 rounded px-2 py-0.5 text-xs">
+                      فعال
+                    </span>
+                  )}
+                </div>
+              ),
+            },
             { header: "ترتیب", cell: (row) => row.order, className: "text-text-secondary" },
             {
               header: "",

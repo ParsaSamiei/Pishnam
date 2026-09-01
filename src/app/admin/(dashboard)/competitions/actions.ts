@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { competitionSchema } from "@/lib/validation/competition";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface CompetitionFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type CompetitionFormState = AdminFormState;
 
 function revalidateCompetitionPages() {
   revalidatePath("/admin/competitions");
@@ -30,12 +28,12 @@ export async function createCompetition(
 
   const parsed = competitionSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const slugTaken = await prisma.competition.findUnique({ where: { slug: parsed.data.slug } });
   if (slugTaken) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.competition.create({ data: parsed.data });
@@ -53,12 +51,12 @@ export async function updateCompetition(
 
   const parsed = competitionSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const slugOwner = await prisma.competition.findUnique({ where: { slug: parsed.data.slug } });
   if (slugOwner && slugOwner.id !== id) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.competition.update({ where: { id }, data: parsed.data });

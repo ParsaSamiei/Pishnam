@@ -5,12 +5,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createAdminUserSchema } from "@/lib/validation/admin-user";
-import { requireOwnerSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireOwnerSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface AdminUserFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type AdminUserFormState = AdminFormState;
 
 export async function createAdminUser(
   _prevState: AdminUserFormState,
@@ -20,12 +18,12 @@ export async function createAdminUser(
 
   const parsed = createAdminUserSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const existing = await prisma.adminUser.findUnique({ where: { email: parsed.data.email } });
   if (existing) {
-    return { status: "error", errors: { email: "این ایمیل قبلاً ثبت شده است." } };
+    return formActionError({ email: "این ایمیل قبلاً ثبت شده است." }, formData);
   }
 
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);

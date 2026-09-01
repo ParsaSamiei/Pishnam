@@ -288,6 +288,32 @@ html[dir="rtl"] .skeleton-shine::after {
   }
 }
 
+/* Long-form reading copy: Persian paragraphs read more naturally when
+   justified; Latin body copy stays start-aligned to avoid uneven word gaps.
+   Apply via .prose-pishnam (RichText / admin editor) or .reading-copy on
+   plain-text blocks. Headings, lists, labels, and UI chrome stay start-aligned. */
+@layer components {
+  html[dir="rtl"] .prose-pishnam p,
+  html[dir="rtl"] .reading-copy,
+  html[dir="rtl"] .reading-copy p {
+    text-align: justify;
+    text-align-last: start;
+    text-wrap: pretty;
+  }
+
+  html[dir="ltr"] .prose-pishnam p,
+  html[dir="ltr"] .reading-copy,
+  html[dir="ltr"] .reading-copy p {
+    text-align: start;
+  }
+
+  html[dir="rtl"]
+    .prose-pishnam
+    :is(h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote, figcaption, th, td) {
+    text-align: start;
+  }
+}
+
 /* Scroll-snap tracks are scrolled by swipe, buttons, and arrow keys, so the
    scrollbar is a third affordance for the same thing -- and an always-visible
    one on Windows, where it eats 15px off the bottom of the frame. Scrolling

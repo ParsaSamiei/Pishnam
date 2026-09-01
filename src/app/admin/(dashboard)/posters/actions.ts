@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { competitionPosterSchema } from "@/lib/validation/competition-poster";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface CompetitionPosterFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type CompetitionPosterFormState = AdminFormState;
 
 function revalidatePosterPages() {
   revalidatePath("/admin/posters");
@@ -27,7 +25,7 @@ export async function createCompetitionPoster(
 
   const parsed = competitionPosterSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { descriptionFa, descriptionEn, ...rest } = parsed.data;
@@ -52,7 +50,7 @@ export async function updateCompetitionPoster(
 
   const parsed = competitionPosterSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { descriptionFa, descriptionEn, ...rest } = parsed.data;

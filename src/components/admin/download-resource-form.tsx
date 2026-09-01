@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,20 +40,31 @@ const CATEGORY_POLICY: Record<string, { policy: UploadPolicyKey; accept: string 
 
 const initialState: DownloadResourceFormState = { status: "idle" };
 
-export function DownloadResourceForm({
-  action,
+type DownloadResourceFormFieldsProps = Omit<DownloadResourceFormProps, "action"> & {
+  state: DownloadResourceFormState;
+  field: ReturnType<typeof usePreservedFormAction<DownloadResourceFormState>>["field"];
+  isPending: boolean;
+};
+
+function DownloadResourceFormFields({
   defaultValues,
   submitLabel,
-}: DownloadResourceFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
-  const [category, setCategory] = useState(defaultValues?.category ?? "DATASHEETS");
-  const [source, setSource] = useState(defaultValues?.source ?? "HOSTED");
-  const [fileSizeBytes, setFileSizeBytes] = useState(defaultValues?.fileSizeBytes ?? 0);
+  state,
+  field,
+  isPending,
+}: DownloadResourceFormFieldsProps) {
+  const [category, setCategory] = useState(() =>
+    field("category", defaultValues?.category ?? "DATASHEETS"),
+  );
+  const [source, setSource] = useState(() => field("source", defaultValues?.source ?? "HOSTED"));
+  const [fileSizeBytes, setFileSizeBytes] = useState(() =>
+    Number(field("fileSizeBytes", defaultValues?.fileSizeBytes ?? 0)),
+  );
 
   const uploadConfig = CATEGORY_POLICY[category] ?? CATEGORY_POLICY.DATASHEETS!;
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="category">دسته‌بندی *</Label>
@@ -92,7 +104,7 @@ export function DownloadResourceForm({
             id="cadTool"
             name="cadTool"
             placeholder="SolidWorks, Altium, ..."
-            defaultValue={defaultValues?.cadTool ?? ""}
+            defaultValue={field("cadTool", defaultValues?.cadTool ?? "")}
           />
         </div>
       )}
@@ -105,7 +117,10 @@ export function DownloadResourceForm({
             policy={uploadConfig.policy}
             accept={uploadConfig.accept}
             field={`download.${category.toLowerCase()}`}
-            defaultValue={defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined,
+            )}
             required
             error={state.errors?.fileUrl}
             onUploaded={(result) => setFileSizeBytes(result.sizeBytes)}
@@ -120,7 +135,10 @@ export function DownloadResourceForm({
             name="fileUrl"
             dir="ltr"
             placeholder="https://..."
-            defaultValue={defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined,
+            )}
             required
             aria-invalid={Boolean(state.errors?.fileUrl)}
           />
@@ -136,7 +154,7 @@ export function DownloadResourceForm({
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -150,7 +168,7 @@ export function DownloadResourceForm({
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -167,7 +185,7 @@ export function DownloadResourceForm({
             id="descriptionFa"
             name="descriptionFa"
             rows={3}
-            defaultValue={defaultValues?.descriptionFa ?? ""}
+            defaultValue={field("descriptionFa", defaultValues?.descriptionFa ?? "")}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -177,7 +195,7 @@ export function DownloadResourceForm({
             name="descriptionEn"
             dir="ltr"
             rows={3}
-            defaultValue={defaultValues?.descriptionEn ?? ""}
+            defaultValue={field("descriptionEn", defaultValues?.descriptionEn ?? "")}
           />
         </div>
       </div>
@@ -188,6 +206,30 @@ export function DownloadResourceForm({
           {submitLabel}
         </Button>
       </div>
+    </>
+  );
+}
+
+export function DownloadResourceForm({
+  action,
+  defaultValues,
+  submitLabel,
+}: DownloadResourceFormProps) {
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  return (
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <DownloadResourceFormFields
+        key={formKey}
+        defaultValues={defaultValues}
+        submitLabel={submitLabel}
+        state={state}
+        field={field}
+        isPending={isPending}
+      />
     </form>
   );
 }

@@ -1,5 +1,5 @@
+import { describe, expect, it } from "vitest";
 import {
-  MAP_PROVIDERS,
   PISHNAM_BALAD_URL,
   PISHNAM_MAP_SEARCH_QUERY,
   PISHNAM_NESHAN_URL,

@@ -10,5 +10,7 @@ export function getUploadsDir(): string {
   if (!configured) {
     return path.join(process.cwd(), "uploads");
   }
-  return path.isAbsolute(configured) ? configured : path.resolve(process.cwd(), configured);
+  return path.isAbsolute(configured)
+    ? configured
+    : path.resolve(/* turbopackIgnore: true */ process.cwd(), configured);
 }

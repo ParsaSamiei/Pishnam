@@ -9,7 +9,10 @@ import { Card } from "@/components/ui/card";
 import { deleteDownloadResource } from "./actions";
 
 export default async function AdminDownloadsPage() {
-  const resources = await prisma.downloadResource.findMany({ orderBy: { createdAt: "desc" } });
+  const resources = await prisma.downloadResource.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { section: { select: { titleFa: true } } },
+  });
 
   return (
     <div>
@@ -25,7 +28,9 @@ export default async function AdminDownloadsPage() {
             {
               header: "دسته‌بندی",
               cell: (row) =>
-                downloadCategoryLabel(row.category.toLowerCase().replace(/_/g, "-"), "fa"),
+                row.category
+                  ? downloadCategoryLabel(row.category.toLowerCase().replace(/_/g, "-"), "fa")
+                  : (row.section?.titleFa ?? "بخش سفارشی"),
               className: "text-text-secondary",
             },
             {

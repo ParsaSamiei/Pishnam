@@ -2,9 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/format";
 import { AdminListHeader } from "@/components/admin/admin-list-header";
 import { DataTable } from "@/components/admin/data-table";
+import { DeleteButton } from "@/components/admin/delete-button";
 import { LeadStatusBadge, LeadTypeLabel } from "@/components/admin/lead-status-badge";
 import { LeadDetailDialog } from "@/components/admin/lead-detail-dialog";
 import { Card } from "@/components/ui/card";
+import { deleteLead } from "./actions";
 
 export default async function AdminLeadsPage() {
   const leads = await prisma.lead.findMany({ orderBy: { createdAt: "desc" } });
@@ -47,6 +49,15 @@ export default async function AdminLeadsPage() {
               className: "text-text-secondary",
             },
             { header: "وضعیت", cell: (row) => <LeadStatusBadge status={row.status} /> },
+            {
+              header: "",
+              className: "w-16 text-end",
+              cell: (row) => (
+                <div className="flex justify-end">
+                  <DeleteButton onDelete={deleteLead.bind(null, row.id)} itemLabel={row.name} />
+                </div>
+              ),
+            },
           ]}
         />
       </Card>

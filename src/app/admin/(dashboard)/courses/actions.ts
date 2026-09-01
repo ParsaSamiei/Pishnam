@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { courseSchema } from "@/lib/validation/course";
+import { resolveAparatThumbnail } from "@/lib/aparat";
 import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 import { AdminFormState, formActionError } from "@/lib/form-state";
 
@@ -21,6 +22,38 @@ function revalidateCoursePages(slug?: string) {
   revalidatePath("/en");
   revalidatePath("/enroll");
   revalidatePath("/en/enroll");
+}
+
+async function resolveCourseVideoFields({
+  aparatUrl,
+  hostedVideo,
+  videoThumbnail,
+}: {
+  aparatUrl: string | null;
+  hostedVideo: string | null;
+  videoThumbnail: string | null;
+}) {
+  if (hostedVideo) {
+    return {
+      aparatUrl: null,
+      hostedVideo,
+      videoThumbnail: videoThumbnail || null,
+    };
+  }
+
+  if (aparatUrl) {
+    return {
+      aparatUrl,
+      hostedVideo: null,
+      videoThumbnail: await resolveAparatThumbnail(videoThumbnail ?? "", aparatUrl),
+    };
+  }
+
+  return {
+    aparatUrl: null,
+    hostedVideo: null,
+    videoThumbnail: null,
+  };
 }
 
 export async function createCourse(
@@ -43,6 +76,9 @@ export async function createCourse(
     excerptEn,
     bodyEn,
     prerequisitesEn,
+    aparatUrl,
+    hostedVideo,
+    videoThumbnail,
     ...courseFields
   } = parsed.data;
 
@@ -51,9 +87,12 @@ export async function createCourse(
     return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
+  const videoFields = await resolveCourseVideoFields({ aparatUrl, hostedVideo, videoThumbnail });
+
   await prisma.course.create({
     data: {
       ...courseFields,
+      ...videoFields,
       translations: {
         create: [
           {
@@ -100,6 +139,9 @@ export async function updateCourse(
     excerptEn,
     bodyEn,
     prerequisitesEn,
+    aparatUrl,
+    hostedVideo,
+    videoThumbnail,
     ...courseFields
   } = parsed.data;
 
@@ -108,10 +150,13 @@ export async function updateCourse(
     return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
+  const videoFields = await resolveCourseVideoFields({ aparatUrl, hostedVideo, videoThumbnail });
+
   await prisma.course.update({
     where: { id },
     data: {
       ...courseFields,
+      ...videoFields,
       translations: {
         upsert: [
           {

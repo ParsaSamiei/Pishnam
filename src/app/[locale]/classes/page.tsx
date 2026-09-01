@@ -6,7 +6,12 @@ import { prisma } from "@/lib/prisma";
 import { formatWeekday } from "@/lib/format";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { PageHeader } from "@/components/layout/page-header";
+import { EnrollmentApplication } from "@/components/forms/enrollment-application";
 import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
+import {
+  getEnrollmentGuidelines,
+  isEnrollmentGuidelinesGateActive,
+} from "@/lib/enrollment-guidelines";
 import { Card, CardContent } from "@/components/ui/card";
 
 export async function generateMetadata({
@@ -36,6 +41,9 @@ export default async function ClassesPage({ params }: { params: Promise<{ locale
     orderBy: [{ weekday: "asc" }, { startTime: "asc" }],
     include: { course: { include: { translations: { where: { locale: appLocale } } } } },
   });
+
+  const guidelines = await getEnrollmentGuidelines();
+  const showGuidelines = isEnrollmentGuidelinesGateActive(guidelines, appLocale);
 
   return (
     <>
@@ -88,34 +96,64 @@ export default async function ClassesPage({ params }: { params: Promise<{ locale
 
       {sessions.length > 0 && (
         <section className="bg-bg-surface-alt py-14">
-          <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
+          <div
+            className={`mx-auto px-4 sm:px-6 lg:px-8 ${showGuidelines ? "max-w-3xl" : "max-w-xl"}`}
+          >
             <h2 className="text-text-primary text-xl font-bold">
               {isFa ? "درخواست جای خالی" : "Request a seat"}
             </h2>
             <div className="mt-6">
-              <LeadCaptureForm
-                leadType="CLASS_SEAT"
-                analyticsEvent="class_seat_request"
-                submitLabel={isFa ? "ارسال درخواست" : "Request a seat"}
-                extraFields={[
-                  {
-                    name: "classSession",
-                    label: isFa ? "کلاس مورد نظر" : "Class",
-                    type: "select",
-                    required: true,
-                    options: sessions.map((session) => ({
-                      value: session.id,
-                      label: `${session.course.translations[0]?.title} — ${formatWeekday(session.weekday, appLocale)} ${session.startTime}`,
-                    })),
-                  },
-                ]}
-                successTitle={isFa ? "درخواست شما ثبت شد" : "Request received"}
-                successBody={
-                  isFa
-                    ? "در صورت وجود جای خالی، همکاران ما با شما تماس می‌گیرند."
-                    : "If a seat is available, our team will contact you."
-                }
-              />
+              {showGuidelines && guidelines ? (
+                <EnrollmentApplication
+                  locale={appLocale}
+                  guidelines={guidelines}
+                  leadType="CLASS_SEAT"
+                  analyticsEvent="class_seat_request"
+                  submitLabel={isFa ? "ارسال درخواست" : "Request a seat"}
+                  extraFields={[
+                    {
+                      name: "classSession",
+                      label: isFa ? "کلاس مورد نظر" : "Class",
+                      type: "select",
+                      required: true,
+                      options: sessions.map((session) => ({
+                        value: session.id,
+                        label: `${session.course.translations[0]?.title} — ${formatWeekday(session.weekday, appLocale)} ${session.startTime}`,
+                      })),
+                    },
+                  ]}
+                  successTitle={isFa ? "درخواست شما ثبت شد" : "Request received"}
+                  successBody={
+                    isFa
+                      ? "در صورت وجود جای خالی، همکاران ما با شما تماس می‌گیرند."
+                      : "If a seat is available, our team will contact you."
+                  }
+                />
+              ) : (
+                <LeadCaptureForm
+                  leadType="CLASS_SEAT"
+                  analyticsEvent="class_seat_request"
+                  submitLabel={isFa ? "ارسال درخواست" : "Request a seat"}
+                  extraFields={[
+                    {
+                      name: "classSession",
+                      label: isFa ? "کلاس مورد نظر" : "Class",
+                      type: "select",
+                      required: true,
+                      options: sessions.map((session) => ({
+                        value: session.id,
+                        label: `${session.course.translations[0]?.title} — ${formatWeekday(session.weekday, appLocale)} ${session.startTime}`,
+                      })),
+                    },
+                  ]}
+                  successTitle={isFa ? "درخواست شما ثبت شد" : "Request received"}
+                  successBody={
+                    isFa
+                      ? "در صورت وجود جای خالی، همکاران ما با شما تماس می‌گیرند."
+                      : "If a seat is available, our team will contact you."
+                  }
+                />
+              )}
             </div>
           </div>
         </section>

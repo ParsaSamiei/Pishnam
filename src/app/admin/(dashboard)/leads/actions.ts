@@ -29,3 +29,10 @@ export async function updateLead(formData: FormData): Promise<void> {
   revalidatePath("/admin/leads");
   revalidatePath("/admin");
 }
+
+export async function deleteLead(id: string): Promise<void> {
+  await requireAdminSession();
+  await prisma.lead.delete({ where: { id } });
+  revalidatePath("/admin/leads");
+  revalidatePath("/admin");
+}

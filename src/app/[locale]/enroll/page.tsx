@@ -5,7 +5,12 @@ import { prisma } from "@/lib/prisma";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { TIER_LABELS } from "@/lib/tier-labels";
 import { PageHeader } from "@/components/layout/page-header";
+import { EnrollmentApplication } from "@/components/forms/enrollment-application";
 import { LeadCaptureForm, type LeadExtraField } from "@/components/forms/lead-capture-form";
+import {
+  getEnrollmentGuidelines,
+  isEnrollmentGuidelinesGateActive,
+} from "@/lib/enrollment-guidelines";
 
 export async function generateMetadata({
   params,
@@ -40,6 +45,9 @@ export default async function EnrollPage({
     orderBy: { order: "asc" },
     include: { translations: { where: { locale: appLocale } } },
   });
+
+  const guidelines = await getEnrollmentGuidelines();
+  const showGuidelines = isEnrollmentGuidelinesGateActive(guidelines, appLocale);
 
   const extraFields: LeadExtraField[] = [
     {
@@ -80,22 +88,44 @@ export default async function EnrollPage({
             : "Fill out the form below and our team will reach out to complete your enrollment."
         }
       />
-      <div className="mx-auto max-w-xl px-4 py-12 sm:px-6 lg:px-8">
-        <LeadCaptureForm
-          leadType="ENROLL"
-          analyticsEvent="enroll_form_submit"
-          submitLabel={locale === "fa" ? "ارسال درخواست ثبت‌نام" : "Submit enrollment request"}
-          extraFields={extraFields}
-          successTitle={locale === "fa" ? "درخواست شما ثبت شد" : "Your request has been received"}
-          successBody={
-            locale === "fa"
-              ? "همکاران ما به‌زودی برای هماهنگی جزئیات ثبت‌نام با شما تماس می‌گیرند."
-              : "Our team will contact you soon to finalize enrollment details."
-          }
-          messageLabel={
-            locale === "fa" ? "توضیحات تکمیلی (اختیاری)" : "Additional notes (optional)"
-          }
-        />
+      <div
+        className={`mx-auto px-4 py-12 sm:px-6 lg:px-8 ${showGuidelines ? "max-w-3xl" : "max-w-xl"}`}
+      >
+        {showGuidelines && guidelines ? (
+          <EnrollmentApplication
+            locale={appLocale}
+            guidelines={guidelines}
+            leadType="ENROLL"
+            analyticsEvent="enroll_form_submit"
+            submitLabel={locale === "fa" ? "ارسال درخواست ثبت‌نام" : "Submit enrollment request"}
+            extraFields={extraFields}
+            successTitle={locale === "fa" ? "درخواست شما ثبت شد" : "Your request has been received"}
+            successBody={
+              locale === "fa"
+                ? "همکاران ما به‌زودی برای هماهنگی جزئیات ثبت‌نام با شما تماس می‌گیرند."
+                : "Our team will contact you soon to finalize enrollment details."
+            }
+            messageLabel={
+              locale === "fa" ? "توضیحات تکمیلی (اختیاری)" : "Additional notes (optional)"
+            }
+          />
+        ) : (
+          <LeadCaptureForm
+            leadType="ENROLL"
+            analyticsEvent="enroll_form_submit"
+            submitLabel={locale === "fa" ? "ارسال درخواست ثبت‌نام" : "Submit enrollment request"}
+            extraFields={extraFields}
+            successTitle={locale === "fa" ? "درخواست شما ثبت شد" : "Your request has been received"}
+            successBody={
+              locale === "fa"
+                ? "همکاران ما به‌زودی برای هماهنگی جزئیات ثبت‌نام با شما تماس می‌گیرند."
+                : "Our team will contact you soon to finalize enrollment details."
+            }
+            messageLabel={
+              locale === "fa" ? "توضیحات تکمیلی (اختیاری)" : "Additional notes (optional)"
+            }
+          />
+        )}
       </div>
     </>
   );

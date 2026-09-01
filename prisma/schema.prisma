@@ -91,6 +91,12 @@ model Course {
   tier          Tier
   topicTags     String[] // ["electronics","rescue-line", ...]
   coverImage    String
+  // Optional Aparat embed URL (canonical form from lib/aparat.ts) shown on the
+  // public course page. Paste the share/embed snippet in admin -- not a hosted file.
+  aparatUrl       String?
+  // Self-hosted video at `/uploads/<uuid>.{mp4,webm}` -- mutually exclusive with aparatUrl.
+  hostedVideo     String?
+  videoThumbnail  String? // custom poster; falls back to Aparat's poster when empty
   order         Int                 @default(0)
   active        Boolean             @default(true)
   translations  CourseTranslation[]
@@ -454,6 +460,27 @@ model AdminUser {
   passwordHash String
   role         AdminRole @default(editor)
   createdAt    DateTime  @default(now())
+}
+
+// One-row enrollment guidelines shown before ENROLL and CLASS_SEAT forms.
+// Admins edit bilingual rich text from /admin/enrollment-guidelines; when
+// `active` and body content exist, applicants must scroll through and
+// acknowledge before submitting.
+model EnrollmentGuidelines {
+  id String @id @default("default")
+
+  active Boolean @default(true)
+
+  titleFa String @default("راهنمای ثبت‌نام")
+  titleEn String @default("Before you apply")
+
+  introFa String @default("لطفاً موارد زیر را با دقت بخوانید تا از شرایط کلاس‌ها و قوانین پیشنام آگاه شوید.")
+  introEn String @default("Please read the following so you know what to expect from Pishnam classes and how we work together.")
+
+  bodyFa String @default("")
+  bodyEn String @default("")
+
+  updatedAt DateTime @updatedAt
 }
 
 // One-row site contact details, edited from /admin/contact. Unlike HeroSlide

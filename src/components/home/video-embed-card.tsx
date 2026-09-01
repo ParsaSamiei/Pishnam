@@ -14,6 +14,8 @@ interface VideoEmbedCardProps {
   aparatUrl: string;
   thumbnail: string | null;
   topicTags?: string[];
+  /** When false, only the player is shown (e.g. on a course detail page). */
+  showTitle?: boolean;
 }
 
 /**
@@ -22,7 +24,13 @@ interface VideoEmbedCardProps {
  * target in docs/05-frontend-architecture.md ("lazy-loaded... don't load
  * iframe until in viewport / user interaction").
  */
-export function VideoEmbedCard({ title, aparatUrl, thumbnail, topicTags }: VideoEmbedCardProps) {
+export function VideoEmbedCard({
+  title,
+  aparatUrl,
+  thumbnail,
+  topicTags,
+  showTitle = true,
+}: VideoEmbedCardProps) {
   const [playing, setPlaying] = useState(false);
 
   function handlePlay() {
@@ -74,9 +82,11 @@ export function VideoEmbedCard({ title, aparatUrl, thumbnail, topicTags }: Video
           </button>
         )}
       </div>
-      <CardContent className="p-4">
-        <h3 className="text-text-primary line-clamp-2 font-bold">{title}</h3>
-      </CardContent>
+      {showTitle && (
+        <CardContent className="p-4">
+          <h3 className="text-text-primary line-clamp-2 font-bold">{title}</h3>
+        </CardContent>
+      )}
     </Card>
   );
 

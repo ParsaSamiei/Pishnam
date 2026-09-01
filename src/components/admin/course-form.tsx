@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
+import { CourseVideoFields, type CourseVideoSource } from "@/components/admin/course-video-fields";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { TIERS, TIER_LABELS } from "@/lib/tier-labels";
 import type { CourseFormState } from "@/app/admin/(dashboard)/courses/actions";
@@ -19,6 +20,10 @@ interface CourseFormProps {
     tier: string;
     topicTags: string[];
     coverImage: string;
+    aparatUrl: string | null;
+    hostedVideo: string | null;
+    videoThumbnail: string | null;
+    videoSource?: CourseVideoSource;
     order: number;
     active: boolean;
     titleFa: string;
@@ -41,6 +46,10 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
     initialState,
   );
 
+  const inferredVideoSource: CourseVideoSource =
+    defaultValues?.videoSource ??
+    (defaultValues?.hostedVideo ? "hosted" : defaultValues?.aparatUrl ? "aparat" : "none");
+
   return (
     <form key={formKey} action={formAction} className="flex max-w-3xl flex-col gap-6">
       <ImageUploadField
@@ -50,6 +59,18 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
         defaultValue={field("coverImage", defaultValues?.coverImage)}
         required
         error={state.errors?.coverImage}
+      />
+
+      <CourseVideoFields
+        defaultSource={field("videoSource", inferredVideoSource) as CourseVideoSource}
+        aparatUrl={field("aparatUrl", defaultValues?.aparatUrl ?? "")}
+        hostedVideo={field("hostedVideo", defaultValues?.hostedVideo ?? "")}
+        videoThumbnail={field("videoThumbnail", defaultValues?.videoThumbnail ?? "")}
+        errors={{
+          aparatUrl: state.errors?.aparatUrl,
+          hostedVideo: state.errors?.hostedVideo,
+          videoThumbnail: state.errors?.videoThumbnail,
+        }}
       />
 
       <div className="grid gap-4 sm:grid-cols-2">

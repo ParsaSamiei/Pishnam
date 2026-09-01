@@ -5,7 +5,7 @@
  * form components can share the same constants the server enforces.
  */
 
-type UploadKind = "image" | "document" | "archive";
+type UploadKind = "image" | "document" | "archive" | "video";
 
 interface FieldPolicy {
   kind: UploadKind;
@@ -88,6 +88,11 @@ export const UPLOAD_POLICIES = {
     allowedMimeTypes: ["application/pdf"],
     maxBytes: 10 * 1024 * 1024,
   },
+  "course.video": {
+    kind: "video",
+    allowedMimeTypes: ["video/mp4", "video/webm"],
+    maxBytes: 100 * 1024 * 1024,
+  },
 } satisfies Record<string, FieldPolicy>;
 
 export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;
@@ -99,3 +104,8 @@ export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;
  * is no longer accepted -- see the note on the policy above.
  */
 export const IMAGE_ACCEPT = UPLOAD_POLICIES.image.allowedMimeTypes.join(",");
+
+/** Browser `accept` for course hosted-video uploads. */
+export const VIDEO_ACCEPT = UPLOAD_POLICIES["course.video"].allowedMimeTypes
+  .concat([".mp4", ".webm"])
+  .join(",");

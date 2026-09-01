@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { videoEntrySchema } from "@/lib/validation/video-entry";
-import { extractAparatHash, fetchAparatPoster } from "@/lib/aparat";
+import { resolveAparatThumbnail } from "@/lib/aparat";
 import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
 export type VideoEntryFormState = AdminFormState;
@@ -16,16 +16,6 @@ function revalidateVideoPages() {
   revalidatePath("/en/videos");
   revalidatePath("/");
   revalidatePath("/en");
-}
-
-// If the admin left the thumbnail field empty (or cleared it), fall back to
-// Aparat's own poster for that video instead of showing a blank card until
-// the visitor presses play -- see docs/06-admin-panel.md and the form's
-// helper text, which both promise this behavior.
-async function resolveThumbnail(thumbnail: string, aparatUrl: string): Promise<string | null> {
-  if (thumbnail) return thumbnail;
-  const hash = extractAparatHash(aparatUrl);
-  return hash ? await fetchAparatPoster(hash) : null;
 }
 
 // Checkbox groups (tierTags) submit multiple values under the same
@@ -54,7 +44,7 @@ export async function createVideoEntry(
     data: {
       ...rest,
       aparatUrl,
-      thumbnail: await resolveThumbnail(thumbnail ?? "", aparatUrl),
+      thumbnail: await resolveAparatThumbnail(thumbnail ?? "", aparatUrl),
       publishedAt: new Date(publishedAt),
     },
   });
@@ -81,7 +71,7 @@ export async function updateVideoEntry(
     data: {
       ...rest,
       aparatUrl,
-      thumbnail: await resolveThumbnail(thumbnail ?? "", aparatUrl),
+      thumbnail: await resolveAparatThumbnail(thumbnail ?? "", aparatUrl),
       publishedAt: new Date(publishedAt),
     },
   });

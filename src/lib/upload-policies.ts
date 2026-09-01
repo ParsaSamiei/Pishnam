@@ -83,6 +83,11 @@ export const UPLOAD_POLICIES = {
     allowedMimeTypes: DOWNLOAD_CENTER_MIME_TYPES,
     maxBytes: 50 * 1024 * 1024,
   },
+  "teamMember.resume": {
+    kind: "document",
+    allowedMimeTypes: ["application/pdf"],
+    maxBytes: 10 * 1024 * 1024,
+  },
 } satisfies Record<string, FieldPolicy>;
 
 export type UploadPolicyKey = keyof typeof UPLOAD_POLICIES;

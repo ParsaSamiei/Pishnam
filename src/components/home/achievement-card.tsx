@@ -21,15 +21,13 @@ export function AchievementCard({ title, competition, year, result, photo }: Ach
     <TiltCard tilt={false}>
       <Card className={cn("p-0", cardHoverClass)}>
         <CardHoverRule />
-        {/* `overflow-hidden` so the photo's hover zoom crops inside the frame
-            instead of bleeding a sliver over the competition line below. */}
         <div className="bg-bg-surface-alt relative aspect-[4/3] w-full overflow-hidden">
           {photo ? (
             <Image
               src={photo}
               alt={title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-contain"
               sizes="(min-width: 1024px) 320px, 50vw"
             />
           ) : (

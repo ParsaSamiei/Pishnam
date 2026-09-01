@@ -32,15 +32,13 @@ export function ArticleCard({
       <TiltCard className="h-full">
         <Card className={cn("h-full overflow-hidden p-0", cardHoverClass)}>
           <CardHoverRule />
-          {/* `overflow-hidden` so the cover's hover zoom crops inside the frame
-              instead of bleeding a sliver over the date below. */}
           <div className="bg-bg-surface-alt relative aspect-[16/9] w-full overflow-hidden">
             {coverImage ? (
               <Image
                 src={coverImage}
                 alt=""
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-contain"
                 sizes="(min-width: 1024px) 380px, 100vw"
               />
             ) : (

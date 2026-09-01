@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,13 +13,20 @@ import { DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
 import { DOWNLOAD_ACCEPT, type UploadPolicyKey } from "@/lib/upload-policies";
 import type { DownloadResourceFormState } from "@/app/admin/(dashboard)/downloads/actions";
 
+type CustomSectionOption = {
+  id: string;
+  titleFa: string;
+};
+
 interface DownloadResourceFormProps {
   action: (
     prevState: DownloadResourceFormState,
     formData: FormData,
   ) => Promise<DownloadResourceFormState>;
+  customSections?: CustomSectionOption[];
   defaultValues?: {
-    category: string;
+    category: string | null;
+    sectionId: string | null;
     source: string;
     cadTool: string | null;
     titleFa: string;
@@ -35,40 +43,73 @@ const CATEGORY_POLICY: Record<string, { policy: UploadPolicyKey; accept: string 
   DATASHEETS: { policy: "download.datasheet", accept: DOWNLOAD_ACCEPT },
   BOOKS: { policy: "download.book", accept: DOWNLOAD_ACCEPT },
   COMPONENT_LIBRARIES: { policy: "download.componentLibrary", accept: DOWNLOAD_ACCEPT },
+  CUSTOM: { policy: "download.datasheet", accept: DOWNLOAD_ACCEPT },
 };
 
 const initialState: DownloadResourceFormState = { status: "idle" };
 
-export function DownloadResourceForm({
-  action,
+function resolveTarget(defaultValues?: DownloadResourceFormProps["defaultValues"]): string {
+  if (defaultValues?.sectionId) {
+    return `section:${defaultValues.sectionId}`;
+  }
+  return defaultValues?.category ?? "DATASHEETS";
+}
+
+type DownloadResourceFormFieldsProps = Omit<DownloadResourceFormProps, "action"> & {
+  state: DownloadResourceFormState;
+  field: ReturnType<typeof usePreservedFormAction<DownloadResourceFormState>>["field"];
+  isPending: boolean;
+};
+
+function DownloadResourceFormFields({
+  customSections = [],
   defaultValues,
   submitLabel,
-}: DownloadResourceFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
-  const [category, setCategory] = useState(defaultValues?.category ?? "DATASHEETS");
-  const [source, setSource] = useState(defaultValues?.source ?? "HOSTED");
-  const [fileSizeBytes, setFileSizeBytes] = useState(defaultValues?.fileSizeBytes ?? 0);
+  state,
+  field,
+  isPending,
+}: DownloadResourceFormFieldsProps) {
+  const [target, setTarget] = useState(() => field("target", resolveTarget(defaultValues)));
+  const [source, setSource] = useState(() => field("source", defaultValues?.source ?? "HOSTED"));
+  const [fileSizeBytes, setFileSizeBytes] = useState(() =>
+    Number(field("fileSizeBytes", defaultValues?.fileSizeBytes ?? 0)),
+  );
 
-  const uploadConfig = CATEGORY_POLICY[category] ?? CATEGORY_POLICY.DATASHEETS!;
+  const isCustomSection = target.startsWith("section:");
+  const policyKey = isCustomSection ? "CUSTOM" : target;
+  const uploadConfig = CATEGORY_POLICY[policyKey] ?? CATEGORY_POLICY.DATASHEETS!;
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="category">دسته‌بندی *</Label>
+          <Label htmlFor="target">دسته‌بندی *</Label>
           <NativeSelect
-            id="category"
-            name="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            id="target"
+            name="target"
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
             required
+            aria-invalid={Boolean(state.errors?.target)}
           >
             {DOWNLOAD_CATEGORIES.map((cat) => (
               <option key={cat.value} value={cat.value}>
                 {cat.labelFa}
               </option>
             ))}
+            {customSections.length > 0 && (
+              <optgroup label="بخش‌های سفارشی">
+                {customSections.map((section) => (
+                  <option key={section.id} value={`section:${section.id}`}>
+                    {section.titleFa}
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </NativeSelect>
+          {state.errors?.target && (
+            <p className="text-pishnam-danger text-xs">{state.errors.target}</p>
+          )}
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="source">نوع منبع *</Label>
@@ -85,14 +126,14 @@ export function DownloadResourceForm({
         </div>
       </div>
 
-      {category === "COMPONENT_LIBRARIES" && (
+      {target === "COMPONENT_LIBRARIES" && (
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="cadTool">نرم‌افزار CAD</Label>
           <Input
             id="cadTool"
             name="cadTool"
             placeholder="SolidWorks, Altium, ..."
-            defaultValue={defaultValues?.cadTool ?? ""}
+            defaultValue={field("cadTool", defaultValues?.cadTool ?? "")}
           />
         </div>
       )}
@@ -104,8 +145,11 @@ export function DownloadResourceForm({
             label="فایل *"
             policy={uploadConfig.policy}
             accept={uploadConfig.accept}
-            field={`download.${category.toLowerCase()}`}
-            defaultValue={defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined}
+            field={`download.${policyKey.toLowerCase()}`}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "HOSTED" ? defaultValues.fileUrl : undefined,
+            )}
             required
             error={state.errors?.fileUrl}
             onUploaded={(result) => setFileSizeBytes(result.sizeBytes)}
@@ -120,7 +164,10 @@ export function DownloadResourceForm({
             name="fileUrl"
             dir="ltr"
             placeholder="https://..."
-            defaultValue={defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined}
+            defaultValue={field(
+              "fileUrl",
+              defaultValues?.source === "EXTERNAL" ? defaultValues.fileUrl : undefined,
+            )}
             required
             aria-invalid={Boolean(state.errors?.fileUrl)}
           />
@@ -136,7 +183,7 @@ export function DownloadResourceForm({
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -150,7 +197,7 @@ export function DownloadResourceForm({
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -167,7 +214,7 @@ export function DownloadResourceForm({
             id="descriptionFa"
             name="descriptionFa"
             rows={3}
-            defaultValue={defaultValues?.descriptionFa ?? ""}
+            defaultValue={field("descriptionFa", defaultValues?.descriptionFa ?? "")}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -177,7 +224,7 @@ export function DownloadResourceForm({
             name="descriptionEn"
             dir="ltr"
             rows={3}
-            defaultValue={defaultValues?.descriptionEn ?? ""}
+            defaultValue={field("descriptionEn", defaultValues?.descriptionEn ?? "")}
           />
         </div>
       </div>
@@ -188,6 +235,32 @@ export function DownloadResourceForm({
           {submitLabel}
         </Button>
       </div>
+    </>
+  );
+}
+
+export function DownloadResourceForm({
+  action,
+  customSections,
+  defaultValues,
+  submitLabel,
+}: DownloadResourceFormProps) {
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  return (
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <DownloadResourceFormFields
+        key={formKey}
+        customSections={customSections}
+        defaultValues={defaultValues}
+        submitLabel={submitLabel}
+        state={state}
+        field={field}
+        isPending={isPending}
+      />
     </form>
   );
 }

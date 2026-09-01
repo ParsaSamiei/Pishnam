@@ -68,7 +68,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       />
 
       <section className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
-        <p className="text-text-secondary leading-relaxed">
+        <p className="reading-copy text-text-secondary leading-relaxed">
           {isFa
             ? "پیشنام با هدف آموزش عملی و پروژه‌محور رباتیک و الکترونیک به دانش‌آموزان تاسیس شد. مسیر آموزشی ما از مفاهیم پایه مدار و برنامه‌نویسی شروع می‌شود و دانش‌آموزان علاقه‌مند را تا سطح تیم‌های مسابقات روبوکاپ همراهی می‌کند."
             : "Pishnam was founded to teach robotics and electronics through hands-on, project-based learning. Our path starts with basic circuits and programming concepts and carries interested students all the way to RoboCup competition teams."}

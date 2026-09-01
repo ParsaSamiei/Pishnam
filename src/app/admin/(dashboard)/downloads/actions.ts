@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { downloadResourceSchema } from "@/lib/validation/download-resource";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface DownloadResourceFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type DownloadResourceFormState = AdminFormState;
 
 function revalidateDownloadPages() {
   revalidatePath("/admin/downloads");
@@ -29,10 +27,10 @@ export async function createDownloadResource(
 
   const parsed = downloadResourceSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
-  const { cadTool, descriptionFa, descriptionEn, ...rest } = parsed.data;
+  const { cadTool, descriptionFa, descriptionEn, target: _target, ...rest } = parsed.data;
   await prisma.downloadResource.create({
     data: {
       ...rest,
@@ -55,7 +53,7 @@ export async function updateDownloadResource(
 
   const parsed = downloadResourceSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { cadTool, descriptionFa, descriptionEn, ...rest } = parsed.data;

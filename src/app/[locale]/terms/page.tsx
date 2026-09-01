@@ -24,7 +24,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
     <>
       <PageHeader title={isFa ? "قوانین و مقررات" : "Terms of Service"} />
       <div className="text-text-secondary mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 leading-relaxed">
+        <div className="reading-copy flex flex-col gap-4 leading-relaxed">
           <p>
             {isFa
               ? "استفاده از محتوای دانلودی این سایت (نرم‌افزار، دیتاشیت، کتاب، پوستر و کتابخانه قطعات) رایگان و صرفاً برای مقاصد آموزشی و پژوهشی است."

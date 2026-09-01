@@ -6,6 +6,7 @@ import { randomUUID } from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
 import { Jimp, JimpMime } from "jimp";
 import { UPLOAD_POLICIES, type UploadPolicyKey } from "@/lib/upload-policies";
+import { getUploadsDir } from "@/lib/uploads-dir";
 
 export {
   DOWNLOAD_ACCEPT,
@@ -36,7 +37,7 @@ export {
  * are noted at the re-encode call below.
  */
 
-const UPLOADS_DIR = process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads");
+const UPLOADS_DIR = getUploadsDir();
 // This directory is a runtime-mounted Docker volume (see docker-compose.yml)
 // that's empty at build time and only gets populated after deployment --
 // there's nothing here for Next's build-time file tracer to bundle, and it

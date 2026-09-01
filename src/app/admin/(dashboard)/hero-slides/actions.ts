@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { heroSlideSchema } from "@/lib/validation/hero-slide";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface HeroSlideFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type HeroSlideFormState = AdminFormState;
 
 function revalidateHeroSlidePages() {
   revalidatePath("/admin/hero-slides");
@@ -28,7 +26,7 @@ export async function createHeroSlide(
 
   const parsed = heroSlideSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.heroSlide.create({ data: parsed.data });
@@ -45,7 +43,7 @@ export async function updateHeroSlide(
 
   const parsed = heroSlideSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.heroSlide.update({ where: { id }, data: parsed.data });

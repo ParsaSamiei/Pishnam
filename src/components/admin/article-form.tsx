@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,21 +29,19 @@ interface ArticleFormProps {
 
 const initialState: ArticleFormState = { status: "idle" };
 
-function toDateInputValue(date?: Date): string {
-  if (!date) return new Date().toISOString().slice(0, 10);
-  return date.toISOString().slice(0, 10);
-}
-
 export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-3xl flex-col gap-6">
+    <form key={formKey} action={formAction} className="flex max-w-3xl flex-col gap-6">
       <ImageUploadField
         name="coverImage"
         label="تصویر شاخص"
         field="article.coverImage"
-        defaultValue={defaultValues?.coverImage}
+        defaultValue={field("coverImage", defaultValues?.coverImage)}
         required
         error={state.errors?.coverImage}
       />
@@ -56,7 +54,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             name="slug"
             dir="ltr"
             placeholder="robocup-2026-results"
-            defaultValue={defaultValues?.slug}
+            defaultValue={field("slug", defaultValues?.slug)}
             required
             aria-invalid={Boolean(state.errors?.slug)}
           />
@@ -69,7 +67,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             name="publishedAt"
             type="date"
             dir="ltr"
-            defaultValue={toDateInputValue(defaultValues?.publishedAt)}
+            defaultValue={field("publishedAt", defaultValues?.publishedAt)}
             required
           />
         </div>
@@ -77,7 +75,12 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="tags">برچسب‌ها (با کاما جدا کنید)</Label>
-        <Input id="tags" name="tags" dir="ltr" defaultValue={defaultValues?.tags.join(", ")} />
+        <Input
+          id="tags"
+          name="tags"
+          dir="ltr"
+          defaultValue={field("tags", defaultValues?.tags.join(", "))}
+        />
       </div>
 
       <div className="border-border border-t pt-6">
@@ -88,7 +91,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             <Input
               id="titleFa"
               name="titleFa"
-              defaultValue={defaultValues?.titleFa}
+              defaultValue={field("titleFa", defaultValues?.titleFa)}
               required
               aria-invalid={Boolean(state.errors?.titleFa)}
             />
@@ -102,7 +105,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
               id="excerptFa"
               name="excerptFa"
               rows={2}
-              defaultValue={defaultValues?.excerptFa}
+              defaultValue={field("excerptFa", defaultValues?.excerptFa)}
               required
               aria-invalid={Boolean(state.errors?.excerptFa)}
             />
@@ -114,7 +117,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             <Label htmlFor="richtext-bodyFa">متن کامل *</Label>
             <RichTextEditor
               name="bodyFa"
-              defaultValue={defaultValues?.bodyFa}
+              defaultValue={field("bodyFa", defaultValues?.bodyFa)}
               error={state.errors?.bodyFa}
             />
           </div>
@@ -129,7 +132,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             <Input
               id="titleEn"
               name="titleEn"
-              defaultValue={defaultValues?.titleEn}
+              defaultValue={field("titleEn", defaultValues?.titleEn)}
               required
               aria-invalid={Boolean(state.errors?.titleEn)}
             />
@@ -143,7 +146,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
               id="excerptEn"
               name="excerptEn"
               rows={2}
-              defaultValue={defaultValues?.excerptEn}
+              defaultValue={field("excerptEn", defaultValues?.excerptEn)}
               required
               aria-invalid={Boolean(state.errors?.excerptEn)}
             />
@@ -155,7 +158,7 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             <Label htmlFor="richtext-bodyEn">Full body *</Label>
             <RichTextEditor
               name="bodyEn"
-              defaultValue={defaultValues?.bodyEn}
+              defaultValue={field("bodyEn", defaultValues?.bodyEn)}
               error={state.errors?.bodyEn}
             />
           </div>

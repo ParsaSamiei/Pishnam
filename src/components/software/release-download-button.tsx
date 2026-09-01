@@ -5,7 +5,7 @@ import { track } from "@/lib/analytics";
 
 interface ReleaseDownloadButtonProps {
   href: string;
-  isExternal: boolean;
+  isDirectDownload: boolean;
   productTitle: string;
   platformLabel: string;
   versionLabel: string;
@@ -21,18 +21,20 @@ interface ReleaseDownloadButtonProps {
  */
 export function ReleaseDownloadButton({
   href,
-  isExternal,
+  isDirectDownload,
   productTitle,
   platformLabel,
   versionLabel,
   label,
 }: ReleaseDownloadButtonProps) {
+  const isOffSite = /^https?:\/\//i.test(href);
+
   return (
     <a
       href={href}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
-      download={!isExternal}
+      target={isOffSite ? "_blank" : undefined}
+      rel={isOffSite ? "noopener noreferrer" : undefined}
+      download={isDirectDownload && !isOffSite}
       onClick={() =>
         track("download_click", {
           category: "software",
@@ -41,10 +43,10 @@ export function ReleaseDownloadButton({
       }
       className="bg-pishnam-gold-500 text-pishnam-navy-900 hover:bg-pishnam-gold-600 inline-flex shrink-0 items-center gap-1.5 rounded-md px-4 py-2 text-sm font-semibold transition-colors"
     >
-      {isExternal ? (
-        <ExternalLink className="size-4" aria-hidden="true" />
-      ) : (
+      {isDirectDownload ? (
         <Download className="size-4" aria-hidden="true" />
+      ) : (
+        <ExternalLink className="size-4" aria-hidden="true" />
       )}
       {label}
     </a>

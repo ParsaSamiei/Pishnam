@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { leagueSchema } from "@/lib/validation/league";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface LeagueFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type LeagueFormState = AdminFormState;
 
 function revalidateLeaguePages() {
   revalidatePath("/admin/leagues");
@@ -27,7 +25,7 @@ export async function createLeague(
 
   const parsed = leagueSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const slugTaken = await prisma.league.findUnique({
@@ -39,7 +37,7 @@ export async function createLeague(
     },
   });
   if (slugTaken) {
-    return { status: "error", errors: { slug: "این نامک در این مسابقه قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک در این مسابقه قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.league.create({ data: parsed.data });
@@ -57,7 +55,7 @@ export async function updateLeague(
 
   const parsed = leagueSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const slugOwner = await prisma.league.findUnique({
@@ -69,7 +67,7 @@ export async function updateLeague(
     },
   });
   if (slugOwner && slugOwner.id !== id) {
-    return { status: "error", errors: { slug: "این نامک در این مسابقه قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک در این مسابقه قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.league.update({ where: { id }, data: parsed.data });

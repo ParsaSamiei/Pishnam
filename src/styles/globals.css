@@ -100,6 +100,31 @@
       opacity: 1;
     }
   }
+
+  /* FloatingContactButton: label bounces gently; icon ring pulses outward. */
+  --animate-contact-label-bounce: contact-label-bounce 3s ease-in-out infinite;
+  --animate-contact-pulse-ring: contact-pulse-ring 2.4s ease-out infinite;
+
+  @keyframes contact-label-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes contact-pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.45;
+    }
+    100% {
+      transform: scale(1.55);
+      opacity: 0;
+    }
+  }
 }
 
 /* Header logo: a quiet diagonal sheen that drifts across the mark now and
@@ -247,6 +272,11 @@ html[dir="rtl"] .skeleton-shine::after {
       animation: none;
     }
 
+    .animate-contact-label-bounce,
+    .animate-contact-pulse-ring {
+      animation: none;
+    }
+
     .logo-shine::after {
       animation: none;
       content: none;
@@ -285,6 +315,32 @@ html[dir="rtl"] .skeleton-shine::after {
     [data-carousel-controls] {
       display: none !important;
     }
+  }
+}
+
+/* Long-form reading copy: Persian paragraphs read more naturally when
+   justified; Latin body copy stays start-aligned to avoid uneven word gaps.
+   Apply via .prose-pishnam (RichText / admin editor) or .reading-copy on
+   plain-text blocks. Headings, lists, labels, and UI chrome stay start-aligned. */
+@layer components {
+  html[dir="rtl"] .prose-pishnam p,
+  html[dir="rtl"] .reading-copy,
+  html[dir="rtl"] .reading-copy p {
+    text-align: justify;
+    text-align-last: start;
+    text-wrap: pretty;
+  }
+
+  html[dir="ltr"] .prose-pishnam p,
+  html[dir="ltr"] .reading-copy,
+  html[dir="ltr"] .reading-copy p {
+    text-align: start;
+  }
+
+  html[dir="rtl"]
+    .prose-pishnam
+    :is(h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote, figcaption, th, td) {
+    text-align: start;
   }
 }
 

@@ -14,6 +14,12 @@ export function formatDate(date: Date, locale: AppLocale): string {
   }).format(date);
 }
 
+/** Team member collaboration start, localized for the public team page. */
+export function formatCollaborationStartLabel(date: Date, locale: AppLocale): string {
+  const formatted = formatDate(date, locale);
+  return locale === "fa" ? `شروع همکاری: ${formatted}` : `Collaboration since ${formatted}`;
+}
+
 /** Weekday names indexed 0-6 matching ClassSession.weekday, Saturday-first
  * per the Iranian week (see prisma/schema.prisma comment). */
 export const WEEKDAY_LABELS: Record<AppLocale, string[]> = {
@@ -23,6 +29,20 @@ export const WEEKDAY_LABELS: Record<AppLocale, string[]> = {
 
 export function formatWeekday(weekday: number, locale: AppLocale): string {
   return WEEKDAY_LABELS[locale][weekday] ?? "";
+}
+
+/** File extensions allowed in the download center (see upload-policies.ts). */
+const DIRECT_DOWNLOAD_EXTENSION =
+  /\.(zip|rar|7z|tar|gz|bz2|xz|dmg|exe|apk|pdf|epub|txt|jpe?g|png)$/i;
+
+/**
+ * True when the URL points at a downloadable file rather than a web page.
+ * Used for CTA copy ("Download" vs "Visit") on software release rows.
+ */
+export function isDirectDownloadLink(fileUrl: string, source?: "HOSTED" | "EXTERNAL"): boolean {
+  if (source === "HOSTED" || fileUrl.startsWith("/")) return true;
+  const path = fileUrl.split(/[?#]/)[0] ?? fileUrl;
+  return DIRECT_DOWNLOAD_EXTENSION.test(path);
 }
 
 /** Shared by every download-center listing (flat resources + software releases). */

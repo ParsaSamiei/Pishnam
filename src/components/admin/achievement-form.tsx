@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,15 +25,18 @@ interface AchievementFormProps {
 const initialState: AchievementFormState = { status: "idle" };
 
 export function AchievementForm({ action, defaultValues, submitLabel }: AchievementFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <ImageUploadField
         name="photo"
         label="تصویر"
         field="achievement.photo"
-        defaultValue={defaultValues?.photo}
+        defaultValue={field("photo", defaultValues?.photo)}
         required
         error={state.errors?.photo}
       />
@@ -44,7 +47,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -58,7 +61,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -75,7 +78,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
             id="competition"
             name="competition"
             placeholder="RoboCup Iran Open"
-            defaultValue={defaultValues?.competition}
+            defaultValue={field("competition", defaultValues?.competition)}
             required
             aria-invalid={Boolean(state.errors?.competition)}
           />
@@ -91,7 +94,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
             type="number"
             min={2000}
             max={2100}
-            defaultValue={defaultValues?.year}
+            defaultValue={field("year", defaultValues?.year)}
             required
             aria-invalid={Boolean(state.errors?.year)}
           />
@@ -105,7 +108,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
           id="result"
           name="result"
           placeholder="مقام اول، لیگ Rescue Line"
-          defaultValue={defaultValues?.result}
+          defaultValue={field("result", defaultValues?.result)}
           required
           aria-invalid={Boolean(state.errors?.result)}
         />
@@ -118,7 +121,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
         <input
           type="checkbox"
           name="featured"
-          defaultChecked={defaultValues?.featured ?? false}
+          defaultChecked={checked("featured", defaultValues?.featured ?? false)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش در صفحه اصلی (افتخارات ویژه)

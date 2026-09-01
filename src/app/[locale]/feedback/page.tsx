@@ -71,8 +71,8 @@ export default async function FeedbackPage({ params }: { params: Promise<{ local
         title={isFa ? "انتقادات و پیشنهادات" : "Feedback & Suggestions"}
         subtitle={
           isFa
-            ? "نظر، انتقاد یا پیشنهادتان را بنویسید. نوشتن نام اختیاری است. پیام‌های تأییدشدهٔ تیم در همین صفحه نمایش داده می‌شوند."
-            : "Share a comment, criticism, or suggestion. Your name is optional. Messages approved by the team appear on this page."
+            ? "نظر، انتقاد یا پیشنهادتان را بنویسید. نوشتن نام اختیاری است."
+            : "Share a comment, criticism, or suggestion. Your name is optional."
         }
       />
 
@@ -112,8 +112,8 @@ export default async function FeedbackPage({ params }: { params: Promise<{ local
         title={isFa ? "پیام‌های جامعه پیشنام" : "Pishnam Community Feedback"}
         subtitle={
           isFa
-            ? "نظرات منتشرشده توسط جامعه پیشنام. می‌توانید موافق یا مخالف باشید — هر پیام یک رأی."
-            : "Messages published by the Pishnam community. You can like or dislike — one vote per message."
+            ? "نظرات منتشرشده توسط جامعه پیشنام."
+            : "Messages published by the Pishnam community."
         }
         empty={
           isFa

@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { achievementSchema } from "@/lib/validation/achievement";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface AchievementFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type AchievementFormState = AdminFormState;
 
 function revalidateAchievementPages() {
   revalidatePath("/admin/achievements");
@@ -26,7 +24,7 @@ export async function createAchievement(
 
   const parsed = achievementSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.achievement.create({ data: parsed.data });
@@ -43,7 +41,7 @@ export async function updateAchievement(
 
   const parsed = achievementSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.achievement.update({ where: { id }, data: parsed.data });

@@ -51,7 +51,9 @@ const THEME_SCRIPT = `
   if (!window.__pishnamThemeGuard) {
     window.__pishnamThemeGuard = true;
     new MutationObserver(function () {
-      if (!root.getAttribute("data-theme")) apply();
+      var expected = resolve();
+      var current = root.getAttribute("data-theme");
+      if (current !== expected) apply();
     }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
   }
 })();

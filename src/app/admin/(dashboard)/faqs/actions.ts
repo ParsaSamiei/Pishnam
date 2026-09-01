@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { faqSchema } from "@/lib/validation/faq";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface FaqFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type FaqFormState = AdminFormState;
 
 function revalidateFaqPages() {
   revalidatePath("/admin/faqs");
@@ -24,7 +22,7 @@ export async function createFaq(
 
   const parsed = faqSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.faq.create({ data: parsed.data });
@@ -41,7 +39,7 @@ export async function updateFaq(
 
   const parsed = faqSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.faq.update({ where: { id }, data: parsed.data });

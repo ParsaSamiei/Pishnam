@@ -2,11 +2,14 @@
 
 import { AuthError } from "next-auth";
 import { signIn } from "@/lib/auth";
+import { formActionErrorWithMessage, type PreservedFormState } from "@/lib/form-state";
+
+export type LoginFormState = PreservedFormState;
 
 export async function loginAction(
-  _prevState: string | undefined,
+  _prevState: LoginFormState,
   formData: FormData,
-): Promise<string | undefined> {
+): Promise<LoginFormState> {
   try {
     await signIn("credentials", formData);
   } catch (error) {
@@ -16,11 +19,13 @@ export async function loginAction(
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return "ایمیل یا رمز عبور اشتباه است.";
+          return formActionErrorWithMessage("ایمیل یا رمز عبور اشتباه است.", formData);
         default:
-          return "مشکلی در ورود پیش آمد. دوباره تلاش کنید.";
+          return formActionErrorWithMessage("مشکلی در ورود پیش آمد. دوباره تلاش کنید.", formData);
       }
     }
     throw error;
   }
+
+  return { status: "idle" };
 }

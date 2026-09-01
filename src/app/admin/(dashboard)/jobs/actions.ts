@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { jobPostingSchema } from "@/lib/validation/job-posting";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface JobPostingFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type JobPostingFormState = AdminFormState;
 
 function revalidateJobPages() {
   revalidatePath("/admin/jobs");
@@ -24,7 +22,7 @@ export async function createJobPosting(
 
   const parsed = jobPostingSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.jobPosting.create({ data: parsed.data });
@@ -41,7 +39,7 @@ export async function updateJobPosting(
 
   const parsed = jobPostingSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.jobPosting.update({ where: { id }, data: parsed.data });

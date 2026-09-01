@@ -1,24 +1,33 @@
 "use client";
 
-import { useActionState } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { loginAction } from "./actions";
 
 export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
-  const [errorMessage, formAction, isPending] = useActionState(loginAction, undefined);
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(loginAction, {
+    status: "idle",
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form key={formKey} action={formAction} className="flex flex-col gap-4">
       <input type="hidden" name="redirectTo" value={callbackUrl} />
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">ایمیل</Label>
-        <Input id="email" name="email" type="email" autoComplete="username" required />
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="username"
+          required
+          defaultValue={field("email")}
+        />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -31,6 +40,7 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
             autoComplete="current-password"
             required
             className="pe-10"
+            defaultValue={field("password")}
           />
           <button
             type="button"
@@ -43,9 +53,9 @@ export function LoginForm({ callbackUrl }: { callbackUrl: string }) {
         </div>
       </div>
 
-      {errorMessage && (
+      {state.message && (
         <p role="alert" className="text-pishnam-danger text-sm font-medium">
-          {errorMessage}
+          {state.message}
         </p>
       )}
 

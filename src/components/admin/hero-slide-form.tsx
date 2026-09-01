@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,16 +22,19 @@ interface HeroSlideFormProps {
 const initialState: HeroSlideFormState = { status: "idle" };
 
 export function HeroSlideForm({ action, defaultValues, submitLabel }: HeroSlideFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
       <div className="flex flex-col gap-2">
         <ImageUploadField
           name="image"
           label="تصویر"
           field="heroSlide.image"
-          defaultValue={defaultValues?.image}
+          defaultValue={field("image", defaultValues?.image)}
           required
           error={state.errors?.image}
         />
@@ -47,7 +50,7 @@ export function HeroSlideForm({ action, defaultValues, submitLabel }: HeroSlideF
             id="altFa"
             name="altFa"
             placeholder="تیم رباتیک پیشنام در مسابقات"
-            defaultValue={defaultValues?.altFa ?? ""}
+            defaultValue={field("altFa", defaultValues?.altFa ?? "")}
             aria-invalid={Boolean(state.errors?.altFa)}
           />
           {state.errors?.altFa && (
@@ -61,7 +64,7 @@ export function HeroSlideForm({ action, defaultValues, submitLabel }: HeroSlideF
             name="altEn"
             dir="ltr"
             placeholder="The Pishnam robotics team at a competition"
-            defaultValue={defaultValues?.altEn ?? ""}
+            defaultValue={field("altEn", defaultValues?.altEn ?? "")}
             aria-invalid={Boolean(state.errors?.altEn)}
           />
           {state.errors?.altEn && (
@@ -81,7 +84,7 @@ export function HeroSlideForm({ action, defaultValues, submitLabel }: HeroSlideF
           name="order"
           type="number"
           min={0}
-          defaultValue={defaultValues?.order ?? 0}
+          defaultValue={field("order", defaultValues?.order ?? 0)}
           aria-invalid={Boolean(state.errors?.order)}
         />
         {state.errors?.order ? (

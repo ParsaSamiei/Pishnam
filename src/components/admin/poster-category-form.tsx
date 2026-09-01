@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,16 +36,25 @@ interface PosterCategoryFormProps {
 
 const initialState: PosterCategoryFormState = { status: "idle" };
 
-export function PosterCategoryForm({
-  action,
+type PosterCategoryFormFieldsProps = Omit<PosterCategoryFormProps, "action"> & {
+  state: PosterCategoryFormState;
+  field: ReturnType<typeof usePreservedFormAction<PosterCategoryFormState>>["field"];
+  checked: ReturnType<typeof usePreservedFormAction<PosterCategoryFormState>>["checked"];
+  isPending: boolean;
+};
+
+function PosterCategoryFormFields({
   competitions,
   leagues,
   defaultValues,
   submitLabel,
-}: PosterCategoryFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
-  const [competitionId, setCompetitionId] = useState(
-    defaultValues?.competitionId ?? competitions[0]?.id ?? "",
+  state,
+  field,
+  checked,
+  isPending,
+}: PosterCategoryFormFieldsProps) {
+  const [competitionId, setCompetitionId] = useState(() =>
+    field("competitionId", defaultValues?.competitionId ?? competitions[0]?.id ?? ""),
   );
 
   const filteredLeagues = useMemo(
@@ -59,7 +69,7 @@ export function PosterCategoryForm({
       : (filteredLeagues[0]?.id ?? "");
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="competitionId">مسابقه *</Label>
@@ -85,7 +95,7 @@ export function PosterCategoryForm({
             id="leagueId"
             name="leagueId"
             key={competitionId}
-            defaultValue={defaultLeagueId}
+            defaultValue={field("leagueId", defaultLeagueId)}
             required
             disabled={filteredLeagues.length === 0}
             aria-invalid={Boolean(state.errors?.leagueId)}
@@ -112,7 +122,7 @@ export function PosterCategoryForm({
           name="slug"
           dir="ltr"
           placeholder="rules"
-          defaultValue={defaultValues?.slug}
+          defaultValue={field("slug", defaultValues?.slug)}
           required
           aria-invalid={Boolean(state.errors?.slug)}
         />
@@ -125,7 +135,7 @@ export function PosterCategoryForm({
           <Input
             id="titleFa"
             name="titleFa"
-            defaultValue={defaultValues?.titleFa}
+            defaultValue={field("titleFa", defaultValues?.titleFa)}
             required
             aria-invalid={Boolean(state.errors?.titleFa)}
           />
@@ -139,7 +149,7 @@ export function PosterCategoryForm({
             id="titleEn"
             name="titleEn"
             dir="ltr"
-            defaultValue={defaultValues?.titleEn}
+            defaultValue={field("titleEn", defaultValues?.titleEn)}
             required
             aria-invalid={Boolean(state.errors?.titleEn)}
           />
@@ -156,7 +166,7 @@ export function PosterCategoryForm({
           name="order"
           type="number"
           min={0}
-          defaultValue={defaultValues?.order ?? 0}
+          defaultValue={field("order", defaultValues?.order ?? 0)}
         />
       </div>
 
@@ -164,7 +174,7 @@ export function PosterCategoryForm({
         <input
           type="checkbox"
           name="active"
-          defaultChecked={defaultValues?.active ?? true}
+          defaultChecked={checked("active", defaultValues?.active ?? true)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش در مرکز دانلود
@@ -176,6 +186,35 @@ export function PosterCategoryForm({
           {submitLabel}
         </Button>
       </div>
+    </>
+  );
+}
+
+export function PosterCategoryForm({
+  action,
+  competitions,
+  leagues,
+  defaultValues,
+  submitLabel,
+}: PosterCategoryFormProps) {
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
+
+  return (
+    <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <PosterCategoryFormFields
+        key={formKey}
+        competitions={competitions}
+        leagues={leagues}
+        defaultValues={defaultValues}
+        submitLabel={submitLabel}
+        state={state}
+        field={field}
+        checked={checked}
+        isPending={isPending}
+      />
     </form>
   );
 }

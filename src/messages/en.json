@@ -11,6 +11,7 @@
     "gallery": "Gallery",
     "downloads": "Downloads",
     "blog": "News",
+    "press": "In the Media",
     "contact": "Contact us",
     "feedback": "Feedback & Suggestions",
     "enroll": "Enroll",
@@ -76,6 +77,11 @@
       "title": "Achievements",
       "subtitle": "Our students' results at national and international RoboCup competitions.",
       "viewAll": "View all achievements"
+    },
+    "mediaMentions": {
+      "title": "Pishnam in the Media",
+      "subtitle": "Press reports and news coverage about Pishnam's work and achievements.",
+      "viewAll": "View all"
     },
     "news": {
       "title": "News & Magazine",
@@ -148,6 +154,12 @@
       "next": "Next item",
       "status": "{current, number} of {total, number}"
     }
+  },
+  "press": {
+    "title": "Pishnam in the Media",
+    "subtitle": "Press reports and news coverage about Pishnam's work and achievements.",
+    "empty": "No press coverage has been added yet.",
+    "read": "Read on outlet site"
   },
   "footer": {
     "tagline": "Progressive robotics and electronics education, from elementary school to international competitions.",

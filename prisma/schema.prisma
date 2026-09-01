@@ -361,6 +361,25 @@ model SoftwareRelease {
   @@index([productId])
 }
 
+// Third-party press coverage linking out to external news articles. Managed in
+// /admin/media-mentions; surfaced on the homepage and at /press.
+model MediaMention {
+  id           String   @id @default(cuid())
+  outletNameFa String
+  outletNameEn String
+  headlineFa   String
+  headlineEn   String
+  url          String // external article URL
+  logo         String // `/uploads/<uuid>.webp` outlet mark
+  publishedAt  DateTime
+  order        Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([active, order])
+  @@index([publishedAt])
+}
+
 model Article {
   id           String               @id @default(cuid())
   slug         String               @unique

@@ -9,6 +9,7 @@ import {
   Video,
   Download,
   Newspaper,
+  Radio,
   Briefcase,
   Inbox,
   UserCog,
@@ -62,6 +63,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/download-sections", label: "بخش‌های مرکز دانلود", icon: LayoutGrid },
   { href: "/admin/downloads", label: "فایل‌های دانلود", icon: Download },
   { href: "/admin/articles", label: "اخبار", icon: Newspaper },
+  { href: "/admin/media-mentions", label: "پیشنام در رسانه", icon: Radio },
   { href: "/admin/jobs", label: "فرصت‌های شغلی", icon: Briefcase },
   { href: "/admin/users", label: "کاربران مدیر", icon: UserCog, ownerOnly: true },
 ];

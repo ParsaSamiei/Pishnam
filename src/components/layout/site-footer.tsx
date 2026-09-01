@@ -21,7 +21,7 @@ const EXPLORE_LINKS = [
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },
   { href: "/gallery", key: "gallery" },
-  { href: "/videos", key: "videos" },
+  // { href: "/videos", key: "videos" },
   { href: "/press", key: "press" },
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },

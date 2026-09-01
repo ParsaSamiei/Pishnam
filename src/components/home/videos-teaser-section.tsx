@@ -30,7 +30,7 @@ export async function VideosTeaserSection() {
   if (videos.length === 0) return null;
 
   return (
-    <section data-spine-node className="bg-bg-surface-alt py-16">
+    <section data-spine-node className="py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <StaggerGroup>

@@ -4,6 +4,7 @@
     "fullName": "Pishnam Robotics Researchers"
   },
   "nav": {
+    "home": "Home",
     "about": "About us",
     "courses": "Courses",
     "classes": "In-Person Classes",
@@ -81,7 +82,7 @@
     "mediaMentions": {
       "title": "Pishnam in the Media",
       "subtitle": "Press reports and news coverage about Pishnam's work and achievements.",
-      "viewAll": "View all"
+      "viewAll": "View all press coverage"
     },
     "news": {
       "title": "News & Magazine",

@@ -7,7 +7,7 @@ export function AudienceEntrySection() {
   const t = useTranslations("home.audiences");
 
   return (
-    <section data-spine-node className="bg-bg-surface-alt py-16">
+    <section data-spine-node className="py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <StaggerGroup className="max-w-2xl">
           <StaggerItem variant="heading">

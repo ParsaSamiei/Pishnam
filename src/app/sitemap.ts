@@ -13,6 +13,7 @@ const STATIC_PATHS = [
   "/about-us/faq",
   "/courses",
   "/classes",
+  "/gallery",
   "/videos",
   "/downloads",
   "/downloads/software",

@@ -22,22 +22,26 @@ export function NotFoundView({ locale }: NotFoundViewProps) {
       <PageHeader title={t("title")} subtitle={t("description")} />
 
       <div className="mx-auto max-w-2xl px-4 py-14 text-center sm:px-6 lg:px-8">
-        <CircuitBreakIllustration />
-
-        <p
-          aria-hidden="true"
-          className="text-text-primary/10 mt-8 font-mono text-[4.5rem] leading-none font-extrabold tracking-tighter select-none sm:text-[5.5rem]"
-        >
-          404
-        </p>
-
-        <span className="bg-pishnam-gold-500/12 text-pishnam-gold-500 ring-pishnam-gold-500/25 mt-4 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold ring-1 ring-inset">
+        <span className="bg-pishnam-gold-500/12 text-pishnam-gold-500 ring-pishnam-gold-500/25 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold ring-1 ring-inset">
           <span
             aria-hidden="true"
             className="bg-pishnam-gold-500 size-1.5 rounded-full motion-safe:animate-pulse"
           />
           {t("eyebrow")}
         </span>
+
+        {/* Circuit gap carries the 404 — the break is the error code */}
+        <div className="relative mx-auto mt-8 w-full max-w-md sm:max-w-lg">
+          <CircuitBreakIllustration />
+          <p
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center font-mono text-5xl leading-none font-extrabold tracking-tighter select-none sm:text-6xl"
+          >
+            <span className="text-text-primary">4</span>
+            <span className="text-pishnam-gold-500 mx-0.5">0</span>
+            <span className="text-text-primary">4</span>
+          </p>
+        </div>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <Button asChild size="lg" className="group">

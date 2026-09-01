@@ -1,74 +1,97 @@
 // Decorative SVG for the 404 page: a PCB trace that routes toward the
 // center but stops at an open gap — the same "live via" language as
 // CircuitBackground, only here the signal never completes.
-export function CircuitBreakIllustration() {
+export function CircuitBreakIllustration({ className }: { className?: string }) {
   return (
     <svg
       aria-hidden="true"
-      viewBox="0 0 360 72"
-      className="text-border mx-auto h-16 w-full max-w-sm sm:h-18 sm:max-w-md"
+      viewBox="0 0 360 88"
+      className={className ?? "h-24 w-full sm:h-28"}
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Incoming trace — powered up to the break */}
+      {/* Base traces — steel reads clearly on both light and dark surfaces */}
       <g
         fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
+        stroke="var(--color-steel-accent)"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        opacity="0.85"
       >
-        <path d="M0 36 H72 V20 H132" />
-        <path d="M0 36 H72 V52 H132" />
+        <path d="M0 44 H64 V22 H124" />
+        <path d="M0 44 H64 V66 H124" />
+        <path d="M236 44 H300 V22 H360" />
+        <path d="M236 44 H300 V66 H360" />
       </g>
-      <g fill="none" stroke="var(--color-pishnam-gold-500)" strokeWidth="1.5" strokeLinecap="round">
-        <path d="M0 36 H72" opacity="0.45" />
+
+      {/* Live trace up to the break */}
+      <g
+        fill="none"
+        stroke="var(--color-pishnam-gold-500)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        opacity="0.9"
+      >
+        <path d="M0 44 H64" />
       </g>
       <circle
-        cx="72"
-        cy="36"
-        r="3.5"
+        cx="64"
+        cy="44"
+        r="4.5"
         fill="var(--color-pishnam-gold-500)"
         className="motion-safe:animate-circuit-pulse"
       />
 
-      {/* Open gap — trace ends hang in the air */}
+      {/* Open gap — dangling ends */}
       <g
         fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
+        stroke="var(--color-steel-accent)"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        opacity="0.55"
+        opacity="0.75"
       >
-        <path d="M148 20 H168" strokeDasharray="3 5" />
-        <path d="M148 52 H168" strokeDasharray="3 5" />
-        <path d="M192 20 H212 V36 H228" strokeDasharray="3 5" />
-        <path d="M192 52 H212 V36" strokeDasharray="3 5" />
+        <path d="M132 22 H152" strokeDasharray="4 6" />
+        <path d="M132 66 H152" strokeDasharray="4 6" />
+        <path d="M208 22 H228 V44" strokeDasharray="4 6" />
+        <path d="M208 66 H228 V44" strokeDasharray="4 6" />
       </g>
 
-      {/* Outgoing trace — never receives the signal */}
+      {/* Dead via on the far side of the break */}
+      <circle
+        cx="236"
+        cy="44"
+        r="4"
+        fill="var(--color-border)"
+        stroke="var(--color-steel-accent)"
+        strokeWidth="1.5"
+      />
+
+      {/* IC footprint in the gap — unpowered */}
       <g
-        fill="none"
-        stroke="currentColor"
+        stroke="var(--color-steel-accent)"
         strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.7"
+        fill="var(--color-bg-surface-alt)"
+        opacity="0.9"
       >
-        <path d="M228 36 H300 V20 H360" />
-        <path d="M228 36 H300 V52 H360" />
+        <rect x="156" y="32" width="28" height="24" rx="2" />
+        <path d="M156 38 H150" />
+        <path d="M156 44 H150" />
+        <path d="M156 50 H150" />
+        <path d="M184 38 H190" />
+        <path d="M184 44 H190" />
+        <path d="M184 50 H190" />
       </g>
-      <circle cx="228" cy="36" r="3" fill="currentColor" opacity="0.4" />
 
-      {/* IC footprint in the gap — present but unpowered */}
-      <g stroke="currentColor" strokeWidth="1.25" fill="none" opacity="0.35">
-        <rect x="168" y="26" width="24" height="20" rx="1.5" />
-        <path d="M168 31 H164" />
-        <path d="M168 36 H164" />
-        <path d="M168 41 H164" />
-        <path d="M192 31 H196" />
-        <path d="M192 36 H196" />
-        <path d="M192 41 H196" />
+      {/* Break markers — small X at the gap to read as "disconnected" */}
+      <g
+        stroke="var(--color-pishnam-gold-500)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        opacity="0.65"
+      >
+        <path d="M168 38 L176 50" />
+        <path d="M176 38 L168 50" />
       </g>
     </svg>
   );

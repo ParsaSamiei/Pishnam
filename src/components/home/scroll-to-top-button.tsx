@@ -29,24 +29,24 @@ export function ScrollToTopButton() {
   return (
     <Button
       type="button"
-      variant="default"
+      variant="secondary"
       size="icon"
       aria-label={t("scrollToTop")}
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}
       onClick={scrollToTop}
       className={cn(
-        "fixed bottom-6 z-30 size-11 rounded-full",
-        "inset-e-4 sm:inset-e-6",
-        "ring-pishnam-gold-500/15 shadow-[0_0_6px_1px_rgb(230_168_23_/_0.18)] ring-1",
-        "hover:shadow-[0_0_8px_2px_rgb(230_168_23_/_0.28)]",
-        "transition-[opacity,transform] duration-300 motion-reduce:transition-none",
+        "size-14 rounded-full",
+        "bg-pishnam-steel-600 text-pishnam-off-white hover:bg-pishnam-steel-600/90",
+        "ring-pishnam-steel-600/35 shadow-[0_4px_14px_rgb(24_34_45/0.22)] ring-1",
+        "hover:shadow-[0_6px_16px_rgb(24_34_45/0.32)]",
+        "transition-[opacity,transform,box-shadow,background-color] duration-300 motion-reduce:transition-none",
         visible
           ? "pointer-events-auto translate-y-0 opacity-100"
           : "pointer-events-none translate-y-2 opacity-0 motion-reduce:translate-y-0",
       )}
     >
-      <ChevronUp aria-hidden="true" className="size-5" />
+      <ChevronUp aria-hidden="true" className="size-6" />
     </Button>
   );
 }

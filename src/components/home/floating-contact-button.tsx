@@ -57,8 +57,8 @@ export function FloatingContactButton({
         aria-expanded={open}
         onClick={() => setOpen(true)}
         className={cn(
-          "group fixed bottom-20 z-30 flex cursor-pointer flex-col items-center gap-2",
-          "inset-e-4 border-0 bg-transparent p-0 sm:inset-e-6",
+          "group flex cursor-pointer flex-col items-center gap-2",
+          "border-0 bg-transparent p-0",
           "focus-visible:ring-pishnam-gold-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
         )}
       >

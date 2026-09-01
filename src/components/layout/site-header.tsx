@@ -21,6 +21,7 @@ const NAV_ITEMS = [
   { href: "/about-us", key: "about" },
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },
+  { href: "/gallery", key: "gallery" },
   { href: "/videos", key: "videos" },
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },

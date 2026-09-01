@@ -507,6 +507,25 @@ model HeroSlide {
   @@index([order])
 }
 
+// Public photo gallery -- workshops, competitions, team moments. Managed in
+// /admin/gallery; surfaced as a carousel teaser on the homepage and a full
+// grid with lightbox at /gallery.
+model GalleryImage {
+  id String @id @default(cuid())
+
+  image String
+  altFa String?
+  altEn String?
+  // Optional caption shown under the photo in the lightbox.
+  captionFa String?
+  captionEn String?
+
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([order])
+}
+
 // Audit log for every file upload -- required by the upload security
 // checklist in docs/05-frontend-architecture.md ("Log every upload").
 model UploadLog {

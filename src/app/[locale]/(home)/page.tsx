@@ -8,6 +8,7 @@ import { RelatedSitesBanner } from "@/components/home/related-sites-banner";
 import { AchievementsHighlight } from "@/components/home/achievements-highlight";
 import { NewsTeaserSection } from "@/components/home/news-teaser-section";
 import { VideosTeaserSection } from "@/components/home/videos-teaser-section";
+import { GalleryTeaserSection } from "@/components/home/gallery-teaser-section";
 import { DownloadsTeaserSection } from "@/components/home/downloads-teaser-section";
 import { ScrollSpine } from "@/components/motion/scroll-spine";
 import { FloatingContactButton } from "@/components/home/floating-contact-button";
@@ -59,14 +60,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <AchievementsHighlight />
         <NewsTeaserSection />
         <VideosTeaserSection />
+        <GalleryTeaserSection />
         <DownloadsTeaserSection />
       </ScrollSpine>
-      <FloatingContactButton
-        address={address}
-        phones={contact?.phones ?? []}
-        socialLinks={socialLinks}
-      />
-      <ScrollToTopButton />
+      <div className="fixed inset-e-4 bottom-6 z-30 flex flex-col items-center gap-3 sm:inset-e-6">
+        <FloatingContactButton
+          address={address}
+          phones={contact?.phones ?? []}
+          socialLinks={socialLinks}
+        />
+        <ScrollToTopButton />
+      </div>
     </>
   );
 }

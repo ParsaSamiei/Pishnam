@@ -19,6 +19,7 @@ function toPersianDigits(value: string): string {
 const EXPLORE_LINKS = [
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },
+  { href: "/gallery", key: "gallery" },
   { href: "/videos", key: "videos" },
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },
@@ -27,8 +28,7 @@ const EXPLORE_LINKS = [
 const ABOUT_LINKS = [
   { href: "/about-us", key: "about" },
   { href: "/sponsors", key: "sponsors" },
-  { href: "/schools", key: "schools" },
-  // { href: "/careers", key: "careers" },
+  { href: "/careers", key: "careers" },
   { href: "/contact-us", key: "contact" },
   { href: "/feedback", key: "feedback" },
 ] as const;

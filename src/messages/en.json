@@ -8,6 +8,7 @@
     "courses": "Courses",
     "classes": "In-Person Classes",
     "videos": "Videos",
+    "gallery": "Gallery",
     "downloads": "Downloads",
     "blog": "News",
     "contact": "Contact us",
@@ -86,6 +87,19 @@
       "subtitle": "A curated selection of Pishnam's Aparat content, organized by tier and topic.",
       "viewAll": "View all videos"
     },
+    "gallery": {
+      "title": "Photo Gallery",
+      "subtitle": "Moments from workshops, competitions, and team activities at Pishnam.",
+      "viewAll": "View all photos",
+      "carousel": {
+        "label": "Pishnam photo gallery",
+        "slide": "Photo",
+        "status": "Photo {current, number} of {total, number}",
+        "previous": "Previous photo",
+        "next": "Next photo",
+        "goTo": "Go to photo {index, number}"
+      }
+    },
     "downloads": {
       "title": "Download Center",
       "subtitle": "Software, datasheets, books, competition posters, and part libraries — all free, no sign-up required.",
@@ -114,6 +128,22 @@
       "description": "Reach the Pishnam team by phone, visit us, or follow us online.",
       "address": "Address",
       "phone": "Phone"
+    }
+  },
+  "gallery": {
+    "meta": {
+      "title": "Photo Gallery",
+      "description": "Photos from workshops, competitions, and team activities at Pishnam."
+    },
+    "title": "Photo Gallery",
+    "subtitle": "Moments from workshops, competitions, and team activities at Pishnam.",
+    "empty": "No photos have been added to the gallery yet.",
+    "openPhoto": "Open photo",
+    "lightbox": {
+      "close": "Close",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "status": "{current, number} of {total, number}"
     }
   },
   "footer": {

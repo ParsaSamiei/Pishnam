@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, localeDirection, type AppLocale } from "@/lib/i18n/routing";
 import { buildAlternates } from "@/lib/i18n/alternates";
 import { ThemeScript } from "@/components/layout/theme-script";
+import { ThemeReconciler } from "@/components/layout/theme-reconciler";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CircuitBackground } from "@/components/layout/circuit-background";
@@ -119,6 +120,7 @@ export default async function LocaleLayout({
         <ThemeScript />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
+        <ThemeReconciler />
         <CircuitBackground />
         <BrandCursor />
         <NextIntlClientProvider>

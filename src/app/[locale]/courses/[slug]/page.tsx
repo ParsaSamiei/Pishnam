@@ -114,7 +114,9 @@ export default async function CourseDetailPage({
               <h2 className="text-text-primary text-sm font-bold">
                 {isFa ? "پیش‌نیازها" : "Prerequisites"}
               </h2>
-              <p className="text-text-secondary mt-1 text-sm">{translation.prerequisites}</p>
+              <p className="reading-copy text-text-secondary mt-1 text-sm leading-relaxed">
+                {translation.prerequisites}
+              </p>
             </div>
           )}
 

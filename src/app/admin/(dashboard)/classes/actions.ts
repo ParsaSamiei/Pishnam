@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { classSessionSchema } from "@/lib/validation/class-session";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface ClassSessionFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type ClassSessionFormState = AdminFormState;
 
 function revalidateClassPages() {
   revalidatePath("/admin/classes");
@@ -25,7 +23,7 @@ export async function createClassSession(
 
   const parsed = classSessionSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.classSession.create({
@@ -45,7 +43,7 @@ export async function updateClassSession(
 
   const parsed = classSessionSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   await prisma.classSession.update({

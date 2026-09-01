@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useEffect } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitFeedback, type SubmitFeedbackState } from "@/lib/actions/feedback";
 import { track } from "@/lib/analytics";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 
 interface FeedbackFormProps {
   nameLabel: string;
@@ -32,7 +33,10 @@ export function FeedbackForm({
   successTitle,
   successBody,
 }: FeedbackFormProps) {
-  const [state, formAction, isPending] = useActionState(submitFeedback, initialState);
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    submitFeedback,
+    initialState,
+  );
 
   useEffect(() => {
     if (state.status === "success") {
@@ -54,7 +58,12 @@ export function FeedbackForm({
   }
 
   return (
-    <form action={formAction} className="relative flex min-w-0 flex-col gap-4" noValidate>
+    <form
+      key={formKey}
+      action={formAction}
+      className="relative flex min-w-0 flex-col gap-4"
+      noValidate
+    >
       {/* Honeypot: zero-size clip in place — off-canvas left/start offsets expand page scroll. */}
       <div
         className="pointer-events-none absolute top-0 left-0 h-0 w-0 overflow-hidden opacity-0"
@@ -70,6 +79,7 @@ export function FeedbackForm({
           id="feedback-name"
           name="name"
           autoComplete="name"
+          defaultValue={field("name")}
           aria-describedby="feedback-name-hint"
           aria-invalid={Boolean(state.errors?.name)}
         />
@@ -89,6 +99,7 @@ export function FeedbackForm({
           required
           rows={6}
           placeholder={messagePlaceholder}
+          defaultValue={field("message")}
           aria-describedby={messageHint ? "feedback-message-hint" : undefined}
           aria-invalid={Boolean(state.errors?.message)}
         />

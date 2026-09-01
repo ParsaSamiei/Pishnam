@@ -4,12 +4,13 @@ import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { feedbackFormSchema } from "@/lib/validation/feedback";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  formActionError,
+  formActionErrorWithMessage,
+  type PreservedFormState,
+} from "@/lib/form-state";
 
-export interface SubmitFeedbackState {
-  status: "idle" | "success" | "error";
-  errors?: Record<string, string>;
-  message?: string;
-}
+export type SubmitFeedbackState = PreservedFormState;
 
 export async function submitFeedback(
   _prevState: SubmitFeedbackState,
@@ -31,16 +32,16 @@ export async function submitFeedback(
       const key = String(issue.path[0] ?? "form");
       if (!errors[key]) errors[key] = issue.message;
     }
-    return { status: "error", errors };
+    return formActionError(errors, formData);
   }
 
   const ip = getClientIp(await headers());
   const limitResult = rateLimit(`feedback:${ip}`, 5, 10 * 60 * 1000);
   if (!limitResult.success) {
-    return {
-      status: "error",
-      message: "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید.",
-    };
+    return formActionErrorWithMessage(
+      "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید.",
+      formData,
+    );
   }
 
   await prisma.feedback.create({

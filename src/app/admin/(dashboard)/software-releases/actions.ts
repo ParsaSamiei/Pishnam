@@ -1,15 +1,13 @@
 "use server";
 
+import type { AdminFormState } from "@/lib/form-state";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { softwareReleaseSchema } from "@/lib/validation/software-release";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 
-export interface SoftwareReleaseFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type SoftwareReleaseFormState = AdminFormState;
 
 async function revalidateForProduct(productId: string) {
   const product = await prisma.softwareProduct.findUnique({
@@ -33,7 +31,7 @@ export async function createSoftwareRelease(
 
   const parsed = softwareReleaseSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { notesFa, notesEn, ...rest } = parsed.data;
@@ -58,7 +56,7 @@ export async function updateSoftwareRelease(
 
   const parsed = softwareReleaseSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { notesFa, notesEn, ...rest } = parsed.data;

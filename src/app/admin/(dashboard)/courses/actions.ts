@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { courseSchema } from "@/lib/validation/course";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface CourseFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type CourseFormState = AdminFormState;
 
 function revalidateCoursePages(slug?: string) {
   revalidatePath("/admin/courses");
@@ -33,7 +31,7 @@ export async function createCourse(
 
   const parsed = courseSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const {
@@ -50,7 +48,7 @@ export async function createCourse(
 
   const slugTaken = await prisma.course.findUnique({ where: { slug: courseFields.slug } });
   if (slugTaken) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.course.create({
@@ -90,7 +88,7 @@ export async function updateCourse(
 
   const parsed = courseSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const {
@@ -107,7 +105,7 @@ export async function updateCourse(
 
   const slugOwner = await prisma.course.findUnique({ where: { slug: courseFields.slug } });
   if (slugOwner && slugOwner.id !== id) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.course.update({

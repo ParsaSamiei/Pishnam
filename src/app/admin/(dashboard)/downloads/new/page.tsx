@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { DownloadResourceForm } from "@/components/admin/download-resource-form";
+import { getCustomDownloadSections } from "@/lib/download-sections";
 import { createDownloadResource } from "../actions";
 
-export default function NewDownloadResourcePage() {
+export default async function NewDownloadResourcePage() {
+  const customSections = await getCustomDownloadSections();
+
   return (
     <div>
       <Link
@@ -15,7 +18,11 @@ export default function NewDownloadResourcePage() {
       </Link>
       <h1 className="text-text-primary text-2xl font-bold">افزودن مورد جدید</h1>
       <div className="mt-6">
-        <DownloadResourceForm action={createDownloadResource} submitLabel="ثبت" />
+        <DownloadResourceForm
+          action={createDownloadResource}
+          customSections={customSections}
+          submitLabel="ثبت"
+        />
       </div>
     </div>
   );

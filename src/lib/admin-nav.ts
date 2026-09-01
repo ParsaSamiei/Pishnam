@@ -21,6 +21,8 @@ import {
   Layers,
   Tags,
   ImageIcon,
+  Camera,
+  LayoutGrid,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -41,6 +43,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/leads", label: "درخواست‌ها", icon: Inbox },
   { href: "/admin/feedback", label: "انتقادات و پیشنهادات", icon: MessageSquare },
   { href: "/admin/hero-slides", label: "تصاویر صفحه اصلی", icon: Images },
+  { href: "/admin/gallery", label: "گالری تصاویر", icon: Camera },
   { href: "/admin/contact", label: "تماس با ما", icon: MapPin },
   { href: "/admin/courses", label: "دوره‌ها", icon: GraduationCap },
   { href: "/admin/classes", label: "کلاس‌های حضوری", icon: CalendarDays },
@@ -54,7 +57,8 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/leagues", label: "لیگ‌ها", icon: Layers },
   { href: "/admin/poster-categories", label: "دسته‌بندی پوستر", icon: Tags },
   { href: "/admin/posters", label: "پوسترها", icon: ImageIcon },
-  { href: "/admin/downloads", label: "مرکز دانلود", icon: Download },
+  { href: "/admin/download-sections", label: "بخش‌های مرکز دانلود", icon: LayoutGrid },
+  { href: "/admin/downloads", label: "فایل‌های دانلود", icon: Download },
   { href: "/admin/articles", label: "اخبار", icon: Newspaper },
   { href: "/admin/jobs", label: "فرصت‌های شغلی", icon: Briefcase },
   { href: "/admin/users", label: "کاربران مدیر", icon: UserCog, ownerOnly: true },

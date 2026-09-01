@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { softwareProductSchema } from "@/lib/validation/software-product";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface SoftwareProductFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type SoftwareProductFormState = AdminFormState;
 
 function revalidateSoftwarePages(slug?: string) {
   revalidatePath("/admin/software");
@@ -32,14 +30,14 @@ export async function createSoftwareProduct(
 
   const parsed = softwareProductSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { descriptionFa, descriptionEn, ...rest } = parsed.data;
 
   const slugTaken = await prisma.softwareProduct.findUnique({ where: { slug: rest.slug } });
   if (slugTaken) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.softwareProduct.create({
@@ -63,14 +61,14 @@ export async function updateSoftwareProduct(
 
   const parsed = softwareProductSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { descriptionFa, descriptionEn, ...rest } = parsed.data;
 
   const slugOwner = await prisma.softwareProduct.findUnique({ where: { slug: rest.slug } });
   if (slugOwner && slugOwner.id !== id) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.softwareProduct.update({

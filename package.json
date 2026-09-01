@@ -1,12 +1,12 @@
 {
   "name": "pishnam",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": true,
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "prisma generate && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -23,6 +23,7 @@
     "prisma:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "db:tunnel": "bash infra/db-tunnel.sh",
+    "postinstall": "prisma generate",
     "prepare": "husky"
   },
   "dependencies": {
@@ -51,6 +52,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel": "^8.6.0",
+    "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-react": "^8.5.2",
     "file-type": "^22.0.2",
     "isomorphic-dompurify": "^3.22.0",

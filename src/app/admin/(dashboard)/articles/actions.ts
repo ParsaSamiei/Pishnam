@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { articleSchema } from "@/lib/validation/article";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface ArticleFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type ArticleFormState = AdminFormState;
 
 function revalidateArticlePages(slug?: string) {
   revalidatePath("/admin/articles");
@@ -31,7 +29,7 @@ export async function createArticle(
 
   const parsed = articleSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { titleFa, excerptFa, bodyFa, titleEn, excerptEn, bodyEn, publishedAt, ...articleFields } =
@@ -39,7 +37,7 @@ export async function createArticle(
 
   const slugTaken = await prisma.article.findUnique({ where: { slug: articleFields.slug } });
   if (slugTaken) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.article.create({
@@ -68,7 +66,7 @@ export async function updateArticle(
 
   const parsed = articleSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const { titleFa, excerptFa, bodyFa, titleEn, excerptEn, bodyEn, publishedAt, ...articleFields } =
@@ -76,7 +74,7 @@ export async function updateArticle(
 
   const slugOwner = await prisma.article.findUnique({ where: { slug: articleFields.slug } });
   if (slugOwner && slugOwner.id !== id) {
-    return { status: "error", errors: { slug: "این نامک قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.article.update({

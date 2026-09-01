@@ -1,5 +1,6 @@
 import "server-only";
 import { auth } from "@/lib/auth";
+import { formActionError } from "@/lib/form-state";
 
 /**
  * Every admin content-mutation server action calls this first. Middleware
@@ -39,4 +40,12 @@ export function firstErrorPerField(
     if (!errors[key]) errors[key] = issue.message;
   }
   return errors;
+}
+
+/** Validation failure payload that keeps submitted field values for the client form. */
+export function formErrorFromIssues(
+  issues: { path: PropertyKey[]; message: string }[],
+  formData: FormData,
+) {
+  return formActionError(firstErrorPerField(issues), formData);
 }

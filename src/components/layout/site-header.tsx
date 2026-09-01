@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ExternalLink, Menu, Search, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -21,16 +21,17 @@ const NAV_ITEMS = [
   { href: "/about-us", key: "about" },
   { href: "/courses", key: "courses" },
   { href: "/classes", key: "classes" },
+  { href: "/gallery", key: "gallery" },
   { href: "/videos", key: "videos" },
   { href: "/downloads", key: "downloads" },
   { href: "/blog", key: "blog" },
   { href: "/contact-us", key: "contact" },
 ] as const;
 
-const EXTERNAL_LINKS = [
-  { href: "https://pishcup.com", key: "pishcup" },
-  { href: "https://pishtalk.com", key: "pishtalk" },
-] as const;
+// const EXTERNAL_LINKS = [
+//   { href: "https://pishcup.com", key: "pishcup" },
+//   { href: "https://pishtalk.com", key: "pishtalk" },
+// ] as const;
 
 /** Icon / outline controls in the header: gold wash instead of a near-invisible surface swap. */
 const headerControlClass =
@@ -108,7 +109,7 @@ export function SiteHeader() {
             );
           })}
           <span className="bg-border mx-1 h-4 w-px shrink-0" aria-hidden="true" />
-          {EXTERNAL_LINKS.map((item) => (
+          {/* {EXTERNAL_LINKS.map((item) => (
             <a
               key={item.href}
               href={item.href}
@@ -123,7 +124,7 @@ export function SiteHeader() {
               {t(item.key)}
               <ExternalLink className="size-3.5 opacity-60" aria-hidden="true" />
             </a>
-          ))}
+          ))} */}
         </nav>
 
         <div className="flex items-center gap-1">
@@ -199,8 +200,8 @@ export function SiteHeader() {
                         </Link>
                       );
                     })}
-                    <div className="border-border my-2 border-t pt-2">
-                      {EXTERNAL_LINKS.map((item) => (
+                    {/* <div className="border-border my-2 border-t pt-2"> */}
+                    {/* {EXTERNAL_LINKS.map((item) => (
                         <a
                           key={item.href}
                           href={item.href}
@@ -216,8 +217,8 @@ export function SiteHeader() {
                           {t(item.key)}
                           <ExternalLink className="size-4 opacity-60" aria-hidden="true" />
                         </a>
-                      ))}
-                    </div>
+                      ))} */}
+                    {/* </div> */}
                     <Button asChild size="lg" className="mt-4">
                       <Link href="/enroll" onClick={() => setMobileOpen(false)}>
                         {t("enroll")}

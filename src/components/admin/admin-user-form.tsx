@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,10 +15,13 @@ interface AdminUserFormProps {
 const initialState: AdminUserFormState = { status: "idle" };
 
 export function AdminUserForm({ action }: AdminUserFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-md flex-col gap-4">
+    <form key={formKey} action={formAction} className="flex max-w-md flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">ایمیل *</Label>
         <Input
@@ -26,6 +29,7 @@ export function AdminUserForm({ action }: AdminUserFormProps) {
           name="email"
           type="email"
           dir="ltr"
+          defaultValue={field("email")}
           required
           aria-invalid={Boolean(state.errors?.email)}
         />
@@ -39,6 +43,7 @@ export function AdminUserForm({ action }: AdminUserFormProps) {
           name="password"
           type="password"
           dir="ltr"
+          defaultValue={field("password")}
           required
           aria-invalid={Boolean(state.errors?.password)}
         />
@@ -52,7 +57,7 @@ export function AdminUserForm({ action }: AdminUserFormProps) {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="role">نقش *</Label>
-        <NativeSelect id="role" name="role" defaultValue="editor" required>
+        <NativeSelect id="role" name="role" defaultValue={field("role", "editor")} required>
           <option value="editor">ویرایشگر (editor) — مدیریت محتوا</option>
           <option value="owner">مالک (owner) — دسترسی کامل + مدیریت کاربران</option>
         </NativeSelect>

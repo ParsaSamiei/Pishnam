@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,15 +36,18 @@ interface CourseFormProps {
 const initialState: CourseFormState = { status: "idle" };
 
 export function CourseForm({ action, defaultValues, submitLabel }: CourseFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-3xl flex-col gap-6">
+    <form key={formKey} action={formAction} className="flex max-w-3xl flex-col gap-6">
       <ImageUploadField
         name="coverImage"
         label="تصویر شاخص"
         field="course.coverImage"
-        defaultValue={defaultValues?.coverImage}
+        defaultValue={field("coverImage", defaultValues?.coverImage)}
         required
         error={state.errors?.coverImage}
       />
@@ -57,7 +60,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             name="slug"
             dir="ltr"
             placeholder="rescue-line-basics"
-            defaultValue={defaultValues?.slug}
+            defaultValue={field("slug", defaultValues?.slug)}
             required
             aria-invalid={Boolean(state.errors?.slug)}
           />
@@ -68,7 +71,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
           <NativeSelect
             id="tier"
             name="tier"
-            defaultValue={defaultValues?.tier ?? TIERS[0]}
+            defaultValue={field("tier", defaultValues?.tier ?? TIERS[0])}
             required
           >
             {TIERS.map((tierValue) => (
@@ -88,7 +91,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             name="topicTags"
             dir="ltr"
             placeholder="electronics, rescue-line"
-            defaultValue={defaultValues?.topicTags.join(", ")}
+            defaultValue={field("topicTags", defaultValues?.topicTags.join(", "))}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -98,7 +101,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             name="order"
             type="number"
             min={0}
-            defaultValue={defaultValues?.order ?? 0}
+            defaultValue={field("order", defaultValues?.order ?? 0)}
           />
         </div>
       </div>
@@ -107,7 +110,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
         <input
           type="checkbox"
           name="active"
-          defaultChecked={defaultValues?.active ?? true}
+          defaultChecked={checked("active", defaultValues?.active ?? true)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش عمومی این دوره
@@ -121,7 +124,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             <Input
               id="titleFa"
               name="titleFa"
-              defaultValue={defaultValues?.titleFa}
+              defaultValue={field("titleFa", defaultValues?.titleFa)}
               required
               aria-invalid={Boolean(state.errors?.titleFa)}
             />
@@ -135,7 +138,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
               id="excerptFa"
               name="excerptFa"
               rows={2}
-              defaultValue={defaultValues?.excerptFa}
+              defaultValue={field("excerptFa", defaultValues?.excerptFa)}
               required
               aria-invalid={Boolean(state.errors?.excerptFa)}
             />
@@ -147,7 +150,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             <Label htmlFor="richtext-bodyFa">متن کامل دوره *</Label>
             <RichTextEditor
               name="bodyFa"
-              defaultValue={defaultValues?.bodyFa}
+              defaultValue={field("bodyFa", defaultValues?.bodyFa)}
               error={state.errors?.bodyFa}
             />
           </div>
@@ -157,7 +160,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
               id="prerequisitesFa"
               name="prerequisitesFa"
               rows={2}
-              defaultValue={defaultValues?.prerequisitesFa ?? ""}
+              defaultValue={field("prerequisitesFa", defaultValues?.prerequisitesFa ?? "")}
             />
           </div>
         </div>
@@ -171,7 +174,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             <Input
               id="titleEn"
               name="titleEn"
-              defaultValue={defaultValues?.titleEn}
+              defaultValue={field("titleEn", defaultValues?.titleEn)}
               required
               aria-invalid={Boolean(state.errors?.titleEn)}
             />
@@ -185,7 +188,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
               id="excerptEn"
               name="excerptEn"
               rows={2}
-              defaultValue={defaultValues?.excerptEn}
+              defaultValue={field("excerptEn", defaultValues?.excerptEn)}
               required
               aria-invalid={Boolean(state.errors?.excerptEn)}
             />
@@ -197,7 +200,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             <Label htmlFor="richtext-bodyEn">Full course body *</Label>
             <RichTextEditor
               name="bodyEn"
-              defaultValue={defaultValues?.bodyEn}
+              defaultValue={field("bodyEn", defaultValues?.bodyEn)}
               error={state.errors?.bodyEn}
             />
           </div>
@@ -207,7 +210,7 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
               id="prerequisitesEn"
               name="prerequisitesEn"
               rows={2}
-              defaultValue={defaultValues?.prerequisitesEn ?? ""}
+              defaultValue={field("prerequisitesEn", defaultValues?.prerequisitesEn ?? "")}
             />
           </div>
         </div>

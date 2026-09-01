@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,16 +32,19 @@ export function ClassSessionForm({
   defaultValues,
   submitLabel,
 }: ClassSessionFormProps) {
-  const [state, formAction, isPending] = useActionState(action, initialState);
+  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
+    action,
+    initialState,
+  );
 
   return (
-    <form action={formAction} className="flex max-w-xl flex-col gap-4">
+    <form key={formKey} action={formAction} className="flex max-w-xl flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="courseId">دوره *</Label>
         <NativeSelect
           id="courseId"
           name="courseId"
-          defaultValue={defaultValues?.courseId}
+          defaultValue={field("courseId", defaultValues?.courseId)}
           required
           aria-invalid={Boolean(state.errors?.courseId)}
         >
@@ -64,7 +67,7 @@ export function ClassSessionForm({
         <NativeSelect
           id="weekday"
           name="weekday"
-          defaultValue={defaultValues?.weekday ?? 0}
+          defaultValue={field("weekday", defaultValues?.weekday ?? 0)}
           required
         >
           {WEEKDAY_LABELS.fa.map((label, index) => (
@@ -83,7 +86,7 @@ export function ClassSessionForm({
             name="startTime"
             type="time"
             dir="ltr"
-            defaultValue={defaultValues?.startTime}
+            defaultValue={field("startTime", defaultValues?.startTime)}
             required
             aria-invalid={Boolean(state.errors?.startTime)}
           />
@@ -98,7 +101,7 @@ export function ClassSessionForm({
             name="endTime"
             type="time"
             dir="ltr"
-            defaultValue={defaultValues?.endTime}
+            defaultValue={field("endTime", defaultValues?.endTime)}
             required
             aria-invalid={Boolean(state.errors?.endTime)}
           />
@@ -113,7 +116,7 @@ export function ClassSessionForm({
         <Input
           id="location"
           name="location"
-          defaultValue={defaultValues?.location}
+          defaultValue={field("location", defaultValues?.location)}
           required
           aria-invalid={Boolean(state.errors?.location)}
         />
@@ -128,7 +131,7 @@ export function ClassSessionForm({
           id="capacityNote"
           name="capacityNote"
           placeholder="۲ جای خالی باقی مانده"
-          defaultValue={defaultValues?.capacityNote ?? ""}
+          defaultValue={field("capacityNote", defaultValues?.capacityNote ?? "")}
         />
       </div>
 
@@ -136,7 +139,7 @@ export function ClassSessionForm({
         <input
           type="checkbox"
           name="active"
-          defaultChecked={defaultValues?.active ?? true}
+          defaultChecked={checked("active", defaultValues?.active ?? true)}
           className="border-border accent-pishnam-gold-500 size-4 rounded"
         />
         نمایش در برنامه عمومی

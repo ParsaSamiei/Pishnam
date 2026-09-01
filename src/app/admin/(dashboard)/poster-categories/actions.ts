@@ -4,12 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { posterCategorySchema } from "@/lib/validation/poster-category";
-import { requireAdminSession, firstErrorPerField } from "@/lib/actions/admin-guard";
+import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { AdminFormState, formActionError } from "@/lib/form-state";
 
-export interface PosterCategoryFormState {
-  status: "idle" | "error";
-  errors?: Record<string, string>;
-}
+export type PosterCategoryFormState = AdminFormState;
 
 function revalidatePosterCategoryPages() {
   revalidatePath("/admin/poster-categories");
@@ -26,7 +24,7 @@ export async function createPosterCategory(
 
   const parsed = posterCategorySchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const slugTaken = await prisma.posterCategory.findUnique({
@@ -38,7 +36,7 @@ export async function createPosterCategory(
     },
   });
   if (slugTaken) {
-    return { status: "error", errors: { slug: "این نامک در این لیگ قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک در این لیگ قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.posterCategory.create({ data: parsed.data });
@@ -56,7 +54,7 @@ export async function updatePosterCategory(
 
   const parsed = posterCategorySchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", errors: firstErrorPerField(parsed.error.issues) };
+    return formErrorFromIssues(parsed.error.issues, formData);
   }
 
   const slugOwner = await prisma.posterCategory.findUnique({
@@ -68,7 +66,7 @@ export async function updatePosterCategory(
     },
   });
   if (slugOwner && slugOwner.id !== id) {
-    return { status: "error", errors: { slug: "این نامک در این لیگ قبلاً استفاده شده است." } };
+    return formActionError({ slug: "این نامک در این لیگ قبلاً استفاده شده است." }, formData);
   }
 
   await prisma.posterCategory.update({ where: { id }, data: parsed.data });

@@ -2,14 +2,15 @@
 
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { leadFormSchema } from "@/lib/validation/lead";
+import { createLeadFormSchema, type LeadFormLocale } from "@/lib/validation/lead";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  formActionError,
+  formActionErrorWithMessage,
+  type PreservedFormState,
+} from "@/lib/form-state";
 
-export interface SubmitLeadState {
-  status: "idle" | "success" | "error";
-  errors?: Record<string, string>;
-  message?: string;
-}
+export type SubmitLeadState = PreservedFormState;
 
 const METADATA_PREFIX = "metadata.";
 
@@ -25,7 +26,9 @@ export async function submitLead(
     return { status: "success" };
   }
 
-  const parsed = leadFormSchema.safeParse({
+  const locale: LeadFormLocale = formData.get("locale") === "en" ? "en" : "fa";
+
+  const parsed = createLeadFormSchema(locale).safeParse({
     type: formData.get("type"),
     name: formData.get("name"),
     phone: formData.get("phone"),
@@ -39,16 +42,18 @@ export async function submitLead(
       const key = String(issue.path[0] ?? "form");
       if (!errors[key]) errors[key] = issue.message;
     }
-    return { status: "error", errors };
+    return formActionError(errors, formData);
   }
 
   const ip = getClientIp(await headers());
   const limitResult = rateLimit(`lead:${parsed.data.type}:${ip}`, 5, 10 * 60 * 1000);
   if (!limitResult.success) {
-    return {
-      status: "error",
-      message: "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید.",
-    };
+    return formActionErrorWithMessage(
+      locale === "fa"
+        ? "تعداد درخواست‌های شما بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید."
+        : "Too many requests. Please try again in a few minutes.",
+      formData,
+    );
   }
 
   // Variant-specific extra fields (e.g. metadata.courseSlug, metadata.tier,

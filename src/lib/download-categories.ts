@@ -28,17 +28,21 @@ export const POSTERS_DOWNLOAD_TILE = {
   labelEn: "Competition Posters",
 } as const;
 
-// Mirrors `enum DownloadCategory` in prisma/schema.prisma. URL slugs are
-// kebab-case per docs/02-information-architecture.md
-// ("/downloads/[category]").
+// Datasheets used to be a flat DownloadResource category. They now have their
+// own DatasheetPart model (family + optional variants, each with a page of
+// docs/video/photos/code) -- see src/app/[locale]/downloads/datasheets/.
+export const DATASHEETS_DOWNLOAD_TILE = {
+  slug: "datasheets",
+  value: "DATASHEETS",
+  icon: FileText,
+  labelFa: "دیتاشیت و مستندات فنی",
+  labelEn: "Datasheets & Docs",
+} as const;
+
+// Mirrors the remaining flat values of `enum DownloadCategory` in
+// prisma/schema.prisma. URL slugs are kebab-case per
+// docs/02-information-architecture.md ("/downloads/[category]").
 export const DOWNLOAD_CATEGORIES = [
-  {
-    slug: "datasheets",
-    value: "DATASHEETS",
-    icon: FileText,
-    labelFa: "دیتاشیت و مستندات فنی",
-    labelEn: "Datasheets & Docs",
-  },
   {
     slug: "books",
     value: "BOOKS",
@@ -61,6 +65,12 @@ export const DOWNLOAD_CATEGORIES = [
   labelEn: string;
 }[];
 
+/** Leftover DATASHEETS rows in /admin/downloads until they are deleted. */
+export const ADMIN_DOWNLOAD_CATEGORIES = [
+  DATASHEETS_DOWNLOAD_TILE,
+  ...DOWNLOAD_CATEGORIES,
+] as const;
+
 export type DownloadCategorySlug = (typeof DOWNLOAD_CATEGORIES)[number]["slug"];
 
 export function getDownloadCategory(slug: string) {
@@ -68,7 +78,9 @@ export function getDownloadCategory(slug: string) {
 }
 
 export function downloadCategoryLabel(slug: string, locale: AppLocale): string {
-  const category = getDownloadCategory(slug);
+  const category =
+    getDownloadCategory(slug) ??
+    ADMIN_DOWNLOAD_CATEGORIES.find((entry) => entry.slug === slug || entry.value === slug);
   if (!category) return slug;
   return locale === "fa" ? category.labelFa : category.labelEn;
 }

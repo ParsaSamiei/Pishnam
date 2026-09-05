@@ -25,6 +25,7 @@ import {
   ImageIcon,
   Camera,
   LayoutGrid,
+  CircuitBoard,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -56,6 +57,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/videos", label: "ویدیوها", icon: Video },
   { href: "/admin/software", label: "نرم‌افزار و افزونه‌ها", icon: Package },
   { href: "/admin/software-releases", label: "فایل‌های نرم‌افزار", icon: FileArchive },
+  { href: "/admin/datasheets", label: "دیتاشیت و قطعات", icon: CircuitBoard },
   { href: "/admin/competitions", label: "مسابقات", icon: Medal },
   { href: "/admin/leagues", label: "لیگ‌ها", icon: Layers },
   { href: "/admin/poster-categories", label: "دسته‌بندی پوستر", icon: Tags },

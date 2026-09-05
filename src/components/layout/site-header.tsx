@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -15,6 +15,7 @@ import { useIsRtl } from "@/components/motion/use-is-rtl";
 import { DURATION, EASE_OUT, SPRING, directionSign } from "@/lib/motion";
 import { LanguageSwitch } from "./language-switch";
 import { ThemeToggle } from "./theme-toggle";
+import { SiteSearch } from "@/components/search/site-search";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -49,6 +50,7 @@ export function SiteHeader() {
   const tBrand = useTranslations("brand");
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const scrolled = useScrolledPast(80);
   const reduced = useReducedMotionSafe();
   const isRtl = useIsRtl();
@@ -129,14 +131,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={t("search")}
-            className={cn("hidden sm:inline-flex", headerControlClass)}
-          >
-            <Search aria-hidden="true" />
-          </Button>
+          <SiteSearch
+            triggerClassName={headerControlClass}
+            open={searchOpen}
+            onOpenChange={setSearchOpen}
+          />
           <ThemeToggle className={headerControlClass} />
           <LanguageSwitch className={headerControlClass} />
           <Button asChild size="sm" className="hidden sm:inline-flex">
@@ -220,6 +219,16 @@ export function SiteHeader() {
                         </a>
                       ))} */}
                     {/* </div> */}
+                    <button
+                      type="button"
+                      className={cn(headerNavLinkClass, "cursor-pointer py-3 text-start text-base")}
+                      onClick={() => {
+                        setMobileOpen(false);
+                        window.setTimeout(() => setSearchOpen(true), 200);
+                      }}
+                    >
+                      {t("search")}
+                    </button>
                     <Button asChild size="lg" className="mt-4">
                       <Link href="/enroll" onClick={() => setMobileOpen(false)}>
                         {t("enroll")}

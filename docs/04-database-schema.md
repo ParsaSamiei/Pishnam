@@ -31,6 +31,11 @@ enum Tier {
   COMPETITIVE  // پیشرفته / تیم مسابقات
 }
 
+enum AchievementScope {
+  NATIONAL       // کشوری
+  INTERNATIONAL  // جهانی
+}
+
 enum LeadType {
   ENROLL
   CLASS_SEAT
@@ -50,7 +55,7 @@ enum DownloadCategory {
   // SOFTWARE used to live here; it now has its own SoftwareProduct/
   // SoftwareRelease models below (see there for why).
   // POSTERS moved to CompetitionPoster under Competition → League → PosterCategory.
-  DATASHEETS            // دیتاشیت و مستندات فنی
+  DATASHEETS            // leftover flat rows; public pages now use DatasheetPart
   BOOKS                 // کتاب و منابع آموزشی
   COMPONENT_LIBRARIES   // کتابخانه قطعات CAD (merges former SolidWorks/Altium categories)
 }
@@ -148,16 +153,17 @@ model ClassSession { // confirmed for v1
 }
 
 model Achievement {
-  id            String   @id @default(cuid())
+  id            String           @id @default(cuid())
   titleFa       String
   titleEn       String
-  competition   String   // e.g. "RoboCup"
+  competition   String           // e.g. "RoboCup"
   year          Int
-  result        String   // e.g. "1st place, Rescue Line"
+  result        String           // e.g. "1st place, Rescue Line"
   photo         String
-  courses       Course[] @relation("CourseAchievements")
-  featured      Boolean  @default(false)
-  createdAt     DateTime @default(now())
+  scope         AchievementScope @default(NATIONAL)
+  courses       Course[]         @relation("CourseAchievements")
+  featured      Boolean          @default(false)
+  createdAt     DateTime         @default(now())
 }
 
 model TeamMember {
@@ -312,6 +318,94 @@ model SoftwareRelease {
   createdAt     DateTime         @default(now())
 }
 
+// A hardware part or part-family in Datasheets & Docs (e.g. "LCD", "SRF05").
+// Public: /downloads/datasheets, /downloads/datasheets/[slug],
+// /downloads/datasheets/[slug]/[variant]. A part with no children is a
+// stand-alone module (full content on its own page). A part with children
+// is a family; each variant has its own content page. Nesting is two levels.
+model DatasheetPart {
+  id       String  @id @default(cuid())
+  slug     String
+  parentId String?
+  parent   DatasheetPart?  @relation("DatasheetTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children DatasheetPart[] @relation("DatasheetTree")
+  image     String
+  titleFa   String
+  titleEn   String
+  excerptFa String?
+  excerptEn String?
+  bodyFa    String? // rich text HTML
+  bodyEn    String?
+  order     Int     @default(0)
+  active    Boolean @default(true)
+  documents   DatasheetDocument[]
+  videos      DatasheetVideo[]
+  images      DatasheetImage[]
+  codeSamples DatasheetCodeSample[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DatasheetDocument {
+  id            String         @id @default(cuid())
+  part          DatasheetPart  @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId        String
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  source        ResourceSource
+  fileUrl       String
+  fileSizeBytes Int?
+  order         Int            @default(0)
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+}
+
+model DatasheetVideo {
+  id          String        @id @default(cuid())
+  part        DatasheetPart @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId      String
+  titleFa     String
+  titleEn     String
+  aparatUrl   String?
+  hostedVideo String?
+  thumbnail   String?
+  order       Int           @default(0)
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+}
+
+model DatasheetImage {
+  id        String        @id @default(cuid())
+  part      DatasheetPart @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId    String
+  image     String
+  captionFa String?
+  captionEn String?
+  order     Int           @default(0)
+  active    Boolean       @default(true)
+  createdAt DateTime      @default(now())
+}
+
+model DatasheetCodeSample {
+  id            String          @id @default(cuid())
+  part          DatasheetPart   @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId        String
+  titleFa       String
+  titleEn       String
+  language      String
+  code          String          @default("")
+  notesFa       String?
+  notesEn       String?
+  source        ResourceSource?
+  fileUrl       String?
+  fileSizeBytes Int?
+  order         Int             @default(0)
+  active        Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+}
+
 model Article {
   id           String   @id @default(cuid())
   slug         String   @unique
@@ -427,6 +521,12 @@ model HeroSlide {
   a picture and its own page) and one `SoftwareRelease` row per platform/version under it (e.g.
   Windows + macOS builds of the same app). This is the one download-center category that isn't a
   flat DownloadResource list, because a single row can't represent "one product, several files."
+- **Datasheets & Docs is a two-level part catalog** — `DatasheetPart` is either a stand-alone
+  module (SRF05) or a family (LCD) with variant children. Each leaf page can hold rich text, PDFs,
+  videos, a photo gallery, and example code (inline snippet and/or a downloadable file). Public
+  routes are `/downloads/datasheets`, `/downloads/datasheets/[slug]`, and
+  `/downloads/datasheets/[slug]/[variant]`. Leftover flat `DownloadResource` rows with
+  `category = DATASHEETS` stay editable in `/admin/downloads` until deleted.
 - **Search**: if/when free-text site search is added, use Postgres `tsvector` columns on
   `CourseTranslation`, `ArticleTranslation`, `Faq` rather than adding a new service.
 - **Contact details are a settings singleton** — `ContactSettings` is one row (`id = "default"`),

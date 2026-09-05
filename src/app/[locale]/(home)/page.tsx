@@ -65,12 +65,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <DownloadsTeaserSection />
         <MediaMentionsSection />
       </ScrollSpine>
-      <div className="fixed inset-e-4 bottom-6 z-30 flex flex-col items-center gap-3 sm:inset-e-6">
+      <div className="fixed inset-e-4 bottom-6 z-30 sm:inset-e-6">
         <FloatingContactButton
           address={address}
           phones={contact?.phones ?? []}
           socialLinks={socialLinks}
         />
+      </div>
+      <div className="fixed inset-s-4 bottom-6 z-30 sm:inset-s-6">
         <ScrollToTopButton />
       </div>
     </>

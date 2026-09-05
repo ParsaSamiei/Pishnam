@@ -51,6 +51,10 @@ One admin section per content type from the schema:
 - Software files (`SoftwareRelease`) — one row per platform/version under a product: pick the
   product from a dropdown, pick a platform (Windows/macOS/Linux/Web/Android/iOS/Other), a version
   label, and the same upload-or-external-link toggle as download resources, plus per-release notes.
+- Datasheet parts (`DatasheetPart`) — cover picture, slug, FA/EN title/excerpt/body, active/order.
+  A part can stand alone or list variants. Nested on the same form: PDFs, videos (Aparat or
+  hosted), photo gallery, and example code (inline + optional file). Variants are added from the
+  parent edit page. Public pages live under `/downloads/datasheets`.
 - Blog articles (+ FA/EN translations)
 - Job postings
 - **Leads** (all form submissions — enroll, sponsor, school, job, general contact) with status

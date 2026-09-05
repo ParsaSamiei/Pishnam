@@ -52,6 +52,7 @@ function TeamMemberGrid({
             alumniLabel={isFa ? "عضو پیشین" : "Former member"}
             learnMoreLabel={isFa ? "بیشتر بدانید" : "Learn more"}
             downloadResumeLabel={isFa ? "دانلود رزومه" : "Download resume"}
+            printLabel={isFa ? "چاپ" : "Print"}
           />
         );
       })}

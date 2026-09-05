@@ -68,6 +68,16 @@ export const UPLOAD_POLICIES = {
     allowedMimeTypes: DOWNLOAD_CENTER_MIME_TYPES,
     maxBytes: 20 * 1024 * 1024,
   },
+  "datasheet.code": {
+    kind: "document",
+    allowedMimeTypes: [
+      "text/plain",
+      "application/zip",
+      "application/x-rar-compressed",
+      "application/x-7z-compressed",
+    ],
+    maxBytes: 5 * 1024 * 1024,
+  },
   "download.book": {
     kind: "document",
     allowedMimeTypes: DOWNLOAD_CENTER_MIME_TYPES,
@@ -136,3 +146,6 @@ export const VIDEO_ACCEPT = UPLOAD_POLICIES["course.video"].allowedMimeTypes
 
 /** Browser `accept` for course-related document uploads. */
 export const COURSE_DOCUMENT_ACCEPT = ".pdf,.zip,.rar,.7z,.epub,.txt,.jpg,.jpeg,.png";
+
+/** Browser `accept` for datasheet example-code file uploads. */
+export const DATASHEET_CODE_ACCEPT = ".ino,.c,.cpp,.h,.hpp,.py,.txt,.zip,.rar,.7z";

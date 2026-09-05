@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
+import { NativeSelect } from "@/components/ui/native-select";
+import { ACHIEVEMENT_SCOPES, ACHIEVEMENT_SCOPE_LABELS } from "@/lib/achievement-scope";
 import type { AchievementFormState } from "@/app/admin/(dashboard)/achievements/actions";
 
 interface AchievementFormProps {
@@ -17,6 +19,7 @@ interface AchievementFormProps {
     year: number;
     result: string;
     photo: string;
+    scope: string;
     featured: boolean;
   };
   submitLabel: string;
@@ -102,19 +105,40 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
         </div>
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="result">نتیجه *</Label>
-        <Input
-          id="result"
-          name="result"
-          placeholder="مقام اول، لیگ Rescue Line"
-          defaultValue={field("result", defaultValues?.result)}
-          required
-          aria-invalid={Boolean(state.errors?.result)}
-        />
-        {state.errors?.result && (
-          <p className="text-pishnam-danger text-xs">{state.errors.result}</p>
-        )}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="result">نتیجه *</Label>
+          <Input
+            id="result"
+            name="result"
+            placeholder="مقام اول، لیگ Rescue Line"
+            defaultValue={field("result", defaultValues?.result)}
+            required
+            aria-invalid={Boolean(state.errors?.result)}
+          />
+          {state.errors?.result && (
+            <p className="text-pishnam-danger text-xs">{state.errors.result}</p>
+          )}
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="scope">سطح مسابقه *</Label>
+          <NativeSelect
+            id="scope"
+            name="scope"
+            defaultValue={field("scope", defaultValues?.scope ?? "NATIONAL")}
+            required
+            aria-invalid={Boolean(state.errors?.scope)}
+          >
+            {ACHIEVEMENT_SCOPES.map((scopeValue) => (
+              <option key={scopeValue} value={scopeValue}>
+                {ACHIEVEMENT_SCOPE_LABELS.fa[scopeValue]}
+              </option>
+            ))}
+          </NativeSelect>
+          {state.errors?.scope && (
+            <p className="text-pishnam-danger text-xs">{state.errors.scope}</p>
+          )}
+        </div>
       </div>
 
       <label className="text-text-primary flex items-center gap-2 text-sm">

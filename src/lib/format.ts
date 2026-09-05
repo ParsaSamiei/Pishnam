@@ -33,7 +33,7 @@ export function formatWeekday(weekday: number, locale: AppLocale): string {
 
 /** File extensions allowed in the download center (see upload-policies.ts). */
 const DIRECT_DOWNLOAD_EXTENSION =
-  /\.(zip|rar|7z|tar|gz|bz2|xz|dmg|exe|apk|pdf|epub|txt|jpe?g|png)$/i;
+  /\.(zip|rar|7z|tar|gz|bz2|xz|dmg|exe|apk|pdf|epub|txt|ino|c|cpp|h|hpp|py|jpe?g|png)$/i;
 
 /**
  * True when the URL points at a downloadable file rather than a web page.

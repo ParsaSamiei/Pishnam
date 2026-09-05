@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { FileUploadField } from "@/components/admin/file-upload-field";
-import { DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
+import { ADMIN_DOWNLOAD_CATEGORIES } from "@/lib/download-categories";
 import { DOWNLOAD_ACCEPT, type UploadPolicyKey } from "@/lib/upload-policies";
 import type { DownloadResourceFormState } from "@/app/admin/(dashboard)/downloads/actions";
 
@@ -92,7 +92,7 @@ function DownloadResourceFormFields({
             required
             aria-invalid={Boolean(state.errors?.target)}
           >
-            {DOWNLOAD_CATEGORIES.map((cat) => (
+            {ADMIN_DOWNLOAD_CATEGORIES.map((cat) => (
               <option key={cat.value} value={cat.value}>
                 {cat.labelFa}
               </option>

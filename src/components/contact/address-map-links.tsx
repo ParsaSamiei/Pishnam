@@ -1,7 +1,7 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { MapProviderIcon } from "@/components/contact/map-provider-icon";
 import {
   MAP_PROVIDERS,
   PISHNAM_MAP_SEARCH_QUERY,
@@ -53,10 +53,10 @@ export function AddressMapLinks({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${t("openIn", { service: label })} (${tNav("opensInNewTab")})`}
-                className="hover:text-pishnam-gold-500 inline-flex cursor-pointer items-center gap-1 text-xs opacity-80 transition-colors duration-200 hover:opacity-100"
+                className="hover:text-pishnam-gold-500 inline-flex cursor-pointer items-center gap-1.5 text-xs opacity-90 transition-colors duration-200 hover:opacity-100"
               >
+                <MapProviderIcon provider={provider} />
                 <span>{label}</span>
-                <ExternalLink className="size-3 shrink-0 opacity-60" aria-hidden="true" />
               </a>
             </li>
           );

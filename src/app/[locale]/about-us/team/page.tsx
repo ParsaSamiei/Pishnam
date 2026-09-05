@@ -50,7 +50,7 @@ function TeamMemberGrid({
             collaborationStartLabel={collaborationStartLabel}
             isAlumni={member.isAlumni}
             alumniLabel={isFa ? "عضو پیشین" : "Former member"}
-            viewProfileLabel={isFa ? `مشاهده ${name}` : `View ${name}`}
+            learnMoreLabel={isFa ? "بیشتر بدانید" : "Learn more"}
             downloadResumeLabel={isFa ? "دانلود رزومه" : "Download resume"}
           />
         );

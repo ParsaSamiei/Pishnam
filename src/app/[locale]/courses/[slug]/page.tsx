@@ -13,6 +13,10 @@ import { RichText } from "@/components/rich-text";
 import { AchievementCard } from "@/components/home/achievement-card";
 import { VideoEmbedCard } from "@/components/home/video-embed-card";
 import { HostedVideoPlayer } from "@/components/courses/hosted-video-player";
+import { CourseLearningOutcomes } from "@/components/courses/course-learning-outcomes";
+import { CoursePastResults } from "@/components/courses/course-past-results";
+import { CourseDocuments } from "@/components/courses/course-documents";
+import { CoursePhotos } from "@/components/courses/course-photos";
 import { JsonLd } from "@/components/json-ld";
 
 async function getCourse(slug: string, locale: AppLocale) {
@@ -21,6 +25,14 @@ async function getCourse(slug: string, locale: AppLocale) {
     include: {
       translations: { where: { locale } },
       achievements: { orderBy: { year: "desc" }, take: 4 },
+      documents: {
+        where: { active: true },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+      },
+      images: {
+        where: { active: true },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+      },
     },
   });
 }
@@ -71,6 +83,25 @@ export default async function CourseDetailPage({
   if (!course || !translation) {
     notFound();
   }
+
+  const documents = course.documents.map((doc) => ({
+    id: doc.id,
+    title: pickLocaleField(doc.titleFa, doc.titleEn, appLocale),
+    description: pickLocaleField(doc.descriptionFa, doc.descriptionEn, appLocale),
+    fileUrl: doc.fileUrl,
+    source: doc.source,
+    fileSizeBytes: doc.fileSizeBytes,
+  }));
+
+  const photos = course.images.map((img) => {
+    const caption = pickLocaleField(img.captionFa, img.captionEn, appLocale);
+    return {
+      id: img.id,
+      image: img.image,
+      caption,
+      alt: caption || translation.title,
+    };
+  });
 
   return (
     <>
@@ -134,6 +165,11 @@ export default async function CourseDetailPage({
 
           <RichText html={translation.body} />
 
+          <CourseLearningOutcomes
+            outcomes={translation.learningOutcomes}
+            title={isFa ? "آنچه در این دوره به‌دست می‌آورید" : "What you will achieve"}
+          />
+
           {translation.prerequisites && (
             <div className="border-border bg-bg-surface-alt mt-6 rounded-lg border p-4">
               <h2 className="text-text-primary text-sm font-bold">
@@ -144,6 +180,21 @@ export default async function CourseDetailPage({
               </p>
             </div>
           )}
+
+          <CoursePastResults
+            text={translation.pastResults ?? ""}
+            eyebrow={isFa ? "کارنامه دوره" : "Track record"}
+            title={isFa ? "نتایج سال‌های گذشته" : "Results from previous years"}
+          />
+
+          <CoursePhotos photos={photos} title={isFa ? "گالری دوره" : "Course gallery"} />
+
+          <CourseDocuments
+            documents={documents}
+            title={isFa ? "اسناد مرتبط" : "Related documents"}
+            downloadLabel={isFa ? "دانلود" : "Download"}
+            openLabel={isFa ? "باز کردن" : "Open"}
+          />
 
           {course.achievements.length > 0 && (
             <div className="mt-10">

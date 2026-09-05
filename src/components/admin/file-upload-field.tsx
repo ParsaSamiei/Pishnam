@@ -92,7 +92,10 @@ export function FileUploadField({
           </span>
           <button
             type="button"
-            onClick={() => setValue("")}
+            onClick={() => {
+              setValue("");
+              onUploaded?.({ relativePath: "", sizeBytes: 0 });
+            }}
             className="text-text-secondary hover:bg-bg-surface hover:text-pishnam-danger flex size-7 shrink-0 items-center justify-center rounded-full"
             aria-label="حذف فایل"
           >

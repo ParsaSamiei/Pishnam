@@ -102,6 +102,8 @@ model Course {
   translations  CourseTranslation[]
   classSessions ClassSession[]
   achievements  Achievement[]       @relation("CourseAchievements")
+  documents     CourseDocument[]
+  images        CourseImage[]
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
 
@@ -110,16 +112,57 @@ model Course {
 }
 
 model CourseTranslation {
-  id            String  @id @default(cuid())
-  course        Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId      String
-  locale        Locale
-  title         String
-  excerpt       String
-  body          String // rich text (stored as HTML string from Tiptap)
-  prerequisites String?
+  id               String   @id @default(cuid())
+  course           Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId         String
+  locale           Locale
+  title            String
+  excerpt          String
+  body             String // rich text (stored as HTML string from Tiptap)
+  prerequisites    String?
+  // Optional free-text track record of past years' results for this course.
+  pastResults      String?
+  // Optional checklist of what a student will gain (one item per array entry).
+  learningOutcomes String[] @default([])
 
   @@unique([courseId, locale])
+}
+
+// Course-specific attachments (syllabus PDFs, worksheets, etc.) -- separate from
+// the global download center so they only appear on the course detail page.
+model CourseDocument {
+  id            String         @id @default(cuid())
+  course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId      String
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  source        ResourceSource @default(HOSTED)
+  fileUrl       String
+  fileSizeBytes Int?
+  order         Int            @default(0)
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+
+  @@index([courseId, order])
+  @@index([active])
+}
+
+// Optional photo gallery for a course detail page (class moments, projects, etc.).
+model CourseImage {
+  id        String   @id @default(cuid())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
+  image     String
+  captionFa String?
+  captionEn String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([courseId, order])
+  @@index([active])
 }
 
 model ClassSession {

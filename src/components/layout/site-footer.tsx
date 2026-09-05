@@ -86,7 +86,7 @@ export async function SiteFooter() {
             <AddressMapLinks
               address={address}
               className="mt-3 max-w-sm"
-              addressClassName="text-pishnam-off-white/60 hover:text-pishnam-gold-500 text-sm leading-snug transition-colors duration-200"
+              addressClassName="text-pishnam-off-white/60 text-sm leading-snug"
               icon={<MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />}
             />
           ) : null}

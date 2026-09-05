@@ -50,42 +50,32 @@ export function FloatingContactButton({
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={t("floatingContact.open")}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={() => setOpen(true)}
-        className={cn(
-          "group flex cursor-pointer flex-col items-center gap-2",
-          "border-0 bg-transparent p-0",
-          "focus-visible:ring-pishnam-gold-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
-        )}
-      >
-        <div className={cn(!reduced && "animate-contact-label-bounce")}>
-          <div className="relative">
-            <span className="bg-pishnam-gold-500 text-pishnam-navy-900 block rounded-full px-4 py-1.5 text-sm font-semibold whitespace-nowrap shadow-[0_4px_14px_rgb(0_0_0_/_0.14)]">
-              {t("floatingContact.open")}
-            </span>
-            <span
-              aria-hidden="true"
-              className="border-t-pishnam-gold-500 absolute start-1/2 -bottom-1.5 size-0 -translate-x-1/2 border-x-[7px] border-t-[8px] border-x-transparent"
-            />
-          </div>
-        </div>
-
-        <span className="relative flex size-14 items-center justify-center">
-          {!reduced ? (
-            <span
-              aria-hidden="true"
-              className="bg-pishnam-gold-500/35 animate-contact-pulse-ring absolute inset-0 rounded-full"
-            />
-          ) : null}
-          <span className="bg-pishnam-gold-500 group-hover:bg-pishnam-gold-600 relative flex size-14 items-center justify-center rounded-full shadow-[0_4px_16px_rgb(230_168_23_/_0.35)] transition-colors duration-200">
-            <MessageCircle aria-hidden="true" className="text-pishnam-navy-900 size-6" />
+      <span className="relative flex size-14 shrink-0 items-center justify-center">
+        {!reduced ? (
+          <span
+            aria-hidden="true"
+            className="animate-contact-pulse-ring bg-pishnam-gold-500/70 pointer-events-none absolute inset-0 rounded-full"
+          />
+        ) : null}
+        <button
+          type="button"
+          aria-label={t("floatingContact.open")}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          onClick={() => setOpen(true)}
+          className={cn(
+            "relative flex size-14 cursor-pointer flex-col items-center justify-center gap-0.5 overflow-hidden rounded-full border-0 p-1",
+            "bg-pishnam-gold-500 text-pishnam-navy-900 shadow-[0_4px_16px_rgb(230_168_23_/_0.35)]",
+            "hover:bg-pishnam-gold-600 transition-colors duration-200",
+            "focus-visible:ring-pishnam-gold-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+          )}
+        >
+          <MessageCircle aria-hidden="true" className="size-4 shrink-0" />
+          <span className="px-0.5 text-center text-[9px] leading-[1.05] font-semibold">
+            {t("floatingContact.open")}
           </span>
-        </span>
-      </button>
+        </button>
+      </span>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
@@ -107,7 +97,7 @@ export function FloatingContactButton({
                   </p>
                   <AddressMapLinks
                     address={address}
-                    addressClassName="text-text-secondary hover:text-pishnam-gold-600 mt-1 block text-sm leading-snug transition-colors duration-200"
+                    addressClassName="text-text-secondary mt-1 text-sm leading-snug"
                   />
                 </div>
               </div>

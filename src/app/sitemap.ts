@@ -17,6 +17,7 @@ const STATIC_PATHS = [
   "/videos",
   "/downloads",
   "/downloads/software",
+  "/downloads/datasheets",
   "/downloads/posters",
   "/blog",
   "/sponsors",
@@ -55,24 +56,34 @@ function buildEntry(path: string, lastModified?: Date): MetadataRoute.Sitemap[nu
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [courses, articles, softwareProducts, downloadSections] = await Promise.all([
-    prisma.course.findMany({
-      where: { active: true },
-      select: { slug: true, updatedAt: true },
-    }),
-    prisma.article.findMany({
-      where: { publishedAt: { lte: new Date() } },
-      select: { slug: true, publishedAt: true },
-    }),
-    prisma.softwareProduct.findMany({
-      where: { active: true },
-      select: { slug: true, updatedAt: true },
-    }),
-    prisma.downloadSection.findMany({
-      where: { active: true },
-      select: { slug: true, sectionType: true, updatedAt: true },
-    }),
-  ]);
+  const [courses, articles, softwareProducts, datasheetParts, downloadSections] = await Promise.all(
+    [
+      prisma.course.findMany({
+        where: { active: true },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.article.findMany({
+        where: { publishedAt: { lte: new Date() } },
+        select: { slug: true, publishedAt: true },
+      }),
+      prisma.softwareProduct.findMany({
+        where: { active: true },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.datasheetPart.findMany({
+        where: { active: true },
+        select: {
+          slug: true,
+          updatedAt: true,
+          parent: { select: { slug: true } },
+        },
+      }),
+      prisma.downloadSection.findMany({
+        where: { active: true },
+        select: { slug: true, sectionType: true, updatedAt: true },
+      }),
+    ],
+  );
 
   const activeDownloadPaths = downloadSections.map(
     (section) => `/downloads/${resolveDownloadSectionSlug(section)}`,
@@ -85,6 +96,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...articles.map((article) => buildEntry(`/blog/${article.slug}`, article.publishedAt)),
     ...softwareProducts.map((product) =>
       buildEntry(`/downloads/software/${product.slug}`, product.updatedAt),
+    ),
+    ...datasheetParts.map((part) =>
+      buildEntry(
+        part.parent
+          ? `/downloads/datasheets/${part.parent.slug}/${part.slug}`
+          : `/downloads/datasheets/${part.slug}`,
+        part.updatedAt,
+      ),
     ),
   ];
 

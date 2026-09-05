@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { ACHIEVEMENT_SCOPE_LABELS } from "@/lib/achievement-scope";
 import { AnimatedLink } from "@/components/motion/animated-link";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
@@ -53,6 +54,7 @@ export async function AchievementsHighlight() {
                 year={achievement.year}
                 result={achievement.result}
                 photo={achievement.photo}
+                scopeLabel={ACHIEVEMENT_SCOPE_LABELS[locale][achievement.scope]}
               />
             </StaggerItem>
           ))}

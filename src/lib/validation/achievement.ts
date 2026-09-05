@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ACHIEVEMENT_SCOPES } from "@/lib/achievement-scope";
 
 export const achievementSchema = z.object({
   titleFa: z.string().trim().min(2, "عنوان فارسی الزامی است.").max(200),
@@ -11,6 +12,7 @@ export const achievementSchema = z.object({
     .max(2100, "سال معتبر نیست."),
   result: z.string().trim().min(2, "نتیجه الزامی است.").max(200),
   photo: z.string().trim().min(1, "تصویر الزامی است."),
+  scope: z.enum(ACHIEVEMENT_SCOPES, { message: "سطح مسابقه الزامی است." }),
   featured: z.coerce.boolean(),
 });
 

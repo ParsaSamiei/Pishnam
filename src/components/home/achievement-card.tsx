@@ -12,9 +12,17 @@ interface AchievementCardProps {
   year: number;
   result: string;
   photo: string;
+  scopeLabel: string;
 }
 
-export function AchievementCard({ title, competition, year, result, photo }: AchievementCardProps) {
+export function AchievementCard({
+  title,
+  competition,
+  year,
+  result,
+  photo,
+  scopeLabel,
+}: AchievementCardProps) {
   return (
     // Lift without tilt, for the same reason as the download tiles: these sit
     // four across, and four photos tipping on their own axes reads as noise.
@@ -38,6 +46,9 @@ export function AchievementCard({ title, competition, year, result, photo }: Ach
           <Pop className="bg-pishnam-gold-500 text-pishnam-navy-900 absolute start-3 top-3 rounded-full px-2.5 py-1 text-xs font-bold">
             {year}
           </Pop>
+          <span className="bg-pishnam-navy-900/85 text-pishnam-off-white absolute end-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap">
+            {scopeLabel}
+          </span>
         </div>
         <CardContent className="p-4">
           <p className="text-pishnam-steel-600 text-xs font-semibold tracking-wide uppercase">

@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { ACHIEVEMENT_SCOPE_LABELS } from "@/lib/achievement-scope";
 import { PageHeader } from "@/components/layout/page-header";
 import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
 import { AchievementCard } from "@/components/home/achievement-card";
@@ -60,6 +61,7 @@ export default async function SponsorsPage({ params }: { params: Promise<{ local
                 year={achievement.year}
                 result={achievement.result}
                 photo={achievement.photo}
+                scopeLabel={ACHIEVEMENT_SCOPE_LABELS[appLocale][achievement.scope]}
               />
             ))}
           </div>

@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { TIER_LABELS, type TierValue } from "@/lib/tier-labels";
+import { ACHIEVEMENT_SCOPE_LABELS } from "@/lib/achievement-scope";
 import { Link } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { RichText } from "@/components/rich-text";
@@ -210,6 +211,7 @@ export default async function CourseDetailPage({
                     year={achievement.year}
                     result={achievement.result}
                     photo={achievement.photo}
+                    scopeLabel={ACHIEVEMENT_SCOPE_LABELS[appLocale][achievement.scope]}
                   />
                 ))}
               </div>

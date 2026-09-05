@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Pencil, Star } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/format";
+import { ACHIEVEMENT_SCOPE_LABELS, type AchievementScopeValue } from "@/lib/achievement-scope";
 import { AdminListHeader } from "@/components/admin/admin-list-header";
 import { DataTable } from "@/components/admin/data-table";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -40,6 +41,10 @@ export default async function AdminAchievementsPage() {
               ),
             },
             { header: "مسابقه", cell: (row) => row.competition },
+            {
+              header: "سطح",
+              cell: (row) => ACHIEVEMENT_SCOPE_LABELS.fa[row.scope as AchievementScopeValue],
+            },
             { header: "سال", cell: (row) => row.year },
             { header: "نتیجه", cell: (row) => row.result },
             {

@@ -93,20 +93,22 @@ export function downloadSectionTitle(
 }
 
 async function fetchItemCounts() {
-  const [resourceCounts, customCounts, softwareCount, postersCount] = await Promise.all([
-    prisma.downloadResource.groupBy({
-      by: ["category"],
-      _count: true,
-      where: { category: { not: null } },
-    }),
-    prisma.downloadResource.groupBy({
-      by: ["sectionId"],
-      _count: true,
-      where: { sectionId: { not: null } },
-    }),
-    prisma.softwareProduct.count({ where: { active: true } }),
-    prisma.competitionPoster.count({ where: { active: true } }),
-  ]);
+  const [resourceCounts, customCounts, softwareCount, postersCount, datasheetCount] =
+    await Promise.all([
+      prisma.downloadResource.groupBy({
+        by: ["category"],
+        _count: true,
+        where: { category: { not: null } },
+      }),
+      prisma.downloadResource.groupBy({
+        by: ["sectionId"],
+        _count: true,
+        where: { sectionId: { not: null } },
+      }),
+      prisma.softwareProduct.count({ where: { active: true } }),
+      prisma.competitionPoster.count({ where: { active: true } }),
+      prisma.datasheetPart.count({ where: { active: true, parentId: null } }),
+    ]);
 
   const countByCategory = new Map<string, number>(
     resourceCounts.map((entry) => [entry.category!, entry._count]),
@@ -115,7 +117,7 @@ async function fetchItemCounts() {
     customCounts.map((entry) => [entry.sectionId!, entry._count]),
   );
 
-  return { countByCategory, countBySectionId, softwareCount, postersCount };
+  return { countByCategory, countBySectionId, softwareCount, postersCount, datasheetCount };
 }
 
 function itemCountForSection(
@@ -128,7 +130,7 @@ function itemCountForSection(
     case "POSTERS":
       return counts.postersCount;
     case "DATASHEETS":
-      return counts.countByCategory.get("DATASHEETS") ?? 0;
+      return counts.datasheetCount;
     case "BOOKS":
       return counts.countByCategory.get("BOOKS") ?? 0;
     case "COMPONENT_LIBRARIES":

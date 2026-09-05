@@ -26,6 +26,36 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
+  "search": {
+    "title": "Search Pishnam",
+    "description": "Find any page, course, class, download, or article.",
+    "placeholder": "Course, part, page…",
+    "close": "Close search",
+    "results": "Results",
+    "loading": "Loading the catalog…",
+    "error": "Search could not load. Check your connection and try again.",
+    "retry": "Try again",
+    "empty": "Nothing matches. Try a course name, a part number, or a page.",
+    "count": "{count} items",
+    "hint": "↑↓ to move · Enter to open · Esc to close",
+    "kinds": {
+      "page": "Pages",
+      "course": "Courses",
+      "class": "Classes",
+      "software": "Software",
+      "datasheet": "Parts & datasheets",
+      "download": "Downloads",
+      "poster": "Posters",
+      "video": "Videos",
+      "article": "News",
+      "team": "Team",
+      "achievement": "Achievements",
+      "faq": "FAQ",
+      "job": "Careers",
+      "press": "In the media",
+      "gallery": "Gallery"
+    }
+  },
   "theme": {
     "toggle": "Toggle theme",
     "light": "Light",

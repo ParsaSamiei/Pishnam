@@ -17,6 +17,13 @@ export default async function AdminDownloadsPage() {
   return (
     <div>
       <AdminListHeader title="مرکز دانلود" newHref="/admin/downloads/new" newLabel="افزودن مورد" />
+      <p className="text-text-secondary mt-2 text-sm">
+        دیتاشیت‌های قطعه‌محور را از{" "}
+        <Link href="/admin/datasheets" className="text-pishnam-gold-600 underline">
+          دیتاشیت و قطعات
+        </Link>{" "}
+        مدیریت کنید. موارد قدیمی دستهٔ دیتاشیت در این فهرست می‌مانند تا حذف شوند.
+      </p>
 
       <Card className="mt-6 overflow-hidden p-0">
         <DataTable

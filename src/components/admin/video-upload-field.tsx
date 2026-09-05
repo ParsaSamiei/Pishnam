@@ -16,6 +16,7 @@ interface VideoUploadFieldProps {
   defaultValue?: string;
   required?: boolean;
   error?: string;
+  onUploaded?: (relativePath: string) => void;
 }
 
 export function VideoUploadField({
@@ -26,6 +27,7 @@ export function VideoUploadField({
   defaultValue,
   required,
   error,
+  onUploaded,
 }: VideoUploadFieldProps) {
   const [value, setValue] = useState(defaultValue ?? "");
   const [isUploading, setIsUploading] = useState(false);
@@ -53,6 +55,7 @@ export function VideoUploadField({
         return;
       }
       setValue(data.relativePath);
+      onUploaded?.(data.relativePath);
     } catch {
       setUploadError("خطا در آپلود ویدیو. اتصال خود را بررسی کنید.");
     } finally {
@@ -84,7 +87,10 @@ export function VideoUploadField({
             </span>
             <button
               type="button"
-              onClick={() => setValue("")}
+              onClick={() => {
+                setValue("");
+                onUploaded?.("");
+              }}
               className="text-text-secondary hover:bg-bg-surface hover:text-pishnam-danger flex size-7 shrink-0 items-center justify-center rounded-full"
               aria-label="حذف ویدیو"
             >

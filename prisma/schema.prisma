@@ -24,6 +24,11 @@ enum Tier {
   COMPETITIVE // پیشرفته / تیم مسابقات
 }
 
+enum AchievementScope {
+  NATIONAL // کشوری
+  INTERNATIONAL // جهانی
+}
+
 enum LeadType {
   ENROLL
   CLASS_SEAT
@@ -44,6 +49,9 @@ enum DownloadCategory {
   // models below (each app/plugin needed a picture + its own page + several
   // per-platform files, which a flat DownloadResource row can't represent).
   // POSTERS moved to CompetitionPoster under Competition → League → PosterCategory.
+  // DATASHEETS public pages now use DatasheetPart (family + variants). The
+  // enum value remains so leftover flat DownloadResource rows can still be
+  // managed in /admin/downloads until they are deleted.
   DATASHEETS // دیتاشیت و مستندات فنی
   BOOKS // کتاب و منابع آموزشی
   COMPONENT_LIBRARIES // کتابخانه قطعات CAD (merges former SolidWorks/Altium categories)
@@ -86,26 +94,26 @@ enum AdminRole {
 // See docs/09-analytics-i18n.md for rationale.
 
 model Course {
-  id            String              @id @default(cuid())
-  slug          String              @unique
-  tier          Tier
-  topicTags     String[] // ["electronics","rescue-line", ...]
-  coverImage    String
+  id             String              @id @default(cuid())
+  slug           String              @unique
+  tier           Tier
+  topicTags      String[] // ["electronics","rescue-line", ...]
+  coverImage     String
   // Optional Aparat embed URL (canonical form from lib/aparat.ts) shown on the
   // public course page. Paste the share/embed snippet in admin -- not a hosted file.
-  aparatUrl       String?
+  aparatUrl      String?
   // Self-hosted video at `/uploads/<uuid>.{mp4,webm}` -- mutually exclusive with aparatUrl.
-  hostedVideo     String?
-  videoThumbnail  String? // custom poster; falls back to Aparat's poster when empty
-  order         Int                 @default(0)
-  active        Boolean             @default(true)
-  translations  CourseTranslation[]
-  classSessions ClassSession[]
-  achievements  Achievement[]       @relation("CourseAchievements")
-  documents     CourseDocument[]
-  images        CourseImage[]
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  hostedVideo    String?
+  videoThumbnail String? // custom poster; falls back to Aparat's poster when empty
+  order          Int                 @default(0)
+  active         Boolean             @default(true)
+  translations   CourseTranslation[]
+  classSessions  ClassSession[]
+  achievements   Achievement[]       @relation("CourseAchievements")
+  documents      CourseDocument[]
+  images         CourseImage[]
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
 
   @@index([tier])
   @@index([active])
@@ -182,19 +190,21 @@ model ClassSession {
 }
 
 model Achievement {
-  id          String   @id @default(cuid())
+  id          String           @id @default(cuid())
   titleFa     String
   titleEn     String
   competition String // e.g. "RoboCup"
   year        Int
   result      String // e.g. "1st place, Rescue Line"
   photo       String
-  courses     Course[] @relation("CourseAchievements")
-  featured    Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  scope       AchievementScope @default(NATIONAL)
+  courses     Course[]         @relation("CourseAchievements")
+  featured    Boolean          @default(false)
+  createdAt   DateTime         @default(now())
 
   @@index([year])
   @@index([featured])
+  @@index([scope])
 }
 
 model TeamMember {
@@ -273,7 +283,7 @@ model DownloadResource {
   descriptionEn String?
   fileUrl       String // hosted file path OR external URL, per `source`
   fileSizeBytes Int? // only relevant when source = HOSTED
-  createdAt     DateTime         @default(now())
+  createdAt     DateTime          @default(now())
 
   @@index([category])
   @@index([sectionId])
@@ -319,13 +329,13 @@ model League {
 }
 
 model PosterCategory {
-  id       String @id @default(cuid())
-  league   League @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  id       String  @id @default(cuid())
+  league   League  @relation(fields: [leagueId], references: [id], onDelete: Cascade)
   leagueId String
   slug     String
   titleFa  String
   titleEn  String
-  order    Int    @default(0)
+  order    Int     @default(0)
   active   Boolean @default(true)
 
   posters   CompetitionPoster[]
@@ -365,8 +375,8 @@ model CompetitionPoster {
 // One product can have several SoftwareRelease rows (Windows build, macOS
 // build, ...), which a flat DownloadResource row couldn't represent.
 model SoftwareProduct {
-  id            String   @id @default(cuid())
-  slug          String   @unique
+  id            String  @id @default(cuid())
+  slug          String  @unique
   // `/uploads/<uuid>.webp` from /api/admin/upload -- shown as the product's
   // cover picture on both the software grid and its own page.
   image         String
@@ -374,8 +384,8 @@ model SoftwareProduct {
   titleEn       String
   descriptionFa String?
   descriptionEn String?
-  order         Int      @default(0)
-  active        Boolean  @default(true)
+  order         Int     @default(0)
+  active        Boolean @default(true)
 
   releases  SoftwareRelease[]
   createdAt DateTime          @default(now())
@@ -402,6 +412,118 @@ model SoftwareRelease {
   createdAt     DateTime         @default(now())
 
   @@index([productId])
+}
+
+// A hardware part or part-family in Datasheets & Docs (e.g. "LCD", "SRF05").
+// Public routes:
+//   /downloads/datasheets              grid of top-level parts
+//   /downloads/datasheets/[slug]       family page (has children) or leaf page
+//   /downloads/datasheets/[slug]/[variant]  sub-part page (LCD 16x2, ...)
+// A part with no children is a stand-alone module and holds its own body,
+// PDFs, videos, photos, and example code. A part with children is a family:
+// the parent page lists variants; each variant has its own content page.
+// Nesting is capped at two levels (parentId of a parent must be null).
+model DatasheetPart {
+  id       String          @id @default(cuid())
+  slug     String
+  parentId String?
+  parent   DatasheetPart?  @relation("DatasheetTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children DatasheetPart[] @relation("DatasheetTree")
+
+  image     String
+  titleFa   String
+  titleEn   String
+  excerptFa String?
+  excerptEn String?
+  bodyFa    String? // rich text (Tiptap HTML), optional
+  bodyEn    String?
+
+  order  Int     @default(0)
+  active Boolean @default(true)
+
+  documents   DatasheetDocument[]
+  videos      DatasheetVideo[]
+  images      DatasheetImage[]
+  codeSamples DatasheetCodeSample[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([active, order])
+  @@index([slug])
+}
+
+model DatasheetDocument {
+  id            String         @id @default(cuid())
+  part          DatasheetPart  @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId        String
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  source        ResourceSource @default(HOSTED)
+  fileUrl       String
+  fileSizeBytes Int?
+  order         Int            @default(0)
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+
+  @@index([partId, order])
+  @@index([active])
+}
+
+model DatasheetVideo {
+  id          String        @id @default(cuid())
+  part        DatasheetPart @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId      String
+  titleFa     String
+  titleEn     String
+  aparatUrl   String?
+  hostedVideo String?
+  thumbnail   String?
+  order       Int           @default(0)
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+
+  @@index([partId, order])
+  @@index([active])
+}
+
+model DatasheetImage {
+  id        String        @id @default(cuid())
+  part      DatasheetPart @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId    String
+  image     String
+  captionFa String?
+  captionEn String?
+  order     Int           @default(0)
+  active    Boolean       @default(true)
+  createdAt DateTime      @default(now())
+
+  @@index([partId, order])
+  @@index([active])
+}
+
+model DatasheetCodeSample {
+  id            String          @id @default(cuid())
+  part          DatasheetPart   @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId        String
+  titleFa       String
+  titleEn       String
+  language      String // arduino | c | cpp | python | javascript | bash | other
+  code          String          @default("")
+  notesFa       String?
+  notesEn       String?
+  source        ResourceSource?
+  fileUrl       String?
+  fileSizeBytes Int?
+  order         Int             @default(0)
+  active        Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+
+  @@index([partId, order])
+  @@index([active])
 }
 
 // Third-party press coverage linking out to external news articles. Managed in
@@ -504,13 +626,13 @@ enum FeedbackVoteValue {
 }
 
 model FeedbackVote {
-  id         String             @id @default(cuid())
+  id         String            @id @default(cuid())
   feedbackId String
   voterKey   String
   value      FeedbackVoteValue
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
-  feedback   Feedback           @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  feedback   Feedback          @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 
   @@unique([feedbackId, voterKey])
   @@index([feedbackId])
@@ -611,8 +733,8 @@ model GalleryImage {
   mediaType GalleryMediaType @default(IMAGE)
   image     String? // photo asset, or optional poster for videos
   video     String? // `/uploads/<uuid>.{mp4,webm}` when mediaType = VIDEO
-  altFa String?
-  altEn String?
+  altFa     String?
+  altEn     String?
   // Optional caption shown under the media in the lightbox.
   captionFa String?
   captionEn String?

@@ -4,14 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { PageHeader } from "@/components/layout/page-header";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
 import { buildAlternates } from "@/lib/i18n/alternates";
 import { JsonLd } from "@/components/json-ld";
+import { FaqList } from "@/components/about/faq-list";
 
 export async function generateMetadata({
   params,
@@ -72,25 +67,16 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: st
             {isFa ? "سوالی ثبت نشده است." : "No FAQs added yet."}
           </p>
         ) : (
-          <div className="flex flex-col gap-10">
-            {Array.from(grouped.entries()).map(([category, items]) => (
-              <div key={category}>
-                <h2 className="text-text-primary mb-2 text-lg font-bold">{category}</h2>
-                <Accordion type="single" collapsible>
-                  {items.map((faq) => (
-                    <AccordionItem key={faq.id} value={faq.id}>
-                      <AccordionTrigger>
-                        {pickLocaleField(faq.questionFa, faq.questionEn, appLocale)}
-                      </AccordionTrigger>
-                      <AccordionContent className="reading-copy leading-relaxed">
-                        {pickLocaleField(faq.answerFa, faq.answerEn, appLocale)}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            ))}
-          </div>
+          <FaqList
+            groups={Array.from(grouped.entries()).map(([category, items]) => ({
+              category,
+              items: items.map((faq) => ({
+                id: faq.id,
+                question: pickLocaleField(faq.questionFa, faq.questionEn, appLocale),
+                answer: pickLocaleField(faq.answerFa, faq.answerEn, appLocale),
+              })),
+            }))}
+          />
         )}
       </div>
     </>

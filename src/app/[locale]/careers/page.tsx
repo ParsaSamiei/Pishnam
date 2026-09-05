@@ -76,7 +76,7 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
         ) : (
           <div className="flex flex-col gap-4">
             {jobs.map((job) => (
-              <Card key={job.id}>
+              <Card key={job.id} id={`job-${job.id}`} className="scroll-mt-24">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-3">
                     <Briefcase

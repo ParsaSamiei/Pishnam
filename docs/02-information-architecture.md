@@ -46,13 +46,17 @@ feed:
 │   │   label, size/link, and notes  [content type: SoftwareRelease, child of SoftwareProduct]
 │   │   (previously a flat DownloadResource category — split out because a single
 │   │   flat row can't represent "one app, several platform builds")
+│   ├── /downloads/datasheets                         [content type: DatasheetPart]
+│   │   دیتاشیت و مستندات فنی — each part (LCD, SRF05, …) has its own page. A part
+│   │   can stand alone (module page with text, PDFs, videos, photos, example code)
+│   │   or be a family that lists variants at /downloads/datasheets/[slug]/[variant]
+│   │   (e.g. LCD → 16×2, graphical LCD). Previously a flat DownloadResource list.
 │   ├── /downloads/posters                           [content type: CompetitionPoster]
 │   │   پوستر مسابقات رباتیک — filtered by competition → league → poster category
 │   │   (admin-managed taxonomy; previously a flat DownloadResource POSTERS category)
 │   └── /downloads/[category]                        [content type: DownloadResource]
 │       remaining flat, single-file-per-item categories (renamed/consolidated from the
 │       old WP site):
-│         - datasheets       دیتاشیت و مستندات فنی      (Datasheets & Technical Docs)
 │         - books            کتاب و منابع آموزشی        (Books & Learning Resources)
 │         - component-libraries  کتابخانه قطعات CAD     (Component Libraries — merges old
 │                                                        "SolidWorks library" + "Altium library"
@@ -97,25 +101,30 @@ reachable via footer/search for less-common needs (e.g. part libraries, old comp
 
 ## Content types requiring admin CRUD
 
-| Type                     | Key fields                                                                                                                           |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority   |
-| ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                                 |
-| Achievement              | title, competition name, year, result/rank, photo, related course tags                                                               |
-| TeamMember               | name, role, photo, bio (short)                                                                                                       |
-| FAQ                      | question, answer, category                                                                                                           |
-| VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                        |
-| DownloadResource         | title, category (datasheets/books/component-libraries), file URL or external link, description                                       |
-| Competition              | slug, title, optional year, active/order — parent of leagues                                                                         |
-| League                   | competition ref, slug, title, active/order — parent of poster categories                                                             |
-| PosterCategory           | league ref, slug, title, active/order — groups posters within a league                                                               |
-| CompetitionPoster        | category ref, preview image, title, description, file URL or external link, active/order                                             |
-| SoftwareProduct          | slug, picture, title, description, order/active — one per app/plugin, has its own public page                                        |
-| SoftwareRelease          | product ref, platform (Windows/macOS/Linux/Web/Android/iOS/Other), version label, file URL or external link, size, per-release notes |
-| Article (blog)           | title, slug, cover image, body (rich text), tags, published date                                                                     |
-| JobPosting               | title, description, requirements, active flag, expiry date                                                                           |
-| Lead/Inquiry submissions | type (enroll/class-seat/sponsor/school/job), form fields, submitted date, status (new/contacted/closed)                              |
-| Feedback                 | optional name, message, submitted date, read flag — criticisms & suggestions from `/contact-us`                                      |
+| Type                     | Key fields                                                                                                                                    |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority            |
+| ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                                          |
+| Achievement              | title, competition name, year, result/rank, photo, related course tags                                                                        |
+| TeamMember               | name, role, photo, bio (short)                                                                                                                |
+| FAQ                      | question, answer, category                                                                                                                    |
+| VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                                 |
+| DownloadResource         | title, category (datasheets/books/component-libraries), file URL or external link, description                                                |
+| Competition              | slug, title, optional year, active/order — parent of leagues                                                                                  |
+| League                   | competition ref, slug, title, active/order — parent of poster categories                                                                      |
+| PosterCategory           | league ref, slug, title, active/order — groups posters within a league                                                                        |
+| CompetitionPoster        | category ref, preview image, title, description, file URL or external link, active/order                                                      |
+| SoftwareProduct          | slug, picture, title, description, order/active — one per app/plugin, has its own public page                                                 |
+| SoftwareRelease          | product ref, platform (Windows/macOS/Linux/Web/Android/iOS/Other), version label, file URL or external link, size, per-release notes          |
+| DatasheetPart            | slug, picture, title, excerpt, rich-text body, optional parent (variant of a family), order/active — public page with docs/videos/photos/code |
+| DatasheetDocument        | part ref, FA/EN title/description, hosted file or external link                                                                               |
+| DatasheetVideo           | part ref, FA/EN title, Aparat embed or hosted video, thumbnail                                                                                |
+| DatasheetImage           | part ref, image, FA/EN caption                                                                                                                |
+| DatasheetCodeSample      | part ref, FA/EN title, language, inline code, optional downloadable file                                                                      |
+| Article (blog)           | title, slug, cover image, body (rich text), tags, published date                                                                              |
+| JobPosting               | title, description, requirements, active flag, expiry date                                                                                    |
+| Lead/Inquiry submissions | type (enroll/class-seat/sponsor/school/job), form fields, submitted date, status (new/contacted/closed)                                       |
+| Feedback                 | optional name, message, submitted date, read flag — criticisms & suggestions from `/contact-us`                                               |
 
 ## Confirmed decisions
 

@@ -87,6 +87,7 @@ model Course {
   classSessions ClassSession[]
   achievements  Achievement[] @relation("CourseAchievements")
   documents     CourseDocument[]
+  images        CourseImage[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -120,6 +121,18 @@ model CourseDocument {
   order         Int            @default(0)
   active        Boolean        @default(true)
   createdAt     DateTime       @default(now())
+}
+
+model CourseImage {
+  id        String   @id @default(cuid())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
+  image     String
+  captionFa String?
+  captionEn String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
 }
 
 model ClassSession { // confirmed for v1

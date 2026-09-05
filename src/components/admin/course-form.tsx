@@ -13,6 +13,7 @@ import {
   CourseDocumentsFields,
   type CourseDocumentDraft,
 } from "@/components/admin/course-documents-fields";
+import { CourseImagesFields, type CourseImageDraft } from "@/components/admin/course-images-fields";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { TIERS, TIER_LABELS } from "@/lib/tier-labels";
 import type { CourseFormState } from "@/app/admin/(dashboard)/courses/actions";
@@ -43,6 +44,7 @@ interface CourseFormProps {
     pastResultsEn: string | null;
     learningOutcomesEn: string;
     documents?: CourseDocumentDraft[];
+    images?: CourseImageDraft[];
   };
   submitLabel: string;
 }
@@ -295,6 +297,12 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
           </div>
         </div>
       </div>
+
+      <CourseImagesFields
+        defaultImages={defaultValues?.images ?? []}
+        preservedJson={state.values?.imagesJson}
+        error={state.errors?.imagesJson}
+      />
 
       <CourseDocumentsFields
         defaultDocuments={defaultValues?.documents ?? []}

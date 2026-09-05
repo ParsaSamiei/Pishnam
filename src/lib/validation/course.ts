@@ -39,7 +39,17 @@ const courseDocumentSchema = z
 
 export type CourseDocumentFormValues = z.infer<typeof courseDocumentSchema>;
 
-function parseDocumentsJson(raw: unknown): unknown[] {
+const courseImageSchema = z.object({
+  image: z.string().trim().min(1, "تصویر الزامی است."),
+  captionFa: z.string().trim().max(300).optional().or(z.literal("")),
+  captionEn: z.string().trim().max(300).optional().or(z.literal("")),
+  order: z.coerce.number().int().min(0).default(0),
+  active: z.coerce.boolean().default(true),
+});
+
+export type CourseImageFormValues = z.infer<typeof courseImageSchema>;
+
+function parseJsonArray(raw: unknown): unknown[] {
   if (typeof raw !== "string" || !raw.trim()) return [];
   try {
     const parsed: unknown = JSON.parse(raw);
@@ -105,6 +115,7 @@ export const courseSchema = z
       .transform(linesToOutcomes),
 
     documentsJson: z.string().optional().or(z.literal("")),
+    imagesJson: z.string().optional().or(z.literal("")),
   })
   .superRefine((data, ctx) => {
     if (data.videoSource === "aparat") {
@@ -126,26 +137,47 @@ export const courseSchema = z
       });
     }
 
-    const docs = parseDocumentsJson(data.documentsJson);
+    const docs = parseJsonArray(data.documentsJson);
     if (docs.length > 20) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["documentsJson"],
         message: "حداکثر ۲۰ سند برای هر دوره مجاز است.",
       });
-      return;
+    } else {
+      for (let i = 0; i < docs.length; i++) {
+        const result = courseDocumentSchema.safeParse(docs[i]);
+        if (!result.success) {
+          const first = result.error.issues[0];
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["documentsJson"],
+            message: `سند ${i + 1}: ${first?.message ?? "معتبر نیست."}`,
+          });
+          break;
+        }
+      }
     }
 
-    for (let i = 0; i < docs.length; i++) {
-      const result = courseDocumentSchema.safeParse(docs[i]);
-      if (!result.success) {
-        const first = result.error.issues[0];
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["documentsJson"],
-          message: `سند ${i + 1}: ${first?.message ?? "معتبر نیست."}`,
-        });
-        break;
+    const images = parseJsonArray(data.imagesJson);
+    if (images.length > 24) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["imagesJson"],
+        message: "حداکثر ۲۴ تصویر برای هر دوره مجاز است.",
+      });
+    } else {
+      for (let i = 0; i < images.length; i++) {
+        const result = courseImageSchema.safeParse(images[i]);
+        if (!result.success) {
+          const first = result.error.issues[0];
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["imagesJson"],
+            message: `تصویر ${i + 1}: ${first?.message ?? "معتبر نیست."}`,
+          });
+          break;
+        }
       }
     }
   })
@@ -157,7 +189,7 @@ export const courseSchema = z
     const hostedVideo = data.videoSource === "hosted" ? data.hostedVideo || null : null;
     const videoThumbnail = data.videoSource === "none" ? null : data.videoThumbnail?.trim() || null;
 
-    const documents = parseDocumentsJson(data.documentsJson)
+    const documents = parseJsonArray(data.documentsJson)
       .map((doc) => courseDocumentSchema.parse(doc))
       .map((doc, index) => ({
         titleFa: doc.titleFa,
@@ -171,12 +203,23 @@ export const courseSchema = z
         active: doc.active,
       }));
 
+    const images = parseJsonArray(data.imagesJson)
+      .map((img) => courseImageSchema.parse(img))
+      .map((img, index) => ({
+        image: img.image,
+        captionFa: img.captionFa || null,
+        captionEn: img.captionEn || null,
+        order: img.order ?? index,
+        active: img.active,
+      }));
+
     return {
       ...data,
       aparatUrl,
       hostedVideo,
       videoThumbnail,
       documents,
+      images,
     };
   });
 

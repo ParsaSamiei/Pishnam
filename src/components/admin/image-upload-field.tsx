@@ -17,6 +17,8 @@ interface ImageUploadFieldProps {
   field: string;
   required?: boolean;
   error?: string;
+  /** Reports the stored path back to a parent that keeps its own state (e.g. course image rows). */
+  onUploaded?: (relativePath: string) => void;
 }
 
 /**
@@ -34,6 +36,7 @@ export function ImageUploadField({
   field,
   required,
   error,
+  onUploaded,
 }: ImageUploadFieldProps) {
   const [value, setValue] = useState(defaultValue ?? "");
   const [isUploading, setIsUploading] = useState(false);
@@ -61,6 +64,7 @@ export function ImageUploadField({
         return;
       }
       setValue(data.relativePath);
+      onUploaded?.(data.relativePath);
     } catch {
       setUploadError("خطا در آپلود تصویر. اتصال خود را بررسی کنید.");
     } finally {
@@ -84,8 +88,11 @@ export function ImageUploadField({
           </div>
           <button
             type="button"
-            onClick={() => setValue("")}
-            className="bg-pishnam-danger absolute -end-2 -top-2 flex size-6 items-center justify-center rounded-full text-white shadow"
+            onClick={() => {
+              setValue("");
+              onUploaded?.("");
+            }}
+            className="bg-pishnam-danger absolute -end-2 -top-2 flex size-6 cursor-pointer items-center justify-center rounded-full text-white shadow"
             aria-label="حذف تصویر"
           >
             <X className="size-3.5" aria-hidden="true" />

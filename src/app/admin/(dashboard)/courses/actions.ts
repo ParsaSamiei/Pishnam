@@ -107,6 +107,8 @@ export async function createCourse(
     videoThumbnail,
     documents,
     documentsJson: _documentsJson,
+    images,
+    imagesJson: _imagesJson,
     videoSource: _videoSource,
     ...courseFields
   } = parsed.data;
@@ -145,6 +147,9 @@ export async function createCourse(
       documents: {
         create: documents,
       },
+      images: {
+        create: images,
+      },
     },
   });
 
@@ -182,6 +187,8 @@ export async function updateCourse(
     videoThumbnail,
     documents,
     documentsJson: _documentsJson,
+    images,
+    imagesJson: _imagesJson,
     videoSource: _videoSource,
     ...courseFields
   } = parsed.data;
@@ -246,6 +253,10 @@ export async function updateCourse(
       documents: {
         deleteMany: {},
         create: documents,
+      },
+      images: {
+        deleteMany: {},
+        create: images,
       },
     },
   });

@@ -16,6 +16,7 @@ import { HostedVideoPlayer } from "@/components/courses/hosted-video-player";
 import { CourseLearningOutcomes } from "@/components/courses/course-learning-outcomes";
 import { CoursePastResults } from "@/components/courses/course-past-results";
 import { CourseDocuments } from "@/components/courses/course-documents";
+import { CoursePhotos } from "@/components/courses/course-photos";
 import { JsonLd } from "@/components/json-ld";
 
 async function getCourse(slug: string, locale: AppLocale) {
@@ -25,6 +26,10 @@ async function getCourse(slug: string, locale: AppLocale) {
       translations: { where: { locale } },
       achievements: { orderBy: { year: "desc" }, take: 4 },
       documents: {
+        where: { active: true },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+      },
+      images: {
         where: { active: true },
         orderBy: [{ order: "asc" }, { createdAt: "asc" }],
       },
@@ -87,6 +92,16 @@ export default async function CourseDetailPage({
     source: doc.source,
     fileSizeBytes: doc.fileSizeBytes,
   }));
+
+  const photos = course.images.map((img) => {
+    const caption = pickLocaleField(img.captionFa, img.captionEn, appLocale);
+    return {
+      id: img.id,
+      image: img.image,
+      caption,
+      alt: caption || translation.title,
+    };
+  });
 
   return (
     <>
@@ -171,6 +186,8 @@ export default async function CourseDetailPage({
             eyebrow={isFa ? "کارنامه دوره" : "Track record"}
             title={isFa ? "نتایج سال‌های گذشته" : "Results from previous years"}
           />
+
+          <CoursePhotos photos={photos} title={isFa ? "گالری دوره" : "Course gallery"} />
 
           <CourseDocuments
             documents={documents}

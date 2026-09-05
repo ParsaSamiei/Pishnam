@@ -13,6 +13,7 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
     include: {
       translations: true,
       documents: { orderBy: [{ order: "asc" }, { createdAt: "asc" }] },
+      images: { orderBy: [{ order: "asc" }, { createdAt: "asc" }] },
     },
   });
 
@@ -70,6 +71,13 @@ export default async function EditCoursePage({ params }: { params: Promise<{ id:
               fileSizeBytes: doc.fileSizeBytes,
               order: doc.order,
               active: doc.active,
+            })),
+            images: course.images.map((img) => ({
+              image: img.image,
+              captionFa: img.captionFa ?? "",
+              captionEn: img.captionEn ?? "",
+              order: img.order,
+              active: img.active,
             })),
           }}
         />

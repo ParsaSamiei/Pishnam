@@ -56,6 +56,28 @@ async function resolveCourseVideoFields({
   };
 }
 
+function translationPayload(
+  locale: "fa" | "en",
+  fields: {
+    title: string;
+    excerpt: string;
+    body: string;
+    prerequisites: string | null;
+    pastResults: string | null;
+    learningOutcomes: string[];
+  },
+) {
+  return {
+    locale,
+    title: fields.title,
+    excerpt: fields.excerpt,
+    body: fields.body,
+    prerequisites: fields.prerequisites,
+    pastResults: fields.pastResults,
+    learningOutcomes: fields.learningOutcomes,
+  };
+}
+
 export async function createCourse(
   _prevState: CourseFormState,
   formData: FormData,
@@ -72,13 +94,20 @@ export async function createCourse(
     excerptFa,
     bodyFa,
     prerequisitesFa,
+    pastResultsFa,
+    learningOutcomesFa,
     titleEn,
     excerptEn,
     bodyEn,
     prerequisitesEn,
+    pastResultsEn,
+    learningOutcomesEn,
     aparatUrl,
     hostedVideo,
     videoThumbnail,
+    documents,
+    documentsJson: _documentsJson,
+    videoSource: _videoSource,
     ...courseFields
   } = parsed.data;
 
@@ -95,21 +124,26 @@ export async function createCourse(
       ...videoFields,
       translations: {
         create: [
-          {
-            locale: "fa",
+          translationPayload("fa", {
             title: titleFa,
             excerpt: excerptFa,
             body: bodyFa,
             prerequisites: prerequisitesFa || null,
-          },
-          {
-            locale: "en",
+            pastResults: pastResultsFa || null,
+            learningOutcomes: learningOutcomesFa,
+          }),
+          translationPayload("en", {
             title: titleEn,
             excerpt: excerptEn,
             body: bodyEn,
             prerequisites: prerequisitesEn || null,
-          },
+            pastResults: pastResultsEn || null,
+            learningOutcomes: learningOutcomesEn,
+          }),
         ],
+      },
+      documents: {
+        create: documents,
       },
     },
   });
@@ -135,13 +169,20 @@ export async function updateCourse(
     excerptFa,
     bodyFa,
     prerequisitesFa,
+    pastResultsFa,
+    learningOutcomesFa,
     titleEn,
     excerptEn,
     bodyEn,
     prerequisitesEn,
+    pastResultsEn,
+    learningOutcomesEn,
     aparatUrl,
     hostedVideo,
     videoThumbnail,
+    documents,
+    documentsJson: _documentsJson,
+    videoSource: _videoSource,
     ...courseFields
   } = parsed.data;
 
@@ -152,6 +193,23 @@ export async function updateCourse(
 
   const videoFields = await resolveCourseVideoFields({ aparatUrl, hostedVideo, videoThumbnail });
 
+  const fa = translationPayload("fa", {
+    title: titleFa,
+    excerpt: excerptFa,
+    body: bodyFa,
+    prerequisites: prerequisitesFa || null,
+    pastResults: pastResultsFa || null,
+    learningOutcomes: learningOutcomesFa,
+  });
+  const en = translationPayload("en", {
+    title: titleEn,
+    excerpt: excerptEn,
+    body: bodyEn,
+    prerequisites: prerequisitesEn || null,
+    pastResults: pastResultsEn || null,
+    learningOutcomes: learningOutcomesEn,
+  });
+
   await prisma.course.update({
     where: { id },
     data: {
@@ -161,37 +219,33 @@ export async function updateCourse(
         upsert: [
           {
             where: { courseId_locale: { courseId: id, locale: "fa" } },
-            create: {
-              locale: "fa",
-              title: titleFa,
-              excerpt: excerptFa,
-              body: bodyFa,
-              prerequisites: prerequisitesFa || null,
-            },
+            create: fa,
             update: {
-              title: titleFa,
-              excerpt: excerptFa,
-              body: bodyFa,
-              prerequisites: prerequisitesFa || null,
+              title: fa.title,
+              excerpt: fa.excerpt,
+              body: fa.body,
+              prerequisites: fa.prerequisites,
+              pastResults: fa.pastResults,
+              learningOutcomes: fa.learningOutcomes,
             },
           },
           {
             where: { courseId_locale: { courseId: id, locale: "en" } },
-            create: {
-              locale: "en",
-              title: titleEn,
-              excerpt: excerptEn,
-              body: bodyEn,
-              prerequisites: prerequisitesEn || null,
-            },
+            create: en,
             update: {
-              title: titleEn,
-              excerpt: excerptEn,
-              body: bodyEn,
-              prerequisites: prerequisitesEn || null,
+              title: en.title,
+              excerpt: en.excerpt,
+              body: en.body,
+              prerequisites: en.prerequisites,
+              pastResults: en.pastResults,
+              learningOutcomes: en.learningOutcomes,
             },
           },
         ],
+      },
+      documents: {
+        deleteMany: {},
+        create: documents,
       },
     },
   });

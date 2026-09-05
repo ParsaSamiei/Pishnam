@@ -143,7 +143,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                       </p>
                       <AddressMapLinks
                         address={address}
-                        addressClassName="reading-copy text-text-secondary hover:text-pishnam-gold-600 mt-1 text-sm transition-colors duration-200"
+                        addressClassName="reading-copy text-text-secondary mt-1 text-sm"
                       />
                     </div>
                   </div>

@@ -9,6 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { CourseVideoFields, type CourseVideoSource } from "@/components/admin/course-video-fields";
+import {
+  CourseDocumentsFields,
+  type CourseDocumentDraft,
+} from "@/components/admin/course-documents-fields";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { TIERS, TIER_LABELS } from "@/lib/tier-labels";
 import type { CourseFormState } from "@/app/admin/(dashboard)/courses/actions";
@@ -30,10 +34,15 @@ interface CourseFormProps {
     excerptFa: string;
     bodyFa: string;
     prerequisitesFa: string | null;
+    pastResultsFa: string | null;
+    learningOutcomesFa: string;
     titleEn: string;
     excerptEn: string;
     bodyEn: string;
     prerequisitesEn: string | null;
+    pastResultsEn: string | null;
+    learningOutcomesEn: string;
+    documents?: CourseDocumentDraft[];
   };
   submitLabel: string;
 }
@@ -184,6 +193,32 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
               defaultValue={field("prerequisitesFa", defaultValues?.prerequisitesFa ?? "")}
             />
           </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="learningOutcomesFa">آنچه در این دوره به‌دست می‌آورید</Label>
+            <Textarea
+              id="learningOutcomesFa"
+              name="learningOutcomesFa"
+              rows={4}
+              placeholder={
+                "هر دستاورد در یک خط\nمثال: ساخت ربات خط‌یاب کامل\nمثال: آمادگی شرکت در مسابقات"
+              }
+              defaultValue={field("learningOutcomesFa", defaultValues?.learningOutcomesFa ?? "")}
+            />
+            <p className="text-text-secondary text-xs">اختیاری — هر مورد را در یک خط بنویسید.</p>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="pastResultsFa">نتایج سال‌های گذشته</Label>
+            <Textarea
+              id="pastResultsFa"
+              name="pastResultsFa"
+              rows={4}
+              placeholder="مثال: در سه سال اخیر، تیم‌های این دوره موفق به کسب مقام در مسابقات کشوری شده‌اند..."
+              defaultValue={field("pastResultsFa", defaultValues?.pastResultsFa ?? "")}
+            />
+            <p className="text-text-secondary text-xs">
+              اختیاری — متن آزاد درباره افتخارات و نتایج دوره‌های پیشین.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -234,8 +269,38 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
               defaultValue={field("prerequisitesEn", defaultValues?.prerequisitesEn ?? "")}
             />
           </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="learningOutcomesEn">What you will achieve</Label>
+            <Textarea
+              id="learningOutcomesEn"
+              name="learningOutcomesEn"
+              rows={4}
+              placeholder={"One outcome per line\nExample: Build a complete line-follower robot"}
+              defaultValue={field("learningOutcomesEn", defaultValues?.learningOutcomesEn ?? "")}
+            />
+            <p className="text-text-secondary text-xs">Optional — one outcome per line.</p>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="pastResultsEn">Results from previous years</Label>
+            <Textarea
+              id="pastResultsEn"
+              name="pastResultsEn"
+              rows={4}
+              placeholder="Optional narrative of past competition results and alumni outcomes..."
+              defaultValue={field("pastResultsEn", defaultValues?.pastResultsEn ?? "")}
+            />
+            <p className="text-text-secondary text-xs">
+              Optional free-text track record for this course.
+            </p>
+          </div>
         </div>
       </div>
+
+      <CourseDocumentsFields
+        defaultDocuments={defaultValues?.documents ?? []}
+        preservedJson={state.values?.documentsJson}
+        error={state.errors?.documentsJson}
+      />
 
       <div className="flex gap-3">
         <Button type="submit" disabled={isPending}>

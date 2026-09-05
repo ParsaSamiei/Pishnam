@@ -86,21 +86,40 @@ model Course {
   translations  CourseTranslation[]
   classSessions ClassSession[]
   achievements  Achievement[] @relation("CourseAchievements")
+  documents     CourseDocument[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
 
 model CourseTranslation {
-  id           String  @id @default(cuid())
-  course       Course  @relation(fields: [courseId], references: [id])
-  courseId     String
-  locale       Locale
-  title        String
-  excerpt      String
-  body         String  // rich text (stored as HTML or MDX string)
-  prerequisites String?
+  id               String   @id @default(cuid())
+  course           Course   @relation(fields: [courseId], references: [id])
+  courseId         String
+  locale           Locale
+  title            String
+  excerpt          String
+  body             String  // rich text (stored as HTML or MDX string)
+  prerequisites    String?
+  pastResults      String?  // optional narrative of past years' results
+  learningOutcomes String[] @default([]) // what students will achieve
 
   @@unique([courseId, locale])
+}
+
+model CourseDocument {
+  id            String         @id @default(cuid())
+  course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId      String
+  titleFa       String
+  titleEn       String
+  descriptionFa String?
+  descriptionEn String?
+  source        ResourceSource @default(HOSTED)
+  fileUrl       String
+  fileSizeBytes Int?
+  order         Int            @default(0)
+  active        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
 }
 
 model ClassSession { // confirmed for v1

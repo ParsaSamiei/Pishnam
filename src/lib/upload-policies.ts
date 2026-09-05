@@ -93,6 +93,20 @@ export const UPLOAD_POLICIES = {
     allowedMimeTypes: ["video/mp4", "video/webm"],
     maxBytes: 100 * 1024 * 1024,
   },
+  "course.document": {
+    kind: "document",
+    allowedMimeTypes: [
+      "application/pdf",
+      "application/zip",
+      "application/x-rar-compressed",
+      "application/x-7z-compressed",
+      "application/epub+zip",
+      "text/plain",
+      "image/jpeg",
+      "image/png",
+    ],
+    maxBytes: 20 * 1024 * 1024,
+  },
   "gallery.video": {
     kind: "video",
     allowedMimeTypes: ["video/mp4", "video/webm"],
@@ -119,3 +133,6 @@ export const IMAGE_ACCEPT = UPLOAD_POLICIES.image.allowedMimeTypes.join(",");
 export const VIDEO_ACCEPT = UPLOAD_POLICIES["course.video"].allowedMimeTypes
   .concat([".mp4", ".webm"])
   .join(",");
+
+/** Browser `accept` for course-related document uploads. */
+export const COURSE_DOCUMENT_ACCEPT = ".pdf,.zip,.rar,.7z,.epub,.txt,.jpg,.jpeg,.png";

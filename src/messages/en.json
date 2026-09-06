@@ -7,6 +7,7 @@
     "home": "Home",
     "about": "About us",
     "courses": "Courses",
+    "products": "Products",
     "classes": "In-Person Classes",
     "videos": "Videos",
     "gallery": "Gallery",
@@ -28,8 +29,8 @@
   },
   "search": {
     "title": "Search Pishnam",
-    "description": "Find any page, course, class, download, or article.",
-    "placeholder": "Course, part, page…",
+    "description": "Find any page, course, product, class, download, or article.",
+    "placeholder": "Course, product, part, page…",
     "close": "Close search",
     "results": "Results",
     "loading": "Loading the catalog…",
@@ -41,6 +42,7 @@
     "kinds": {
       "page": "Pages",
       "course": "Courses",
+      "product": "Products",
       "class": "Classes",
       "software": "Software",
       "datasheet": "Parts & datasheets",
@@ -50,6 +52,7 @@
       "article": "News",
       "team": "Team",
       "achievement": "Achievements",
+      "license": "Licenses",
       "faq": "FAQ",
       "job": "Careers",
       "press": "In the media",
@@ -164,6 +167,7 @@
       "title": "Get in touch",
       "description": "Reach the Pishnam team by phone, visit us, or follow us online.",
       "address": "Address",
+      "postalCode": "Postal code",
       "phone": "Phone"
     }
   },

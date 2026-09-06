@@ -62,6 +62,7 @@ export const contactSettingsSchema = z.object({
     .pipe(z.string().email("ایمیل معتبر نیست.").nullable()),
   addressFa: optionalText(500),
   addressEn: optionalText(500),
+  postalCode: optionalText(20),
   mapEmbedUrl: z
     .string()
     .trim()

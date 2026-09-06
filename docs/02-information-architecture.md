@@ -20,6 +20,7 @@ feed:
 ├── درباره پیشنام            about
 │   ├── تاریخچه و ماموریت     history/mission
 │   ├── افتخارات و جوایز      achievements            [content type: Achievement]
+│   ├── مجوز‌ها               licenses                 [content type: License]
 │   ├── پرسنل                 team                      [content type: TeamMember]
 │   └── سوالات متداول         faq                       [content type: FAQ]
 │
@@ -27,6 +28,11 @@ feed:
 │   └── /courses/[slug]                                  [content type: Course]
 │       (each course page: description, tier/age range, prerequisites,
 │        what students build, related achievements, enroll CTA)
+│
+├── محصولات                   products (showcase catalog, filter by admin type tags)
+│   └── /products/[slug]                                 [content type: Product]
+│       (cover, rich text, gallery, videos, optional price, specs table,
+│        optional related course — no checkout)
 │
 ├── کلاس‌های حضوری            classes/schedule           [content type: ClassSession]  — CONFIRMED for v1
 │   day/time, location, tier, "request a seat" form
@@ -90,7 +96,7 @@ feed:
 Restructure the current 5-item deep mega-menu into **top-level groups that match audience intent**,
 max 2 levels deep:
 
-Primary nav: `درباره ما` · `دوره‌ها` · `کلاس‌های حضوری` · `ویدیوها` · `مرکز دانلود` · `اخبار` ·
+Primary nav: `درباره ما` · `دوره‌ها` · `محصولات` · `کلاس‌های حضوری` · `ویدیوها` · `مرکز دانلود` · `اخبار` ·
 `تماس`
 Persistent header CTAs: `ثبت‌نام` (primary/yellow button), language switch (FA/EN), search.
 Secondary/footer nav: sponsors, schools, careers, privacy/terms — important but not primary-nav
@@ -104,8 +110,11 @@ reachable via footer/search for less-common needs (e.g. part libraries, old comp
 | Type                     | Key fields                                                                                                                                    |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority            |
+| ProductTag               | slug, FA/EN name, active/order — admin type filters on `/products`                                                                            |
+| Product                  | slug, cover, FA/EN title/excerpt/body, optional price labels, optional course link, tags, gallery, videos, specs table, active/order          |
 | ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                                          |
 | Achievement              | title, competition name, year, result/rank, photo, related course tags                                                                        |
+| License                  | title, certificate image, optional issuer/year/description, order                                                                             |
 | TeamMember               | name, role, photo, bio (short)                                                                                                                |
 | FAQ                      | question, answer, category                                                                                                                    |
 | VideoEntry               | title, Aparat embed URL/ID, tier/topic tags, thumbnail (can pull from Aparat)                                                                 |

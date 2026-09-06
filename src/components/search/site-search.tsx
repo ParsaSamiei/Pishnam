@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import {
+  BadgeCheck,
   BookOpen,
   Briefcase,
   CalendarDays,
@@ -24,6 +25,7 @@ import {
   ImageIcon,
   Medal,
   Newspaper,
+  Package,
   Play,
   Radio,
   Search,
@@ -48,6 +50,7 @@ import { cn } from "@/lib/utils";
 const KIND_LABEL_KEYS: Record<SearchKind, `kinds.${SearchKind}`> = {
   page: "kinds.page",
   course: "kinds.course",
+  product: "kinds.product",
   class: "kinds.class",
   software: "kinds.software",
   datasheet: "kinds.datasheet",
@@ -57,6 +60,7 @@ const KIND_LABEL_KEYS: Record<SearchKind, `kinds.${SearchKind}`> = {
   article: "kinds.article",
   team: "kinds.team",
   achievement: "kinds.achievement",
+  license: "kinds.license",
   faq: "kinds.faq",
   job: "kinds.job",
   press: "kinds.press",
@@ -66,6 +70,7 @@ const KIND_LABEL_KEYS: Record<SearchKind, `kinds.${SearchKind}`> = {
 const KIND_ICONS: Record<SearchKind, typeof Search> = {
   page: FileText,
   course: GraduationCap,
+  product: Package,
   class: CalendarDays,
   software: Download,
   datasheet: Cpu,
@@ -75,6 +80,7 @@ const KIND_ICONS: Record<SearchKind, typeof Search> = {
   article: Newspaper,
   team: Users,
   achievement: Medal,
+  license: BadgeCheck,
   faq: HelpCircle,
   job: Briefcase,
   press: Radio,

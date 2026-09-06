@@ -1,6 +1,7 @@
 export const SEARCH_KINDS = [
   "page",
   "course",
+  "product",
   "class",
   "software",
   "datasheet",
@@ -10,6 +11,7 @@ export const SEARCH_KINDS = [
   "article",
   "team",
   "achievement",
+  "license",
   "faq",
   "job",
   "press",

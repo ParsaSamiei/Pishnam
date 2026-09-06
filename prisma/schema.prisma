@@ -24,11 +24,6 @@ enum Tier {
   COMPETITIVE // پیشرفته / تیم مسابقات
 }
 
-enum AchievementScope {
-  NATIONAL // کشوری
-  INTERNATIONAL // جهانی
-}
-
 enum LeadType {
   ENROLL
   CLASS_SEAT
@@ -112,6 +107,7 @@ model Course {
   achievements   Achievement[]       @relation("CourseAchievements")
   documents      CourseDocument[]
   images         CourseImage[]
+  products       Product[]
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
 
@@ -189,26 +185,59 @@ model ClassSession {
   @@index([active])
 }
 
+// Admin-managed labels shown on achievement cards and as public filter pills
+// (e.g. جهانی / کشوری). Admins can add, rename, or hide tags.
+model AchievementTag {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  nameFa       String
+  nameEn       String
+  order        Int           @default(0)
+  active       Boolean       @default(true)
+  achievements Achievement[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([active, order])
+}
+
 model Achievement {
-  id          String           @id @default(cuid())
+  id          String         @id @default(cuid())
   titleFa     String
   titleEn     String
   competition String // e.g. "RoboCup"
   year        Int
   result      String // e.g. "1st place, Rescue Line"
   photo       String
-  scope       AchievementScope @default(NATIONAL)
-  courses     Course[]         @relation("CourseAchievements")
-  featured    Boolean          @default(false)
-  createdAt   DateTime         @default(now())
+  tag         AchievementTag @relation(fields: [tagId], references: [id], onDelete: Restrict)
+  tagId       String
+  courses     Course[]       @relation("CourseAchievements")
+  featured    Boolean        @default(false)
+  createdAt   DateTime       @default(now())
 
   @@index([year])
   @@index([featured])
-  @@index([scope])
+  @@index([tagId])
+}
+
+// Admin-managed taxonomy for public personnel pages at /about-us/team/[slug].
+// Members can belong to multiple tags (e.g. teachers + management).
+model TeamTag {
+  id        String          @id @default(cuid())
+  slug      String          @unique
+  nameFa    String
+  nameEn    String
+  order     Int             @default(0)
+  active    Boolean         @default(true)
+  members   TeamMemberTag[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([active, order])
 }
 
 model TeamMember {
-  id                     String    @id @default(cuid())
+  id                     String          @id @default(cuid())
   nameFa                 String
   nameEn                 String
   roleFa                 String
@@ -218,9 +247,20 @@ model TeamMember {
   bioEn                  String?
   resume                 String?
   collaborationStartDate DateTime?
-  isAlumni               Boolean   @default(false)
-  isVisible              Boolean   @default(true)
-  order                  Int       @default(0)
+  isAlumni               Boolean         @default(false)
+  isVisible              Boolean         @default(true)
+  order                  Int             @default(0)
+  tags                   TeamMemberTag[]
+}
+
+model TeamMemberTag {
+  member   TeamMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String
+  tag      TeamTag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId    String
+
+  @@id([memberId, tagId])
+  @@index([tagId])
 }
 
 model Faq {
@@ -233,6 +273,25 @@ model Faq {
   order      Int    @default(0)
 
   @@index([category])
+}
+
+// Official permits / credentials shown at /about-us/licenses (مجوز‌ها).
+model License {
+  id             String   @id @default(cuid())
+  titleFa        String
+  titleEn        String
+  issuerFa       String?
+  issuerEn       String?
+  year           Int?
+  image          String // certificate scan `/uploads/<uuid>.webp`
+  descriptionFa  String?
+  descriptionEn  String?
+  order          Int      @default(0)
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([active, order])
 }
 
 model VideoEntry {
@@ -412,6 +471,112 @@ model SoftwareRelease {
   createdAt     DateTime         @default(now())
 
   @@index([productId])
+}
+
+// Showcase catalog at /products — educational kits, robots, boards, etc.
+// Admin-managed ProductTag filters (types). No checkout; optional price is
+// display-only free text. Optional Course link for related curriculum.
+model ProductTag {
+  id        String          @id @default(cuid())
+  slug      String          @unique
+  nameFa    String
+  nameEn    String
+  order     Int             @default(0)
+  active    Boolean         @default(true)
+  products  ProductTagOnProduct[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([active, order])
+}
+
+model Product {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  image     String // cover `/uploads/<uuid>.webp`
+  titleFa   String
+  titleEn   String
+  excerptFa String?
+  excerptEn String?
+  bodyFa    String? // rich text (Tiptap HTML)
+  bodyEn    String?
+  // Optional display price (e.g. "۲٬۵۰۰٬۰۰۰ تومان") — showcase only, no cart.
+  priceFa   String?
+  priceEn   String?
+
+  courseId String?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  tags   ProductTagOnProduct[]
+  images ProductImage[]
+  videos ProductVideo[]
+  specs  ProductSpec[]
+
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, order])
+  @@index([courseId])
+}
+
+model ProductTagOnProduct {
+  productId String
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tagId     String
+  tag       ProductTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+  @@index([tagId])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  image     String
+  captionFa String?
+  captionEn String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([productId, order])
+  @@index([active])
+}
+
+model ProductVideo {
+  id          String   @id @default(cuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  titleFa     String
+  titleEn     String
+  aparatUrl   String?
+  hostedVideo String?
+  thumbnail   String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@index([productId, order])
+  @@index([active])
+}
+
+model ProductSpec {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  keyFa     String
+  keyEn     String
+  valueFa   String
+  valueEn   String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([productId, order])
+  @@index([active])
 }
 
 // A hardware part or part-family in Datasheets & Docs (e.g. "LCD", "SRF05").
@@ -680,6 +845,8 @@ model ContactSettings {
 
   addressFa String?
   addressEn String?
+  // Optional postal / ZIP code shown with the address on /contact-us.
+  postalCode String?
 
   // Canonical Google Maps embed URL only (https://www.google.com/maps/embed?...).
   // The admin form accepts a full iframe snippet or a bare embed URL and

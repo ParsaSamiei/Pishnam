@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ExternalLink, MapPin, Phone } from "lucide-react";
+import { ExternalLink, MapPin, Mailbox, Phone } from "lucide-react";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { APP_VERSION } from "@/lib/app-version";
@@ -19,6 +19,7 @@ function toPersianDigits(value: string): string {
 
 const EXPLORE_LINKS = [
   { href: "/courses", key: "courses" },
+  { href: "/products", key: "products" },
   { href: "/classes", key: "classes" },
   { href: "/gallery", key: "gallery" },
   // { href: "/videos", key: "videos" },
@@ -89,6 +90,17 @@ export async function SiteFooter() {
               addressClassName="text-pishnam-off-white/60 text-sm leading-snug"
               icon={<MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />}
             />
+          ) : null}
+          {settings?.postalCode ? (
+            <p className="text-pishnam-off-white/60 mt-2 flex max-w-sm items-center gap-1.5 text-sm">
+              <Mailbox className="size-3.5 shrink-0 opacity-70" aria-hidden="true" />
+              <span>
+                {isFa ? "کد پستی: " : "Postal code: "}
+                <span dir="ltr">
+                  {isFa ? toPersianDigits(settings.postalCode) : settings.postalCode}
+                </span>
+              </span>
+            </p>
           ) : null}
           {phones.length > 0 ? (
             <ul className="text-pishnam-off-white/60 mt-2 flex max-w-sm flex-col gap-1.5 text-sm">

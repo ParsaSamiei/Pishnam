@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,11 +8,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { NativeSelect } from "@/components/ui/native-select";
-import { ACHIEVEMENT_SCOPES, ACHIEVEMENT_SCOPE_LABELS } from "@/lib/achievement-scope";
 import type { AchievementFormState } from "@/app/admin/(dashboard)/achievements/actions";
+
+interface AchievementTagOption {
+  id: string;
+  nameFa: string;
+  nameEn: string;
+  active: boolean;
+}
 
 interface AchievementFormProps {
   action: (prevState: AchievementFormState, formData: FormData) => Promise<AchievementFormState>;
+  tags: AchievementTagOption[];
   defaultValues?: {
     titleFa: string;
     titleEn: string;
@@ -19,7 +27,7 @@ interface AchievementFormProps {
     year: number;
     result: string;
     photo: string;
-    scope: string;
+    tagId: string;
     featured: boolean;
   };
   submitLabel: string;
@@ -27,11 +35,18 @@ interface AchievementFormProps {
 
 const initialState: AchievementFormState = { status: "idle" };
 
-export function AchievementForm({ action, defaultValues, submitLabel }: AchievementFormProps) {
+export function AchievementForm({
+  action,
+  tags,
+  defaultValues,
+  submitLabel,
+}: AchievementFormProps) {
   const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
     action,
     initialState,
   );
+
+  const defaultTagId = field("tagId", defaultValues?.tagId ?? tags.find((tag) => tag.active)?.id);
 
   return (
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
@@ -121,22 +136,33 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="scope">سطح مسابقه *</Label>
-          <NativeSelect
-            id="scope"
-            name="scope"
-            defaultValue={field("scope", defaultValues?.scope ?? "NATIONAL")}
-            required
-            aria-invalid={Boolean(state.errors?.scope)}
-          >
-            {ACHIEVEMENT_SCOPES.map((scopeValue) => (
-              <option key={scopeValue} value={scopeValue}>
-                {ACHIEVEMENT_SCOPE_LABELS.fa[scopeValue]}
-              </option>
-            ))}
-          </NativeSelect>
-          {state.errors?.scope && (
-            <p className="text-pishnam-danger text-xs">{state.errors.scope}</p>
+          <Label htmlFor="tagId">برچسب *</Label>
+          {tags.length === 0 ? (
+            <p className="text-text-secondary text-sm">
+              ابتدا حداقل یک برچسب در{" "}
+              <Link href="/admin/achievement-tags/new" className="text-pishnam-gold-600 underline">
+                برچسب افتخارات
+              </Link>{" "}
+              بسازید.
+            </p>
+          ) : (
+            <NativeSelect
+              id="tagId"
+              name="tagId"
+              defaultValue={defaultTagId}
+              required
+              aria-invalid={Boolean(state.errors?.tagId)}
+            >
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.nameFa}
+                  {!tag.active ? " (غیرفعال)" : ""}
+                </option>
+              ))}
+            </NativeSelect>
+          )}
+          {state.errors?.tagId && (
+            <p className="text-pishnam-danger text-xs">{state.errors.tagId}</p>
           )}
         </div>
       </div>
@@ -152,7 +178,7 @@ export function AchievementForm({ action, defaultValues, submitLabel }: Achievem
       </label>
 
       <div className="flex gap-3">
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending || tags.length === 0}>
           {isPending && <Loader2 className="animate-spin" aria-hidden="true" />}
           {submitLabel}
         </Button>

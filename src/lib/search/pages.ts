@@ -30,10 +30,16 @@ export const SEARCH_PAGES: SearchPageDef[] = [
     keywords: "جوایز مسابقات robocup awards trophies",
   },
   {
+    href: "/about-us/licenses",
+    titleFa: "مجوز‌ها",
+    titleEn: "Licenses & Permits",
+    keywords: "مجوز گواهی پروانه license permit credential official",
+  },
+  {
     href: "/about-us/team",
     titleFa: "پرسنل",
     titleEn: "Team",
-    keywords: "مربیان staff coaches instructors alumni",
+    keywords: "مربیان staff coaches instructors alumni teachers management",
   },
   {
     href: "/about-us/faq",
@@ -46,6 +52,12 @@ export const SEARCH_PAGES: SearchPageDef[] = [
     titleFa: "دوره‌ها",
     titleEn: "Courses",
     keywords: "آموزش سطوح کلاس رباتیک catalog tiers",
+  },
+  {
+    href: "/products",
+    titleFa: "محصولات",
+    titleEn: "Products",
+    keywords: "کیت ربات محصول kit robot showcase products",
   },
   {
     href: "/classes",

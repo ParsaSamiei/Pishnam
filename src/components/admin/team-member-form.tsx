@@ -9,9 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { FileUploadField } from "@/components/admin/file-upload-field";
 import type { TeamMemberFormState } from "@/app/admin/(dashboard)/team/actions";
+import Link from "next/link";
 
 interface TeamMemberFormProps {
   action: (prevState: TeamMemberFormState, formData: FormData) => Promise<TeamMemberFormState>;
+  tags: { id: string; nameFa: string; nameEn: string; active: boolean }[];
   defaultValues?: {
     nameFa: string;
     nameEn: string;
@@ -25,17 +27,18 @@ interface TeamMemberFormProps {
     isAlumni: boolean;
     isVisible: boolean;
     order: number;
+    tagIds: string[];
   };
   submitLabel: string;
 }
 
 const initialState: TeamMemberFormState = { status: "idle" };
 
-export function TeamMemberForm({ action, defaultValues, submitLabel }: TeamMemberFormProps) {
-  const { state, formAction, isPending, formKey, field, checked } = usePreservedFormAction(
-    action,
-    initialState,
-  );
+export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: TeamMemberFormProps) {
+  const { state, formAction, isPending, formKey, field, checked, multiValueField } =
+    usePreservedFormAction(action, initialState);
+
+  const selectedTagIds = multiValueField("tagIds", defaultValues?.tagIds ?? []).filter(Boolean);
 
   return (
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
@@ -102,6 +105,45 @@ export function TeamMemberForm({ action, defaultValues, submitLabel }: TeamMembe
             <p className="text-pishnam-danger text-xs">{state.errors.roleEn}</p>
           )}
         </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <span className="text-text-primary text-sm font-medium">دسته‌بندی پرسنل *</span>
+        {tags.length === 0 ? (
+          <p className="text-text-secondary text-sm">
+            ابتدا حداقل یک دسته در{" "}
+            <Link href="/admin/team-tags/new" className="text-pishnam-gold-600 underline">
+              دسته‌بندی پرسنل
+            </Link>{" "}
+            بسازید.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {tags.map((tag) => (
+              <label key={tag.id} className="text-text-primary flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  name="tagIds"
+                  value={tag.id}
+                  defaultChecked={selectedTagIds.includes(tag.id)}
+                  className="border-border accent-pishnam-gold-500 size-4 rounded"
+                />
+                <span>
+                  {tag.nameFa}
+                  <span className="text-text-secondary ms-1 text-xs" dir="ltr">
+                    ({tag.nameEn})
+                  </span>
+                  {!tag.active && (
+                    <span className="text-text-secondary ms-1 text-xs">(غیرفعال)</span>
+                  )}
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+        {state.errors?.tagIds && (
+          <p className="text-pishnam-danger text-xs">{state.errors.tagIds}</p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -192,7 +234,7 @@ export function TeamMemberForm({ action, defaultValues, submitLabel }: TeamMembe
       </div>
 
       <div className="flex gap-3">
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending || tags.length === 0}>
           {isPending && <Loader2 className="animate-spin" aria-hidden="true" />}
           {submitLabel}
         </Button>

@@ -26,6 +26,8 @@ import {
   Camera,
   LayoutGrid,
   CircuitBoard,
+  Boxes,
+  BadgeCheck,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -50,9 +52,14 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/contact", label: "تماس با ما", icon: MapPin },
   { href: "/admin/enrollment-guidelines", label: "راهنمای ثبت‌نام", icon: ClipboardList },
   { href: "/admin/courses", label: "دوره‌ها", icon: GraduationCap },
+  { href: "/admin/products", label: "محصولات", icon: Boxes },
+  { href: "/admin/product-tags", label: "انواع محصول", icon: Tags },
   { href: "/admin/classes", label: "کلاس‌های حضوری", icon: CalendarDays },
   { href: "/admin/achievements", label: "افتخارات", icon: Trophy },
+  { href: "/admin/achievement-tags", label: "برچسب افتخارات", icon: Tags },
+  { href: "/admin/licenses", label: "مجوز‌ها", icon: BadgeCheck },
   { href: "/admin/team", label: "اعضای تیم", icon: Users },
+  { href: "/admin/team-tags", label: "دسته‌بندی پرسنل", icon: Tags },
   { href: "/admin/faqs", label: "سوالات متداول", icon: HelpCircle },
   { href: "/admin/videos", label: "ویدیوها", icon: Video },
   { href: "/admin/software", label: "نرم‌افزار و افزونه‌ها", icon: Package },

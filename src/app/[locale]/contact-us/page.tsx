@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildAlternates } from "@/lib/i18n/alternates";
-import { Briefcase, Mail, Phone, MapPin } from "lucide-react";
+import { Briefcase, Mail, Mailbox, Phone, MapPin } from "lucide-react";
 import { Link } from "@/lib/i18n/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { PageHeader } from "@/components/layout/page-header";
@@ -33,6 +33,10 @@ function toTelHref(phone: string): string {
   return `tel:${latin.replace(/[^\d+]/g, "")}`;
 }
 
+function toPersianDigits(value: string): string {
+  return value.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)] ?? d);
+}
+
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -45,13 +49,19 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     (isFa ? settings?.addressFa : settings?.addressEn) ||
     (isFa ? settings?.addressEn : settings?.addressFa) ||
     null;
+  const postalCode = settings?.postalCode ?? null;
   const mapEmbedUrl = settings?.mapEmbedUrl ?? null;
   const socialLinks = getSocialLinks(settings);
   const hasContactDetails =
-    phones.length > 0 || Boolean(email) || Boolean(address) || socialLinks.length > 0;
+    phones.length > 0 ||
+    Boolean(email) ||
+    Boolean(address) ||
+    Boolean(postalCode) ||
+    socialLinks.length > 0;
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const sameAs = socialLinks.map((link) => link.href);
+  const displayPostalCode = postalCode ? (isFa ? toPersianDigits(postalCode) : postalCode) : null;
 
   return (
     <>
@@ -65,7 +75,15 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             name: isFa ? "پیشنام" : "Pishnam",
             ...(email ? { email } : {}),
             ...(phones.length ? { telephone: phones } : {}),
-            ...(address ? { address: { "@type": "PostalAddress", streetAddress: address } } : {}),
+            ...(address || postalCode
+              ? {
+                  address: {
+                    "@type": "PostalAddress",
+                    ...(address ? { streetAddress: address } : {}),
+                    ...(postalCode ? { postalCode } : {}),
+                  },
+                }
+              : {}),
             ...(sameAs.length ? { sameAs } : {}),
           },
         }}
@@ -145,6 +163,26 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                         address={address}
                         addressClassName="reading-copy text-text-secondary mt-1 text-sm"
                       />
+                    </div>
+                  </div>
+                ) : null}
+
+                {displayPostalCode ? (
+                  <div className="flex items-start gap-3">
+                    <Mailbox
+                      className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <div>
+                      <p className="text-text-primary text-sm font-semibold">
+                        {isFa ? "کد پستی" : "Postal code"}
+                      </p>
+                      <p
+                        dir="ltr"
+                        className="text-text-secondary mt-1 text-end text-sm sm:text-start"
+                      >
+                        {displayPostalCode}
+                      </p>
                     </div>
                   </div>
                 ) : null}

@@ -13,6 +13,7 @@ export default async function EditAchievementPage({ params }: { params: Promise<
     notFound();
   }
 
+  const tags = await prisma.achievementTag.findMany({ orderBy: { order: "asc" } });
   const boundUpdate = updateAchievement.bind(null, id);
 
   return (
@@ -28,6 +29,7 @@ export default async function EditAchievementPage({ params }: { params: Promise<
       <div className="mt-6">
         <AchievementForm
           action={boundUpdate}
+          tags={tags}
           defaultValues={achievement}
           submitLabel="ذخیره تغییرات"
         />

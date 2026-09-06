@@ -4,11 +4,6 @@ import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
-import {
-  ACHIEVEMENT_SCOPES,
-  ACHIEVEMENT_SCOPE_LABELS,
-  isAchievementScope,
-} from "@/lib/achievement-scope";
 import { Link } from "@/lib/i18n/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { AchievementCard } from "@/components/home/achievement-card";
@@ -26,24 +21,47 @@ export async function generateMetadata({
   };
 }
 
+function tagSlugFromSearch(tag?: string, scope?: string): string | undefined {
+  if (tag) return tag;
+  if (scope === "INTERNATIONAL") return "international";
+  if (scope === "NATIONAL") return "national";
+  return undefined;
+}
+
 export default async function AchievementsPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ scope?: string }>;
+  searchParams: Promise<{ tag?: string; scope?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const appLocale = locale as AppLocale;
   const isFa = locale === "fa";
-  const { scope: scopeParam } = await searchParams;
-  const activeScope = isAchievementScope(scopeParam) ? scopeParam : undefined;
+  const { tag: tagParam, scope: scopeParam } = await searchParams;
+  const requestedSlug = tagSlugFromSearch(tagParam, scopeParam);
 
-  const achievements = await prisma.achievement.findMany({
-    where: activeScope ? { scope: activeScope } : undefined,
-    orderBy: { year: "desc" },
-  });
+  const [tags, achievements] = await Promise.all([
+    prisma.achievementTag.findMany({
+      where: { active: true },
+      orderBy: { order: "asc" },
+    }),
+    prisma.achievement.findMany({
+      include: { tag: true },
+      orderBy: { year: "desc" },
+    }),
+  ]);
+
+  const activeSlug =
+    requestedSlug &&
+    (tags.some((tag) => tag.slug === requestedSlug) ||
+      achievements.some((achievement) => achievement.tag.slug === requestedSlug))
+      ? requestedSlug
+      : undefined;
+  const visibleAchievements = activeSlug
+    ? achievements.filter((achievement) => achievement.tag.slug === activeSlug)
+    : achievements;
 
   return (
     <>
@@ -56,41 +74,43 @@ export default async function AchievementsPage({
         }
       />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div
-          className="flex flex-wrap gap-2"
-          role="group"
-          aria-label={isFa ? "فیلتر بر اساس سطح مسابقه" : "Filter by competition scope"}
-        >
-          <Link
-            href="/about-us/achievements"
-            className={cn(
-              "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
-              !activeScope
-                ? "border-pishnam-gold-500 bg-pishnam-gold-500 text-pishnam-navy-900"
-                : "border-border text-text-secondary hover:bg-bg-surface-alt",
-            )}
+        {tags.length > 0 && (
+          <div
+            className="flex flex-wrap gap-2"
+            role="group"
+            aria-label={isFa ? "فیلتر بر اساس برچسب" : "Filter by tag"}
           >
-            {isFa ? "همه" : "All"}
-          </Link>
-          {ACHIEVEMENT_SCOPES.map((scopeValue) => (
             <Link
-              key={scopeValue}
-              href={{ pathname: "/about-us/achievements", query: { scope: scopeValue } }}
+              href="/about-us/achievements"
               className={cn(
                 "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
-                activeScope === scopeValue
+                !activeSlug
                   ? "border-pishnam-gold-500 bg-pishnam-gold-500 text-pishnam-navy-900"
                   : "border-border text-text-secondary hover:bg-bg-surface-alt",
               )}
             >
-              {ACHIEVEMENT_SCOPE_LABELS[appLocale][scopeValue]}
+              {isFa ? "همه" : "All"}
             </Link>
-          ))}
-        </div>
+            {tags.map((tag) => (
+              <Link
+                key={tag.id}
+                href={{ pathname: "/about-us/achievements", query: { tag: tag.slug } }}
+                className={cn(
+                  "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
+                  activeSlug === tag.slug
+                    ? "border-pishnam-gold-500 bg-pishnam-gold-500 text-pishnam-navy-900"
+                    : "border-border text-text-secondary hover:bg-bg-surface-alt",
+                )}
+              >
+                {pickLocaleField(tag.nameFa, tag.nameEn, appLocale)}
+              </Link>
+            ))}
+          </div>
+        )}
 
-        {achievements.length === 0 ? (
-          <p className="text-text-secondary mt-10 text-center">
-            {activeScope
+        {visibleAchievements.length === 0 ? (
+          <p className={cn("text-text-secondary text-center", tags.length > 0 && "mt-10")}>
+            {activeSlug
               ? isFa
                 ? "افتخاری در این دسته یافت نشد."
                 : "No achievements found in this category."
@@ -99,8 +119,10 @@ export default async function AchievementsPage({
                 : "No achievements recorded yet."}
           </p>
         ) : (
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {achievements.map((achievement) => (
+          <div
+            className={cn("grid gap-5 sm:grid-cols-2 lg:grid-cols-4", tags.length > 0 && "mt-8")}
+          >
+            {visibleAchievements.map((achievement) => (
               <AchievementCard
                 key={achievement.id}
                 title={pickLocaleField(achievement.titleFa, achievement.titleEn, appLocale)}
@@ -108,7 +130,11 @@ export default async function AchievementsPage({
                 year={achievement.year}
                 result={achievement.result}
                 photo={achievement.photo}
-                scopeLabel={ACHIEVEMENT_SCOPE_LABELS[appLocale][achievement.scope]}
+                scopeLabel={pickLocaleField(
+                  achievement.tag.nameFa,
+                  achievement.tag.nameEn,
+                  appLocale,
+                )}
               />
             ))}
           </div>

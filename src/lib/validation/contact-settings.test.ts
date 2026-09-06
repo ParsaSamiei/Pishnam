@@ -8,6 +8,7 @@ describe("contactSettingsSchema", () => {
       email: "",
       addressFa: "",
       addressEn: "",
+      postalCode: "",
       mapEmbedUrl: "",
       telegramUrl: "",
       baleUrl: "",
@@ -20,6 +21,7 @@ describe("contactSettingsSchema", () => {
       email: null,
       addressFa: null,
       addressEn: null,
+      postalCode: null,
       mapEmbedUrl: null,
       telegramUrl: null,
       baleUrl: null,
@@ -35,6 +37,7 @@ describe("contactSettingsSchema", () => {
       email: "info@pishnam.ir",
       addressFa: "تهران",
       addressEn: "Tehran",
+      postalCode: "1234567890",
       mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18",
       telegramUrl: "https://t.me/pishnam",
       baleUrl: "https://ble.ir/pishnam",
@@ -44,6 +47,7 @@ describe("contactSettingsSchema", () => {
     });
     expect(parsed.phones).toEqual(["+98 21 1111 1111", "09120000000"]);
     expect(parsed.email).toBe("info@pishnam.ir");
+    expect(parsed.postalCode).toBe("1234567890");
     expect(parsed.mapEmbedUrl).toBe("https://www.google.com/maps/embed?pb=!1m18");
     expect(parsed.telegramUrl).toBe("https://t.me/pishnam");
     expect(parsed.baleUrl).toBe("https://ble.ir/pishnam");

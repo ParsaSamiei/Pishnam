@@ -29,8 +29,12 @@ enough to a headless-CMS content model that migrating later wouldn't mean starti
 One admin section per content type from the schema:
 
 - Courses (+ their FA/EN translations, tier, topic tags, related achievements)
+- Products (showcase: cover, FA/EN copy, optional price text, optional related course, gallery,
+  videos, specs table) and Product tags (type filters on `/products`)
 - Class sessions (offline schedule — confirmed for v1)
 - Achievements
+- Achievement tags (labels like جهانی / کشوری used on cards and public filters)
+- Licenses (مجوز‌ها — certificate image + FA/EN title, optional issuer/year/description)
 - Team members
 - FAQs
 - Video entries (Aparat links)
@@ -63,8 +67,8 @@ One admin section per content type from the schema:
   required. Listed at `/admin/feedback` with unread/read status; not mixed into Leads because
   there is no phone/email to follow up on.
 - **Contact details** (singleton, not a list): phone numbers (any number of them), email, FA/EN
-  address, and a Google Maps embed. Edited at `/admin/contact`; shown on the public `/contact`
-  page. Paste either the Maps “Embed a map” iframe or the embed URL itself.
+  address, postal code, and a Google Maps embed. Edited at `/admin/contact`; shown on the public
+  `/contact-us` page. Paste either the Maps “Embed a map” iframe or the embed URL itself.
 
 ## UI pattern
 

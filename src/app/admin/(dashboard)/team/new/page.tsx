@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 import { TeamMemberForm } from "@/components/admin/team-member-form";
 import { createTeamMember } from "../actions";
 
-export default function NewTeamMemberPage() {
+export default async function NewTeamMemberPage() {
+  const tags = await prisma.teamTag.findMany({ orderBy: { order: "asc" } });
+
   return (
     <div>
       <Link
@@ -15,7 +18,16 @@ export default function NewTeamMemberPage() {
       </Link>
       <h1 className="text-text-primary text-2xl font-bold">افزودن عضو جدید</h1>
       <div className="mt-6">
-        <TeamMemberForm action={createTeamMember} submitLabel="ثبت عضو" />
+        <TeamMemberForm
+          action={createTeamMember}
+          tags={tags.map((tag) => ({
+            id: tag.id,
+            nameFa: tag.nameFa,
+            nameEn: tag.nameEn,
+            active: tag.active,
+          }))}
+          submitLabel="ثبت عضو"
+        />
       </div>
     </div>
   );

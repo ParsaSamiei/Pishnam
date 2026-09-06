@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useLocale } from "next-intl";
 import { Reveal } from "@/components/motion/reveal";
+import { ViewMediaHint } from "@/components/media/view-media-hint";
 import { GalleryLightbox, type GalleryLightboxItem } from "@/components/gallery/gallery-lightbox";
 
 export type CoursePhotoView = {
@@ -19,6 +21,8 @@ interface CoursePhotosProps {
 
 export function CoursePhotos({ photos, title }: CoursePhotosProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const locale = useLocale();
+  const viewLabel = locale === "fa" ? "مشاهده" : "View";
 
   if (photos.length === 0) return null;
 
@@ -46,7 +50,7 @@ export function CoursePhotos({ photos, title }: CoursePhotosProps) {
               type="button"
               onClick={() => setOpenIndex(index)}
               className="border-border bg-bg-surface-alt focus-visible:ring-pishnam-gold-500 group relative aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-xl border transition-shadow duration-200 ease-out hover:shadow-md focus-visible:ring-2 focus-visible:outline-none"
-              aria-label={photo.caption ?? photo.alt}
+              aria-label={`${viewLabel}: ${photo.caption ?? photo.alt}`}
             >
               <Image
                 src={photo.image}
@@ -54,6 +58,10 @@ export function CoursePhotos({ photos, title }: CoursePhotosProps) {
                 fill
                 className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                 sizes="(min-width: 1024px) 240px, 45vw"
+              />
+              <ViewMediaHint
+                label={viewLabel}
+                className={photo.caption ? "top-2.5 bottom-auto" : undefined}
               />
               {photo.caption ? (
                 <span className="from-pishnam-navy-900/80 absolute inset-x-0 bottom-0 bg-gradient-to-t to-transparent px-2.5 pt-8 pb-2 text-start text-xs font-medium text-white">

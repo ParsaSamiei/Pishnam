@@ -53,6 +53,7 @@ pishnam/
 │   │   │   ├── page.tsx                  # dashboard (recent leads, etc.)
 │   │   │   ├── courses/
 │   │   │   ├── achievements/
+│   │   │   ├── licenses/
 │   │   │   ├── articles/
 │   │   │   ├── leads/
 │   │   │   └── ...one folder per content type

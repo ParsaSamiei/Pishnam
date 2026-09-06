@@ -20,6 +20,7 @@ interface ContactSettingsFormProps {
     email: string | null;
     addressFa: string | null;
     addressEn: string | null;
+    postalCode: string | null;
     mapEmbedUrl: string | null;
     telegramUrl: string | null;
     baleUrl: string | null;
@@ -158,6 +159,24 @@ function ContactSettingsFormFields({
         />
         {state.errors?.addressEn && (
           <p className="text-pishnam-danger text-xs">{state.errors.addressEn}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="postalCode">کد پستی</Label>
+        <Input
+          id="postalCode"
+          name="postalCode"
+          type="text"
+          dir="ltr"
+          inputMode="numeric"
+          autoComplete="postal-code"
+          placeholder="1234567890"
+          defaultValue={field("postalCode", defaultValues?.postalCode ?? "")}
+          aria-invalid={Boolean(state.errors?.postalCode)}
+        />
+        {state.errors?.postalCode && (
+          <p className="text-pishnam-danger text-xs">{state.errors.postalCode}</p>
         )}
       </div>
 

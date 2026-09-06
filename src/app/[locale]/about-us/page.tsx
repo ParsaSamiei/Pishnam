@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Trophy, Users, HelpCircle } from "lucide-react";
+import { Trophy, Users, HelpCircle, BadgeCheck } from "lucide-react";
 import { buildAlternates } from "@/lib/i18n/alternates";
 import { PageHeader } from "@/components/layout/page-header";
 import { AudienceEntryCard } from "@/components/home/audience-entry-card";
@@ -37,6 +37,15 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         ? "نتایج تیم پیشنام در مسابقات ملی و بین‌المللی."
         : "Pishnam's results at national and international competitions.",
       accent: "gold" as const,
+    },
+    {
+      href: "/about-us/licenses" as const,
+      icon: BadgeCheck,
+      title: isFa ? "مجوز‌ها" : "Licenses & Permits",
+      body: isFa
+        ? "مجوزها و گواهی‌های رسمی فعالیت پیشنام."
+        : "Official licenses and permits authorizing Pishnam's work.",
+      accent: "steel" as const,
     },
     {
       href: "/about-us/team" as const,
@@ -76,7 +85,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {links.map((link) => (
             <AudienceEntryCard
               key={link.href}

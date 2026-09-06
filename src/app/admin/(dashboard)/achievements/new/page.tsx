@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 import { AchievementForm } from "@/components/admin/achievement-form";
 import { createAchievement } from "../actions";
 
-export default function NewAchievementPage() {
+export default async function NewAchievementPage() {
+  const tags = await prisma.achievementTag.findMany({ orderBy: { order: "asc" } });
+
   return (
     <div>
       <Link
@@ -15,7 +18,7 @@ export default function NewAchievementPage() {
       </Link>
       <h1 className="text-text-primary text-2xl font-bold">افزودن افتخار جدید</h1>
       <div className="mt-6">
-        <AchievementForm action={createAchievement} submitLabel="ثبت افتخار" />
+        <AchievementForm action={createAchievement} tags={tags} submitLabel="ثبت افتخار" />
       </div>
     </div>
   );

@@ -9,9 +9,11 @@ const STATIC_PATHS = [
   "",
   "/about-us",
   "/about-us/achievements",
+  "/about-us/licenses",
   "/about-us/team",
   "/about-us/faq",
   "/courses",
+  "/products",
   "/classes",
   "/gallery",
   "/videos",
@@ -56,34 +58,48 @@ function buildEntry(path: string, lastModified?: Date): MetadataRoute.Sitemap[nu
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [courses, articles, softwareProducts, datasheetParts, downloadSections] = await Promise.all(
-    [
-      prisma.course.findMany({
-        where: { active: true },
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.article.findMany({
-        where: { publishedAt: { lte: new Date() } },
-        select: { slug: true, publishedAt: true },
-      }),
-      prisma.softwareProduct.findMany({
-        where: { active: true },
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.datasheetPart.findMany({
-        where: { active: true },
-        select: {
-          slug: true,
-          updatedAt: true,
-          parent: { select: { slug: true } },
-        },
-      }),
-      prisma.downloadSection.findMany({
-        where: { active: true },
-        select: { slug: true, sectionType: true, updatedAt: true },
-      }),
-    ],
-  );
+  const [
+    courses,
+    articles,
+    softwareProducts,
+    datasheetParts,
+    downloadSections,
+    teamTags,
+    products,
+  ] = await Promise.all([
+    prisma.course.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.article.findMany({
+      where: { publishedAt: { lte: new Date() } },
+      select: { slug: true, publishedAt: true },
+    }),
+    prisma.softwareProduct.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.datasheetPart.findMany({
+      where: { active: true },
+      select: {
+        slug: true,
+        updatedAt: true,
+        parent: { select: { slug: true } },
+      },
+    }),
+    prisma.downloadSection.findMany({
+      where: { active: true },
+      select: { slug: true, sectionType: true, updatedAt: true },
+    }),
+    prisma.teamTag.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    }),
+    prisma.product.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    }),
+  ]);
 
   const activeDownloadPaths = downloadSections.map(
     (section) => `/downloads/${resolveDownloadSectionSlug(section)}`,
@@ -93,6 +109,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...STATIC_PATHS.map((path) => buildEntry(path)),
     ...activeDownloadPaths.map((path) => buildEntry(path)),
     ...courses.map((course) => buildEntry(`/courses/${course.slug}`, course.updatedAt)),
+    ...products.map((product) => buildEntry(`/products/${product.slug}`, product.updatedAt)),
     ...articles.map((article) => buildEntry(`/blog/${article.slug}`, article.publishedAt)),
     ...softwareProducts.map((product) =>
       buildEntry(`/downloads/software/${product.slug}`, product.updatedAt),
@@ -105,6 +122,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         part.updatedAt,
       ),
     ),
+    ...teamTags.map((tag) => buildEntry(`/about-us/team/${tag.slug}`, tag.updatedAt)),
   ];
 
   return entries;

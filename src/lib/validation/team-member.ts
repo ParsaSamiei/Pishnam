@@ -18,6 +18,11 @@ export const teamMemberSchema = z.object({
   isAlumni: z.coerce.boolean(),
   isVisible: z.coerce.boolean(),
   order: z.coerce.number().int().min(0).default(0),
+  tagIds: z
+    .union([z.string(), z.array(z.string())])
+    .optional()
+    .transform((val) => (Array.isArray(val) ? val : val ? [val] : []))
+    .pipe(z.array(z.string().min(1)).min(1, "حداقل یک دسته‌بندی الزامی است.")),
 });
 
 export type TeamMemberFormValues = z.infer<typeof teamMemberSchema>;

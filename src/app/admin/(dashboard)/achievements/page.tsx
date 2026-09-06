@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Pencil, Star } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/format";
-import { ACHIEVEMENT_SCOPE_LABELS, type AchievementScopeValue } from "@/lib/achievement-scope";
 import { AdminListHeader } from "@/components/admin/admin-list-header";
 import { DataTable } from "@/components/admin/data-table";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -10,7 +9,10 @@ import { Card } from "@/components/ui/card";
 import { deleteAchievement } from "./actions";
 
 export default async function AdminAchievementsPage() {
-  const achievements = await prisma.achievement.findMany({ orderBy: { year: "desc" } });
+  const achievements = await prisma.achievement.findMany({
+    orderBy: { year: "desc" },
+    include: { tag: true },
+  });
 
   return (
     <div>
@@ -19,6 +21,13 @@ export default async function AdminAchievementsPage() {
         newHref="/admin/achievements/new"
         newLabel="افزودن افتخار"
       />
+      <p className="text-text-secondary mt-2 text-sm">
+        برچسب‌های جهانی، کشوری و موارد جدید را از{" "}
+        <Link href="/admin/achievement-tags" className="text-pishnam-gold-600 underline">
+          برچسب افتخارات
+        </Link>{" "}
+        مدیریت کنید.
+      </p>
 
       <Card className="mt-6 overflow-hidden p-0">
         <DataTable
@@ -42,8 +51,8 @@ export default async function AdminAchievementsPage() {
             },
             { header: "مسابقه", cell: (row) => row.competition },
             {
-              header: "سطح",
-              cell: (row) => ACHIEVEMENT_SCOPE_LABELS.fa[row.scope as AchievementScopeValue],
+              header: "برچسب",
+              cell: (row) => row.tag.nameFa,
             },
             { header: "سال", cell: (row) => row.year },
             { header: "نتیجه", cell: (row) => row.result },

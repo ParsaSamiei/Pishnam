@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
+import { ViewMediaHint } from "@/components/media/view-media-hint";
 import { GalleryLightbox, type GalleryLightboxItem } from "./gallery-lightbox";
 import { GalleryMediaThumb } from "./gallery-media-thumb";
 
@@ -12,6 +14,8 @@ interface GalleryGridProps {
 
 export function GalleryGrid({ items, openLabel }: GalleryGridProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const locale = useLocale();
+  const viewLabel = locale === "fa" ? "مشاهده" : "View";
 
   return (
     <>
@@ -36,6 +40,9 @@ export function GalleryGrid({ items, openLabel }: GalleryGridProps) {
                 "group-hover:bg-pishnam-navy-900/20 group-focus-visible:bg-pishnam-navy-900/20",
               )}
             />
+            {item.mediaType === "IMAGE" ? (
+              <ViewMediaHint label={viewLabel} className="top-2.5 bottom-auto" />
+            ) : null}
             {item.caption && (
               <div
                 aria-hidden="true"

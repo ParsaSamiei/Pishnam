@@ -8,11 +8,26 @@ import { Card } from "@/components/ui/card";
 import { deleteTeamMember } from "./actions";
 
 export default async function AdminTeamPage() {
-  const members = await prisma.teamMember.findMany({ orderBy: { order: "asc" } });
+  const members = await prisma.teamMember.findMany({
+    orderBy: { order: "asc" },
+    include: {
+      tags: {
+        include: { tag: { select: { nameFa: true } } },
+        orderBy: { tag: { order: "asc" } },
+      },
+    },
+  });
 
   return (
     <div>
       <AdminListHeader title="پرسنل" newHref="/admin/team/new" newLabel="افزودن عضو" />
+      <p className="text-text-secondary mt-2 text-sm">
+        دسته‌بندی‌های عمومی را از{" "}
+        <Link href="/admin/team-tags" className="text-pishnam-gold-600 underline">
+          دسته‌بندی پرسنل
+        </Link>{" "}
+        مدیریت کنید.
+      </p>
 
       <Card className="mt-6 overflow-hidden p-0">
         <DataTable
@@ -22,6 +37,12 @@ export default async function AdminTeamPage() {
           columns={[
             { header: "نام", cell: (row) => row.nameFa },
             { header: "سمت", cell: (row) => row.roleFa, className: "text-text-secondary" },
+            {
+              header: "دسته‌ها",
+              cell: (row) =>
+                row.tags.length > 0 ? row.tags.map((rowTag) => rowTag.tag.nameFa).join("، ") : "—",
+              className: "text-text-secondary",
+            },
             {
               header: "وضعیت",
               cell: (row) => (

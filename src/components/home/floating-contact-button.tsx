@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { MapPin, Mailbox, MessageCircle, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
@@ -27,12 +27,14 @@ function toPersianDigits(value: string): string {
 
 type FloatingContactButtonProps = {
   address: string | null;
+  postalCode: string | null;
   phones: string[];
   socialLinks: SocialLink[];
 };
 
 export function FloatingContactButton({
   address,
+  postalCode,
   phones,
   socialLinks,
 }: FloatingContactButtonProps) {
@@ -44,7 +46,9 @@ export function FloatingContactButton({
   const reduced = useReducedMotionSafe();
   const [open, setOpen] = useState(false);
 
-  const hasContent = Boolean(address) || phones.length > 0 || socialLinks.length > 0;
+  const displayPostalCode = postalCode ? (isFa ? toPersianDigits(postalCode) : postalCode) : null;
+  const hasContent =
+    Boolean(address) || Boolean(displayPostalCode) || phones.length > 0 || socialLinks.length > 0;
 
   if (!hasContent) return null;
 
@@ -99,6 +103,23 @@ export function FloatingContactButton({
                     address={address}
                     addressClassName="text-text-secondary mt-1 text-sm leading-snug"
                   />
+                </div>
+              </div>
+            ) : null}
+
+            {displayPostalCode ? (
+              <div className="flex items-start gap-3">
+                <Mailbox
+                  className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p className="text-text-primary text-sm font-semibold">
+                    {t("floatingContact.postalCode")}
+                  </p>
+                  <p dir="ltr" className="text-text-secondary mt-1 text-sm">
+                    {displayPostalCode}
+                  </p>
                 </div>
               </div>
             ) : null}

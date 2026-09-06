@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { TIER_LABELS, type TierValue } from "@/lib/tier-labels";
-import { ACHIEVEMENT_SCOPE_LABELS } from "@/lib/achievement-scope";
 import { Link } from "@/lib/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { RichText } from "@/components/rich-text";
@@ -25,7 +24,7 @@ async function getCourse(slug: string, locale: AppLocale) {
     where: { slug, active: true },
     include: {
       translations: { where: { locale } },
-      achievements: { orderBy: { year: "desc" }, take: 4 },
+      achievements: { orderBy: { year: "desc" }, take: 4, include: { tag: true } },
       documents: {
         where: { active: true },
         orderBy: [{ order: "asc" }, { createdAt: "asc" }],
@@ -211,7 +210,11 @@ export default async function CourseDetailPage({
                     year={achievement.year}
                     result={achievement.result}
                     photo={achievement.photo}
-                    scopeLabel={ACHIEVEMENT_SCOPE_LABELS[appLocale][achievement.scope]}
+                    scopeLabel={pickLocaleField(
+                      achievement.tag.nameFa,
+                      achievement.tag.nameEn,
+                      appLocale,
+                    )}
                   />
                 ))}
               </div>

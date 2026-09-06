@@ -2,7 +2,6 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { ACHIEVEMENT_SCOPE_LABELS, type AchievementScopeValue } from "@/lib/achievement-scope";
 import { datasheetPublicPath } from "@/lib/datasheet-parts";
 import { resolveDownloadSectionSlug } from "@/lib/download-sections";
 import { formatWeekday } from "@/lib/format";
@@ -70,10 +69,13 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
     articles,
     team,
     achievements,
+    licenses,
     faqs,
     jobs,
     mentions,
     gallery,
+    teamTags,
+    products,
   ] = await Promise.all([
     prisma.course.findMany({
       where: { active: true },
@@ -140,9 +142,21 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
     prisma.teamMember.findMany({
       where: { isVisible: true },
       orderBy: { order: "asc" },
+      include: {
+        tags: {
+          where: { tag: { active: true } },
+          orderBy: { tag: { order: "asc" } },
+          include: { tag: { select: { slug: true, nameFa: true, nameEn: true } } },
+        },
+      },
     }),
     prisma.achievement.findMany({
+      include: { tag: true },
       orderBy: [{ year: "desc" }, { createdAt: "desc" }],
+    }),
+    prisma.license.findMany({
+      where: { active: true },
+      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
     }),
     prisma.faq.findMany({
       orderBy: [{ category: "asc" }, { order: "asc" }],
@@ -160,6 +174,25 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
     }),
     prisma.galleryImage.findMany({
       orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+    }),
+    prisma.teamTag.findMany({
+      where: { active: true },
+      orderBy: { order: "asc" },
+      select: { id: true, slug: true, nameFa: true, nameEn: true },
+    }),
+    prisma.product.findMany({
+      where: { active: true },
+      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+      include: {
+        tags: {
+          where: { tag: { active: true } },
+          include: { tag: { select: { nameFa: true, nameEn: true, slug: true } } },
+        },
+        specs: {
+          where: { active: true },
+          select: { keyFa: true, keyEn: true, valueFa: true, valueEn: true },
+        },
+      },
     }),
   ]);
 
@@ -208,6 +241,38 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
           course.topicTags,
           TIER_LABELS.fa[course.tier as TierValue],
           TIER_LABELS.en[course.tier as TierValue],
+        ),
+      }),
+    );
+  }
+
+  for (const product of products) {
+    const tagNames = product.tags.flatMap((assignment) => [
+      assignment.tag.nameFa,
+      assignment.tag.nameEn,
+      assignment.tag.slug,
+    ]);
+    const subtitle =
+      product.tags
+        .map((assignment) => localized(assignment.tag.nameFa, assignment.tag.nameEn, locale))
+        .filter(Boolean)
+        .join(" · ") || null;
+    hits.push(
+      hit("product", `product:${product.id}`, {
+        title: localized(product.titleFa, product.titleEn, locale),
+        subtitle,
+        href: `/products/${product.slug}`,
+        image: product.image || null,
+        keywords: keywords(
+          product.titleFa,
+          product.titleEn,
+          product.excerptFa,
+          product.excerptEn,
+          product.slug,
+          product.priceFa,
+          product.priceEn,
+          tagNames,
+          ...product.specs.flatMap((spec) => [spec.keyFa, spec.keyEn, spec.valueFa, spec.valueEn]),
         ),
       }),
     );
@@ -366,12 +431,25 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
     );
   }
 
+  for (const tag of teamTags) {
+    hits.push(
+      hit("page", `team-tag:${tag.id}`, {
+        title: localized(tag.nameFa, tag.nameEn, locale),
+        subtitle: locale === "fa" ? "پرسنل" : "Team",
+        href: `/about-us/team/${tag.slug}`,
+        image: null,
+        keywords: keywords(tag.nameFa, tag.nameEn, tag.slug, "پرسنل", "team", "staff"),
+      }),
+    );
+  }
+
   for (const member of team) {
+    const primaryTag = member.tags[0]?.tag;
     hits.push(
       hit("team", `team:${member.id}`, {
         title: localized(member.nameFa, member.nameEn, locale),
         subtitle: localized(member.roleFa, member.roleEn, locale) || null,
-        href: "/about-us/team",
+        href: primaryTag ? `/about-us/team/${primaryTag.slug}` : "/about-us/team",
         image: member.photo || null,
         keywords: keywords(
           member.nameFa,
@@ -380,17 +458,18 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
           member.roleEn,
           member.bioFa,
           member.bioEn,
+          ...member.tags.flatMap((row) => [row.tag.nameFa, row.tag.nameEn, row.tag.slug]),
         ),
       }),
     );
   }
 
   for (const achievement of achievements) {
-    const scope = ACHIEVEMENT_SCOPE_LABELS[locale][achievement.scope as AchievementScopeValue];
+    const tagLabel = localized(achievement.tag.nameFa, achievement.tag.nameEn, locale);
     hits.push(
       hit("achievement", `achievement:${achievement.id}`, {
         title: localized(achievement.titleFa, achievement.titleEn, locale),
-        subtitle: `${achievement.competition} · ${achievement.year} · ${scope}`,
+        subtitle: `${achievement.competition} · ${achievement.year} · ${tagLabel}`,
         href: "/about-us/achievements",
         image: achievement.photo || null,
         keywords: keywords(
@@ -399,8 +478,35 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
           achievement.competition,
           achievement.result,
           String(achievement.year),
-          ACHIEVEMENT_SCOPE_LABELS.fa[achievement.scope as AchievementScopeValue],
-          ACHIEVEMENT_SCOPE_LABELS.en[achievement.scope as AchievementScopeValue],
+          achievement.tag.nameFa,
+          achievement.tag.nameEn,
+          achievement.tag.slug,
+        ),
+      }),
+    );
+  }
+
+  for (const license of licenses) {
+    const issuer = localized(license.issuerFa, license.issuerEn, locale);
+    hits.push(
+      hit("license", `license:${license.id}`, {
+        title: localized(license.titleFa, license.titleEn, locale),
+        subtitle:
+          [issuer, license.year != null ? String(license.year) : null]
+            .filter(Boolean)
+            .join(" · ") || (locale === "fa" ? "مجوز" : "License"),
+        href: "/about-us/licenses",
+        image: license.image || null,
+        keywords: keywords(
+          license.titleFa,
+          license.titleEn,
+          license.issuerFa,
+          license.issuerEn,
+          license.descriptionFa,
+          license.descriptionEn,
+          license.year != null ? String(license.year) : undefined,
+          "مجوز",
+          "license",
         ),
       }),
     );

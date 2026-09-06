@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import type { EmblaOptionsType } from "embla-carousel";
@@ -11,6 +11,7 @@ import { useIsRtl } from "@/components/motion/use-is-rtl";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
 import { GalleryLightbox, type GalleryLightboxItem } from "./gallery-lightbox";
 import { GalleryMediaThumb } from "./gallery-media-thumb";
+import { ViewMediaHint } from "@/components/media/view-media-hint";
 
 const SIZES = "(min-width: 1024px) 22vw, (min-width: 640px) 32vw, 55vw";
 const DRAG_THRESHOLD_PX = 8;
@@ -53,10 +54,12 @@ function useSlideClick(onOpen: (index: number) => void) {
 export function GalleryCarousel({ items }: { items: GalleryLightboxItem[] }) {
   const t = useTranslations("home.gallery.carousel");
   const tGallery = useTranslations("gallery");
+  const locale = useLocale();
   const isRtl = useIsRtl();
   const reduceMotion = useReducedMotionSafe();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const slideClick = useSlideClick(setOpenIndex);
+  const viewLabel = locale === "fa" ? "مشاهده" : "View";
 
   const hasMultipleSlides = items.length > 1;
   const canAutoScroll = hasMultipleSlides && !reduceMotion;
@@ -166,6 +169,9 @@ export function GalleryCarousel({ items }: { items: GalleryLightboxItem[] }) {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 ring-1 ring-black/5 ring-inset"
                   />
+                  {item.mediaType === "IMAGE" ? (
+                    <ViewMediaHint label={viewLabel} className="top-2.5 bottom-auto" />
+                  ) : null}
                 </button>
               </div>
             ))}

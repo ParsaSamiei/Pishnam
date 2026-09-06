@@ -3,10 +3,10 @@ import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { PageHeader } from "@/components/layout/page-header";
-import { TeamMemberCard } from "@/components/team/team-member-card";
+import { TeamTagNav } from "@/components/team/team-tag-nav";
 import { buildAlternates } from "@/lib/i18n/alternates";
-import { formatCollaborationStartLabel } from "@/lib/format";
 
 export async function generateMetadata({
   params,
@@ -20,59 +20,25 @@ export async function generateMetadata({
   };
 }
 
-function TeamMemberGrid({
-  members,
-  appLocale,
-  isFa,
-}: {
-  members: Awaited<ReturnType<typeof prisma.teamMember.findMany>>;
-  appLocale: AppLocale;
-  isFa: boolean;
-}) {
-  return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {members.map((member) => {
-        const name = pickLocaleField(member.nameFa, member.nameEn, appLocale);
-        const role = pickLocaleField(member.roleFa, member.roleEn, appLocale);
-        const bio = pickLocaleField(member.bioFa, member.bioEn, appLocale);
-        const collaborationStartLabel = member.collaborationStartDate
-          ? formatCollaborationStartLabel(member.collaborationStartDate, appLocale)
-          : null;
-
-        return (
-          <TeamMemberCard
-            key={member.id}
-            name={name}
-            role={role}
-            photo={member.photo}
-            bio={bio}
-            resume={member.resume}
-            collaborationStartLabel={collaborationStartLabel}
-            isAlumni={member.isAlumni}
-            alumniLabel={isFa ? "عضو پیشین" : "Former member"}
-            learnMoreLabel={isFa ? "بیشتر بدانید" : "Learn more"}
-            downloadResumeLabel={isFa ? "دانلود رزومه" : "Download resume"}
-            printLabel={isFa ? "چاپ" : "Print"}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-export default async function TeamPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function TeamHubPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const appLocale = locale as AppLocale;
   const isFa = locale === "fa";
 
-  const members = await prisma.teamMember.findMany({
-    where: { isVisible: true },
+  const tags = await prisma.teamTag.findMany({
+    where: { active: true },
     orderBy: { order: "asc" },
+    include: {
+      _count: {
+        select: {
+          members: {
+            where: { member: { isVisible: true } },
+          },
+        },
+      },
+    },
   });
-
-  const activeMembers = members.filter((member) => !member.isAlumni);
-  const alumniMembers = members.filter((member) => member.isAlumni);
 
   return (
     <>
@@ -81,39 +47,32 @@ export default async function TeamPage({ params }: { params: Promise<{ locale: s
         subtitle={isFa ? "مربیان و اعضای تیم پیشنام." : "Pishnam's instructors and team members."}
       />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        {members.length === 0 ? (
+        <TeamTagNav tags={tags} appLocale={appLocale} isFa={isFa} />
+
+        {tags.length === 0 ? (
           <p className="text-text-secondary text-center">
             {isFa ? "اطلاعات تیم به‌زودی منتشر می‌شود." : "Team info coming soon."}
           </p>
         ) : (
-          <div className="flex flex-col gap-14">
-            {activeMembers.length > 0 && (
-              <section>
-                {alumniMembers.length > 0 && (
-                  <h2 className="text-text-primary mb-6 text-lg font-bold">
-                    {isFa ? "تیم فعلی" : "Current team"}
-                  </h2>
-                )}
-                <TeamMemberGrid members={activeMembers} appLocale={appLocale} isFa={isFa} />
-              </section>
-            )}
-
-            {alumniMembers.length > 0 && (
-              <section>
-                <div className="mb-6 flex flex-col gap-2">
-                  <h2 className="text-text-primary text-lg font-bold">
-                    {isFa ? "اعضای پیشین" : "Former members"}
-                  </h2>
-                  <p className="text-text-secondary text-sm">
-                    {isFa
-                      ? "افرادی که در مسیر پیشنام نقش داشته‌اند و اکنون در مسیرهای دیگر ادامه می‌دهند."
-                      : "People who shaped Pishnam and now continue on other paths."}
-                  </p>
-                </div>
-                <TeamMemberGrid members={alumniMembers} appLocale={appLocale} isFa={isFa} />
-              </section>
-            )}
-          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {tags.map((tag) => {
+              const name = pickLocaleField(tag.nameFa, tag.nameEn, appLocale);
+              const count = tag._count.members;
+              return (
+                <li key={tag.id}>
+                  <Link
+                    href={`/about-us/team/${tag.slug}`}
+                    className="border-border bg-bg-surface hover:border-pishnam-gold-500/60 focus-visible:ring-pishnam-gold-500 block rounded-xl border p-5 transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                  >
+                    <h2 className="text-text-primary text-lg font-bold">{name}</h2>
+                    <p className="text-text-secondary mt-1 text-sm">
+                      {isFa ? `${count} عضو` : `${count} ${count === 1 ? "member" : "members"}`}
+                    </p>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         )}
       </div>
     </>

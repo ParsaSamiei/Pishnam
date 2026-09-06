@@ -31,11 +31,6 @@ enum Tier {
   COMPETITIVE  // پیشرفته / تیم مسابقات
 }
 
-enum AchievementScope {
-  NATIONAL       // کشوری
-  INTERNATIONAL  // جهانی
-}
-
 enum LeadType {
   ENROLL
   CLASS_SEAT
@@ -152,18 +147,31 @@ model ClassSession { // confirmed for v1
   active    Boolean  @default(true)
 }
 
+model AchievementTag {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  nameFa        String
+  nameEn        String
+  order         Int           @default(0)
+  active        Boolean       @default(true)
+  achievements  Achievement[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
 model Achievement {
-  id            String           @id @default(cuid())
+  id            String         @id @default(cuid())
   titleFa       String
   titleEn       String
-  competition   String           // e.g. "RoboCup"
+  competition   String         // e.g. "RoboCup"
   year          Int
-  result        String           // e.g. "1st place, Rescue Line"
+  result        String         // e.g. "1st place, Rescue Line"
   photo         String
-  scope         AchievementScope @default(NATIONAL)
-  courses       Course[]         @relation("CourseAchievements")
-  featured      Boolean          @default(false)
-  createdAt     DateTime         @default(now())
+  tag           AchievementTag @relation(fields: [tagId], references: [id])
+  tagId         String
+  courses       Course[]       @relation("CourseAchievements")
+  featured      Boolean        @default(false)
+  createdAt     DateTime       @default(now())
 }
 
 model TeamMember {
@@ -186,6 +194,22 @@ model Faq {
   answerFa   String
   answerEn   String
   order      Int    @default(0)
+}
+
+model License {
+  id            String   @id @default(cuid())
+  titleFa       String
+  titleEn       String
+  issuerFa      String?
+  issuerEn      String?
+  year          Int?
+  image         String   // certificate scan
+  descriptionFa String?
+  descriptionEn String?
+  order         Int      @default(0)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model VideoEntry {
@@ -468,15 +492,16 @@ model AdminUser {
   createdAt    DateTime @default(now())
 }
 
-// One-row contact details (phones, email, FA/EN address, Google Maps embed,
-// social profile URLs). Singleton: id is always "default"; first admin save
-// creates the row.
+// One-row contact details (phones, email, FA/EN address, postal code,
+// Google Maps embed, social profile URLs). Singleton: id is always "default";
+// first admin save creates the row.
 model ContactSettings {
   id          String   @id @default("default")
   phones      String[]
   email       String?
   addressFa   String?
   addressEn   String?
+  postalCode  String?
   mapEmbedUrl String?  // canonical https://www.google.com/maps/embed?... URL
   telegramUrl  String?
   baleUrl      String?
@@ -521,6 +546,11 @@ model HeroSlide {
   a picture and its own page) and one `SoftwareRelease` row per platform/version under it (e.g.
   Windows + macOS builds of the same app). This is the one download-center category that isn't a
   flat DownloadResource list, because a single row can't represent "one product, several files."
+- **Products showcase (not software, not checkout)** — `Product` + admin-managed `ProductTag`
+  filters live at `/products` and `/products/[slug]`. Each product can carry rich text, a photo
+  gallery, videos, an optional display-only price (`priceFa`/`priceEn`), an optional related
+  `Course`, and a bilingual specs table. Nested children use the same delete-and-recreate pattern
+  as datasheet media. This is separate from `SoftwareProduct` in the download center.
 - **Datasheets & Docs is a two-level part catalog** — `DatasheetPart` is either a stand-alone
   module (SRF05) or a family (LCD) with variant children. Each leaf page can hold rich text, PDFs,
   videos, a photo gallery, and example code (inline snippet and/or a downloadable file). Public
@@ -531,9 +561,10 @@ model HeroSlide {
   `CourseTranslation`, `ArticleTranslation`, `Faq` rather than adding a new service.
 - **Contact details are a settings singleton** — `ContactSettings` is one row (`id = "default"`),
   edited from `/admin/contact`, not a list of locations. Phone numbers are a `String[]` so several
-  can be shown; address is bilingual (`addressFa` / `addressEn`); `mapEmbedUrl` stores only a
-  canonical Google Maps embed URL (the admin form accepts a pasted iframe or URL and normalizes
-  it). Missing fields are omitted on `/contact` rather than falling back to placeholder copy.
+  can be shown; address is bilingual (`addressFa` / `addressEn`); optional `postalCode` is shown
+  with the address; `mapEmbedUrl` stores only a canonical Google Maps embed URL (the admin form
+  accepts a pasted iframe or URL and normalizes it). Missing fields are omitted on `/contact-us`
+  rather than falling back to placeholder copy.
 - **Hero slides are a collection, not settings** — `HeroSlide` is an ordered table managed from
   `/admin/hero-slides` like any other content type, rather than image columns on a settings
   singleton. "How many photos does the hero show?" is a question a table answers and a fixed set of

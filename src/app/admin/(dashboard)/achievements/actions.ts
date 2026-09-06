@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { achievementSchema } from "@/lib/validation/achievement";
 import { requireAdminSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
+import { formActionError } from "@/lib/form-state";
 
 export type AchievementFormState = AdminFormState;
 
@@ -27,6 +28,14 @@ export async function createAchievement(
     return formErrorFromIssues(parsed.error.issues, formData);
   }
 
+  const tag = await prisma.achievementTag.findUnique({
+    where: { id: parsed.data.tagId },
+    select: { id: true },
+  });
+  if (!tag) {
+    return formActionError({ tagId: "برچسب معتبر نیست." }, formData);
+  }
+
   await prisma.achievement.create({ data: parsed.data });
   revalidateAchievementPages();
   redirect("/admin/achievements");
@@ -42,6 +51,14 @@ export async function updateAchievement(
   const parsed = achievementSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     return formErrorFromIssues(parsed.error.issues, formData);
+  }
+
+  const tag = await prisma.achievementTag.findUnique({
+    where: { id: parsed.data.tagId },
+    select: { id: true },
+  });
+  if (!tag) {
+    return formActionError({ tagId: "برچسب معتبر نیست." }, formData);
   }
 
   await prisma.achievement.update({ where: { id }, data: parsed.data });

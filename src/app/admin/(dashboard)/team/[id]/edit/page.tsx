@@ -7,11 +7,19 @@ import { updateTeamMember } from "../../actions";
 
 export default async function EditTeamMemberPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const member = await prisma.teamMember.findUnique({ where: { id } });
+  const [member, tags] = await Promise.all([
+    prisma.teamMember.findUnique({
+      where: { id },
+      include: { tags: { select: { tagId: true } } },
+    }),
+    prisma.teamTag.findMany({ orderBy: { order: "asc" } }),
+  ]);
 
   if (!member) {
     notFound();
   }
+
+  const { tags: memberTags, ...memberFields } = member;
 
   return (
     <div>
@@ -26,7 +34,16 @@ export default async function EditTeamMemberPage({ params }: { params: Promise<{
       <div className="mt-6">
         <TeamMemberForm
           action={updateTeamMember.bind(null, id)}
-          defaultValues={member}
+          tags={tags.map((tag) => ({
+            id: tag.id,
+            nameFa: tag.nameFa,
+            nameEn: tag.nameEn,
+            active: tag.active,
+          }))}
+          defaultValues={{
+            ...memberFields,
+            tagIds: memberTags.map((row) => row.tagId),
+          }}
           submitLabel="ذخیره تغییرات"
         />
       </div>

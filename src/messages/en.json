@@ -86,6 +86,11 @@
         "goTo": "Go to photo {index, number}",
         "pause": "Pause autoplay",
         "play": "Play autoplay"
+      },
+      "stats": {
+        "boys": "Boys enrolled",
+        "girls": "Girls enrolled",
+        "achievements": "Achievements"
       }
     },
     "audiences": {
@@ -179,6 +184,9 @@
     "title": "Gallery",
     "subtitle": "Moments from workshops, competitions, and team activities at Pishnam.",
     "empty": "No items have been added to the gallery yet.",
+    "emptyFiltered": "No items in this category yet.",
+    "filterLabel": "Filter by tag",
+    "filterAll": "All",
     "openItem": "Open",
     "openPhoto": "Open photo",
     "videoBadge": "Video",

@@ -42,7 +42,7 @@ export function TeamTagForm({ action, defaultValues, submitLabel }: TeamTagFormP
         />
         {state.errors?.slug && <p className="text-pishnam-danger text-xs">{state.errors.slug}</p>}
         <p className="text-text-secondary text-xs" dir="ltr">
-          /about-us/team/[slug]
+          /about-us/team#slug
         </p>
       </div>
 

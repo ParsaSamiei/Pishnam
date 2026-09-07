@@ -1,5 +1,5 @@
 import "server-only";
-import { auth } from "@/lib/auth";
+import { getVerifiedAdminUser } from "@/lib/admin-session";
 import { formActionError } from "@/lib/form-state";
 
 /**
@@ -8,13 +8,16 @@ import { formActionError } from "@/lib/form-state";
  * can in principle be invoked directly, so each one re-checks auth itself
  * rather than trusting that a request only ever arrives via a page that was
  * already gated.
+ *
+ * Uses the live AdminUser row (not just the JWT) so a newly disabled account
+ * cannot keep mutating content with an old session cookie.
  */
 export async function requireAdminSession() {
-  const session = await auth();
-  if (!session?.user) {
+  const user = await getVerifiedAdminUser();
+  if (!user) {
     throw new Error("Unauthorized");
   }
-  return session;
+  return { user };
 }
 
 /**

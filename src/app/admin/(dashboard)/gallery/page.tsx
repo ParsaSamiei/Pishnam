@@ -11,6 +11,12 @@ import { deleteGalleryImage } from "./actions";
 export default async function AdminGalleryPage() {
   const rows = await prisma.galleryImage.findMany({
     orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+    include: {
+      tags: {
+        orderBy: { tag: { order: "asc" } },
+        include: { tag: { select: { nameFa: true } } },
+      },
+    },
   });
 
   const images = rows.map((image, index) => ({
@@ -23,7 +29,11 @@ export default async function AdminGalleryPage() {
       <AdminListHeader title="گالری" newHref="/admin/gallery/new" newLabel="افزودن مورد" />
       <p className="text-text-secondary mt-2 text-sm">
         تصاویر و ویدیوهای گالری عمومی سایت. در صفحه اصلی به‌صورت اسلایدشو و در صفحه گالری به‌صورت
-        شبکه نمایش داده می‌شوند.
+        شبکه نمایش داده می‌شوند. برچسب‌ها را از{" "}
+        <Link href="/admin/gallery-tags" className="text-pishnam-gold-600 underline">
+          برچسب‌های گالری
+        </Link>{" "}
+        مدیریت کنید.
       </p>
 
       <Card className="mt-6 overflow-hidden p-0">
@@ -64,6 +74,17 @@ export default async function AdminGalleryPage() {
             {
               header: "متن جایگزین",
               cell: (row) => row.altFa ?? <span className="text-text-secondary">—</span>,
+            },
+            {
+              header: "برچسب‌ها",
+              cell: (row) =>
+                row.tags.length > 0 ? (
+                  <span className="text-text-secondary text-xs">
+                    {row.tags.map((assignment) => assignment.tag.nameFa).join("، ")}
+                  </span>
+                ) : (
+                  <span className="text-text-secondary">—</span>
+                ),
             },
             {
               header: "توضیح",

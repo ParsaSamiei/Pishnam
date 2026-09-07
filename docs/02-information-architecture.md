@@ -6,6 +6,8 @@ Unlike the current WordPress site (one long undifferentiated homepage feed), the
 should surface **distinct entry points per audience** near the top, above the general content
 feed:
 
+- Hero: bilingual pitch + CTAs, optional admin-managed count-up stats (boys / girls enrolled,
+  achievements) under the buttons.
 - "برای دانش‌آموزان و والدین" (For students & parents) → courses/tiers, enrollment.
 - "برای مدارس" (For schools) → partnership info, contact.
 - "برای حامیان" (For sponsors) → achievements, sponsorship inquiry.
@@ -111,7 +113,7 @@ reachable via footer/search for less-common needs (e.g. part libraries, old comp
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Course                   | title, slug, tier/age range, topic tags, cover image, description (rich text), prerequisites, related achievements, order/priority            |
 | ProductTag               | slug, FA/EN name, active/order — admin type filters on `/products`                                                                            |
-| Product                  | slug, cover, FA/EN title/excerpt/body, optional price labels, optional course link, tags, gallery, videos, specs table, active/order          |
+| Product                  | slug, cover, FA/EN title/excerpt/body, optional toman price, optional course link, tags, gallery, videos, specs table, active/order           |
 | ClassSession             | course/tier ref, weekday, time, location, capacity note, active flag                                                                          |
 | Achievement              | title, competition name, year, result/rank, photo, related course tags                                                                        |
 | License                  | title, certificate image, optional issuer/year/description, order                                                                             |

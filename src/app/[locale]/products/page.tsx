@@ -7,6 +7,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { ProductCard } from "@/components/products/product-card";
 import { buildAlternates } from "@/lib/i18n/alternates";
+import { formatProductPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Package } from "lucide-react";
 
@@ -141,7 +142,11 @@ export default async function ProductsPage({
                   title={pickLocaleField(product.titleFa, product.titleEn, appLocale)}
                   excerpt={pickLocaleField(product.excerptFa, product.excerptEn, appLocale) ?? ""}
                   image={product.image}
-                  price={pickLocaleField(product.priceFa, product.priceEn, appLocale)}
+                  price={formatProductPrice(
+                    product.price,
+                    appLocale,
+                    pickLocaleField(product.currencyFa, product.currencyEn, appLocale),
+                  )}
                   tags={product.tags.map((assignment) =>
                     pickLocaleField(assignment.tag.nameFa, assignment.tag.nameEn, appLocale),
                   )}

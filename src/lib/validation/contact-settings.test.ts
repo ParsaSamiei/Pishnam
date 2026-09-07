@@ -33,7 +33,7 @@ describe("contactSettingsSchema", () => {
 
   it("keeps multiple phone numbers and a valid email", () => {
     const parsed = contactSettingsSchema.parse({
-      phones: ["+98 21 1111 1111", "09120000000"],
+      phones: ["021 11111111", "09120000000"],
       email: "info@pishnam.ir",
       addressFa: "تهران",
       addressEn: "Tehran",
@@ -45,7 +45,7 @@ describe("contactSettingsSchema", () => {
       aparatUrl: "https://www.aparat.com/pishnam",
       instagramUrl: "https://www.instagram.com/pishnam",
     });
-    expect(parsed.phones).toEqual(["+98 21 1111 1111", "09120000000"]);
+    expect(parsed.phones).toEqual(["021 11111111", "09120000000"]);
     expect(parsed.email).toBe("info@pishnam.ir");
     expect(parsed.postalCode).toBe("1234567890");
     expect(parsed.mapEmbedUrl).toBe("https://www.google.com/maps/embed?pb=!1m18");
@@ -54,6 +54,14 @@ describe("contactSettingsSchema", () => {
     expect(parsed.youtubeUrl).toBe("https://www.youtube.com/@pishnam");
     expect(parsed.aparatUrl).toBe("https://www.aparat.com/pishnam");
     expect(parsed.instagramUrl).toBe("https://www.instagram.com/pishnam");
+  });
+
+  it("rejects an invalid phone number", () => {
+    const parsed = contactSettingsSchema.safeParse({
+      phones: ["+98 21 1111 1111"],
+      email: "",
+    });
+    expect(parsed.success).toBe(false);
   });
 
   it("rejects a non-embed Google Maps URL", () => {

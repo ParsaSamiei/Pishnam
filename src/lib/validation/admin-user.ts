@@ -8,4 +8,9 @@ export const createAdminUserSchema = z.object({
   role: z.enum(ROLES),
 });
 
+export const setAdminUserDisabledSchema = z.object({
+  id: z.string().cuid(),
+  disabled: z.boolean(),
+});
+
 export type CreateAdminUserFormValues = z.infer<typeof createAdminUserSchema>;

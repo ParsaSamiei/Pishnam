@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { toGoogleMapsEmbedUrl } from "@/lib/google-maps";
+import { IRANIAN_PHONE_HINT_FA, parseIranianPhone } from "@/lib/phone";
 
 const optionalText = (max: number) =>
   z
@@ -49,7 +50,17 @@ export const contactSettingsSchema = z.object({
     .pipe(
       z
         .array(
-          z.string().min(3, "شماره تلفن خیلی کوتاه است.").max(40, "شماره تلفن خیلی طولانی است."),
+          z.string().transform((val, ctx) => {
+            const parsed = parseIranianPhone(val);
+            if (!parsed) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: `شماره تلفن معتبر نیست. قالب مجاز: ${IRANIAN_PHONE_HINT_FA}`,
+              });
+              return z.NEVER;
+            }
+            return parsed;
+          }),
         )
         .max(10, "حداکثر ۱۰ شماره می‌توانید ثبت کنید."),
     ),

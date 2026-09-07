@@ -195,17 +195,17 @@ export function TeamMemberCard({
         )}
       >
         <CardHoverRule />
-        <div className="bg-bg-surface-alt relative aspect-square w-full">
+        <div className="bg-bg-surface-alt relative aspect-square w-full overflow-hidden">
           {photo ? (
             <Image
               src={photo}
               alt=""
               fill
               className={cn(
-                "object-contain transition-transform duration-300 motion-safe:group-hover:scale-105",
+                "object-cover transition-transform duration-300 motion-safe:group-hover:scale-105",
                 isAlumni && "opacity-85 grayscale-[35%]",
               )}
-              sizes="(min-width: 1024px) 240px, 50vw"
+              sizes="(min-width: 640px) 33vw, 50vw"
             />
           ) : (
             <div className="text-text-secondary flex h-full items-center justify-center">
@@ -226,11 +226,13 @@ export function TeamMemberCard({
             </span>
           )}
         </div>
-        <CardContent className="flex flex-col items-center p-4">
-          <p className="text-text-primary font-bold">{name}</p>
-          <p className="text-pishnam-steel-600 mt-0.5 text-sm">{role}</p>
+        <CardContent className="flex flex-col items-center px-3 py-4">
+          <p className="text-text-primary leading-snug font-bold">{name}</p>
+          <p className="text-pishnam-steel-600 mt-0.5 text-sm leading-snug">{role}</p>
           {collaborationStartLabel && (
-            <p className="text-text-secondary mt-1.5 text-[11px]">{collaborationStartLabel}</p>
+            <p className="text-text-secondary mt-1.5 text-[11px] leading-snug">
+              {collaborationStartLabel}
+            </p>
           )}
           {hasDetails && (
             <button

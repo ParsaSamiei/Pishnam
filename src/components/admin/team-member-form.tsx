@@ -8,7 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { FileUploadField } from "@/components/admin/file-upload-field";
+import { NativeSelect } from "@/components/ui/native-select";
 import type { TeamMemberFormState } from "@/app/admin/(dashboard)/team/actions";
+import type { TeamMemberGender } from "@/lib/team-member-photo";
 import Link from "next/link";
 
 interface TeamMemberFormProps {
@@ -19,7 +21,8 @@ interface TeamMemberFormProps {
     nameEn: string;
     roleFa: string;
     roleEn: string;
-    photo: string;
+    gender: TeamMemberGender;
+    photo: string | null;
     bioFa: string | null;
     bioEn: string | null;
     resume: string | null;
@@ -42,12 +45,30 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
 
   return (
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
+      <div className="flex flex-col gap-1.5 sm:max-w-xs">
+        <Label htmlFor="gender">جنسیت *</Label>
+        <NativeSelect
+          id="gender"
+          name="gender"
+          defaultValue={field("gender", defaultValues?.gender ?? "MALE")}
+          required
+        >
+          <option value="MALE">آقا</option>
+          <option value="FEMALE">خانم</option>
+        </NativeSelect>
+        {state.errors?.gender && (
+          <p className="text-pishnam-danger text-xs">{state.errors.gender}</p>
+        )}
+        <p className="text-text-secondary text-xs">
+          اگر تصویری آپلود نشود، جای‌نگهدار آقا یا خانم بر اساس این انتخاب نمایش داده می‌شود.
+        </p>
+      </div>
+
       <ImageUploadField
         name="photo"
         label="تصویر"
         field="teamMember.photo"
-        defaultValue={field("photo", defaultValues?.photo)}
-        required
+        defaultValue={field("photo", defaultValues?.photo ?? undefined)}
         error={state.errors?.photo}
       />
 

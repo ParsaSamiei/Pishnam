@@ -1,4 +1,6 @@
-import { Link } from "@/lib/i18n/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -13,13 +15,24 @@ export function TeamTagNav({
   tags,
   appLocale,
   isFa,
-  activeSlug,
 }: {
   tags: TeamTagNavItem[];
   appLocale: AppLocale;
   isFa: boolean;
-  activeSlug?: string;
 }) {
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    const syncFromHash = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      setActiveSlug(hash || null);
+    };
+
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
   if (tags.length === 0) return null;
 
   return (
@@ -28,33 +41,23 @@ export function TeamTagNav({
       role="navigation"
       aria-label={isFa ? "دسته‌بندی پرسنل" : "Team categories"}
     >
-      <Link
-        href="/about-us/team"
-        className={cn(
-          "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
-          !activeSlug
-            ? "border-pishnam-gold-500 bg-pishnam-gold-500 text-pishnam-navy-900"
-            : "border-border text-text-secondary hover:bg-bg-surface-alt",
-        )}
-      >
-        {isFa ? "همه دسته‌ها" : "All categories"}
-      </Link>
       {tags.map((tag) => {
         const label = pickLocaleField(tag.nameFa, tag.nameEn, appLocale);
         const isActive = activeSlug === tag.slug;
         return (
-          <Link
+          <a
             key={tag.slug}
-            href={`/about-us/team/${tag.slug}`}
+            href={`#${tag.slug}`}
             className={cn(
               "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
               isActive
                 ? "border-pishnam-gold-500 bg-pishnam-gold-500 text-pishnam-navy-900"
                 : "border-border text-text-secondary hover:bg-bg-surface-alt",
             )}
+            aria-current={isActive ? "true" : undefined}
           >
             {label}
-          </Link>
+          </a>
         );
       })}
     </div>

@@ -7,7 +7,9 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { HeroBackdrop } from "@/components/motion/hero-backdrop";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
+import { getHomepageStats } from "@/lib/homepage-stats";
 import { HeroShowcase } from "./hero-showcase";
+import { HeroStats } from "./hero-stats";
 
 export async function HeroSection() {
   const t = await getTranslations("home.hero");
@@ -15,9 +17,12 @@ export async function HeroSection() {
 
   // Same ordering the /admin/hero-slides table lists them in, so the admin sees
   // the sequence visitors will scroll through.
-  const rows = await prisma.heroSlide.findMany({
-    orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-  });
+  const [rows, stats] = await Promise.all([
+    prisma.heroSlide.findMany({
+      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+    }),
+    getHomepageStats(),
+  ]);
 
   // Whoever uploaded a photo is the only one who can describe it, so their alt
   // text wins; the generic message is the floor, not the default, and an alt
@@ -31,6 +36,14 @@ export async function HeroSection() {
       slide.altEn ??
       t("imageAlt"),
   }));
+
+  const statItems = stats
+    ? [
+        { key: "boys", value: stats.boysEnrolled, label: t("stats.boys") },
+        { key: "girls", value: stats.girlsEnrolled, label: t("stats.girls") },
+        { key: "achievements", value: stats.achievements, label: t("stats.achievements") },
+      ]
+    : [];
 
   return (
     <section data-spine-node className="bg-bg-page text-text-primary relative overflow-hidden">
@@ -110,6 +123,13 @@ export async function HeroSection() {
                 </Button>
               </div>
             </StaggerItem>
+            {statItems.length > 0 ? (
+              <StaggerItem variant="rise">
+                {/* Scoreboard under the CTAs — admin-managed counts, not DB
+                    aggregates. Hidden until /admin/homepage-stats is saved. */}
+                <HeroStats locale={locale} items={statItems} />
+              </StaggerItem>
+            ) : null}
           </StaggerGroup>
 
           {/* Its own group, offset to land after the copy has finished. Nested

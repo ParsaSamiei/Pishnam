@@ -11,7 +11,16 @@ export default async function EditGalleryImagePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const image = await prisma.galleryImage.findUnique({ where: { id } });
+  const [image, tags] = await Promise.all([
+    prisma.galleryImage.findUnique({
+      where: { id },
+      include: { tags: { select: { tagId: true } } },
+    }),
+    prisma.galleryTag.findMany({
+      orderBy: { order: "asc" },
+      select: { id: true, nameFa: true, nameEn: true, active: true },
+    }),
+  ]);
 
   if (!image) {
     notFound();
@@ -30,7 +39,15 @@ export default async function EditGalleryImagePage({
       </Link>
       <h1 className="text-text-primary text-2xl font-bold">ویرایش مورد گالری</h1>
       <div className="mt-6">
-        <GalleryImageForm action={boundUpdate} defaultValues={image} submitLabel="ذخیره تغییرات" />
+        <GalleryImageForm
+          action={boundUpdate}
+          tags={tags}
+          defaultValues={{
+            ...image,
+            tagIds: image.tags.map((assignment) => assignment.tagId),
+          }}
+          submitLabel="ذخیره تغییرات"
+        />
       </div>
     </div>
   );

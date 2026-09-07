@@ -28,6 +28,7 @@ import {
   CircuitBoard,
   Boxes,
   BadgeCheck,
+  ChartColumnIncreasing,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -48,7 +49,9 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/leads", label: "درخواست‌ها", icon: Inbox },
   { href: "/admin/feedback", label: "انتقادات و پیشنهادات", icon: MessageSquare },
   { href: "/admin/hero-slides", label: "تصاویر صفحه اصلی", icon: Images },
+  { href: "/admin/homepage-stats", label: "آمار صفحه اصلی", icon: ChartColumnIncreasing },
   { href: "/admin/gallery", label: "گالری تصاویر", icon: Camera },
+  { href: "/admin/gallery-tags", label: "برچسب‌های گالری", icon: Tags },
   { href: "/admin/contact", label: "تماس با ما", icon: MapPin },
   { href: "/admin/enrollment-guidelines", label: "راهنمای ثبت‌نام", icon: ClipboardList },
   { href: "/admin/courses", label: "دوره‌ها", icon: GraduationCap },

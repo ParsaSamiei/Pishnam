@@ -21,11 +21,11 @@ export default async function AdminTeamTagsPage() {
         newLabel="افزودن دسته"
       />
       <p className="text-text-secondary mt-2 text-sm">
-        هر دسته یک صفحه عمومی جداگانه در{" "}
+        دسته‌ها به‌ترتیب روی صفحه عمومی{" "}
         <span dir="ltr" className="font-mono text-xs">
-          /about-us/team/[slug]
+          /about-us/team
         </span>{" "}
-        دارد. اعضا را از بخش{" "}
+        نمایش داده می‌شوند. اعضا را از بخش{" "}
         <Link href="/admin/team" className="text-pishnam-gold-600 underline">
           اعضای تیم
         </Link>{" "}

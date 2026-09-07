@@ -21,6 +21,9 @@ enough to a headless-CMS content model that migrating later wouldn't mean starti
   security.
 - Two roles to start: `owner` (full access) and `editor` (content CRUD, no user/role management).
   Keep it simple — don't over-engineer permissions for a solo/small-team admin.
+- Owners can temporarily disable another admin account (`AdminUser.disabledAt`); a disabled
+  account cannot sign in, and any existing session is rejected until the account is re-enabled.
+  An owner cannot disable their own account or the last remaining enabled owner.
 - `/admin/**` routes gated in the root layout for that segment; redirect unauthenticated requests
   to `/admin/login`.
 
@@ -29,8 +32,8 @@ enough to a headless-CMS content model that migrating later wouldn't mean starti
 One admin section per content type from the schema:
 
 - Courses (+ their FA/EN translations, tier, topic tags, related achievements)
-- Products (showcase: cover, FA/EN copy, optional price text, optional related course, gallery,
-  videos, specs table) and Product tags (type filters on `/products`)
+- Products (showcase: cover, FA/EN copy, optional price + free-text currency, optional related
+  course, gallery, videos, specs table) and Product tags (type filters on `/products`)
 - Class sessions (offline schedule — confirmed for v1)
 - Achievements
 - Achievement tags (labels like جهانی / کشوری used on cards and public filters)
@@ -69,6 +72,9 @@ One admin section per content type from the schema:
 - **Contact details** (singleton, not a list): phone numbers (any number of them), email, FA/EN
   address, postal code, and a Google Maps embed. Edited at `/admin/contact`; shown on the public
   `/contact-us` page. Paste either the Maps “Embed a map” iframe or the embed URL itself.
+- **Homepage stats** (singleton): boys enrolled, girls enrolled, and achievements counts for the
+  hero count-up strip. Edited at `/admin/homepage-stats`. Manual marketing numbers — not live
+  database counts. Until saved once, the public strip stays hidden.
 
 ## UI pattern
 

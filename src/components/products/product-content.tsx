@@ -3,6 +3,7 @@ import { GraduationCap } from "lucide-react";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { Link } from "@/lib/i18n/navigation";
+import { formatProductPrice } from "@/lib/format";
 import { RichText } from "@/components/rich-text";
 import { CoursePhotos } from "@/components/courses/course-photos";
 import { VideoEmbedCard } from "@/components/home/video-embed-card";
@@ -19,8 +20,9 @@ export type ProductDetail = {
   excerptEn: string | null;
   bodyFa: string | null;
   bodyEn: string | null;
-  priceFa: string | null;
-  priceEn: string | null;
+  price: number | null;
+  currencyFa: string | null;
+  currencyEn: string | null;
   tags: { nameFa: string; nameEn: string; slug: string }[];
   images: {
     id: string;
@@ -60,7 +62,11 @@ export function ProductContent({ product, locale }: ProductContentProps) {
   const title = pickLocaleField(product.titleFa, product.titleEn, locale);
   const excerpt = pickLocaleField(product.excerptFa, product.excerptEn, locale);
   const body = pickLocaleField(product.bodyFa, product.bodyEn, locale);
-  const price = pickLocaleField(product.priceFa, product.priceEn, locale);
+  const price = formatProductPrice(
+    product.price,
+    locale,
+    pickLocaleField(product.currencyFa, product.currencyEn, locale),
+  );
 
   const photos = product.images.map((img) => {
     const caption = pickLocaleField(img.captionFa, img.captionEn, locale);

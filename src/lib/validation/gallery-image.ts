@@ -23,6 +23,11 @@ export const galleryImageSchema = z
     captionFa: optionalText(300, "توضیح فارسی حداکثر ۳۰۰ نویسه است."),
     captionEn: optionalText(300, "Caption must be at most 300 characters."),
     order: z.coerce.number().int("ترتیب باید عدد صحیح باشد.").min(0, "ترتیب نمی‌تواند منفی باشد."),
+    tagIds: z
+      .union([z.string(), z.array(z.string())])
+      .optional()
+      .transform((val) => (Array.isArray(val) ? val : val ? [val] : []))
+      .pipe(z.array(z.string().min(1))),
   })
   .superRefine((data, ctx) => {
     if (data.mediaType === "IMAGE") {

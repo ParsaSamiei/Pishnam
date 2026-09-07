@@ -2,6 +2,8 @@ import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { TeamMemberCard } from "@/components/team/team-member-card";
 import { formatCollaborationStartLabel } from "@/lib/format";
+import type { TeamMemberGender } from "@/lib/team-member-photo";
+import { resolveTeamMemberPhoto } from "@/lib/team-member-photo";
 
 export type TeamMemberCardData = {
   id: string;
@@ -9,7 +11,8 @@ export type TeamMemberCardData = {
   nameEn: string;
   roleFa: string;
   roleEn: string;
-  photo: string;
+  gender: TeamMemberGender;
+  photo: string | null;
   bioFa: string | null;
   bioEn: string | null;
   resume: string | null;
@@ -27,7 +30,7 @@ export function TeamMemberGrid({
   isFa: boolean;
 }) {
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="flex flex-wrap justify-center gap-5">
       {members.map((member) => {
         const name = pickLocaleField(member.nameFa, member.nameEn, appLocale);
         const role = pickLocaleField(member.roleFa, member.roleEn, appLocale);
@@ -37,39 +40,46 @@ export function TeamMemberGrid({
           : null;
 
         return (
-          <TeamMemberCard
-            key={member.id}
-            name={name}
-            role={role}
-            photo={member.photo}
-            bio={bio}
-            resume={member.resume}
-            collaborationStartLabel={collaborationStartLabel}
-            isAlumni={member.isAlumni}
-            alumniLabel={isFa ? "عضو پیشین" : "Former member"}
-            learnMoreLabel={isFa ? "بیشتر بدانید" : "Learn more"}
-            downloadResumeLabel={isFa ? "دانلود رزومه" : "Download resume"}
-            printLabel={isFa ? "چاپ" : "Print"}
-          />
+          <div key={member.id} className="w-[calc(50%-0.625rem)] sm:w-[calc(33.333%-0.834rem)]">
+            <TeamMemberCard
+              name={name}
+              role={role}
+              photo={resolveTeamMemberPhoto(member.photo, member.gender)}
+              bio={bio}
+              resume={member.resume}
+              collaborationStartLabel={collaborationStartLabel}
+              isAlumni={member.isAlumni}
+              alumniLabel={isFa ? "عضو پیشین" : "Former member"}
+              learnMoreLabel={isFa ? "بیشتر بدانید" : "Learn more"}
+              downloadResumeLabel={isFa ? "دانلود رزومه" : "Download resume"}
+              printLabel={isFa ? "چاپ" : "Print"}
+            />
+          </div>
         );
       })}
     </div>
   );
 }
 
-export function TeamMemberSections({
-  members,
+export type TeamTagSectionData = {
+  slug: string;
+  nameFa: string;
+  nameEn: string;
+  members: TeamMemberCardData[];
+};
+
+export function TeamPageContent({
+  tags,
+  alumni,
   appLocale,
   isFa,
 }: {
-  members: TeamMemberCardData[];
+  tags: TeamTagSectionData[];
+  alumni: TeamMemberCardData[];
   appLocale: AppLocale;
   isFa: boolean;
 }) {
-  const activeMembers = members.filter((member) => !member.isAlumni);
-  const alumniMembers = members.filter((member) => member.isAlumni);
-
-  if (members.length === 0) {
+  if (tags.length === 0 && alumni.length === 0) {
     return (
       <p className="text-text-secondary text-center">
         {isFa ? "اطلاعات تیم به‌زودی منتشر می‌شود." : "Team info coming soon."}
@@ -78,22 +88,28 @@ export function TeamMemberSections({
   }
 
   return (
-    <div className="flex flex-col gap-14">
-      {activeMembers.length > 0 && (
-        <section>
-          {alumniMembers.length > 0 && (
-            <h2 className="text-text-primary mb-6 text-lg font-bold">
-              {isFa ? "تیم فعلی" : "Current team"}
+    <div className="flex flex-col gap-10">
+      {tags.map((tag) => {
+        const title = pickLocaleField(tag.nameFa, tag.nameEn, appLocale);
+        return (
+          <section
+            key={tag.slug}
+            id={tag.slug}
+            className="scroll-mt-24"
+            aria-labelledby={`team-tag-${tag.slug}`}
+          >
+            <h2 id={`team-tag-${tag.slug}`} className="text-text-primary mb-4 text-lg font-bold">
+              {title}
             </h2>
-          )}
-          <TeamMemberGrid members={activeMembers} appLocale={appLocale} isFa={isFa} />
-        </section>
-      )}
+            <TeamMemberGrid members={tag.members} appLocale={appLocale} isFa={isFa} />
+          </section>
+        );
+      })}
 
-      {alumniMembers.length > 0 && (
-        <section>
-          <div className="mb-6 flex flex-col gap-2">
-            <h2 className="text-text-primary text-lg font-bold">
+      {alumni.length > 0 && (
+        <section id="alumni" className="scroll-mt-24" aria-labelledby="team-alumni-heading">
+          <div className="mb-4 flex flex-col gap-1.5">
+            <h2 id="team-alumni-heading" className="text-text-primary text-lg font-bold">
               {isFa ? "اعضای پیشین" : "Former members"}
             </h2>
             <p className="text-text-secondary text-sm">
@@ -102,7 +118,7 @@ export function TeamMemberSections({
                 : "People who shaped Pishnam and now continue on other paths."}
             </p>
           </div>
-          <TeamMemberGrid members={alumniMembers} appLocale={appLocale} isFa={isFa} />
+          <TeamMemberGrid members={alumni} appLocale={appLocale} isFa={isFa} />
         </section>
       )}
     </div>

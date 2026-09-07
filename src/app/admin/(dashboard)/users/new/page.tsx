@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, ShieldAlert } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { getVerifiedAdminUser } from "@/lib/admin-session";
 import { AdminUserForm } from "@/components/admin/admin-user-form";
 import { createAdminUser } from "../actions";
 
 export default async function NewAdminUserPage() {
-  const session = await auth();
-  if (session?.user.role !== "owner") {
+  const user = await getVerifiedAdminUser();
+  if (user?.role !== "owner") {
     return (
       <div className="flex flex-col items-center gap-3 py-20 text-center">
         <ShieldAlert className="text-text-secondary size-10" aria-hidden="true" />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getVerifiedAdminUser, getStaleSessionClearPath } from "@/lib/admin-session";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
@@ -17,9 +17,16 @@ export default async function AdminLoginPage({
   // Proxy no longer handles this redirect (see proxy.ts) -- an
   // already-authenticated visitor landing here gets sent straight to the
   // dashboard instead of seeing the login form again.
-  const session = await auth();
-  if (session?.user) {
+  // Disabled/deleted accounts keep a JWT until we clear it via the
+  // clear-session Route Handler; otherwise they would bounce between
+  // /admin and /admin/login forever.
+  const user = await getVerifiedAdminUser();
+  if (user) {
     redirect("/admin");
+  }
+  const clearPath = await getStaleSessionClearPath();
+  if (clearPath) {
+    redirect(clearPath);
   }
 
   const { callbackUrl } = await searchParams;

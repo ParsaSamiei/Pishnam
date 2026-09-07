@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import type { GalleryImageFormState } from "@/app/admin/(dashboard)/gallery/acti
 
 interface GalleryImageFormProps {
   action: (prevState: GalleryImageFormState, formData: FormData) => Promise<GalleryImageFormState>;
+  tags: { id: string; nameFa: string; nameEn: string; active: boolean }[];
   defaultValues?: {
     mediaType?: GalleryMediaType;
     image: string | null;
@@ -20,20 +22,27 @@ interface GalleryImageFormProps {
     captionFa: string | null;
     captionEn: string | null;
     order: number;
+    tagIds: string[];
   };
   submitLabel: string;
 }
 
 const initialState: GalleryImageFormState = { status: "idle" };
 
-export function GalleryImageForm({ action, defaultValues, submitLabel }: GalleryImageFormProps) {
-  const { state, formAction, isPending, formKey, field } = usePreservedFormAction(
+export function GalleryImageForm({
+  action,
+  tags,
+  defaultValues,
+  submitLabel,
+}: GalleryImageFormProps) {
+  const { state, formAction, isPending, formKey, field, multiValueField } = usePreservedFormAction(
     action,
     initialState,
   );
 
   const inferredMediaType: GalleryMediaType =
     defaultValues?.mediaType ?? (defaultValues?.video ? "VIDEO" : "IMAGE");
+  const selectedTagIds = multiValueField("tagIds", defaultValues?.tagIds ?? []).filter(Boolean);
 
   return (
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-5">
@@ -108,6 +117,48 @@ export function GalleryImageForm({ action, defaultValues, submitLabel }: Gallery
             <p className="text-pishnam-danger text-xs">{state.errors.captionEn}</p>
           )}
         </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <span className="text-text-primary text-sm font-medium">برچسب‌ها</span>
+        {tags.length === 0 ? (
+          <p className="text-text-secondary text-sm">
+            برای فیلتر کردن در صفحه گالری، ابتدا برچسب بسازید:{" "}
+            <Link href="/admin/gallery-tags/new" className="text-pishnam-gold-600 underline">
+              برچسب‌های گالری
+            </Link>
+            .
+          </p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {tags.map((tag) => (
+              <label key={tag.id} className="text-text-primary flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  name="tagIds"
+                  value={tag.id}
+                  defaultChecked={selectedTagIds.includes(tag.id)}
+                  className="border-border accent-pishnam-gold-500 size-4 rounded"
+                />
+                <span>
+                  {tag.nameFa}
+                  <span className="text-text-secondary ms-1 text-xs" dir="ltr">
+                    ({tag.nameEn})
+                  </span>
+                  {!tag.active && (
+                    <span className="text-text-secondary ms-1 text-xs">(غیرفعال)</span>
+                  )}
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+        {state.errors?.tagIds && (
+          <p className="text-pishnam-danger text-xs">{state.errors.tagIds}</p>
+        )}
+        <p className="text-text-secondary text-xs">
+          اختیاری — موارد بدون برچسب فقط در «همه» دیده می‌شوند.
+        </p>
       </div>
 
       <div className="flex max-w-xs flex-col gap-1.5">

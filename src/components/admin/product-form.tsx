@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
+import { formatPriceInput } from "@/lib/format";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +23,70 @@ import {
 import { ProductSpecsFields, type ProductSpecDraft } from "@/components/admin/product-specs-fields";
 import type { ProductFormState } from "@/app/admin/(dashboard)/products/actions";
 
+function ProductPriceFields({
+  defaultPrice,
+  defaultCurrencyFa,
+  defaultCurrencyEn,
+  priceError,
+  currencyFaError,
+  currencyEnError,
+}: {
+  defaultPrice: string;
+  defaultCurrencyFa: string;
+  defaultCurrencyEn: string;
+  priceError?: string;
+  currencyFaError?: string;
+  currencyEnError?: string;
+}) {
+  const [value, setValue] = useState(() => formatPriceInput(defaultPrice, "fa"));
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="price">قیمت</Label>
+        <Input
+          id="price"
+          name="price"
+          dir="ltr"
+          inputMode="numeric"
+          placeholder="۱٬۰۰۰٬۰۰۰"
+          value={value}
+          onChange={(e) => setValue(formatPriceInput(e.target.value, "fa"))}
+          aria-invalid={Boolean(priceError)}
+        />
+        <p className="text-text-secondary text-xs">اختیاری — با جداکننده و ارقام فارسی.</p>
+        {priceError && <p className="text-pishnam-danger text-xs">{priceError}</p>}
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="currencyFa">واحد پول (فارسی)</Label>
+        <Input
+          id="currencyFa"
+          name="currencyFa"
+          placeholder="تومان"
+          defaultValue={defaultCurrencyFa}
+          aria-invalid={Boolean(currencyFaError)}
+        />
+        {currencyFaError && <p className="text-pishnam-danger text-xs">{currencyFaError}</p>}
+      </div>
+      <div className="flex flex-col gap-1.5 sm:col-start-2">
+        <Label htmlFor="currencyEn">Currency (English)</Label>
+        <Input
+          id="currencyEn"
+          name="currencyEn"
+          dir="ltr"
+          placeholder="toman"
+          defaultValue={defaultCurrencyEn}
+          aria-invalid={Boolean(currencyEnError)}
+        />
+        <p className="text-text-secondary text-xs" dir="ltr">
+          Free text — e.g. toman, rial, dollar
+        </p>
+        {currencyEnError && <p className="text-pishnam-danger text-xs">{currencyEnError}</p>}
+      </div>
+    </div>
+  );
+}
+
 interface ProductFormProps {
   action: (prevState: ProductFormState, formData: FormData) => Promise<ProductFormState>;
   tags: { id: string; nameFa: string; nameEn: string; active: boolean }[];
@@ -34,8 +100,9 @@ interface ProductFormProps {
     excerptEn: string | null;
     bodyFa: string | null;
     bodyEn: string | null;
-    priceFa: string | null;
-    priceEn: string | null;
+    price: number | null;
+    currencyFa: string | null;
+    currencyEn: string | null;
     courseId: string | null;
     order: number;
     active: boolean;
@@ -141,28 +208,18 @@ export function ProductForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="priceFa">قیمت نمایشی (فارسی)</Label>
-          <Input
-            id="priceFa"
-            name="priceFa"
-            placeholder="۲٬۵۰۰٬۰۰۰ تومان"
-            defaultValue={field("priceFa", defaultValues?.priceFa ?? "")}
-          />
-          <p className="text-text-secondary text-xs">اختیاری — فقط نمایش؛ خرید آنلاین نیست.</p>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="priceEn">Display price (English)</Label>
-          <Input
-            id="priceEn"
-            name="priceEn"
-            dir="ltr"
-            placeholder="2,500,000 toman"
-            defaultValue={field("priceEn", defaultValues?.priceEn ?? "")}
-          />
-        </div>
-      </div>
+      <ProductPriceFields
+        key={`price-${formKey}`}
+        defaultPrice={field(
+          "price",
+          defaultValues?.price != null ? String(defaultValues.price) : "",
+        )}
+        defaultCurrencyFa={field("currencyFa", defaultValues?.currencyFa ?? "")}
+        defaultCurrencyEn={field("currencyEn", defaultValues?.currencyEn ?? "")}
+        priceError={state.errors?.price}
+        currencyFaError={state.errors?.currencyFa}
+        currencyEnError={state.errors?.currencyEn}
+      />
 
       <div className="flex flex-col gap-1.5">
         <span className="text-text-primary text-sm font-medium">نوع محصول *</span>

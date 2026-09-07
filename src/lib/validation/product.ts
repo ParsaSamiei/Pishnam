@@ -75,8 +75,35 @@ export const productSchema = z
     excerptEn: z.string().trim().max(500).optional().or(z.literal("")),
     bodyFa: z.string().trim().max(50_000).optional().or(z.literal("")),
     bodyEn: z.string().trim().max(50_000).optional().or(z.literal("")),
-    priceFa: z.string().trim().max(120).optional().or(z.literal("")),
-    priceEn: z.string().trim().max(120).optional().or(z.literal("")),
+    price: z
+      .string()
+      .trim()
+      .optional()
+      .or(z.literal(""))
+      .transform((val, ctx) => {
+        if (!val) return null;
+        const digits = val
+          .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+          .replace(/[^\d]/g, "");
+        if (!digits) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "قیمت باید عدد باشد.",
+          });
+          return z.NEVER;
+        }
+        const amount = Number(digits);
+        if (!Number.isSafeInteger(amount) || amount < 0 || amount > 2_000_000_000) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "قیمت معتبر نیست.",
+          });
+          return z.NEVER;
+        }
+        return amount;
+      }),
+    currencyFa: z.string().trim().max(40).optional().or(z.literal("")),
+    currencyEn: z.string().trim().max(40).optional().or(z.literal("")),
     courseId: z.string().trim().optional().or(z.literal("")),
     order: z.coerce.number().int().min(0).default(0),
     active: z.coerce.boolean(),
@@ -199,8 +226,9 @@ export const productSchema = z
       excerptEn: data.excerptEn || null,
       bodyFa: data.bodyFa || null,
       bodyEn: data.bodyEn || null,
-      priceFa: data.priceFa || null,
-      priceEn: data.priceEn || null,
+      price: data.price,
+      currencyFa: data.currencyFa || null,
+      currencyEn: data.currencyEn || null,
       courseId: data.courseId || null,
       order: data.order,
       active: data.active,

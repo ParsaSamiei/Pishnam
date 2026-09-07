@@ -9,6 +9,7 @@ import type { AppLocale } from "@/lib/i18n/routing";
 import { TIER_LABELS, type TierValue } from "@/lib/tier-labels";
 import { SEARCH_PAGES } from "./pages";
 import type { SearchHit, SearchKind } from "./types";
+import { resolveTeamMemberPhoto } from "@/lib/team-member-photo";
 
 function localized(
   fa: string | null | undefined,
@@ -269,8 +270,9 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
           product.excerptFa,
           product.excerptEn,
           product.slug,
-          product.priceFa,
-          product.priceEn,
+          product.price != null ? String(product.price) : null,
+          product.currencyFa,
+          product.currencyEn,
           tagNames,
           ...product.specs.flatMap((spec) => [spec.keyFa, spec.keyEn, spec.valueFa, spec.valueEn]),
         ),
@@ -436,7 +438,7 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
       hit("page", `team-tag:${tag.id}`, {
         title: localized(tag.nameFa, tag.nameEn, locale),
         subtitle: locale === "fa" ? "پرسنل" : "Team",
-        href: `/about-us/team/${tag.slug}`,
+        href: `/about-us/team#${tag.slug}`,
         image: null,
         keywords: keywords(tag.nameFa, tag.nameEn, tag.slug, "پرسنل", "team", "staff"),
       }),
@@ -449,8 +451,12 @@ export async function buildSearchIndex(locale: AppLocale): Promise<SearchHit[]> 
       hit("team", `team:${member.id}`, {
         title: localized(member.nameFa, member.nameEn, locale),
         subtitle: localized(member.roleFa, member.roleEn, locale) || null,
-        href: primaryTag ? `/about-us/team/${primaryTag.slug}` : "/about-us/team",
-        image: member.photo || null,
+        href: member.isAlumni
+          ? "/about-us/team#alumni"
+          : primaryTag
+            ? `/about-us/team#${primaryTag.slug}`
+            : "/about-us/team",
+        image: resolveTeamMemberPhoto(member.photo, member.gender),
         keywords: keywords(
           member.nameFa,
           member.nameEn,

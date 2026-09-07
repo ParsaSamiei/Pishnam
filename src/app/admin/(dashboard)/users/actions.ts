@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { createAdminUserSchema } from "@/lib/validation/admin-user";
+import { createAdminUserSchema, setAdminUserDisabledSchema } from "@/lib/validation/admin-user";
 import { requireOwnerSession, formErrorFromIssues } from "@/lib/actions/admin-guard";
 import { AdminFormState, formActionError } from "@/lib/form-state";
 
@@ -35,6 +35,50 @@ export async function createAdminUser(
   redirect("/admin/users");
 }
 
+export async function setAdminUserDisabled(
+  id: string,
+  disabled: boolean,
+): Promise<{ error?: string }> {
+  const session = await requireOwnerSession();
+
+  const parsed = setAdminUserDisabledSchema.safeParse({ id, disabled });
+  if (!parsed.success) {
+    return { error: "درخواست نامعتبر است." };
+  }
+
+  if (session.user.id === parsed.data.id) {
+    return { error: "نمی‌توانید حساب کاربری خودتان را غیرفعال کنید." };
+  }
+
+  const target = await prisma.adminUser.findUnique({ where: { id: parsed.data.id } });
+  if (!target) {
+    return { error: "کاربر یافت نشد." };
+  }
+
+  const alreadyDisabled = Boolean(target.disabledAt);
+  if (alreadyDisabled === parsed.data.disabled) {
+    revalidatePath("/admin/users");
+    return {};
+  }
+
+  if (parsed.data.disabled && target.role === "owner") {
+    const enabledOwnerCount = await prisma.adminUser.count({
+      where: { role: "owner", disabledAt: null },
+    });
+    if (enabledOwnerCount <= 1) {
+      return { error: "نمی‌توانید تنها مالک فعال باقی‌مانده را غیرفعال کنید." };
+    }
+  }
+
+  await prisma.adminUser.update({
+    where: { id: parsed.data.id },
+    data: { disabledAt: parsed.data.disabled ? new Date() : null },
+  });
+
+  revalidatePath("/admin/users");
+  return {};
+}
+
 export async function deleteAdminUser(id: string): Promise<{ error?: string }> {
   const session = await requireOwnerSession();
 
@@ -47,10 +91,13 @@ export async function deleteAdminUser(id: string): Promise<{ error?: string }> {
     return { error: "کاربر یافت نشد." };
   }
 
-  if (target.role === "owner") {
-    const ownerCount = await prisma.adminUser.count({ where: { role: "owner" } });
-    if (ownerCount <= 1) {
-      return { error: "نمی‌توانید تنها مالک باقی‌مانده را حذف کنید." };
+  // Keep at least one enabled owner so account management stays reachable.
+  if (target.role === "owner" && !target.disabledAt) {
+    const enabledOwnerCount = await prisma.adminUser.count({
+      where: { role: "owner", disabledAt: null },
+    });
+    if (enabledOwnerCount <= 1) {
+      return { error: "نمی‌توانید تنها مالک فعال باقی‌مانده را حذف کنید." };
     }
   }
 

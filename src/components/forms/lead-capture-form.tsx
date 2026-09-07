@@ -11,6 +11,7 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { submitLead, type SubmitLeadState } from "@/lib/actions/lead";
 import { track, type AnalyticsEvent } from "@/lib/analytics";
 import { usePreservedFormAction } from "@/lib/hooks/use-preserved-form-action";
+import { IRANIAN_PHONE_HINT_EN, IRANIAN_PHONE_HINT_FA } from "@/lib/phone";
 import type { LeadTypeValue } from "@/lib/validation/lead";
 
 export interface LeadExtraField {
@@ -129,11 +130,20 @@ export function LeadCaptureForm({
             id="lead-phone"
             name="phone"
             type="tel"
+            autoComplete="tel"
             dir="ltr"
+            placeholder="09121234567"
             required={phoneRequired}
             defaultValue={field("phone")}
             aria-invalid={Boolean(state.errors?.phone)}
+            aria-describedby="lead-phone-hint"
           />
+          <p id="lead-phone-hint" className="text-text-secondary text-xs">
+            {isFa ? IRANIAN_PHONE_HINT_FA : IRANIAN_PHONE_HINT_EN}
+          </p>
+          {state.errors?.phone && (
+            <p className="text-pishnam-danger text-xs">{state.errors.phone}</p>
+          )}
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="lead-email">{labels.email}</Label>
@@ -147,9 +157,6 @@ export function LeadCaptureForm({
           />
         </div>
       </div>
-      {state.errors?.phone && (
-        <p className="text-pishnam-danger -mt-2 text-xs">{state.errors.phone}</p>
-      )}
 
       {extraFields.map((extraField) => {
         const metadataName = `metadata.${extraField.name}`;

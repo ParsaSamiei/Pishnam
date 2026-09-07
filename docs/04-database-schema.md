@@ -485,11 +485,12 @@ model Feedback {
 
 // Admin auth (custom admin, not public accounts — see admin panel doc)
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String    @id @default(cuid())
+  email        String    @unique
   passwordHash String
-  role         String   @default("editor") // "owner" | "editor"
-  createdAt    DateTime @default(now())
+  role         String    @default("editor") // "owner" | "editor"
+  disabledAt   DateTime? // set by an owner to temporarily suspend the account
+  createdAt    DateTime  @default(now())
 }
 
 // One-row contact details (phones, email, FA/EN address, postal code,
@@ -509,6 +510,16 @@ model ContactSettings {
   aparatUrl    String?
   instagramUrl String?
   updatedAt   DateTime @updatedAt
+}
+
+// Marketing counters under the homepage hero CTAs. Admin-authored (not counted
+// from Lead / Achievement rows) so enrollment tallies can match offline records.
+model HomepageStats {
+  id             String   @id @default("default")
+  boysEnrolled   Int      @default(0)
+  girlsEnrolled  Int      @default(0)
+  achievements   Int      @default(0)
+  updatedAt      DateTime @updatedAt
 }
 
 // Slides in the homepage hero carousel, ordered low to high. Zero rows is a
@@ -548,9 +559,10 @@ model HeroSlide {
   flat DownloadResource list, because a single row can't represent "one product, several files."
 - **Products showcase (not software, not checkout)** — `Product` + admin-managed `ProductTag`
   filters live at `/products` and `/products/[slug]`. Each product can carry rich text, a photo
-  gallery, videos, an optional display-only price (`priceFa`/`priceEn`), an optional related
-  `Course`, and a bilingual specs table. Nested children use the same delete-and-recreate pattern
-  as datasheet media. This is separate from `SoftwareProduct` in the download center.
+  gallery, videos, an optional integer price with free-text currency labels (`currencyFa` /
+  `currencyEn`, e.g. تومان / dollar / rial), an optional related `Course`, and a bilingual specs
+  table. Nested children use the same delete-and-recreate pattern as datasheet media. This is
+  separate from `SoftwareProduct` in the download center.
 - **Datasheets & Docs is a two-level part catalog** — `DatasheetPart` is either a stand-alone
   module (SRF05) or a family (LCD) with variant children. Each leaf page can hold rich text, PDFs,
   videos, a photo gallery, and example code (inline snippet and/or a downloadable file). Public
@@ -565,6 +577,10 @@ model HeroSlide {
   with the address; `mapEmbedUrl` stores only a canonical Google Maps embed URL (the admin form
   accepts a pasted iframe or URL and normalizes it). Missing fields are omitted on `/contact-us`
   rather than falling back to placeholder copy.
+- **Homepage stats are a settings singleton** — `HomepageStats` is one row (`id = "default"`),
+  edited from `/admin/homepage-stats`. Three integers (boys enrolled, girls enrolled, achievements)
+  drive the count-up strip under the hero CTAs. Numbers are marketing values the admin sets; they
+  are not derived from leads or the achievements table. Until the row is saved, the strip is omitted.
 - **Hero slides are a collection, not settings** — `HeroSlide` is an ordered table managed from
   `/admin/hero-slides` like any other content type, rather than image columns on a settings
   singleton. "How many photos does the hero show?" is a question a table answers and a fixed set of

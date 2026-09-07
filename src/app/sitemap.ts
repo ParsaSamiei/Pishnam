@@ -58,48 +58,37 @@ function buildEntry(path: string, lastModified?: Date): MetadataRoute.Sitemap[nu
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [
-    courses,
-    articles,
-    softwareProducts,
-    datasheetParts,
-    downloadSections,
-    teamTags,
-    products,
-  ] = await Promise.all([
-    prisma.course.findMany({
-      where: { active: true },
-      select: { slug: true, updatedAt: true },
-    }),
-    prisma.article.findMany({
-      where: { publishedAt: { lte: new Date() } },
-      select: { slug: true, publishedAt: true },
-    }),
-    prisma.softwareProduct.findMany({
-      where: { active: true },
-      select: { slug: true, updatedAt: true },
-    }),
-    prisma.datasheetPart.findMany({
-      where: { active: true },
-      select: {
-        slug: true,
-        updatedAt: true,
-        parent: { select: { slug: true } },
-      },
-    }),
-    prisma.downloadSection.findMany({
-      where: { active: true },
-      select: { slug: true, sectionType: true, updatedAt: true },
-    }),
-    prisma.teamTag.findMany({
-      where: { active: true },
-      select: { slug: true, updatedAt: true },
-    }),
-    prisma.product.findMany({
-      where: { active: true },
-      select: { slug: true, updatedAt: true },
-    }),
-  ]);
+  const [courses, articles, softwareProducts, datasheetParts, downloadSections, products] =
+    await Promise.all([
+      prisma.course.findMany({
+        where: { active: true },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.article.findMany({
+        where: { publishedAt: { lte: new Date() } },
+        select: { slug: true, publishedAt: true },
+      }),
+      prisma.softwareProduct.findMany({
+        where: { active: true },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.datasheetPart.findMany({
+        where: { active: true },
+        select: {
+          slug: true,
+          updatedAt: true,
+          parent: { select: { slug: true } },
+        },
+      }),
+      prisma.downloadSection.findMany({
+        where: { active: true },
+        select: { slug: true, sectionType: true, updatedAt: true },
+      }),
+      prisma.product.findMany({
+        where: { active: true },
+        select: { slug: true, updatedAt: true },
+      }),
+    ]);
 
   const activeDownloadPaths = downloadSections.map(
     (section) => `/downloads/${resolveDownloadSectionSlug(section)}`,
@@ -122,7 +111,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         part.updatedAt,
       ),
     ),
-    ...teamTags.map((tag) => buildEntry(`/about-us/team/${tag.slug}`, tag.updatedAt)),
   ];
 
   return entries;

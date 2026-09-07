@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { buildAlternates } from "@/lib/i18n/alternates";
-import { Clock, MapPin } from "lucide-react";
 import { setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { formatWeekday } from "@/lib/format";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { PageHeader } from "@/components/layout/page-header";
+import { ClassSessionGrid } from "@/components/classes/class-session-grid";
 import { EnrollmentApplication } from "@/components/forms/enrollment-application";
 import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
 import {
   getEnrollmentGuidelines,
   isEnrollmentGuidelinesGateActive,
 } from "@/lib/enrollment-guidelines";
-import { Card, CardContent } from "@/components/ui/card";
 
 export async function generateMetadata({
   params,
@@ -42,6 +41,17 @@ export default async function ClassesPage({ params }: { params: Promise<{ locale
     include: { course: { include: { translations: { where: { locale: appLocale } } } } },
   });
 
+  const sessionCards = sessions.map((session) => ({
+    id: session.id,
+    weekday: session.weekday,
+    startTime: session.startTime,
+    endTime: session.endTime,
+    location: session.location,
+    capacityNote: session.capacityNote,
+    courseTitle: session.course.translations[0]?.title ?? null,
+    coverImage: session.course.coverImage,
+  }));
+
   const guidelines = await getEnrollmentGuidelines();
   const showGuidelines = isEnrollmentGuidelinesGateActive(guidelines, appLocale);
 
@@ -57,41 +67,15 @@ export default async function ClassesPage({ params }: { params: Promise<{ locale
       />
 
       <section className="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
-        {sessions.length === 0 ? (
-          <p className="text-text-secondary text-center">
-            {isFa
+        <ClassSessionGrid
+          sessions={sessionCards}
+          locale={appLocale}
+          emptyMessage={
+            isFa
               ? "برنامه کلاس‌ها به‌زودی اعلام می‌شود."
-              : "The class schedule will be announced soon."}
-          </p>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {sessions.map((session) => (
-              <Card key={session.id}>
-                <CardContent className="p-5">
-                  <p className="text-pishnam-steel-600 text-xs font-semibold tracking-wide uppercase">
-                    {session.course.translations[0]?.title}
-                  </p>
-                  <p className="text-text-primary mt-1 font-bold">
-                    {formatWeekday(session.weekday, appLocale)}
-                  </p>
-                  <div className="text-text-secondary mt-3 flex flex-col gap-1.5 text-sm">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="size-4 shrink-0" aria-hidden="true" />
-                      {session.startTime} – {session.endTime}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="size-4 shrink-0" aria-hidden="true" />
-                      {session.location}
-                    </span>
-                  </div>
-                  {session.capacityNote && (
-                    <p className="text-pishnam-gold-600 mt-3 text-xs">{session.capacityNote}</p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+              : "The class schedule will be announced soon."
+          }
+        />
       </section>
 
       {sessions.length > 0 && (

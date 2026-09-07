@@ -83,6 +83,11 @@ enum AdminRole {
   editor
 }
 
+enum TeamMemberGender {
+  MALE // آقا
+  FEMALE // خانم
+}
+
 // Every content model with FA/EN text uses either:
 //  (a) parallel fields (titleFa/titleEn) for simple models, or
 //  (b) a Translation join table for rich-text-heavy models (Course, Article).
@@ -237,19 +242,20 @@ model TeamTag {
 }
 
 model TeamMember {
-  id                     String          @id @default(cuid())
+  id                     String            @id @default(cuid())
   nameFa                 String
   nameEn                 String
   roleFa                 String
   roleEn                 String
-  photo                  String
+  gender                 TeamMemberGender  @default(MALE)
+  photo                  String?
   bioFa                  String?
   bioEn                  String?
   resume                 String?
   collaborationStartDate DateTime?
-  isAlumni               Boolean         @default(false)
-  isVisible              Boolean         @default(true)
-  order                  Int             @default(0)
+  isAlumni               Boolean           @default(false)
+  isVisible              Boolean           @default(true)
+  order                  Int               @default(0)
   tags                   TeamMemberTag[]
 }
 
@@ -500,9 +506,11 @@ model Product {
   excerptEn String?
   bodyFa    String? // rich text (Tiptap HTML)
   bodyEn    String?
-  // Optional display price (e.g. "۲٬۵۰۰٬۰۰۰ تومان") — showcase only, no cart.
-  priceFa   String?
-  priceEn   String?
+  // Optional amount (showcase only, no cart). Displayed with locale digits /
+  // thousand separators and the free-text currency label below.
+  price       Int?
+  currencyFa  String? // e.g. تومان، ریال، دلار
+  currencyEn  String? // e.g. toman, rial, dollar
 
   courseId String?
   course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
@@ -809,6 +817,8 @@ model AdminUser {
   email        String    @unique
   passwordHash String
   role         AdminRole @default(editor)
+  // Set by an owner to temporarily suspend login/session access; null = active.
+  disabledAt   DateTime?
   createdAt    DateTime  @default(now())
 }
 
@@ -829,6 +839,20 @@ model EnrollmentGuidelines {
 
   bodyFa String @default("")
   bodyEn String @default("")
+
+  updatedAt DateTime @updatedAt
+}
+
+// Marketing counters on the homepage hero (boys / girls enrolled, achievements).
+// Admin-authored numbers — not derived from leads or Achievement rows — so the
+// public tally can reflect real enrollment even when that data lives offline.
+// Singleton id is always "default" (see HOMEPAGE_STATS_ID); upsert on first save.
+model HomepageStats {
+  id String @id @default("default")
+
+  boysEnrolled  Int @default(0)
+  girlsEnrolled Int @default(0)
+  achievements  Int @default(0)
 
   updatedAt DateTime @updatedAt
 }
@@ -891,6 +915,22 @@ enum GalleryMediaType {
   VIDEO
 }
 
+// Admin-managed taxonomy for public gallery filters at /gallery?tag=slug.
+// Images can belong to multiple tags (e.g. workshops + competitions).
+model GalleryTag {
+  id        String            @id @default(cuid())
+  slug      String            @unique
+  nameFa    String
+  nameEn    String
+  order     Int               @default(0)
+  active    Boolean           @default(true)
+  images    GalleryImageTag[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([active, order])
+}
+
 // Public media gallery -- photos and videos. Managed in /admin/gallery;
 // surfaced as a carousel teaser on the homepage and a full grid with lightbox
 // at /gallery.
@@ -906,10 +946,21 @@ model GalleryImage {
   captionFa String?
   captionEn String?
 
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
+  order     Int               @default(0)
+  createdAt DateTime          @default(now())
+  tags      GalleryImageTag[]
 
   @@index([order])
+}
+
+model GalleryImageTag {
+  image   GalleryImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId String
+  tag     GalleryTag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId   String
+
+  @@id([imageId, tagId])
+  @@index([tagId])
 }
 
 // Audit log for every file upload -- required by the upload security

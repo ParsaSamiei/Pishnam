@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getVerifiedAdminUser } from "@/lib/admin-session";
 import { prisma } from "@/lib/prisma";
 import {
   processUpload,
@@ -12,15 +12,15 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 export async function POST(request: NextRequest) {
   // 1. Auth + authorization first -- no public upload endpoint exists
   //    anywhere on the site (docs/05-frontend-architecture.md, checklist
-  //    item 1).
-  const session = await auth();
-  if (!session?.user) {
+  //    item 1). Rejects disabled accounts even if a JWT cookie remains.
+  const user = await getVerifiedAdminUser();
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   // 2. Rate-limit, even for an authenticated session (checklist item 8).
   const ip = getClientIp(request.headers);
-  const limitResult = rateLimit(`upload:${session.user.id}:${ip}`, 20, 10 * 60 * 1000);
+  const limitResult = rateLimit(`upload:${user.id}:${ip}`, 20, 10 * 60 * 1000);
   if (!limitResult.success) {
     return NextResponse.json({ error: "Too many uploads, please slow down." }, { status: 429 });
   }
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     // 10. Log every upload -- who, when, filename mapping, size.
     await prisma.uploadLog.create({
       data: {
-        adminUserId: session.user.id,
+        adminUserId: user.id,
         originalName: file.name,
         storedFilename: result.storedFilename,
         mimeType: result.mimeType,

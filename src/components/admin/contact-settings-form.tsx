@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import type { ContactSettingsFormState } from "@/app/admin/(dashboard)/contact/actions";
+import { IRANIAN_PHONE_HINT_FA } from "@/lib/phone";
 import { SOCIAL_CHANNELS } from "@/lib/social-channels";
 
 interface ContactSettingsFormProps {
@@ -77,15 +78,17 @@ function ContactSettingsFormFields({
       <fieldset className="flex flex-col gap-3">
         <legend className="text-text-primary text-sm font-semibold">شماره‌های تلفن</legend>
         <p className="text-text-secondary text-xs">
-          می‌توانید چند شماره ثبت کنید. فیلدهای خالی هنگام ذخیره نادیده گرفته می‌شوند.
+          می‌توانید چند شماره ثبت کنید. قالب مجاز: {IRANIAN_PHONE_HINT_FA}. فیلدهای خالی هنگام ذخیره
+          نادیده گرفته می‌شوند.
         </p>
         {phoneRows.map((row, index) => (
           <div key={row.id} className="flex items-start gap-2">
             <Input
               name="phones"
               type="tel"
+              autoComplete="tel"
               dir="ltr"
-              placeholder="+98 21 0000 0000"
+              placeholder="09121234567"
               defaultValue={row.value}
               aria-label={`شماره تلفن ${index + 1}`}
               aria-invalid={Boolean(state.errors?.phones)}

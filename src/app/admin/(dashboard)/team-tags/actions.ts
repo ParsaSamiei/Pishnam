@@ -9,15 +9,11 @@ import { AdminFormState, formActionError } from "@/lib/form-state";
 
 export type TeamTagFormState = AdminFormState;
 
-function revalidateTeamTagPages(slug?: string) {
+function revalidateTeamTagPages() {
   revalidatePath("/admin/team-tags");
   revalidatePath("/admin/team");
   revalidatePath("/about-us/team");
   revalidatePath("/en/about-us/team");
-  if (slug) {
-    revalidatePath(`/about-us/team/${slug}`);
-    revalidatePath(`/en/about-us/team/${slug}`);
-  }
 }
 
 export async function createTeamTag(
@@ -40,7 +36,7 @@ export async function createTeamTag(
 
   await prisma.teamTag.create({ data: parsed.data });
 
-  revalidateTeamTagPages(parsed.data.slug);
+  revalidateTeamTagPages();
   redirect("/admin/team-tags");
 }
 
@@ -70,16 +66,12 @@ export async function updateTeamTag(
 
   await prisma.teamTag.update({ where: { id }, data: parsed.data });
 
-  revalidateTeamTagPages(existing.slug);
-  if (existing.slug !== parsed.data.slug) {
-    revalidateTeamTagPages(parsed.data.slug);
-  }
+  revalidateTeamTagPages();
   redirect("/admin/team-tags");
 }
 
 export async function deleteTeamTag(id: string): Promise<void> {
   await requireAdminSession();
-  const tag = await prisma.teamTag.findUnique({ where: { id }, select: { slug: true } });
   await prisma.teamTag.delete({ where: { id } });
-  revalidateTeamTagPages(tag?.slug);
+  revalidateTeamTagPages();
 }

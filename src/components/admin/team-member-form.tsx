@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { FileUploadField } from "@/components/admin/file-upload-field";
+import { PersianDateField } from "@/components/admin/persian-date-field";
 import { NativeSelect } from "@/components/ui/native-select";
 import type { TeamMemberFormState } from "@/app/admin/(dashboard)/team/actions";
 import type { TeamMemberGender } from "@/lib/team-member-photo";
@@ -200,22 +201,16 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
       />
 
       <div className="border-border grid gap-4 border-t pt-5 sm:grid-cols-2">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="collaborationStartDate">تاریخ شروع همکاری</Label>
-          <Input
-            id="collaborationStartDate"
-            name="collaborationStartDate"
-            type="date"
-            dir="ltr"
-            defaultValue={field(
-              "collaborationStartDate",
-              defaultValues?.collaborationStartDate ?? undefined,
-            )}
-          />
-          {state.errors?.collaborationStartDate && (
-            <p className="text-pishnam-danger text-xs">{state.errors.collaborationStartDate}</p>
+        <PersianDateField
+          id="collaborationStartDate"
+          name="collaborationStartDate"
+          label="تاریخ شروع همکاری"
+          defaultValue={field(
+            "collaborationStartDate",
+            defaultValues?.collaborationStartDate ?? undefined,
           )}
-        </div>
+          error={state.errors?.collaborationStartDate}
+        />
         <div className="flex flex-col gap-1.5 sm:w-40">
           <Label htmlFor="order">ترتیب نمایش</Label>
           <Input

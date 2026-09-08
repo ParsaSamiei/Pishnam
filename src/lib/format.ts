@@ -55,7 +55,7 @@ export function formatFileSize(bytes: number | null | undefined): string {
 /**
  * Product showcase price. Uses Persian digits for `fa` and Western digits for
  * `en`, with thousand separators, then appends the free-text currency label
- * when provided (تومان / dollar / rial / …).
+ * when provided (تومان / dollar / rial / …). Prefixed with «قیمت :» / «Price :».
  */
 export function formatProductPrice(
   amount: number | null | undefined,
@@ -65,7 +65,8 @@ export function formatProductPrice(
   if (amount == null || !Number.isFinite(amount) || amount < 0) return null;
   const formatted = new Intl.NumberFormat(locale === "fa" ? "fa-IR" : "en-US").format(amount);
   const unit = currency?.trim();
-  return unit ? `${formatted} ${unit}` : formatted;
+  const value = unit ? `${formatted} ${unit}` : formatted;
+  return locale === "fa" ? `قیمت : ${value}` : `Price : ${value}`;
 }
 
 /** Digits-only string (Persian digits accepted) for price fields. */

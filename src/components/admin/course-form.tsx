@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
@@ -228,7 +229,9 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
         <h2 className="text-pishnam-steel-600 mb-4 text-sm font-bold">English version</h2>
         <div className="flex flex-col gap-4" dir="ltr">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="titleEn">Title *</Label>
+            <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+              Title *
+            </EnFieldLabel>
             <Input
               id="titleEn"
               name="titleEn"
@@ -241,7 +244,9 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="excerptEn">Excerpt *</Label>
+            <EnFieldLabel htmlFor="excerptEn" sourceName="excerptFa" targetName="excerptEn">
+              Excerpt *
+            </EnFieldLabel>
             <Textarea
               id="excerptEn"
               name="excerptEn"
@@ -255,7 +260,14 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="richtext-bodyEn">Full course body *</Label>
+            <EnFieldLabel
+              htmlFor="richtext-bodyEn"
+              sourceName="bodyFa"
+              targetName="bodyEn"
+              format="html"
+            >
+              Full course body *
+            </EnFieldLabel>
             <RichTextEditor
               name="bodyEn"
               defaultValue={field("bodyEn", defaultValues?.bodyEn)}
@@ -263,7 +275,13 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="prerequisitesEn">Prerequisites</Label>
+            <EnFieldLabel
+              htmlFor="prerequisitesEn"
+              sourceName="prerequisitesFa"
+              targetName="prerequisitesEn"
+            >
+              Prerequisites
+            </EnFieldLabel>
             <Textarea
               id="prerequisitesEn"
               name="prerequisitesEn"
@@ -272,7 +290,13 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="learningOutcomesEn">What you will achieve</Label>
+            <EnFieldLabel
+              htmlFor="learningOutcomesEn"
+              sourceName="learningOutcomesFa"
+              targetName="learningOutcomesEn"
+            >
+              What you will achieve
+            </EnFieldLabel>
             <Textarea
               id="learningOutcomesEn"
               name="learningOutcomesEn"
@@ -283,7 +307,13 @@ export function CourseForm({ action, defaultValues, submitLabel }: CourseFormPro
             <p className="text-text-secondary text-xs">Optional — one outcome per line.</p>
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="pastResultsEn">Results from previous years</Label>
+            <EnFieldLabel
+              htmlFor="pastResultsEn"
+              sourceName="pastResultsFa"
+              targetName="pastResultsEn"
+            >
+              Results from previous years
+            </EnFieldLabel>
             <Textarea
               id="pastResultsEn"
               name="pastResultsEn"

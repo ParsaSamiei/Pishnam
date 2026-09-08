@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import type { TeamTagFormState } from "@/app/admin/(dashboard)/team-tags/actions";
 
 interface TeamTagFormProps {
@@ -61,7 +62,9 @@ export function TeamTagForm({ action, defaultValues, submitLabel }: TeamTagFormP
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="nameEn">Name (English) *</Label>
+          <EnFieldLabel htmlFor="nameEn" sourceName="nameFa" targetName="nameEn">
+            Name (English) *
+          </EnFieldLabel>
           <Input
             id="nameEn"
             name="nameEn"

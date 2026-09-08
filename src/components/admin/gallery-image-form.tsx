@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { GalleryMediaFields, type GalleryMediaType } from "@/components/admin/gallery-media-fields";
 import type { GalleryImageFormState } from "@/app/admin/(dashboard)/gallery/actions";
@@ -72,7 +73,9 @@ export function GalleryImageForm({
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="altEn">Alt text (English)</Label>
+          <EnFieldLabel htmlFor="altEn" sourceName="altFa" targetName="altEn">
+            Alt text (English)
+          </EnFieldLabel>
           <Input
             id="altEn"
             name="altEn"
@@ -103,7 +106,9 @@ export function GalleryImageForm({
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="captionEn">Caption (English)</Label>
+          <EnFieldLabel htmlFor="captionEn" sourceName="captionFa" targetName="captionEn">
+            Caption (English)
+          </EnFieldLabel>
           <Textarea
             id="captionEn"
             name="captionEn"

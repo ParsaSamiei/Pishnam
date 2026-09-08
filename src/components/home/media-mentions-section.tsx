@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { pickLocaleField } from "@/lib/i18n/pick";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { getHomepageCopy } from "@/lib/homepage-content";
 import { AnimatedLink } from "@/components/motion/animated-link";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
@@ -10,10 +11,10 @@ import { MediaMentionItem } from "@/components/press/media-mention-item";
 import { MediaMentionPanel } from "@/components/press/media-mention-panel";
 
 export async function MediaMentionsSection() {
-  const t = await getTranslations("home.mediaMentions");
   const tPress = await getTranslations("press");
   const tNav = await getTranslations("nav");
   const locale = (await getLocale()) as AppLocale;
+  const { mediaMentions: copy } = await getHomepageCopy(locale);
   const ArrowIcon = locale === "fa" ? ArrowLeft : ArrowRight;
 
   const mentions = await prisma.mediaMention.findMany({
@@ -30,15 +31,15 @@ export async function MediaMentionsSection() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <StaggerGroup>
             <StaggerItem variant="heading">
-              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{t("title")}</h2>
+              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{copy.title}</h2>
             </StaggerItem>
             <StaggerItem variant="rise">
-              <p className="text-text-secondary mt-2 max-w-2xl">{t("subtitle")}</p>
+              <p className="text-text-secondary mt-2 max-w-2xl">{copy.subtitle}</p>
             </StaggerItem>
           </StaggerGroup>
           <Reveal delay={0.2}>
             <AnimatedLink href="/press" icon={<ArrowIcon aria-hidden="true" />}>
-              {t("viewAll")}
+              {copy.viewAll}
             </AnimatedLink>
           </Reveal>
         </div>

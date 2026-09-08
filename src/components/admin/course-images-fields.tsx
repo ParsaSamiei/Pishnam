@@ -5,6 +5,7 @@ import { ImageIcon, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 
 export type CourseImageDraft = {
@@ -151,7 +152,14 @@ export function CourseImagesFields({
                     />
                   </div>
                   <div className="flex flex-col gap-1.5" dir="ltr">
-                    <Label htmlFor={`img-caption-en-${index}`}>English caption</Label>
+                    <EnFieldLabel
+                      htmlFor={`img-caption-en-${index}`}
+                      getSourceText={() => img.captionFa}
+                      getTargetText={() => img.captionEn}
+                      onTranslated={(text) => updateImage(index, { captionEn: text })}
+                    >
+                      English caption
+                    </EnFieldLabel>
                     <Input
                       id={`img-caption-en-${index}`}
                       value={img.captionEn}

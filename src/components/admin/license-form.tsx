@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import type { LicenseFormState } from "@/app/admin/(dashboard)/licenses/actions";
@@ -60,7 +61,9 @@ export function LicenseForm({ action, defaultValues, submitLabel }: LicenseFormP
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="titleEn">Title (English) *</Label>
+          <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+            Title (English) *
+          </EnFieldLabel>
           <Input
             id="titleEn"
             name="titleEn"
@@ -90,7 +93,9 @@ export function LicenseForm({ action, defaultValues, submitLabel }: LicenseFormP
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="issuerEn">Issuer (English)</Label>
+          <EnFieldLabel htmlFor="issuerEn" sourceName="issuerFa" targetName="issuerEn">
+            Issuer (English)
+          </EnFieldLabel>
           <Input
             id="issuerEn"
             name="issuerEn"
@@ -151,7 +156,13 @@ export function LicenseForm({ action, defaultValues, submitLabel }: LicenseFormP
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="descriptionEn">Description (English)</Label>
+          <EnFieldLabel
+            htmlFor="descriptionEn"
+            sourceName="descriptionFa"
+            targetName="descriptionEn"
+          >
+            Description (English)
+          </EnFieldLabel>
           <Textarea
             id="descriptionEn"
             name="descriptionEn"

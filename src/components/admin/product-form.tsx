@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
@@ -69,7 +70,9 @@ function ProductPriceFields({
         {currencyFaError && <p className="text-pishnam-danger text-xs">{currencyFaError}</p>}
       </div>
       <div className="flex flex-col gap-1.5 sm:col-start-2">
-        <Label htmlFor="currencyEn">Currency (English)</Label>
+        <EnFieldLabel htmlFor="currencyEn" sourceName="currencyFa" targetName="currencyEn">
+          Currency (English)
+        </EnFieldLabel>
         <Input
           id="currencyEn"
           name="currencyEn"
@@ -171,7 +174,9 @@ export function ProductForm({
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="titleEn">Title (English) *</Label>
+          <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+            Title (English) *
+          </EnFieldLabel>
           <Input
             id="titleEn"
             name="titleEn"
@@ -197,7 +202,9 @@ export function ProductForm({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="excerptEn">Excerpt (English)</Label>
+          <EnFieldLabel htmlFor="excerptEn" sourceName="excerptFa" targetName="excerptEn">
+            Excerpt (English)
+          </EnFieldLabel>
           <Textarea
             id="excerptEn"
             name="excerptEn"
@@ -291,7 +298,14 @@ export function ProductForm({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label>Full text (English)</Label>
+        <EnFieldLabel
+          htmlFor="richtext-bodyEn"
+          sourceName="bodyFa"
+          targetName="bodyEn"
+          format="html"
+        >
+          Full text (English)
+        </EnFieldLabel>
         <RichTextEditor
           name="bodyEn"
           defaultValue={field("bodyEn", defaultValues?.bodyEn ?? "")}

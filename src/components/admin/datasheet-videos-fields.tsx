@@ -5,6 +5,7 @@ import { Plus, Trash2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { VideoUploadField } from "@/components/admin/video-upload-field";
@@ -151,7 +152,14 @@ export function DatasheetVideosFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`ds-vid-title-en-${index}`}>English title *</Label>
+                  <EnFieldLabel
+                    htmlFor={`ds-vid-title-en-${index}`}
+                    getSourceText={() => video.titleFa}
+                    getTargetText={() => video.titleEn}
+                    onTranslated={(text) => update(index, { titleEn: text })}
+                  >
+                    English title *
+                  </EnFieldLabel>
                   <Input
                     id={`ds-vid-title-en-${index}`}
                     value={video.titleEn}

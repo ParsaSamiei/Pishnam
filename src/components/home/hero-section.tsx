@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { HeroBackdrop } from "@/components/motion/hero-backdrop";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
 import { getHomepageStats } from "@/lib/homepage-stats";
+import { getHomepageCopy } from "@/lib/homepage-content";
 import { HeroShowcase } from "./hero-showcase";
 import { HeroStats } from "./hero-stats";
 
 export async function HeroSection() {
   const t = await getTranslations("home.hero");
   const locale = (await getLocale()) as AppLocale;
+  const copy = await getHomepageCopy(locale);
 
   // Same ordering the /admin/hero-slides table lists them in, so the admin sees
   // the sequence visitors will scroll through.
@@ -37,6 +39,7 @@ export async function HeroSection() {
       t("imageAlt"),
   }));
 
+  const { hero } = copy;
   const statItems = stats
     ? [
         { key: "boys", value: stats.boysEnrolled, label: t("stats.boys") },
@@ -75,28 +78,30 @@ export async function HeroSection() {
                   aria-hidden="true"
                   className="bg-pishnam-gold-500 size-1.5 rounded-full motion-safe:animate-pulse"
                 />
-                {t("eyebrow")}
+                {hero.eyebrow}
               </span>
             </StaggerItem>
             <StaggerItem variant="heading">
               {/* `text-balance` evens the ragged wrap -- the Persian title used
                   to drop its last two words onto a line of their own. */}
               <h1 className="mt-5 text-3xl leading-[1.25] font-extrabold text-balance sm:text-4xl lg:text-5xl">
-                {t.rich("title", {
-                  accent: (chunks) => <span className="text-pishnam-gold-500">{chunks}</span>,
-                })}
+                {hero.titlePrefix}
+                {hero.titleAccent ? (
+                  <span className="text-pishnam-gold-500">{hero.titleAccent}</span>
+                ) : null}
+                {hero.titleSuffix}
               </h1>
             </StaggerItem>
             <StaggerItem variant="rise">
               <p className="text-text-secondary mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
-                {t("subtitle")}
+                {hero.subtitle}
               </p>
             </StaggerItem>
             <StaggerItem variant="rise">
               <div className="mt-9 flex flex-wrap gap-3">
                 <Button asChild size="lg" className="group">
                   <Link href="/courses">
-                    {t("ctaPrimary")}
+                    {hero.ctaPrimary}
                     {/* Points and travels toward the inline end: mirrored by
                         `-scale-x-100` in RTL, and the nudge is signed to match,
                         since CSS applies `translate` outside `scale` and would
@@ -114,7 +119,7 @@ export async function HeroSection() {
                   className="group hover:border-pishnam-gold-500/60 hover:bg-pishnam-gold-500/12 hover:text-pishnam-gold-600"
                 >
                   <Link href="/enroll">
-                    {t("ctaSecondary")}
+                    {hero.ctaSecondary}
                     <ArrowRight
                       aria-hidden="true"
                       className="transition-transform duration-200 motion-safe:group-hover:translate-x-1 rtl:-scale-x-100 motion-safe:rtl:group-hover:-translate-x-1"

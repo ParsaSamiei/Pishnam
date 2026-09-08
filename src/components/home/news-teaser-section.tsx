@@ -1,15 +1,16 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { getHomepageCopy } from "@/lib/homepage-content";
 import { AnimatedLink } from "@/components/motion/animated-link";
 import { Reveal } from "@/components/motion/reveal";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
 import { ArticleCard } from "@/components/blog/article-card";
 
 export async function NewsTeaserSection() {
-  const t = await getTranslations("home.news");
   const locale = (await getLocale()) as AppLocale;
+  const { news: copy } = await getHomepageCopy(locale);
   const ArrowIcon = locale === "fa" ? ArrowLeft : ArrowRight;
 
   const articles = await prisma.article.findMany({
@@ -40,15 +41,15 @@ export async function NewsTeaserSection() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <StaggerGroup>
             <StaggerItem variant="heading">
-              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{t("title")}</h2>
+              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{copy.title}</h2>
             </StaggerItem>
             <StaggerItem variant="rise">
-              <p className="text-text-secondary mt-2">{t("subtitle")}</p>
+              <p className="text-text-secondary mt-2">{copy.subtitle}</p>
             </StaggerItem>
           </StaggerGroup>
           <Reveal delay={0.2}>
             <AnimatedLink href="/blog" icon={<ArrowIcon aria-hidden="true" />}>
-              {t("viewAll")}
+              {copy.viewAll}
             </AnimatedLink>
           </Reveal>
         </div>

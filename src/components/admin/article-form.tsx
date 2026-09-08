@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
@@ -128,7 +129,9 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
         <h2 className="text-pishnam-steel-600 mb-4 text-sm font-bold">English version</h2>
         <div className="flex flex-col gap-4" dir="ltr">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="titleEn">Title *</Label>
+            <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+              Title *
+            </EnFieldLabel>
             <Input
               id="titleEn"
               name="titleEn"
@@ -141,7 +144,9 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="excerptEn">Excerpt *</Label>
+            <EnFieldLabel htmlFor="excerptEn" sourceName="excerptFa" targetName="excerptEn">
+              Excerpt *
+            </EnFieldLabel>
             <Textarea
               id="excerptEn"
               name="excerptEn"
@@ -155,7 +160,14 @@ export function ArticleForm({ action, defaultValues, submitLabel }: ArticleFormP
             )}
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="richtext-bodyEn">Full body *</Label>
+            <EnFieldLabel
+              htmlFor="richtext-bodyEn"
+              sourceName="bodyFa"
+              targetName="bodyEn"
+              format="html"
+            >
+              Full body *
+            </EnFieldLabel>
             <RichTextEditor
               name="bodyEn"
               defaultValue={field("bodyEn", defaultValues?.bodyEn)}

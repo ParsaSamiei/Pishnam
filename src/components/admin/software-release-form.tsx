@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { FileUploadField } from "@/components/admin/file-upload-field";
@@ -177,7 +178,9 @@ function SoftwareReleaseFormFields({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="notesEn">Notes for this release (English)</Label>
+          <EnFieldLabel htmlFor="notesEn" sourceName="notesFa" targetName="notesEn">
+            Notes for this release (English)
+          </EnFieldLabel>
           <Textarea
             id="notesEn"
             name="notesEn"

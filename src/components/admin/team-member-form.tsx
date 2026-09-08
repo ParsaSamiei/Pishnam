@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { FileUploadField } from "@/components/admin/file-upload-field";
@@ -87,7 +88,9 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="nameEn">Name (English) *</Label>
+          <EnFieldLabel htmlFor="nameEn" sourceName="nameFa" targetName="nameEn">
+            Name (English) *
+          </EnFieldLabel>
           <Input
             id="nameEn"
             name="nameEn"
@@ -115,7 +118,9 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="roleEn">Role (English) *</Label>
+          <EnFieldLabel htmlFor="roleEn" sourceName="roleFa" targetName="roleEn">
+            Role (English) *
+          </EnFieldLabel>
           <Input
             id="roleEn"
             name="roleEn"
@@ -179,7 +184,9 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="bioEn">Bio (English)</Label>
+          <EnFieldLabel htmlFor="bioEn" sourceName="bioFa" targetName="bioEn">
+            Bio (English)
+          </EnFieldLabel>
           <Textarea
             id="bioEn"
             name="bioEn"

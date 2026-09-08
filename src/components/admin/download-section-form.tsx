@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { NativeSelect } from "@/components/ui/native-select";
 import {
   DOWNLOAD_SECTION_ICONS,
@@ -142,7 +143,9 @@ export function DownloadSectionForm({
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="titleEn">Title (English) *</Label>
+          <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+            Title (English) *
+          </EnFieldLabel>
           <Input
             id="titleEn"
             name="titleEn"

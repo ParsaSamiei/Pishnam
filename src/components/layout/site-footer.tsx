@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ExternalLink, MapPin, Mailbox, Phone } from "lucide-react";
+import { ExternalLink, Heart, MapPin, Mailbox, Phone } from "lucide-react";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { APP_VERSION } from "@/lib/app-version";
@@ -52,6 +52,8 @@ const RELATED_LINKS = [
 
 const footerLinkClass =
   "text-pishnam-off-white/70 hover:text-pishnam-gold-500 cursor-pointer text-sm transition-colors duration-200";
+
+const DEVELOPER_GITHUB_URL = "https://github.com/ParsaSamiei";
 
 export async function SiteFooter() {
   const t = await getTranslations();
@@ -201,8 +203,33 @@ export async function SiteFooter() {
                   );
                 })}
               </ul>
+              <ul className="mt-3 flex flex-col gap-2">
+                <li>
+                  <Link href="/privacy" className={footerLinkClass}>
+                    {t("footer.privacy")}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className={footerLinkClass}>
+                    {t("footer.terms")}
+                  </Link>
+                </li>
+              </ul>
             </div>
-          ) : null}
+          ) : (
+            <ul className="mt-6 flex flex-col gap-2 border-t border-white/10 pt-3">
+              <li>
+                <Link href="/privacy" className={footerLinkClass}>
+                  {t("footer.privacy")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className={footerLinkClass}>
+                  {t("footer.terms")}
+                </Link>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
 
@@ -214,14 +241,27 @@ export async function SiteFooter() {
               v{APP_VERSION}
             </span>
           </p>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-pishnam-gold-500 cursor-pointer">
-              {t("footer.privacy")}
-            </Link>
-            <Link href="/terms" className="hover:text-pishnam-gold-500 cursor-pointer">
-              {t("footer.terms")}
-            </Link>
-          </div>
+          <p className="text-pishnam-off-white/40 inline-flex flex-wrap items-center justify-center gap-x-1 text-xs font-medium tracking-wide">
+            <span>{t("footer.craftedWith")}</span>
+            <Heart
+              className="text-pishnam-danger/80 ms-0.5 size-2.5 shrink-0"
+              aria-hidden="true"
+              fill="currentColor"
+              strokeWidth={0}
+            />
+            <span>
+              {t("footer.craftedBy")}{" "}
+              <a
+                href={DEVELOPER_GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${t("footer.developerLinkLabel")} (${t("nav.opensInNewTab")})`}
+                className="text-pishnam-off-white/55 hover:text-pishnam-gold-500 cursor-pointer underline-offset-2 transition-colors duration-200 hover:underline"
+              >
+                {t("footer.developerName")}
+              </a>
+            </span>
+          </p>
         </div>
       </div>
     </footer>

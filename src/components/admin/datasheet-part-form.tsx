@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
@@ -118,7 +119,9 @@ export function DatasheetPartForm({
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="titleEn">Title (English) *</Label>
+          <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+            Title (English) *
+          </EnFieldLabel>
           <Input
             id="titleEn"
             name="titleEn"
@@ -144,7 +147,9 @@ export function DatasheetPartForm({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="excerptEn">Excerpt (English)</Label>
+          <EnFieldLabel htmlFor="excerptEn" sourceName="excerptFa" targetName="excerptEn">
+            Excerpt (English)
+          </EnFieldLabel>
           <Textarea
             id="excerptEn"
             name="excerptEn"
@@ -164,7 +169,14 @@ export function DatasheetPartForm({
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <Label>Body (English)</Label>
+        <EnFieldLabel
+          htmlFor="richtext-bodyEn"
+          sourceName="bodyFa"
+          targetName="bodyEn"
+          format="html"
+        >
+          Body (English)
+        </EnFieldLabel>
         <RichTextEditor
           name="bodyEn"
           defaultValue={field("bodyEn", defaultValues?.bodyEn ?? "")}

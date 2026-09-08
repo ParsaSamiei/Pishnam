@@ -217,7 +217,11 @@
     "follow": "Find us",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "rightsReserved": "All rights reserved."
+    "rightsReserved": "All rights reserved.",
+    "craftedWith": "Crafted with",
+    "craftedBy": "by",
+    "developerName": "ParsaSamiee",
+    "developerLinkLabel": "ParsaSamiee on GitHub"
   },
   "common": {
     "learnMore": "Learn more",

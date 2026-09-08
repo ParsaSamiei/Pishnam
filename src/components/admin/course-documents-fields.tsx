@@ -5,6 +5,7 @@ import { FileText, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { FileUploadField } from "@/components/admin/file-upload-field";
@@ -162,7 +163,14 @@ export function CourseDocumentsFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`doc-title-en-${index}`}>English title *</Label>
+                  <EnFieldLabel
+                    htmlFor={`doc-title-en-${index}`}
+                    getSourceText={() => doc.titleFa}
+                    getTargetText={() => doc.titleEn}
+                    onTranslated={(text) => updateDocument(index, { titleEn: text })}
+                  >
+                    English title *
+                  </EnFieldLabel>
                   <Input
                     id={`doc-title-en-${index}`}
                     value={doc.titleEn}
@@ -180,7 +188,14 @@ export function CourseDocumentsFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`doc-desc-en-${index}`}>English description</Label>
+                  <EnFieldLabel
+                    htmlFor={`doc-desc-en-${index}`}
+                    getSourceText={() => doc.descriptionFa}
+                    getTargetText={() => doc.descriptionEn}
+                    onTranslated={(text) => updateDocument(index, { descriptionEn: text })}
+                  >
+                    English description
+                  </EnFieldLabel>
                   <Textarea
                     id={`doc-desc-en-${index}`}
                     rows={2}

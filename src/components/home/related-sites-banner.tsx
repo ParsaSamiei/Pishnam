@@ -1,5 +1,7 @@
-import { useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink } from "lucide-react";
+import type { AppLocale } from "@/lib/i18n/routing";
+import { getHomepageCopy } from "@/lib/homepage-content";
 import { Card, CardContent } from "@/components/ui/card";
 import { TiltCard } from "@/components/motion/tilt-card";
 import { StaggerGroup, StaggerItem } from "@/components/motion/stagger";
@@ -138,25 +140,26 @@ const SITES = [
  * Mid-landing destinations for PishCup and Pishtalk. Same surface / card /
  * hover language as the audience grid so light and dark themes stay coherent.
  */
-export function RelatedSitesBanner() {
-  const t = useTranslations("home.related");
-  const tNav = useTranslations("nav");
+export async function RelatedSitesBanner() {
+  const tNav = await getTranslations("nav");
+  const locale = (await getLocale()) as AppLocale;
+  const { related } = await getHomepageCopy(locale);
 
   return (
     <section data-spine-node className="bg-bg-surface-alt py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <StaggerGroup className="max-w-2xl">
           <StaggerItem variant="heading">
-            <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{t("title")}</h2>
+            <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{related.title}</h2>
           </StaggerItem>
           <StaggerItem variant="rise">
-            <p className="text-text-secondary mt-2">{t("subtitle")}</p>
+            <p className="text-text-secondary mt-2">{related.subtitle}</p>
           </StaggerItem>
         </StaggerGroup>
 
         <StaggerGroup className="mt-8 grid gap-5 sm:grid-cols-2">
           {SITES.map((site) => {
-            const title = t(`${site.key}.title`);
+            const siteCopy = related[site.key];
             const Icon = site.Icon;
 
             return (
@@ -165,7 +168,7 @@ export function RelatedSitesBanner() {
                   href={site.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${title} (${tNav("opensInNewTab")})`}
+                  aria-label={`${siteCopy.title} (${tNav("opensInNewTab")})`}
                   className="group block h-full cursor-pointer"
                 >
                   <TiltCard className="h-full">
@@ -193,20 +196,20 @@ export function RelatedSitesBanner() {
                                 : "text-steel-accent",
                             )}
                           >
-                            {t(`${site.key}.eyebrow`)}
+                            {siteCopy.eyebrow}
                           </p>
                           <h3 className="text-text-primary mt-1 text-xl font-bold sm:text-2xl">
-                            {title}
+                            {siteCopy.title}
                           </h3>
                           <p className="text-text-secondary mt-2 text-sm leading-relaxed sm:text-base">
-                            {t(`${site.key}.description`)}
+                            {siteCopy.description}
                           </p>
                           <div className="mt-4">
                             <AnimatedLinkContent
                               icon={<ExternalLink aria-hidden="true" />}
                               className="font-semibold"
                             >
-                              {t(`${site.key}.cta`)}
+                              {siteCopy.cta}
                             </AnimatedLinkContent>
                           </div>
                         </div>

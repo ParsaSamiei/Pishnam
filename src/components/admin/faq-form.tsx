@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import type { FaqFormState } from "@/app/admin/(dashboard)/faqs/actions";
 
@@ -84,7 +85,9 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="questionEn">Question (English) *</Label>
+        <EnFieldLabel htmlFor="questionEn" sourceName="questionFa" targetName="questionEn">
+          Question (English) *
+        </EnFieldLabel>
         <Input
           id="questionEn"
           name="questionEn"
@@ -97,7 +100,9 @@ export function FaqForm({ action, defaultValues, submitLabel }: FaqFormProps) {
         )}
       </div>
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="answerEn">Answer (English) *</Label>
+        <EnFieldLabel htmlFor="answerEn" sourceName="answerFa" targetName="answerEn">
+          Answer (English) *
+        </EnFieldLabel>
         <Textarea
           id="answerEn"
           name="answerEn"

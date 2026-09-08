@@ -18,7 +18,8 @@ import {
   Undo,
   Redo,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { RICHTEXT_SET_EVENT, type RichTextSetDetail } from "@/lib/rich-text-set-event";
 import { cn } from "@/lib/utils";
 
 interface RichTextEditorProps {
@@ -98,6 +99,19 @@ export function RichTextEditor({ name, defaultValue = "", error }: RichTextEdito
       },
     },
   });
+
+  useEffect(() => {
+    function onSetContent(event: Event) {
+      const detail = (event as CustomEvent<RichTextSetDetail>).detail;
+      if (!detail || detail.name !== name || !editor) return;
+      const next = detail.html?.trim() ? detail.html : "";
+      editor.commands.setContent(next || "<p></p>");
+      setHtml(editor.isEmpty ? "" : editor.getHTML());
+    }
+
+    window.addEventListener(RICHTEXT_SET_EVENT, onSetContent);
+    return () => window.removeEventListener(RICHTEXT_SET_EVENT, onSetContent);
+  }, [editor, name]);
 
   const setLink = useCallback(() => {
     if (!editor) return;

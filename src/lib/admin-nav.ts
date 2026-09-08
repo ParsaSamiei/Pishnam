@@ -29,6 +29,7 @@ import {
   Boxes,
   BadgeCheck,
   ChartColumnIncreasing,
+  Type,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -49,6 +50,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { href: "/admin/leads", label: "درخواست‌ها", icon: Inbox },
   { href: "/admin/feedback", label: "انتقادات و پیشنهادات", icon: MessageSquare },
   { href: "/admin/hero-slides", label: "تصاویر صفحه اصلی", icon: Images },
+  { href: "/admin/homepage-content", label: "متن صفحه اصلی", icon: Type },
   { href: "/admin/homepage-stats", label: "آمار صفحه اصلی", icon: ChartColumnIncreasing },
   { href: "/admin/gallery", label: "گالری تصاویر", icon: Camera },
   { href: "/admin/gallery-tags", label: "برچسب‌های گالری", icon: Tags },

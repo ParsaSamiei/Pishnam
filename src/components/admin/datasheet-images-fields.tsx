@@ -5,6 +5,7 @@ import { ImageIcon, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 
 export type DatasheetImageDraft = {
@@ -138,7 +139,14 @@ export function DatasheetImagesFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`ds-img-cap-en-${index}`}>English caption</Label>
+                  <EnFieldLabel
+                    htmlFor={`ds-img-cap-en-${index}`}
+                    getSourceText={() => img.captionFa}
+                    getTargetText={() => img.captionEn}
+                    onTranslated={(text) => update(index, { captionEn: text })}
+                  >
+                    English caption
+                  </EnFieldLabel>
                   <Input
                     id={`ds-img-cap-en-${index}`}
                     value={img.captionEn}

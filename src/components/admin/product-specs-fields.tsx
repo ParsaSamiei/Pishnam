@@ -5,6 +5,7 @@ import { List, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 
 export type ProductSpecDraft = {
   keyFa: string;
@@ -129,7 +130,14 @@ export function ProductSpecsFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`prod-spec-key-en-${index}`}>Key (English) *</Label>
+                  <EnFieldLabel
+                    htmlFor={`prod-spec-key-en-${index}`}
+                    getSourceText={() => spec.keyFa}
+                    getTargetText={() => spec.keyEn}
+                    onTranslated={(text) => update(index, { keyEn: text })}
+                  >
+                    Key (English) *
+                  </EnFieldLabel>
                   <Input
                     id={`prod-spec-key-en-${index}`}
                     value={spec.keyEn}
@@ -149,7 +157,14 @@ export function ProductSpecsFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`prod-spec-val-en-${index}`}>Value (English) *</Label>
+                  <EnFieldLabel
+                    htmlFor={`prod-spec-val-en-${index}`}
+                    getSourceText={() => spec.valueFa}
+                    getTargetText={() => spec.valueEn}
+                    onTranslated={(text) => update(index, { valueEn: text })}
+                  >
+                    Value (English) *
+                  </EnFieldLabel>
                   <Input
                     id={`prod-spec-val-en-${index}`}
                     value={spec.valueEn}

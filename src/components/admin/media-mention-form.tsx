@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import type { MediaMentionFormState } from "@/app/admin/(dashboard)/media-mentions/actions";
 
@@ -63,7 +64,9 @@ export function MediaMentionForm({ action, defaultValues, submitLabel }: MediaMe
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="outletNameEn">Outlet name (English) *</Label>
+          <EnFieldLabel htmlFor="outletNameEn" sourceName="outletNameFa" targetName="outletNameEn">
+            Outlet name (English) *
+          </EnFieldLabel>
           <Input
             id="outletNameEn"
             name="outletNameEn"
@@ -94,7 +97,9 @@ export function MediaMentionForm({ action, defaultValues, submitLabel }: MediaMe
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="headlineEn">Headline (English) *</Label>
+          <EnFieldLabel htmlFor="headlineEn" sourceName="headlineFa" targetName="headlineEn">
+            Headline (English) *
+          </EnFieldLabel>
           <Input
             id="headlineEn"
             name="headlineEn"

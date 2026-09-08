@@ -1,4 +1,4 @@
-import { getTranslations, getLocale } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "@/lib/i18n/navigation";
 import { AnimatedLink } from "@/components/motion/animated-link";
@@ -9,11 +9,12 @@ import { TiltCard } from "@/components/motion/tilt-card";
 import { CardHoverRule, cardHoverClass, cardHoverIconClass } from "@/components/motion/card-hover";
 import { cn } from "@/lib/utils";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { getHomepageCopy } from "@/lib/homepage-content";
 import { getActiveDownloadSectionTiles, downloadSectionTitle } from "@/lib/download-sections";
 
 export async function DownloadsTeaserSection() {
-  const t = await getTranslations("home.downloads");
   const locale = (await getLocale()) as AppLocale;
+  const { downloads: copy } = await getHomepageCopy(locale);
   const ArrowIcon = locale === "fa" ? ArrowLeft : ArrowRight;
   const tiles = await getActiveDownloadSectionTiles();
 
@@ -23,15 +24,15 @@ export async function DownloadsTeaserSection() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <StaggerGroup>
             <StaggerItem variant="heading">
-              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{t("title")}</h2>
+              <h2 className="text-text-primary text-2xl font-bold sm:text-3xl">{copy.title}</h2>
             </StaggerItem>
             <StaggerItem variant="rise">
-              <p className="text-text-secondary mt-2 max-w-xl">{t("subtitle")}</p>
+              <p className="text-text-secondary mt-2 max-w-xl">{copy.subtitle}</p>
             </StaggerItem>
           </StaggerGroup>
           <Reveal delay={0.2}>
             <AnimatedLink href="/downloads" icon={<ArrowIcon aria-hidden="true" />}>
-              {t("viewAll")}
+              {copy.viewAll}
             </AnimatedLink>
           </Reveal>
         </div>

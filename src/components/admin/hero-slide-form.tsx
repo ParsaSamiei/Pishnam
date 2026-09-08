@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import type { HeroSlideFormState } from "@/app/admin/(dashboard)/hero-slides/actions";
 
@@ -58,7 +59,9 @@ export function HeroSlideForm({ action, defaultValues, submitLabel }: HeroSlideF
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="altEn">Alt text (English)</Label>
+          <EnFieldLabel htmlFor="altEn" sourceName="altFa" targetName="altEn">
+            Alt text (English)
+          </EnFieldLabel>
           <Input
             id="altEn"
             name="altEn"

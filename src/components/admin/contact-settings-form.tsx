@@ -6,6 +6,7 @@ import { Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import type { ContactSettingsFormState } from "@/app/admin/(dashboard)/contact/actions";
 import { IRANIAN_PHONE_HINT_FA } from "@/lib/phone";
@@ -151,7 +152,9 @@ function ContactSettingsFormFields({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="addressEn">Address (English)</Label>
+        <EnFieldLabel htmlFor="addressEn" sourceName="addressFa" targetName="addressEn">
+          Address (English)
+        </EnFieldLabel>
         <Textarea
           id="addressEn"
           name="addressEn"

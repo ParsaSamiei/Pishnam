@@ -857,6 +857,19 @@ model HomepageStats {
   updatedAt DateTime @updatedAt
 }
 
+// Landing-page marketing copy (hero, audience cards, section headings, related
+// sites). Singleton id is always "default" (see HOMEPAGE_CONTENT_ID). Shape of
+// `copy` is validated by homepageContentSchema — not a free-form bag. Until the
+// first admin save, the public site uses the in-code defaults that match the
+// previous next-intl `home.*` strings.
+model HomepageContent {
+  id String @id @default("default")
+
+  copy Json
+
+  updatedAt DateTime @updatedAt
+}
+
 // One-row site contact details, edited from /admin/contact. Unlike HeroSlide
 // this *is* a settings singleton: there is only one address/email/map to show,
 // so a table of rows would be the wrong shape. The id is always "default"

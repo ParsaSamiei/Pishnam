@@ -5,9 +5,11 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { FileUploadField } from "@/components/admin/file-upload-field";
+import { PersianDateField } from "@/components/admin/persian-date-field";
 import { NativeSelect } from "@/components/ui/native-select";
 import type { TeamMemberFormState } from "@/app/admin/(dashboard)/team/actions";
 import type { TeamMemberGender } from "@/lib/team-member-photo";
@@ -86,7 +88,9 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="nameEn">Name (English) *</Label>
+          <EnFieldLabel htmlFor="nameEn" sourceName="nameFa" targetName="nameEn">
+            Name (English) *
+          </EnFieldLabel>
           <Input
             id="nameEn"
             name="nameEn"
@@ -114,7 +118,9 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="roleEn">Role (English) *</Label>
+          <EnFieldLabel htmlFor="roleEn" sourceName="roleFa" targetName="roleEn">
+            Role (English) *
+          </EnFieldLabel>
           <Input
             id="roleEn"
             name="roleEn"
@@ -178,7 +184,9 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="bioEn">Bio (English)</Label>
+          <EnFieldLabel htmlFor="bioEn" sourceName="bioFa" targetName="bioEn">
+            Bio (English)
+          </EnFieldLabel>
           <Textarea
             id="bioEn"
             name="bioEn"
@@ -200,22 +208,16 @@ export function TeamMemberForm({ action, tags, defaultValues, submitLabel }: Tea
       />
 
       <div className="border-border grid gap-4 border-t pt-5 sm:grid-cols-2">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="collaborationStartDate">تاریخ شروع همکاری</Label>
-          <Input
-            id="collaborationStartDate"
-            name="collaborationStartDate"
-            type="date"
-            dir="ltr"
-            defaultValue={field(
-              "collaborationStartDate",
-              defaultValues?.collaborationStartDate ?? undefined,
-            )}
-          />
-          {state.errors?.collaborationStartDate && (
-            <p className="text-pishnam-danger text-xs">{state.errors.collaborationStartDate}</p>
+        <PersianDateField
+          id="collaborationStartDate"
+          name="collaborationStartDate"
+          label="تاریخ شروع همکاری"
+          defaultValue={field(
+            "collaborationStartDate",
+            defaultValues?.collaborationStartDate ?? undefined,
           )}
-        </div>
+          error={state.errors?.collaborationStartDate}
+        />
         <div className="flex flex-col gap-1.5 sm:w-40">
           <Label htmlFor="order">ترتیب نمایش</Label>
           <Input

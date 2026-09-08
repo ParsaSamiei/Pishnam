@@ -5,6 +5,7 @@ import { Code2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
 import { FileUploadField } from "@/components/admin/file-upload-field";
@@ -162,7 +163,14 @@ export function DatasheetCodeFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`ds-code-title-en-${index}`}>English title *</Label>
+                  <EnFieldLabel
+                    htmlFor={`ds-code-title-en-${index}`}
+                    getSourceText={() => sample.titleFa}
+                    getTargetText={() => sample.titleEn}
+                    onTranslated={(text) => update(index, { titleEn: text })}
+                  >
+                    English title *
+                  </EnFieldLabel>
                   <Input
                     id={`ds-code-title-en-${index}`}
                     value={sample.titleEn}
@@ -232,7 +240,14 @@ export function DatasheetCodeFields({
                   />
                 </div>
                 <div className="flex flex-col gap-1.5" dir="ltr">
-                  <Label htmlFor={`ds-code-notes-en-${index}`}>English notes</Label>
+                  <EnFieldLabel
+                    htmlFor={`ds-code-notes-en-${index}`}
+                    getSourceText={() => sample.notesFa}
+                    getTargetText={() => sample.notesEn}
+                    onTranslated={(text) => update(index, { notesEn: text })}
+                  >
+                    English notes
+                  </EnFieldLabel>
                   <Textarea
                     id={`ds-code-notes-en-${index}`}
                     rows={2}

@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import type { EnrollmentGuidelinesFormState } from "@/app/admin/(dashboard)/enrollment-guidelines/actions";
@@ -67,7 +68,9 @@ export function EnrollmentGuidelinesForm({ action, defaultValues }: EnrollmentGu
           )}
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="titleEn">Title (English)</Label>
+          <EnFieldLabel htmlFor="titleEn" sourceName="titleFa" targetName="titleEn">
+            Title (English)
+          </EnFieldLabel>
           <Input
             id="titleEn"
             name="titleEn"
@@ -100,7 +103,9 @@ export function EnrollmentGuidelinesForm({ action, defaultValues }: EnrollmentGu
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="introEn">Short intro (English)</Label>
+        <EnFieldLabel htmlFor="introEn" sourceName="introFa" targetName="introEn">
+          Short intro (English)
+        </EnFieldLabel>
         <Textarea
           id="introEn"
           name="introEn"
@@ -131,7 +136,14 @@ export function EnrollmentGuidelinesForm({ action, defaultValues }: EnrollmentGu
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label>Guidelines body (English)</Label>
+        <EnFieldLabel
+          htmlFor="richtext-bodyEn"
+          sourceName="bodyFa"
+          targetName="bodyEn"
+          format="html"
+        >
+          Guidelines body (English)
+        </EnFieldLabel>
         <RichTextEditor
           name="bodyEn"
           defaultValue={field("bodyEn", defaultValues?.bodyEn ?? "")}

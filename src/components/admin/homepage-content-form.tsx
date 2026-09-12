@@ -372,6 +372,9 @@ export function HomepageContentForm({ action, defaultValues }: HomepageContentFo
           defaultFa={d.hero.titleSuffixFa}
           defaultEn={d.hero.titleSuffixEn}
         />
+        <p className="text-text-secondary text-xs">
+          فاصله بین بخش‌ها خودکار است؛ لازم نیست قبل/بعد از بخش طلایی فاصله بگذارید.
+        </p>
         <BilingualTextarea
           nameFa="hero.subtitleFa"
           nameEn="hero.subtitleEn"
@@ -522,6 +525,13 @@ export function HomepageContentForm({ action, defaultValues }: HomepageContentFo
           prefix="related.pishtalk"
           label="پیشتاک"
           defaults={d.related.pishtalk}
+          field={field}
+          errors={errors}
+        />
+        <RelatedSiteFields
+          prefix="related.pishlab"
+          label="پیش‌لب"
+          defaults={d.related.pishlab}
           field={field}
           errors={errors}
         />

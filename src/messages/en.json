@@ -152,7 +152,7 @@
     },
     "related": {
       "title": "Beyond the classroom",
-      "subtitle": "Compete and connect across the Pishnam ecosystem — the same team, two destinations.",
+      "subtitle": "Compete, connect, and build across the Pishnam ecosystem — competition, community, and workshop under one roof.",
       "pishcup": {
         "eyebrow": "Competition",
         "title": "PishCup",
@@ -164,6 +164,12 @@
         "title": "Pishtalk",
         "description": "A home for AI and robotics engineers — share ideas, ask questions, grow together.",
         "cta": "Open Pishtalk"
+      },
+      "pishlab": {
+        "eyebrow": "Workshop",
+        "title": "PishLab",
+        "description": "Pishnam's VIP workshop floor — a quiet space with tools and parts so anyone without a place to work can build and test their robot.",
+        "cta": "Contact us"
       }
     },
     "scrollToTop": "Back to top",

@@ -113,9 +113,10 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContentCopy = {
   related: {
     titleFa: "فراتر از کلاس",
     titleEn: "Beyond the classroom",
-    subtitleFa: "در اکوسیستم پیشنام رقابت کنید و متصل بمانید — یک تیم، دو مقصد.",
+    subtitleFa:
+      "در اکوسیستم پیشنام رقابت کنید، متصل بمانید و بسازید — مسابقه، جامعه و کارگاه زیر یک سقف.",
     subtitleEn:
-      "Compete and connect across the Pishnam ecosystem — the same team, two destinations.",
+      "Compete, connect, and build across the Pishnam ecosystem — competition, community, and workshop under one roof.",
     pishcup: {
       eyebrowFa: "مسابقه",
       eyebrowEn: "Competition",
@@ -138,6 +139,18 @@ export const DEFAULT_HOMEPAGE_CONTENT: HomepageContentCopy = {
         "A home for AI and robotics engineers — share ideas, ask questions, grow together.",
       ctaFa: "ورود به پیشتاک",
       ctaEn: "Open Pishtalk",
+    },
+    pishlab: {
+      eyebrowFa: "کارگاه",
+      eyebrowEn: "Workshop",
+      titleFa: "پیش‌لب",
+      titleEn: "PishLab",
+      descriptionFa:
+        "طبقه ویژه پیشنام — کارگاهی آرام با ابزار و قطعات تا اگر جایی برای کار ندارید، رباتتان را بسازید و تست کنید.",
+      descriptionEn:
+        "Pishnam's VIP workshop floor — a quiet space with tools and parts so anyone without a place to work can build and test their robot.",
+      ctaFa: "تماس با ما",
+      ctaEn: "Contact us",
     },
   },
 };

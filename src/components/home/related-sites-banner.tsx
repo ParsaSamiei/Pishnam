@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import type { AppLocale } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { getHomepageCopy } from "@/lib/homepage-content";
 import { Card, CardContent } from "@/components/ui/card";
 import { TiltCard } from "@/components/motion/tilt-card";
@@ -121,29 +122,106 @@ function PishtalkIcon({ className }: { className?: string }) {
   );
 }
 
-const SITES = [
+/** Workbench mark — steel bench with gold tools for the VIP workshop floor. */
+function PishlabIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient
+          id="pishlab-bench"
+          x1="8"
+          y1="14"
+          x2="40"
+          y2="40"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#6e8aa6" />
+          <stop offset="1" stopColor="#3b5e82" />
+        </linearGradient>
+        <linearGradient
+          id="pishlab-tool"
+          x1="28"
+          y1="8"
+          x2="40"
+          y2="28"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#f0c14d" />
+          <stop offset="1" stopColor="#c9910e" />
+        </linearGradient>
+      </defs>
+      <rect x="7" y="26" width="34" height="5" rx="1.5" fill="url(#pishlab-bench)" />
+      <path
+        d="M11 31v8.5M37 31v8.5"
+        stroke="url(#pishlab-bench)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <rect
+        x="14"
+        y="18"
+        width="16"
+        height="8"
+        rx="1.5"
+        fill="url(#pishlab-bench)"
+        opacity="0.85"
+      />
+      <circle cx="18" cy="22" r="1.4" fill="#e6a817" />
+      <circle cx="24" cy="22" r="1.4" fill="#e6a817" />
+      <path
+        d="M31 10.5l7 7M32.5 9l1.8 1.8M36.2 12.7l1.8 1.8"
+        stroke="url(#pishlab-tool)"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M33.2 17.8l-4.2 4.2c-.4.4-1 .4-1.4 0l-.4-.4c-.4-.4-.4-1 0-1.4l4.2-4.2"
+        fill="url(#pishlab-tool)"
+      />
+    </svg>
+  );
+}
+
+const DESTINATIONS = [
   {
     href: "https://pishcup.com",
     key: "pishcup" as const,
     accent: "gold" as const,
+    external: true,
     Icon: PishcupIcon,
   },
   {
     href: "https://pishtalk.com",
     key: "pishtalk" as const,
     accent: "steel" as const,
+    external: true,
     Icon: PishtalkIcon,
+  },
+  {
+    href: "/contact-us",
+    key: "pishlab" as const,
+    accent: "gold" as const,
+    external: false,
+    Icon: PishlabIcon,
   },
 ] as const;
 
 /**
- * Mid-landing destinations for PishCup and Pishtalk. Same surface / card /
- * hover language as the audience grid so light and dark themes stay coherent.
+ * Mid-landing destinations for PishCup, Pishtalk, and PishLab. Same surface /
+ * card / hover language as the audience grid so light and dark themes stay coherent.
  */
 export async function RelatedSitesBanner() {
   const tNav = await getTranslations("nav");
   const locale = (await getLocale()) as AppLocale;
   const { related } = await getHomepageCopy(locale);
+  const ArrowIcon = locale === "fa" ? ArrowLeft : ArrowRight;
 
   return (
     <section data-spine-node className="bg-bg-surface-alt py-16">
@@ -157,66 +235,79 @@ export async function RelatedSitesBanner() {
           </StaggerItem>
         </StaggerGroup>
 
-        <StaggerGroup className="mt-8 grid gap-5 sm:grid-cols-2">
-          {SITES.map((site) => {
+        <StaggerGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {DESTINATIONS.map((site) => {
             const siteCopy = related[site.key];
             const Icon = site.Icon;
+            const card = (
+              <TiltCard className="h-full">
+                <Card className={cn("h-full", cardHoverClass)}>
+                  <CardHoverRule />
+                  <CardContent className="flex h-full flex-col gap-5 p-6 sm:p-8">
+                    <div
+                      className={cn(
+                        "flex size-18 shrink-0 items-center justify-center rounded-2xl sm:size-20",
+                        cardHoverIconClass,
+                        site.accent === "gold"
+                          ? "bg-pishnam-gold-500/12 ring-pishnam-gold-500/25 ring-1"
+                          : "bg-pishnam-steel-600/12 ring-pishnam-steel-600/25 ring-1",
+                      )}
+                    >
+                      <Icon className="size-10 sm:size-11" />
+                    </div>
+
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <p
+                        className={cn(
+                          "text-xs font-semibold tracking-wide uppercase",
+                          site.accent === "gold" ? "text-pishnam-gold-600" : "text-steel-accent",
+                        )}
+                      >
+                        {siteCopy.eyebrow}
+                      </p>
+                      <h3 className="text-text-primary mt-1 text-xl font-bold sm:text-2xl">
+                        {siteCopy.title}
+                      </h3>
+                      <p className="text-text-secondary mt-2 text-sm leading-relaxed sm:text-base">
+                        {siteCopy.description}
+                      </p>
+                      <div className="mt-4">
+                        <AnimatedLinkContent
+                          icon={
+                            site.external ? (
+                              <ExternalLink aria-hidden="true" />
+                            ) : (
+                              <ArrowIcon aria-hidden="true" />
+                            )
+                          }
+                          className="font-semibold"
+                        >
+                          {siteCopy.cta}
+                        </AnimatedLinkContent>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TiltCard>
+            );
 
             return (
-              <StaggerItem key={site.href} className="h-full">
-                <a
-                  href={site.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${siteCopy.title} (${tNav("opensInNewTab")})`}
-                  className="group block h-full cursor-pointer"
-                >
-                  <TiltCard className="h-full">
-                    <Card className={cn("h-full", cardHoverClass)}>
-                      <CardHoverRule />
-                      <CardContent className="flex h-full flex-col gap-5 p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-8">
-                        <div
-                          className={cn(
-                            "flex size-18 shrink-0 items-center justify-center rounded-2xl sm:size-24",
-                            cardHoverIconClass,
-                            site.accent === "gold"
-                              ? "bg-pishnam-gold-500/12 ring-pishnam-gold-500/25 ring-1"
-                              : "bg-pishnam-steel-600/12 ring-pishnam-steel-600/25 ring-1",
-                          )}
-                        >
-                          <Icon className="size-10 sm:size-12" />
-                        </div>
-
-                        <div className="flex min-w-0 flex-1 flex-col">
-                          <p
-                            className={cn(
-                              "text-xs font-semibold tracking-wide uppercase",
-                              site.accent === "gold"
-                                ? "text-pishnam-gold-600"
-                                : "text-steel-accent",
-                            )}
-                          >
-                            {siteCopy.eyebrow}
-                          </p>
-                          <h3 className="text-text-primary mt-1 text-xl font-bold sm:text-2xl">
-                            {siteCopy.title}
-                          </h3>
-                          <p className="text-text-secondary mt-2 text-sm leading-relaxed sm:text-base">
-                            {siteCopy.description}
-                          </p>
-                          <div className="mt-4">
-                            <AnimatedLinkContent
-                              icon={<ExternalLink aria-hidden="true" />}
-                              className="font-semibold"
-                            >
-                              {siteCopy.cta}
-                            </AnimatedLinkContent>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TiltCard>
-                </a>
+              <StaggerItem key={site.key} className="h-full">
+                {site.external ? (
+                  <a
+                    href={site.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${siteCopy.title} (${tNav("opensInNewTab")})`}
+                    className="group block h-full cursor-pointer"
+                  >
+                    {card}
+                  </a>
+                ) : (
+                  <Link href={site.href} className="group block h-full cursor-pointer">
+                    {card}
+                  </Link>
+                )}
               </StaggerItem>
             );
           })}

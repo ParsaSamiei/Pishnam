@@ -12,6 +12,28 @@ import { getHomepageCopy } from "@/lib/homepage-content";
 import { HeroShowcase } from "./hero-showcase";
 import { HeroStats } from "./hero-stats";
 
+/**
+ * Joins prefix / gold accent / suffix with a single space at each seam.
+ * Admin fields are trimmed so accidental double spaces or a missing boundary
+ * space (which makes Persian glyphs collide across the span) cannot happen.
+ */
+function HeroTitle({ prefix, accent, suffix }: { prefix: string; accent: string; suffix: string }) {
+  const before = prefix.trim();
+  const mid = accent.trim();
+  const after = suffix.trim();
+
+  return (
+    <>
+      {before}
+      {before && mid ? " " : null}
+      {mid ? <span className="text-pishnam-gold-500">{mid}</span> : null}
+      {mid && after ? " " : null}
+      {!mid && before && after ? " " : null}
+      {after}
+    </>
+  );
+}
+
 export async function HeroSection() {
   const t = await getTranslations("home.hero");
   const locale = (await getLocale()) as AppLocale;
@@ -83,13 +105,17 @@ export async function HeroSection() {
             </StaggerItem>
             <StaggerItem variant="heading">
               {/* `text-balance` evens the ragged wrap -- the Persian title used
-                  to drop its last two words onto a line of their own. */}
+                  to drop its last two words onto a line of their own.
+
+                  Prefix / accent / suffix are joined here with explicit spaces
+                  so a missing boundary space in admin copy cannot crush Persian
+                  letters into each other across the gold span. */}
               <h1 className="mt-5 text-3xl leading-[1.25] font-extrabold text-balance sm:text-4xl lg:text-5xl">
-                {hero.titlePrefix}
-                {hero.titleAccent ? (
-                  <span className="text-pishnam-gold-500">{hero.titleAccent}</span>
-                ) : null}
-                {hero.titleSuffix}
+                <HeroTitle
+                  prefix={hero.titlePrefix}
+                  accent={hero.titleAccent}
+                  suffix={hero.titleSuffix}
+                />
               </h1>
             </StaggerItem>
             <StaggerItem variant="rise">

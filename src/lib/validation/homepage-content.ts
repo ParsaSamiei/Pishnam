@@ -81,6 +81,19 @@ export const homepageContentSchema = z.object({
     subtitleEn: requiredText("Related — English subtitle", 400),
     pishcup: relatedSite("پیشکاپ"),
     pishtalk: relatedSite("پیشتاک"),
+    // Default keeps older saved homepage rows valid until admin re-saves.
+    pishlab: relatedSite("پیش‌لب").default({
+      eyebrowFa: "کارگاه",
+      eyebrowEn: "Workshop",
+      titleFa: "پیش‌لب",
+      titleEn: "PishLab",
+      descriptionFa:
+        "طبقه ویژه پیشنام — کارگاهی آرام با ابزار و قطعات تا اگر جایی برای کار ندارید، رباتتان را بسازید و تست کنید.",
+      descriptionEn:
+        "Pishnam's VIP workshop floor — a quiet space with tools and parts so anyone without a place to work can build and test their robot.",
+      ctaFa: "تماس با ما",
+      ctaEn: "Contact us",
+    }),
   }),
 });
 
@@ -115,6 +128,7 @@ export type HomepageCopy = {
     subtitle: string;
     pishcup: { eyebrow: string; title: string; description: string; cta: string };
     pishtalk: { eyebrow: string; title: string; description: string; cta: string };
+    pishlab: { eyebrow: string; title: string; description: string; cta: string };
   };
 };
 
@@ -178,6 +192,21 @@ function pickRelatedSite(
 export function resolveHomepageCopy(copy: HomepageContentCopy, locale: "fa" | "en"): HomepageCopy {
   const isFa = locale === "fa";
   const { hero, audiences, related } = copy;
+  // Guard stale cache / pre-migration rows that omit newer related destinations.
+  const pishlab =
+    related.pishlab ??
+    ({
+      eyebrowFa: "کارگاه",
+      eyebrowEn: "Workshop",
+      titleFa: "پیش‌لب",
+      titleEn: "PishLab",
+      descriptionFa:
+        "طبقه ویژه پیشنام — کارگاهی آرام با ابزار و قطعات تا اگر جایی برای کار ندارید، رباتتان را بسازید و تست کنید.",
+      descriptionEn:
+        "Pishnam's VIP workshop floor — a quiet space with tools and parts so anyone without a place to work can build and test their robot.",
+      ctaFa: "تماس با ما",
+      ctaEn: "Contact us",
+    } satisfies HomepageContentCopy["related"]["pishlab"]);
 
   return {
     hero: {
@@ -207,6 +236,7 @@ export function resolveHomepageCopy(copy: HomepageContentCopy, locale: "fa" | "e
       subtitle: isFa ? related.subtitleFa : related.subtitleEn,
       pishcup: pickRelatedSite(related.pishcup, isFa),
       pishtalk: pickRelatedSite(related.pishtalk, isFa),
+      pishlab: pickRelatedSite(pishlab, isFa),
     },
   };
 }
@@ -340,6 +370,16 @@ export function homepageContentFromFormData(formData: FormData): unknown {
         descriptionEn: get("related.pishtalk.descriptionEn"),
         ctaFa: get("related.pishtalk.ctaFa"),
         ctaEn: get("related.pishtalk.ctaEn"),
+      },
+      pishlab: {
+        eyebrowFa: get("related.pishlab.eyebrowFa"),
+        eyebrowEn: get("related.pishlab.eyebrowEn"),
+        titleFa: get("related.pishlab.titleFa"),
+        titleEn: get("related.pishlab.titleEn"),
+        descriptionFa: get("related.pishlab.descriptionFa"),
+        descriptionEn: get("related.pishlab.descriptionEn"),
+        ctaFa: get("related.pishlab.ctaFa"),
+        ctaEn: get("related.pishlab.ctaEn"),
       },
     },
   };

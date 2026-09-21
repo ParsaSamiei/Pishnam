@@ -64,22 +64,23 @@ export function GalleryCarousel({ items }: { items: GalleryLightboxItem[] }) {
   const hasMultipleSlides = items.length > 1;
   const canAutoScroll = hasMultipleSlides && !reduceMotion;
 
+  // Keep a stable plugin instance across the reduce-motion hydration flip.
+  // Rebuilding `plugins` when `canAutoScroll` changes tears down AutoScroll
+  // mid-animation and can leave Embla's `engine.scrollBody` undefined
+  // (`TypeError: … scrollBody.settled`). Play/stop is controlled in an effect.
   const plugins = useMemo(
-    () =>
-      canAutoScroll
-        ? [
-            AutoScroll({
-              speed: SCROLL_SPEED,
-              startDelay: 0,
-              playOnInit: true,
-              stopOnMouseEnter: true,
-              stopOnFocusIn: true,
-              // Resume after drag or arrow navigation instead of stopping permanently.
-              stopOnInteraction: false,
-            }),
-          ]
-        : [],
-    [canAutoScroll],
+    () => [
+      AutoScroll({
+        speed: SCROLL_SPEED,
+        startDelay: 0,
+        playOnInit: false,
+        stopOnMouseEnter: true,
+        stopOnFocusIn: true,
+        // Resume after drag or arrow navigation instead of stopping permanently.
+        stopOnInteraction: false,
+      }),
+    ],
+    [],
   );
 
   const options: EmblaOptionsType = useMemo(

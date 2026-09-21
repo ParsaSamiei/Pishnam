@@ -30,13 +30,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   const links = [
     {
-      href: "/about-us/achievements" as const,
-      icon: Trophy,
-      title: isFa ? "افتخارات و جوایز" : "Achievements & Awards",
-      body: isFa
-        ? "نتایج تیم پیشنام در مسابقات ملی و بین‌المللی."
-        : "Pishnam's results at national and international competitions.",
-      accent: "gold" as const,
+      href: "/about-us/team" as const,
+      icon: Users,
+      title: isFa ? "پرسنل" : "Team",
+      body: isFa ? "مربیان و اعضای تیم پیشنام." : "Pishnam's instructors and team members.",
+      accent: "steel" as const,
     },
     {
       href: "/about-us/licenses" as const,
@@ -48,11 +46,13 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       accent: "steel" as const,
     },
     {
-      href: "/about-us/team" as const,
-      icon: Users,
-      title: isFa ? "پرسنل" : "Team",
-      body: isFa ? "مربیان و اعضای تیم پیشنام." : "Pishnam's instructors and team members.",
-      accent: "steel" as const,
+      href: "/about-us/achievements" as const,
+      icon: Trophy,
+      title: isFa ? "افتخارات و جوایز" : "Achievements & Awards",
+      body: isFa
+        ? "نتایج تیم پیشنام در مسابقات ملی و بین‌المللی."
+        : "Pishnam's results at national and international competitions.",
+      accent: "gold" as const,
     },
     {
       href: "/about-us/faq" as const,

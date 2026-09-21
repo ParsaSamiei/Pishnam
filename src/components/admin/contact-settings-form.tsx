@@ -23,6 +23,8 @@ interface ContactSettingsFormProps {
     addressFa: string | null;
     addressEn: string | null;
     postalCode: string | null;
+    footerTaglineFa: string | null;
+    footerTaglineEn: string | null;
     mapEmbedUrl: string | null;
     telegramUrl: string | null;
     baleUrl: string | null;
@@ -136,6 +138,49 @@ function ContactSettingsFormFields({
         />
         {state.errors?.email && <p className="text-pishnam-danger text-xs">{state.errors.email}</p>}
       </div>
+
+      <fieldset className="flex flex-col gap-4">
+        <legend className="text-text-primary text-sm font-semibold">متن معرفی در فوتر</legend>
+        <p className="text-text-secondary text-xs">
+          جملهٔ کوتاه زیر لوگو در فوتر سایت. اگر خالی بماند، متن پیش‌فرض «آموزش پیشرونده…» نمایش
+          داده می‌شود.
+        </p>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="footerTaglineFa">متن فوتر (فارسی)</Label>
+          <Textarea
+            id="footerTaglineFa"
+            name="footerTaglineFa"
+            rows={2}
+            placeholder="آموزش پیشرونده رباتیک از دبستان تا مسابقات بین‌المللی."
+            defaultValue={field("footerTaglineFa", defaultValues?.footerTaglineFa ?? "")}
+            aria-invalid={Boolean(state.errors?.footerTaglineFa)}
+          />
+          {state.errors?.footerTaglineFa && (
+            <p className="text-pishnam-danger text-xs">{state.errors.footerTaglineFa}</p>
+          )}
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <EnFieldLabel
+            htmlFor="footerTaglineEn"
+            sourceName="footerTaglineFa"
+            targetName="footerTaglineEn"
+          >
+            Footer tagline (English)
+          </EnFieldLabel>
+          <Textarea
+            id="footerTaglineEn"
+            name="footerTaglineEn"
+            dir="ltr"
+            rows={2}
+            placeholder="Progressive robotics and electronics education, from elementary school to international competitions."
+            defaultValue={field("footerTaglineEn", defaultValues?.footerTaglineEn ?? "")}
+            aria-invalid={Boolean(state.errors?.footerTaglineEn)}
+          />
+          {state.errors?.footerTaglineEn && (
+            <p className="text-pishnam-danger text-xs">{state.errors.footerTaglineEn}</p>
+          )}
+        </div>
+      </fieldset>
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="addressFa">آدرس (فارسی)</Label>

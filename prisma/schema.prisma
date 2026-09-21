@@ -885,6 +885,11 @@ model ContactSettings {
   // Optional postal / ZIP code shown with the address on /contact-us.
   postalCode String?
 
+  // Short blurb under the brand mark in the site footer. Empty falls back to
+  // the `footer.tagline` string in src/messages/*.json.
+  footerTaglineFa String?
+  footerTaglineEn String?
+
   // Canonical Google Maps embed URL only (https://www.google.com/maps/embed?...).
   // The admin form accepts a full iframe snippet or a bare embed URL and
   // normalizes it -- see src/lib/google-maps.ts.

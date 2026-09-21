@@ -74,6 +74,8 @@ export const contactSettingsSchema = z.object({
   addressFa: optionalText(500),
   addressEn: optionalText(500),
   postalCode: optionalText(20),
+  footerTaglineFa: optionalText(300),
+  footerTaglineEn: optionalText(300),
   mapEmbedUrl: z
     .string()
     .trim()

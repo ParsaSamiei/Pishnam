@@ -66,6 +66,10 @@ export async function SiteFooter() {
     (isFa ? settings?.addressFa : settings?.addressEn) ||
     (isFa ? settings?.addressEn : settings?.addressFa) ||
     null;
+  const tagline =
+    (isFa ? settings?.footerTaglineFa : settings?.footerTaglineEn) ||
+    (isFa ? settings?.footerTaglineEn : settings?.footerTaglineFa) ||
+    t("footer.tagline");
   const phones = settings?.phones ?? [];
 
   return (
@@ -84,7 +88,7 @@ export async function SiteFooter() {
             />
             <span className="text-base font-bold">{t("brand.name")}</span>
           </div>
-          <p className="text-pishnam-off-white/70 mt-3 max-w-sm text-sm">{t("footer.tagline")}</p>
+          <p className="text-pishnam-off-white/70 mt-3 max-w-sm text-sm">{tagline}</p>
           {address ? (
             <AddressMapLinks
               address={address}

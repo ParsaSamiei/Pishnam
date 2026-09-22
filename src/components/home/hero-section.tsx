@@ -64,9 +64,21 @@ export async function HeroSection() {
   const { hero } = copy;
   const statItems = stats
     ? [
-        { key: "boys", value: stats.boysEnrolled, label: t("stats.boys") },
-        { key: "girls", value: stats.girlsEnrolled, label: t("stats.girls") },
-        { key: "achievements", value: stats.achievements, label: t("stats.achievements") },
+        {
+          key: "boys",
+          value: stats.boysEnrolled,
+          label: pickLocaleField(stats.boysLabelFa, stats.boysLabelEn, locale),
+        },
+        {
+          key: "girls",
+          value: stats.girlsEnrolled,
+          label: pickLocaleField(stats.girlsLabelFa, stats.girlsLabelEn, locale),
+        },
+        {
+          key: "achievements",
+          value: stats.achievements,
+          label: pickLocaleField(stats.achievementsLabelFa, stats.achievementsLabelEn, locale),
+        },
       ]
     : [];
 

@@ -844,15 +844,24 @@ model EnrollmentGuidelines {
 }
 
 // Marketing counters on the homepage hero (boys / girls enrolled, achievements).
-// Admin-authored numbers — not derived from leads or Achievement rows — so the
-// public tally can reflect real enrollment even when that data lives offline.
-// Singleton id is always "default" (see HOMEPAGE_STATS_ID); upsert on first save.
+// Admin-authored numbers and labels — not derived from leads or Achievement
+// rows — so the public tally can reflect real enrollment even when that data
+// lives offline. Singleton id is always "default" (see HOMEPAGE_STATS_ID);
+// upsert on first save.
 model HomepageStats {
   id String @id @default("default")
 
   boysEnrolled  Int @default(0)
   girlsEnrolled Int @default(0)
   achievements  Int @default(0)
+
+  // Labels under each counter — bilingual, admin-editable.
+  boysLabelFa         String @default("پسران ثبت‌نام‌شده")
+  boysLabelEn         String @default("Boys enrolled")
+  girlsLabelFa        String @default("دختران ثبت‌نام‌شده")
+  girlsLabelEn        String @default("Girls enrolled")
+  achievementsLabelFa String @default("افتخارات")
+  achievementsLabelEn String @default("Achievements")
 
   updatedAt DateTime @updatedAt
 }

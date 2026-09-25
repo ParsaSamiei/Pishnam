@@ -25,15 +25,15 @@ const labelField = (label: string) =>
   z.string().trim().min(1, `${label} الزامی است.`).max(80, `${label} خیلی بلند است.`);
 
 export const homepageStatsSchema = z.object({
-  boysEnrolled: countField("تعداد پسران"),
-  girlsEnrolled: countField("تعداد دختران"),
-  achievements: countField("تعداد افتخارات"),
-  boysLabelFa: labelField("برچسب پسران (فارسی)"),
-  boysLabelEn: labelField("برچسب پسران (انگلیسی)"),
-  girlsLabelFa: labelField("برچسب دختران (فارسی)"),
-  girlsLabelEn: labelField("برچسب دختران (انگلیسی)"),
-  achievementsLabelFa: labelField("برچسب افتخارات (فارسی)"),
-  achievementsLabelEn: labelField("برچسب افتخارات (انگلیسی)"),
+  boysEnrolled: countField("تعداد آمار اول"),
+  girlsEnrolled: countField("تعداد آمار دوم"),
+  achievements: countField("تعداد آمار سوم"),
+  boysLabelFa: labelField("برچسب آمار اول (فارسی)"),
+  boysLabelEn: labelField("برچسب آمار اول (انگلیسی)"),
+  girlsLabelFa: labelField("برچسب آمار دوم (فارسی)"),
+  girlsLabelEn: labelField("برچسب آمار دوم (انگلیسی)"),
+  achievementsLabelFa: labelField("برچسب آمار سوم (فارسی)"),
+  achievementsLabelEn: labelField("برچسب آمار سوم (انگلیسی)"),
 });
 
 export type HomepageStatsFormValues = z.infer<typeof homepageStatsSchema>;

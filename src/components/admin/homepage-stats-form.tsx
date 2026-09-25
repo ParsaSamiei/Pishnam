@@ -49,7 +49,7 @@ export function HomepageStatsForm({ action, defaultValues }: HomepageStatsFormPr
   return (
     <form key={formKey} action={formAction} className="flex max-w-2xl flex-col gap-8">
       <fieldset className="flex flex-col gap-5">
-        <legend className="text-text-primary text-sm font-semibold">پسران ثبت‌نام‌شده</legend>
+        <legend className="text-text-primary text-sm font-semibold">آمار اول</legend>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="boysEnrolled">تعداد</Label>
           <Input
@@ -100,7 +100,7 @@ export function HomepageStatsForm({ action, defaultValues }: HomepageStatsFormPr
       </fieldset>
 
       <fieldset className="flex flex-col gap-5">
-        <legend className="text-text-primary text-sm font-semibold">دختران ثبت‌نام‌شده</legend>
+        <legend className="text-text-primary text-sm font-semibold">آمار دوم</legend>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="girlsEnrolled">تعداد</Label>
           <Input
@@ -155,7 +155,7 @@ export function HomepageStatsForm({ action, defaultValues }: HomepageStatsFormPr
       </fieldset>
 
       <fieldset className="flex flex-col gap-5">
-        <legend className="text-text-primary text-sm font-semibold">افتخارات</legend>
+        <legend className="text-text-primary text-sm font-semibold">آمار سوم</legend>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="achievements">تعداد</Label>
           <Input

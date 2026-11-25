@@ -57,6 +57,18 @@ export function usePreservedFormAction<TState extends FormActionState>(
     return fallback.length > 0 ? fallback : [""];
   }
 
+  /**
+   * Like multiValueField but without the single-empty-row default. Used by
+   * parallel repeater columns (e.g. addressFa / addressEn / postalCode) where
+   * the row count is the max across all columns and empty rows are allowed.
+   */
+  function arrayField(name: string, fallback: string[] = []): string[] {
+    if (preservedState.values?.[name] !== undefined) {
+      return parseMultiValueField(preservedState.values[name]);
+    }
+    return fallback;
+  }
+
   return {
     state: preservedState,
     formAction,
@@ -65,5 +77,6 @@ export function usePreservedFormAction<TState extends FormActionState>(
     field,
     checked,
     multiValueField,
+    arrayField,
   };
 }

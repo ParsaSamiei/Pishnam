@@ -1,0 +1,160 @@
+{
+  "nodes": [
+    {
+      "id": "public_team_placeholder_female_avatar",
+      "label": "Placeholder Female Avatar Illustration",
+      "file_type": "image",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_team_placeholder_female_long_hair",
+      "label": "Long Hair Mass Behind Head and Shoulders",
+      "file_type": "image",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_team_placeholder_female_bangs",
+      "label": "Soft Bangs over Forehead",
+      "file_type": "image",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_team_placeholder_female_face",
+      "label": "Face",
+      "file_type": "image",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_team_placeholder_female_neck",
+      "label": "Neck",
+      "file_type": "image",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_team_placeholder_female_blouse",
+      "label": "Shoulders / Blouse with Rounded Neckline",
+      "file_type": "image",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_team_placeholder_female_placeholder_role",
+      "label": "Team Member Avatar Placeholder (Persian '\u062e\u0627\u0646\u0645' / Ms.)",
+      "file_type": "concept",
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_team_placeholder_female_avatar",
+      "target": "public_team_placeholder_female_long_hair",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_team_placeholder_female_avatar",
+      "target": "public_team_placeholder_female_bangs",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_team_placeholder_female_avatar",
+      "target": "public_team_placeholder_female_face",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_team_placeholder_female_avatar",
+      "target": "public_team_placeholder_female_neck",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_team_placeholder_female_avatar",
+      "target": "public_team_placeholder_female_blouse",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_team_placeholder_female_avatar",
+      "target": "public_team_placeholder_female_placeholder_role",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/team/placeholder-female.svg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "avatar_visual_components",
+      "label": "Avatar Visual Components",
+      "nodes": [
+        "public_team_placeholder_female_long_hair",
+        "public_team_placeholder_female_bangs",
+        "public_team_placeholder_female_face",
+        "public_team_placeholder_female_neck",
+        "public_team_placeholder_female_blouse"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/team/placeholder-female.svg"
+    }
+  ]
+}

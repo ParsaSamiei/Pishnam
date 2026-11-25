@@ -179,7 +179,8 @@
       "description": "از طریق تلفن، آدرس یا شبکه‌های اجتماعی با تیم پیشنام در تماس باشید.",
       "address": "آدرس",
       "postalCode": "کد پستی",
-      "phone": "تلفن"
+      "phone": "تلفن",
+      "generalPhone": "تلفن عمومی"
     }
   },
   "gallery": {
@@ -202,6 +203,16 @@
       "previous": "مورد قبلی",
       "next": "مورد بعدی",
       "status": "{current, number} از {total, number}"
+    }
+  },
+  "enrollmentSchedule": {
+    "carousel": {
+      "label": "زمان‌های کلاس {course}",
+      "previous": "زمان قبلی کلاس {course}",
+      "next": "زمان بعدی کلاس {course}",
+      "slide": "زمان کلاس",
+      "status": "کلاس {current, number} از {total, number}",
+      "goTo": "مشاهده زمان کلاس {index, number} برای {course}"
     }
   },
   "press": {

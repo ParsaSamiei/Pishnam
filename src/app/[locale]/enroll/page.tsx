@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import type { AppLocale } from "@/lib/i18n/routing";
 import { TIER_LABELS } from "@/lib/tier-labels";
 import { PageHeader } from "@/components/layout/page-header";
-import { ClassSessionGrid } from "@/components/classes/class-session-grid";
+import { CourseScheduleGrid } from "@/components/classes/course-schedule-grid";
 import { EnrollmentApplication } from "@/components/forms/enrollment-application";
 import { LeadCaptureForm, type LeadExtraField } from "@/components/forms/lead-capture-form";
 import {
@@ -42,31 +42,37 @@ export default async function EnrollPage({
   const isFa = locale === "fa";
   const { course: courseSlug, tier } = await searchParams;
 
-  const [courses, sessions] = await Promise.all([
+  const [courses, guidelines] = await Promise.all([
     prisma.course.findMany({
       where: { active: true },
       orderBy: { order: "asc" },
-      include: { translations: { where: { locale: appLocale } } },
+      include: {
+        translations: { where: { locale: appLocale } },
+        classSessions: {
+          where: { active: true },
+          orderBy: [{ weekday: "asc" }, { startTime: "asc" }],
+        },
+      },
     }),
-    prisma.classSession.findMany({
-      where: { active: true },
-      orderBy: [{ weekday: "asc" }, { startTime: "asc" }],
-      include: { course: { include: { translations: { where: { locale: appLocale } } } } },
-    }),
+    getEnrollmentGuidelines(),
   ]);
 
-  const sessionCards = sessions.map((session) => ({
-    id: session.id,
-    weekday: session.weekday,
-    startTime: session.startTime,
-    endTime: session.endTime,
-    location: session.location,
-    capacityNote: session.capacityNote,
-    courseTitle: session.course.translations[0]?.title ?? null,
-    coverImage: session.course.coverImage,
-  }));
+  const courseSchedules = courses
+    .filter((course) => course.classSessions.length > 0)
+    .map((course) => ({
+      id: course.id,
+      title: course.translations[0]?.title ?? course.slug,
+      coverImage: course.coverImage,
+      sessions: course.classSessions.map((session) => ({
+        id: session.id,
+        weekday: session.weekday,
+        startTime: session.startTime,
+        endTime: session.endTime,
+        location: session.location,
+        capacityNote: session.capacityNote,
+      })),
+    }));
 
-  const guidelines = await getEnrollmentGuidelines();
   const showGuidelines = isEnrollmentGuidelinesGateActive(guidelines, appLocale);
 
   const extraFields: LeadExtraField[] = [
@@ -113,8 +119,8 @@ export default async function EnrollPage({
         <h2 className="text-text-primary mb-6 text-xl font-bold">
           {isFa ? "کلاس‌های حضوری" : "In-Person Classes"}
         </h2>
-        <ClassSessionGrid
-          sessions={sessionCards}
+        <CourseScheduleGrid
+          courses={courseSchedules}
           locale={appLocale}
           emptyMessage={
             isFa

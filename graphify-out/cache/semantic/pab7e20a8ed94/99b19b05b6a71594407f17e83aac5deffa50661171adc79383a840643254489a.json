@@ -1,0 +1,144 @@
+{
+  "nodes": [
+    {
+      "id": "public_web_app_manifest_512x512",
+      "label": "Web App Manifest Icon (512\u00d7512)",
+      "file_type": "image",
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Serves as the installable PWA icon; a bold, flat-vector, high-contrast robot mascot is used so the app stays recognizable at small sizes on home screens and launch screens."
+    },
+    {
+      "id": "public_web_app_manifest_512x512_robot_mascot",
+      "label": "Robot Mascot Head",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A friendly, approachable robot face (two large round gold eyes, side panels/'ears', and a mouth/visor panel) is chosen as the app's character to make a technical tool feel personable and memorable."
+    },
+    {
+      "id": "public_web_app_manifest_512x512_shield_badge",
+      "label": "Shield / Badge Frame",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A gold shield/badge silhouette frames the robot, conveying trust, protection, and identity \u2014 a common app-emblem convention that reads well in a circular/squircle icon crop."
+    },
+    {
+      "id": "public_web_app_manifest_512x512_gold_navy_palette",
+      "label": "Gold and Navy Color Palette",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Dominant gold/amber (#E8A81C-like) against dark navy (#1B2A3A-like) with cream highlights gives strong figure-ground contrast for legibility at icon scale and a tech-meets-premium brand feel."
+    },
+    {
+      "id": "public_web_app_manifest_512x512_flag_motif",
+      "label": "Red-and-White Pennant Motif",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A small red-and-white flag/pennant above the robot head adds a national/cultural accent consistent with the Persian-named project, providing a splash of accent color against the otherwise gold/navy design."
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_web_app_manifest_512x512",
+      "target": "public_web_app_manifest_512x512_robot_mascot",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_512x512",
+      "target": "public_web_app_manifest_512x512_shield_badge",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_512x512",
+      "target": "public_web_app_manifest_512x512_gold_navy_palette",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_512x512",
+      "target": "public_web_app_manifest_512x512_flag_motif",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_512x512_robot_mascot",
+      "target": "public_web_app_manifest_512x512_shield_badge",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_512x512_gold_navy_palette",
+      "target": "public_web_app_manifest_512x512_flag_motif",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "public/web-app-manifest-512x512.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "app_icon_brand_identity",
+      "label": "App Icon Brand Identity Elements",
+      "nodes": [
+        "public_web_app_manifest_512x512",
+        "public_web_app_manifest_512x512_robot_mascot",
+        "public_web_app_manifest_512x512_shield_badge",
+        "public_web_app_manifest_512x512_gold_navy_palette",
+        "public_web_app_manifest_512x512_flag_motif"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "public/web-app-manifest-512x512.png"
+    }
+  ],
+  "partial": true
+}

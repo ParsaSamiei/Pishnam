@@ -1,17 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import type { EmblaOptionsType } from "embla-carousel";
-import { cn } from "@/lib/utils";
 import { useIsRtl } from "@/components/motion/use-is-rtl";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
 import { GalleryLightbox, type GalleryLightboxItem } from "./gallery-lightbox";
 import { GalleryMediaThumb } from "./gallery-media-thumb";
 import { ViewMediaHint } from "@/components/media/view-media-hint";
+import { CarouselStepButton } from "@/components/ui/carousel-step-button";
 
 const SIZES = "(min-width: 1024px) 22vw, (min-width: 640px) 32vw, 55vw";
 const DRAG_THRESHOLD_PX = 8;
@@ -181,14 +181,16 @@ export function GalleryCarousel({ items }: { items: GalleryLightboxItem[] }) {
 
         {hasMultipleSlides && (
           <div className="pointer-events-none absolute inset-x-0 inset-y-0 flex items-center justify-between px-1 sm:px-2">
-            <StepButton
+            <CarouselStepButton
+              size="small"
               label={t("previous")}
               icon={ChevronLeft}
               onClick={scrollPrev}
               onKeyDown={handleKeyDown}
               className="start-0"
             />
-            <StepButton
+            <CarouselStepButton
+              size="small"
               label={t("next")}
               icon={ChevronRight}
               onClick={scrollNext}
@@ -201,37 +203,5 @@ export function GalleryCarousel({ items }: { items: GalleryLightboxItem[] }) {
 
       <GalleryLightbox items={items} openIndex={openIndex} onOpenChange={setOpenIndex} />
     </>
-  );
-}
-
-function StepButton({
-  label,
-  icon: Icon,
-  onClick,
-  onKeyDown,
-  className,
-}: {
-  label: string;
-  icon: LucideIcon;
-  onClick: () => void;
-  onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
-  className: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      aria-label={label}
-      className={cn(
-        "pointer-events-auto absolute top-1/2 -translate-y-1/2",
-        "text-pishnam-off-white bg-pishnam-navy-900/80 flex size-9 items-center justify-center rounded-full ring-1 ring-white/20 backdrop-blur-sm ring-inset sm:size-10",
-        "hover:bg-pishnam-navy-900/90 cursor-pointer transition duration-200 hover:ring-white/40",
-        "focus-visible:outline-pishnam-gold-500 focus-visible:outline-2 focus-visible:outline-offset-2",
-        className,
-      )}
-    >
-      <Icon className="size-5 rtl:-scale-x-100" aria-hidden="true" />
-    </button>
   );
 }

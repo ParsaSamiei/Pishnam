@@ -16,6 +16,7 @@ import { FloatingContactButton } from "@/components/home/floating-contact-button
 import { ScrollToTopButton } from "@/components/home/scroll-to-top-button";
 import { JsonLd } from "@/components/json-ld";
 import { getContactSettings } from "@/lib/contact-settings";
+import { toDisplayAddresses } from "@/lib/contact-addresses";
 import { getSocialLinks } from "@/lib/social-channels";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -31,10 +32,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const socialLinks = getSocialLinks(contact);
   const sameAs = socialLinks.map((link) => link.href);
   const isFa = locale === "fa";
-  const address =
-    (isFa ? contact?.addressFa : contact?.addressEn) ||
-    (isFa ? contact?.addressEn : contact?.addressFa) ||
-    null;
+  const addresses = toDisplayAddresses(contact?.addresses ?? [], isFa);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   return (
@@ -67,8 +65,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </ScrollSpine>
       <div className="fixed inset-e-4 bottom-6 z-30 sm:inset-e-6">
         <FloatingContactButton
-          address={address}
-          postalCode={contact?.postalCode ?? null}
+          addresses={addresses}
           phones={contact?.phones ?? []}
           socialLinks={socialLinks}
         />

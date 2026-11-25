@@ -1,0 +1,146 @@
+{
+  "nodes": [
+    {
+      "id": "docs_09_analytics_i18n_document",
+      "label": "09-analytics-i18n.md \u2014 Analytics & i18n",
+      "file_type": "document",
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_09_umami_analytics",
+      "label": "Umami self-hosted analytics",
+      "file_type": "concept",
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Privacy-friendly and cookie-consent-free by design; self-hosted or Cloud both work, self-hosted keeps everything in the existing infra story."
+    },
+    {
+      "id": "docs_09_event_plan",
+      "label": "Lead-focused analytics event plan",
+      "file_type": "concept",
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Track moments mapping to actual goals (leads) rather than vanity events: enroll, class seat, sponsor, school, job, contact, feedback, video_play, download_click, language_switch \u2014 with fa/en as a property to validate whether English content converts."
+    },
+    {
+      "id": "docs_09_next_intl_approach",
+      "label": "next-intl routing + message management",
+      "file_type": "concept",
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Full bilingual parity, not an English landing page: handles locale-prefixed routing, hreflang, RTL/LTR switching; static UI strings in messages/fa.json and messages/en.json."
+    },
+    {
+      "id": "docs_09_rtl_ltr_handling",
+      "label": "RTL/LTR handling (dir, logical properties, icon mirroring)",
+      "file_type": "concept",
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "dir=rtl on html for fa, dir=ltr for en; Tailwind logical properties; directional icons (arrows, chevrons) need explicit per-locale mirroring \u2014 an easy QA miss."
+    },
+    {
+      "id": "docs_09_content_parity",
+      "label": "Content parity workflow (FA/EN fields together)",
+      "file_type": "concept",
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Show FA and EN fields together so nothing ships half-translated; a missing-translation indicator in the admin list view is an optional nice-to-have, not required for v1."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_09_next_intl_approach",
+      "target": "docs_07_url_structure",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_09_rtl_ltr_handling",
+      "target": "docs_03_rtl_first_logical_properties",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_09_content_parity",
+      "target": "docs_04_prisma_schema",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_09_event_plan",
+      "target": "docs_01_lead_capture_business_model",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_09_content_parity",
+      "target": "docs_06_admin_ui_pattern",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/09-analytics-i18n.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "bilingual_i18n_stack",
+      "label": "Bilingual i18n / RTL-first stack",
+      "nodes": [
+        "docs_00_non_negotiable_constraints",
+        "readme_next_intl",
+        "docs_09_next_intl_approach",
+        "docs_09_rtl_ltr_handling",
+        "docs_03_rtl_first_logical_properties",
+        "docs_07_url_structure",
+        "docs_09_content_parity"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/09-analytics-i18n.md"
+    }
+  ]
+}

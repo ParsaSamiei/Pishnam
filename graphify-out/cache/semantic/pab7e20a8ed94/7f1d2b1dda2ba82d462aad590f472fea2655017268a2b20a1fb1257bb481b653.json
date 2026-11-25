@@ -1,0 +1,149 @@
+{
+  "nodes": [
+    {
+      "id": "public_web_app_manifest_192x192_app_icon",
+      "label": "PWA Web App Manifest Icon (192x192)",
+      "file_type": "image",
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_web_app_manifest_192x192_robot_mascot",
+      "label": "Robot Mascot",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_web_app_manifest_192x192_shield_badge",
+      "label": "Shield / Badge Silhouette",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_web_app_manifest_192x192_color_palette",
+      "label": "Gold and Navy Color Scheme",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_web_app_manifest_192x192_robot_face",
+      "label": "Robot Face with Round White Eyes",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_web_app_manifest_192x192_cap_detail",
+      "label": "Red and White Cap Detail",
+      "file_type": "concept",
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_web_app_manifest_192x192_app_icon",
+      "target": "public_web_app_manifest_192x192_robot_mascot",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_192x192_app_icon",
+      "target": "public_web_app_manifest_192x192_shield_badge",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_192x192_robot_mascot",
+      "target": "public_web_app_manifest_192x192_robot_face",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_192x192_robot_mascot",
+      "target": "public_web_app_manifest_192x192_cap_detail",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_192x192_shield_badge",
+      "target": "public_web_app_manifest_192x192_color_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_web_app_manifest_192x192_robot_mascot",
+      "target": "public_web_app_manifest_192x192_shield_badge",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-192x192.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "app_icon_visual_identity",
+      "label": "App Icon Visual Identity",
+      "nodes": [
+        "public_web_app_manifest_192x192_app_icon",
+        "public_web_app_manifest_192x192_robot_mascot",
+        "public_web_app_manifest_192x192_shield_badge",
+        "public_web_app_manifest_192x192_color_palette"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/web-app-manifest-192x192.png"
+    }
+  ],
+  "partial": true
+}

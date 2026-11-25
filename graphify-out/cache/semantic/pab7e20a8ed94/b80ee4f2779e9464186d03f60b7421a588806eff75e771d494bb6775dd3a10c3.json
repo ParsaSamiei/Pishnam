@@ -1,0 +1,82 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_bale_logo",
+      "label": "Bale Brand Logo",
+      "file_type": "image",
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_bale_checkmark",
+      "label": "White Checkmark Symbol",
+      "file_type": "concept",
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_bale_circular_badge",
+      "label": "Teal Circular Badge",
+      "file_type": "concept",
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_bale_tag_notch",
+      "label": "Tag Notch",
+      "file_type": "concept",
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_bale_checkmark",
+      "target": "public_brand_bale_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_bale_circular_badge",
+      "target": "public_brand_bale_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_bale_tag_notch",
+      "target": "public_brand_bale_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/bale.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "partial": true
+}

@@ -4,7 +4,9 @@ import { useState } from "react";
 import { MapPin, Mailbox, MessageCircle, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
+import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
+import type { DisplayContactAddress } from "@/lib/contact-addresses";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
 import {
   Dialog,
@@ -26,15 +28,13 @@ function toPersianDigits(value: string): string {
 }
 
 type FloatingContactButtonProps = {
-  address: string | null;
-  postalCode: string | null;
+  addresses: DisplayContactAddress[];
   phones: string[];
   socialLinks: SocialLink[];
 };
 
 export function FloatingContactButton({
-  address,
-  postalCode,
+  addresses,
   phones,
   socialLinks,
 }: FloatingContactButtonProps) {
@@ -46,9 +46,7 @@ export function FloatingContactButton({
   const reduced = useReducedMotionSafe();
   const [open, setOpen] = useState(false);
 
-  const displayPostalCode = postalCode ? (isFa ? toPersianDigits(postalCode) : postalCode) : null;
-  const hasContent =
-    Boolean(address) || Boolean(displayPostalCode) || phones.length > 0 || socialLinks.length > 0;
+  const hasContent = addresses.length > 0 || phones.length > 0 || socialLinks.length > 0;
 
   if (!hasContent) return null;
 
@@ -82,47 +80,58 @@ export function FloatingContactButton({
       </span>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-h-[85vh] max-w-md overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{t("floatingContact.title")}</DialogTitle>
             <DialogDescription>{t("floatingContact.description")}</DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-5">
-            {address ? (
-              <div className="flex items-start gap-3">
-                <MapPin
-                  className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
-                  aria-hidden="true"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="text-text-primary text-sm font-semibold">
-                    {t("floatingContact.address")}
-                  </p>
-                  <AddressMapLinks
-                    address={address}
-                    addressClassName="text-text-secondary mt-1 text-sm leading-snug"
-                  />
-                </div>
-              </div>
-            ) : null}
+            {addresses.map((address) => (
+              <div
+                key={address.id}
+                role="group"
+                aria-label={address.name}
+                className="flex flex-col gap-3"
+              >
+                {!address.address ? (
+                  <p className="text-text-primary text-sm font-semibold">{address.name}</p>
+                ) : null}
+                {address.address ? (
+                  <div className="flex items-start gap-3">
+                    <MapPin
+                      className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-text-primary text-sm font-semibold">{address.name}</p>
+                      <AddressMapLinks
+                        address={address.address}
+                        addressClassName="text-text-secondary mt-1 text-sm leading-snug"
+                      />
+                    </div>
+                  </div>
+                ) : null}
 
-            {displayPostalCode ? (
-              <div className="flex items-start gap-3">
-                <Mailbox
-                  className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
-                  aria-hidden="true"
-                />
-                <div>
-                  <p className="text-text-primary text-sm font-semibold">
-                    {t("floatingContact.postalCode")}
-                  </p>
-                  <p dir="ltr" className="text-text-secondary mt-1 text-sm">
-                    {displayPostalCode}
-                  </p>
-                </div>
+                {address.postalCode ? (
+                  <div className="flex items-start gap-3">
+                    <Mailbox
+                      className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <div>
+                      <p className="text-text-primary text-sm font-semibold">
+                        {t("floatingContact.postalCode")}
+                      </p>
+                      <p dir="ltr" className="text-text-secondary mt-1 text-sm">
+                        {isFa ? toPersianDigits(address.postalCode) : address.postalCode}
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+                <BranchPhoneNumbers phones={address.phones} isFa={isFa} />
               </div>
-            ) : null}
+            ))}
 
             {phones.length > 0 ? (
               <div className="flex items-start gap-3">
@@ -132,7 +141,7 @@ export function FloatingContactButton({
                 />
                 <div>
                   <p className="text-text-primary text-sm font-semibold">
-                    {t("floatingContact.phone")}
+                    {t("floatingContact.generalPhone")}
                   </p>
                   <ul className="mt-1 flex flex-col gap-1">
                     {phones.map((phone) => (

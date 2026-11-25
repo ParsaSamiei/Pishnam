@@ -1,0 +1,173 @@
+{
+  "nodes": [
+    {
+      "id": "docs_00_ai_instructions_document",
+      "label": "00-ai-instructions.md \u2014 AI / coding-agent entry point",
+      "file_type": "document",
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_00_ai_instructions_doc_index",
+      "label": "Doc index (docs/ as source of truth)",
+      "file_type": "concept",
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_00_non_negotiable_constraints",
+      "label": "Non-negotiable constraints for AI agents",
+      "file_type": "rationale",
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Next.js 16 confirmed; no payments/LMS; single repo; bilingual from day one; light and dark mode; locked brand colors; local-disk media; full upload checklist on every upload; keep logo/brand name; ask on product decisions. Do not violate without explicit human sign-off."
+    },
+    {
+      "id": "docs_00_definition_of_done",
+      "label": "Definition of done (AI instructions)",
+      "file_type": "rationale",
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Works in fa and en, responsive from ~360px, no console errors, passes lint + typecheck, content admin-editable, and metadata per 07-seo-guidelines.md."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_01_product_brand_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_02_information_architecture_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_03_design_system_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_04_database_schema_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_05_frontend_architecture_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_06_admin_panel_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_07_seo_guidelines_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_08_development_guidelines_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_ai_instructions_doc_index",
+      "target": "docs_09_analytics_i18n_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_non_negotiable_constraints",
+      "target": "docs_03_brand_color_palette",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_non_negotiable_constraints",
+      "target": "docs_05_local_disk_media_storage",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_00_non_negotiable_constraints",
+      "target": "docs_05_upload_security_checklist",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/00-ai-instructions.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

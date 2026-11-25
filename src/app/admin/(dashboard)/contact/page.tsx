@@ -13,9 +13,9 @@ export default async function AdminContactPage({
     <div>
       <h1 className="text-text-primary text-2xl font-bold">تماس با ما</h1>
       <p className="text-text-secondary mt-2 max-w-2xl text-sm">
-        شماره‌ها، ایمیل، متن معرفی فوتر، آدرس، کد پستی، نقشهٔ گوگل و لینک شبکه‌های اجتماعی. فیلدهای
-        خالی در سایت نشان داده نمی‌شوند (به‌جز متن فوتر که در صورت خالی بودن به متن پیش‌فرض
-        برمی‌گردد).
+        شماره‌های عمومی، ایمیل، متن معرفی فوتر و شبکه‌های اجتماعی، به همراه نام، آدرس، کد پستی، تلفن
+        و نقشهٔ هر شعبه. نام و اطلاعات شعبه‌ها در صفحه تماس، فوتر و پنجره تماس نمایش داده می‌شوند؛
+        فیلدهای خالی پنهان می‌مانند (متن خالی فوتر به متن پیش‌فرض برمی‌گردد).
       </p>
       {saved === "1" ? (
         <p className="bg-pishnam-gold-500/15 text-pishnam-gold-600 mt-4 max-w-2xl rounded-md px-3 py-2 text-sm">
@@ -31,12 +31,17 @@ export default async function AdminContactPage({
               ? {
                   phones: settings.phones,
                   email: settings.email,
-                  addressFa: settings.addressFa,
-                  addressEn: settings.addressEn,
-                  postalCode: settings.postalCode,
                   footerTaglineFa: settings.footerTaglineFa,
                   footerTaglineEn: settings.footerTaglineEn,
-                  mapEmbedUrl: settings.mapEmbedUrl,
+                  addresses: settings.addresses.map((address) => ({
+                    nameFa: address.nameFa,
+                    nameEn: address.nameEn,
+                    addressFa: address.addressFa,
+                    addressEn: address.addressEn,
+                    postalCode: address.postalCode,
+                    phones: address.phones,
+                    mapEmbedUrl: address.mapEmbedUrl,
+                  })),
                   telegramUrl: settings.telegramUrl,
                   baleUrl: settings.baleUrl,
                   youtubeUrl: settings.youtubeUrl,

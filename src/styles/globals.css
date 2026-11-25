@@ -299,12 +299,21 @@ html[dir="rtl"] .skeleton-shine::after {
       filter: none !important;
     }
 
-    /* The hero carousel's track is a native scroll container, so swiping and
-       trackpad scrolling work with no JS at all -- but its prev/next buttons
-       and dots are driven by scrollTo and would sit there doing nothing. Hide
-       the ones that can't work; the photos all stay reachable. */
+    /* Slider arrows and dots need JS. Course schedules fall back to native
+       horizontal scrolling below so every class time stays reachable. */
     [data-carousel-controls] {
       display: none !important;
+    }
+
+    [data-course-schedule-carousel] {
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory;
+      touch-action: auto !important;
+    }
+
+    [data-course-schedule-slide] {
+      scroll-snap-align: start;
+      padding-inline: 0 !important;
     }
   }
 }

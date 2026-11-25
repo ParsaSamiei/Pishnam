@@ -8,9 +8,12 @@ import { LeadCaptureForm } from "@/components/forms/lead-capture-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { JsonLd } from "@/components/json-ld";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
+import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { getContactSettings } from "@/lib/contact-settings";
+import { toDisplayAddresses } from "@/lib/contact-addresses";
 import { getSocialLinks } from "@/lib/social-channels";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -45,23 +48,17 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   const phones = settings?.phones ?? [];
   const email = settings?.email ?? null;
-  const address =
-    (isFa ? settings?.addressFa : settings?.addressEn) ||
-    (isFa ? settings?.addressEn : settings?.addressFa) ||
-    null;
-  const postalCode = settings?.postalCode ?? null;
-  const mapEmbedUrl = settings?.mapEmbedUrl ?? null;
+  const addresses = settings?.addresses ?? [];
+  const displayAddresses = toDisplayAddresses(addresses, isFa);
+  const mapAddresses = displayAddresses.flatMap((address) =>
+    address.mapEmbedUrl ? [{ ...address, mapEmbedUrl: address.mapEmbedUrl }] : [],
+  );
   const socialLinks = getSocialLinks(settings);
   const hasContactDetails =
-    phones.length > 0 ||
-    Boolean(email) ||
-    Boolean(address) ||
-    Boolean(postalCode) ||
-    socialLinks.length > 0;
+    phones.length > 0 || Boolean(email) || displayAddresses.length > 0 || socialLinks.length > 0;
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const sameAs = socialLinks.map((link) => link.href);
-  const displayPostalCode = postalCode ? (isFa ? toPersianDigits(postalCode) : postalCode) : null;
 
   return (
     <>
@@ -75,13 +72,27 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             name: isFa ? "پیشنام" : "Pishnam",
             ...(email ? { email } : {}),
             ...(phones.length ? { telephone: phones } : {}),
-            ...(address || postalCode
+            ...(displayAddresses.length
               ? {
-                  address: {
+                  address: displayAddresses.map((address) => ({
                     "@type": "PostalAddress",
-                    ...(address ? { streetAddress: address } : {}),
-                    ...(postalCode ? { postalCode } : {}),
-                  },
+                    ...(address.address ? { streetAddress: address.address } : {}),
+                    ...(address.postalCode ? { postalCode: address.postalCode } : {}),
+                  })),
+                  location: displayAddresses.map((address) => ({
+                    "@type": "Place",
+                    name: address.name,
+                    ...(address.phones.length ? { telephone: address.phones } : {}),
+                    ...(address.address || address.postalCode
+                      ? {
+                          address: {
+                            "@type": "PostalAddress",
+                            ...(address.address ? { streetAddress: address.address } : {}),
+                            ...(address.postalCode ? { postalCode: address.postalCode } : {}),
+                          },
+                        }
+                      : {}),
+                  })),
                 }
               : {}),
             ...(sameAs.length ? { sameAs } : {}),
@@ -109,7 +120,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                     />
                     <div>
                       <p className="text-text-primary text-sm font-semibold">
-                        {isFa ? "تلفن" : "Phone"}
+                        {isFa ? "تلفن عمومی" : "General phone"}
                       </p>
                       <ul className="mt-1 flex flex-col gap-1">
                         {phones.map((phone) => (
@@ -149,43 +160,54 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   </div>
                 ) : null}
 
-                {address ? (
-                  <div className="flex items-start gap-3">
-                    <MapPin
-                      className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-text-primary text-sm font-semibold">
-                        {isFa ? "آدرس" : "Address"}
-                      </p>
-                      <AddressMapLinks
-                        address={address}
-                        addressClassName="reading-copy text-text-secondary mt-1 text-sm"
-                      />
-                    </div>
-                  </div>
-                ) : null}
+                {displayAddresses.map((address) => (
+                  <div
+                    key={address.id}
+                    role="group"
+                    aria-label={address.name}
+                    className="flex flex-col gap-3"
+                  >
+                    {!address.address ? (
+                      <p className="text-text-primary text-sm font-semibold">{address.name}</p>
+                    ) : null}
+                    {address.address ? (
+                      <div className="flex items-start gap-3">
+                        <MapPin
+                          className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-text-primary text-sm font-semibold">{address.name}</p>
+                          <AddressMapLinks
+                            address={address.address}
+                            addressClassName="reading-copy text-text-secondary mt-1 text-sm"
+                          />
+                        </div>
+                      </div>
+                    ) : null}
 
-                {displayPostalCode ? (
-                  <div className="flex items-start gap-3">
-                    <Mailbox
-                      className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
-                      aria-hidden="true"
-                    />
-                    <div>
-                      <p className="text-text-primary text-sm font-semibold">
-                        {isFa ? "کد پستی" : "Postal code"}
-                      </p>
-                      <p
-                        dir="ltr"
-                        className="text-text-secondary mt-1 text-end text-sm sm:text-start"
-                      >
-                        {displayPostalCode}
-                      </p>
-                    </div>
+                    {address.postalCode ? (
+                      <div className="flex items-start gap-3">
+                        <Mailbox
+                          className="text-pishnam-steel-600 mt-0.5 size-5 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <p className="text-text-primary text-sm font-semibold">
+                            {isFa ? "کد پستی" : "Postal code"}
+                          </p>
+                          <p
+                            dir="ltr"
+                            className="text-text-secondary mt-1 text-end text-sm sm:text-start"
+                          >
+                            {isFa ? toPersianDigits(address.postalCode) : address.postalCode}
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
+                    <BranchPhoneNumbers phones={address.phones} isFa={isFa} />
                   </div>
-                ) : null}
+                ))}
 
                 {socialLinks.length > 0 ? (
                   <div>
@@ -258,16 +280,23 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           </div>
         </div>
 
-        {mapEmbedUrl ? (
-          <div className="border-border mt-8 overflow-hidden rounded-xl border">
-            <iframe
-              src={mapEmbedUrl}
-              title={isFa ? "موقعیت روی نقشه" : "Location on map"}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-              className="h-72 w-full border-0 sm:h-96"
-            />
+        {mapAddresses.length ? (
+          <div className={cn("mt-8 grid gap-6", mapAddresses.length > 1 && "lg:grid-cols-2")}>
+            {mapAddresses.map((address) => (
+              <div key={address.id} className="border-border overflow-hidden rounded-xl border">
+                <h2 className="border-border bg-bg-surface text-text-primary border-b px-4 py-3 text-sm font-semibold">
+                  {address.name}
+                </h2>
+                <iframe
+                  src={address.mapEmbedUrl}
+                  title={`${address.name} — ${isFa ? "موقعیت روی نقشه" : "Location on map"}`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                  className="h-72 w-full border-0 sm:h-96"
+                />
+              </div>
+            ))}
           </div>
         ) : null}
       </div>

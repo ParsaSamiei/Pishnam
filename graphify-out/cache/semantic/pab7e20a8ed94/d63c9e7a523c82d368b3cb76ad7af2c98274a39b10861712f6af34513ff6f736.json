@@ -1,0 +1,131 @@
+{
+  "nodes": [
+    {
+      "id": "docs_07_seo_guidelines_document",
+      "label": "07-seo-guidelines.md \u2014 SEO Guidelines",
+      "file_type": "document",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_07_bilingual_seo_scope",
+      "label": "Bilingual SEO scope and WP URL redirects",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "No local-SEO work and no WordPress rankings to preserve, but redirect old WP URLs where a clear 1:1 mapping exists as a low-cost safety net against dead backlinks."
+    },
+    {
+      "id": "docs_07_url_structure",
+      "label": "URL structure (no /fa prefix, /en prefix)",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Persian is primary so pishnam.com/ has no /fa prefix; keep slugs stable once published because changing them loses accumulated ranking."
+    },
+    {
+      "id": "docs_07_metadata_api",
+      "label": "generateMetadata / Next.js Metadata API",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Title template %s | \u067e\u06cc\u0634\u0646\u0627\u0645 / %s | Pishnam, unique 120-160 char descriptions, alternates.languages hreflang with x-default to Persian, OG + Twitter cards for shareable achievements and articles."
+    },
+    {
+      "id": "docs_07_structured_data",
+      "label": "JSON-LD structured data (Organization, Course, Article, FAQPage)",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_07_sitemap_robots",
+      "label": "sitemap.xml and robots.txt",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Auto-generated app/sitemap.ts covering both locales; robots.txt allows public routes but disallows /admin/** and API routes."
+    },
+    {
+      "id": "docs_07_seo_content_guidelines",
+      "label": "SEO content guidelines (Persian search intent)",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "English pages are not literal translations \u2014 write for an English-searching audience; one h1 per page and descriptive alt text (e.g. name the team, event, year, and result, not IMG_2312)."
+    },
+    {
+      "id": "docs_07_performance_as_seo",
+      "label": "Performance as SEO (Core Web Vitals)",
+      "file_type": "concept",
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Core Web Vitals count toward ranking, reinforcing the Lighthouse \u2265 90 mobile and lazy-loaded embed targets."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_07_performance_as_seo",
+      "target": "docs_05_performance_targets",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_07_url_structure",
+      "target": "docs_00_non_negotiable_constraints",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_07_metadata_api",
+      "target": "docs_09_next_intl_approach",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "docs/07-seo-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

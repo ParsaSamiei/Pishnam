@@ -1,0 +1,118 @@
+{
+  "nodes": [
+    {
+      "id": "src_app_apple_icon_robot_mascot",
+      "label": "Pishnam Robot Mascot Apple Touch Icon",
+      "file_type": "image",
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "src_app_apple_icon_shield_crest",
+      "label": "Golden Shield Crest Frame",
+      "file_type": "concept",
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "src_app_apple_icon_robot_face",
+      "label": "Robot Face with Circular Lens Eyes",
+      "file_type": "concept",
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "src_app_apple_icon_red_white_band",
+      "label": "Red-White-Red Banner Motif on Robot Head",
+      "file_type": "concept",
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "src_app_apple_icon_ios_app_icon",
+      "label": "iOS Apple Touch App Icon Role",
+      "file_type": "concept",
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "src_app_apple_icon_robot_mascot",
+      "target": "src_app_apple_icon_shield_crest",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "src_app_apple_icon_robot_mascot",
+      "target": "src_app_apple_icon_robot_face",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "src_app_apple_icon_robot_mascot",
+      "target": "src_app_apple_icon_red_white_band",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "src_app_apple_icon_robot_mascot",
+      "target": "src_app_apple_icon_ios_app_icon",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "src/app/apple-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "icon_visual_composition",
+      "label": "App Icon Visual Composition",
+      "nodes": [
+        "src_app_apple_icon_robot_mascot",
+        "src_app_apple_icon_shield_crest",
+        "src_app_apple_icon_robot_face",
+        "src_app_apple_icon_red_white_band"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/app/apple-icon.png"
+    }
+  ],
+  "partial": true
+}

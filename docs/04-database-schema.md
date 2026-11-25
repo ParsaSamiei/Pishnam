@@ -493,23 +493,42 @@ model AdminUser {
   createdAt    DateTime  @default(now())
 }
 
-// One-row contact details (phones, email, FA/EN address, postal code,
-// Google Maps embed, social profile URLs). Singleton: id is always "default";
-// first admin save creates the row.
+// One-row contact details (general phones, email, footer tagline, social URLs). Singleton:
+// id is always "default"; first admin save creates the row. Locations live in
+// ContactAddress because a site can have several branches.
 model ContactSettings {
-  id          String   @id @default("default")
-  phones      String[]
-  email       String?
-  addressFa   String?
-  addressEn   String?
-  postalCode  String?
-  mapEmbedUrl String?  // canonical https://www.google.com/maps/embed?... URL
+  id           String           @id @default("default")
+  phones       String[]
+  email        String?
+  footerTaglineFa String?
+  footerTaglineEn String?
+  addresses    ContactAddress[]
   telegramUrl  String?
   baleUrl      String?
   youtubeUrl   String?
   aparatUrl    String?
   instagramUrl String?
+  updatedAt    DateTime @updatedAt
+}
+
+// One physical location, ordered low to high. Edited from /admin/contact;
+// shown on /contact-us, in the footer and in the floating contact widget.
+model ContactAddress {
+  id                String          @id @default(cuid())
+  contactSettingsId String
+  contactSettings   ContactSettings @relation(fields: [contactSettingsId], references: [id], onDelete: Cascade)
+  nameFa      String?
+  nameEn      String?
+  addressFa   String?
+  addressEn   String?
+  postalCode  String?
+  phones      String[] @default([]) // Branch-specific; independent of general phones.
+  mapEmbedUrl String?  // canonical https://www.google.com/maps/embed?... URL
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([contactSettingsId, order])
 }
 
 // Marketing counters under the homepage hero CTAs. Admin-authored (not counted
@@ -571,12 +590,19 @@ model HeroSlide {
   `category = DATASHEETS` stay editable in `/admin/downloads` until deleted.
 - **Search**: if/when free-text site search is added, use Postgres `tsvector` columns on
   `CourseTranslation`, `ArticleTranslation`, `Faq` rather than adding a new service.
-- **Contact details are a settings singleton** — `ContactSettings` is one row (`id = "default"`),
-  edited from `/admin/contact`, not a list of locations. Phone numbers are a `String[]` so several
-  can be shown; address is bilingual (`addressFa` / `addressEn`); optional `postalCode` is shown
-  with the address; `mapEmbedUrl` stores only a canonical Google Maps embed URL (the admin form
-  accepts a pasted iframe or URL and normalizes it). Missing fields are omitted on `/contact-us`
-  rather than falling back to placeholder copy.
+- **Contact details are one settings row plus a list of locations** — `ContactSettings` is a
+  singleton (`id = "default"`) for general phones, email, footer tagline and social links, while
+  `ContactAddress` holds up to ten branches, edited together from `/admin/contact`. Each branch has
+  optional `nameFa` / `nameEn` fields (up to 100 characters), used consistently in the widget,
+  footer, contact page, map captions and structured data. Names use the requested language with
+  fallback to the other language; if both are blank, the existing numbered address label is used.
+  Each branch also has its own `phones` array (up to ten numbers), shown in the contact page, footer
+  and floating widget. General numbers remain separate and are not assigned to branches
+  automatically. Each address is bilingual (`addressFa` / `addressEn`) with an optional
+  `postalCode` and a canonical Google Maps `mapEmbedUrl` (the admin form accepts a pasted iframe or
+  URL and normalizes it). Addresses are ordered low to high by `order`; the admin form replaces the
+  whole set on save. Missing fields are omitted on `/contact-us` rather than falling back to
+  placeholder copy. Empty footer taglines fall back to the localized default text.
 - **Homepage stats are a settings singleton** — `HomepageStats` is one row (`id = "default"`),
   edited from `/admin/homepage-stats`. Three integers (boys enrolled, girls enrolled, achievements)
   drive the count-up strip under the hero CTAs. Numbers are marketing values the admin sets; they

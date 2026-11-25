@@ -1,0 +1,193 @@
+{
+  "nodes": [
+    {
+      "id": "docs_01_product_brand_document",
+      "label": "01-product-brand.md \u2014 Product & Brand Identity",
+      "file_type": "document",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_01_pishnam_robotics_club",
+      "label": "Pishnam Robotics Researchers (organization)",
+      "file_type": "concept",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A robotics education club in Tehran teaching tiered, hands-on robotics/electronics/AI from first-grade electronics to RoboCup-style competitive robots."
+    },
+    {
+      "id": "docs_01_mission",
+      "label": "Pishnam mission statement",
+      "file_type": "concept",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_01_audiences",
+      "label": "Five target audiences",
+      "file_type": "concept",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Parents, students, prospective sponsors, schools/institutions, and general public/press \u2014 all need distinct entry points on the site, not one generic homepage."
+    },
+    {
+      "id": "docs_01_audience_entry_points",
+      "label": "Audience entry points concept",
+      "file_type": "concept",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Each audience should have a clear, short path from the homepage, not buried in a mega-menu."
+    },
+    {
+      "id": "docs_01_wordpress_rebuild_goals",
+      "label": "Rebuild goals vs. current WordPress site",
+      "file_type": "rationale",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Keep brand/categories/dark-blue-and-yellow identity; improve performance, UI/UX clarity, mobile, and distinct audience entry points; drop e-commerce and LMS in v1."
+    },
+    {
+      "id": "docs_01_tone_of_voice_registers",
+      "label": "Dual tone-of-voice registers",
+      "file_type": "concept",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Credible/technical register for courses, results, sponsors, schools; playful/kid-friendly for entry-level courses, homepage hero, simple blog posts. Never mix registers within a single page."
+    },
+    {
+      "id": "docs_01_lead_capture_business_model",
+      "label": "Lead-capture business model (no payments)",
+      "file_type": "rationale",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "All monetization-adjacent flows are lead capture (enroll, class-seat, sponsor, school, job, contact); they route to leads stored in the database and visible in the admin panel \u2014 no email notification pipeline."
+    },
+    {
+      "id": "docs_01_brand_assets_logo_placeholder",
+      "label": "Brand assets / placeholder logo rule",
+      "file_type": "concept",
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Existing robot-badge logo kept as-is; final production file supplied later, so use a simple placeholder mark and do not design a new logo."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_01_audience_entry_points",
+      "target": "docs_02_audience_first_homepage",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_brand_assets_logo_placeholder",
+      "target": "docs_03_brand_color_palette",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_lead_capture_business_model",
+      "target": "docs_06_leads_dashboard",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_pishnam_robotics_club",
+      "target": "docs_01_mission",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_audiences",
+      "target": "docs_01_audience_entry_points",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_tone_of_voice_registers",
+      "target": "docs_01_audiences",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_wordpress_rebuild_goals",
+      "target": "docs_02_navigation_structure",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_01_brand_assets_logo_placeholder",
+      "target": "docs_00_non_negotiable_constraints",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/01-product-brand.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

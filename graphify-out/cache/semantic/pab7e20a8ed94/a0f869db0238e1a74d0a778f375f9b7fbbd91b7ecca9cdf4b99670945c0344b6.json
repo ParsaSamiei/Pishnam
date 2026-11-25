@@ -1,0 +1,128 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_neshan_logo",
+      "label": "Neshan brand logo icon",
+      "file_type": "image",
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_neshan_map_pin_motif",
+      "label": "Map-pin / location marker motif",
+      "file_type": "concept",
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_neshan_red_blue_swoosh",
+      "label": "Red and navy-blue interlocking swooshes forming the outer mark",
+      "file_type": "concept",
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_neshan_green_center_dot",
+      "label": "Green center destination dot",
+      "file_type": "concept",
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_neshan_brand_identity",
+      "label": "Neshan mapping / navigation service brand identity",
+      "file_type": "concept",
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_neshan_logo",
+      "target": "public_brand_neshan_map_pin_motif",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_neshan_logo",
+      "target": "public_brand_neshan_brand_identity",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_neshan_red_blue_swoosh",
+      "target": "public_brand_neshan_map_pin_motif",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_neshan_green_center_dot",
+      "target": "public_brand_neshan_map_pin_motif",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_neshan_brand_identity",
+      "target": "public_brand_neshan_map_pin_motif",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/neshan.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "public_brand_neshan_brand_mark",
+      "label": "Neshan visual brand mark",
+      "nodes": [
+        "public_brand_neshan_logo",
+        "public_brand_neshan_map_pin_motif",
+        "public_brand_neshan_red_blue_swoosh",
+        "public_brand_neshan_green_center_dot"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/neshan.png"
+    }
+  ],
+  "partial": true
+}

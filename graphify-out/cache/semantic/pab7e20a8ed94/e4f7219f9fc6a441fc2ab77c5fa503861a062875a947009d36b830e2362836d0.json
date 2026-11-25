@@ -1,0 +1,204 @@
+{
+  "nodes": [
+    {
+      "id": "docs_pishnam_robot_mascot_logo",
+      "label": "Pishnam Robot Mascot Logo",
+      "file_type": "image",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_robot_head",
+      "label": "Robot Head Design",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_visor_display",
+      "label": "Visor Display with Circular Eyes",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_red_flag_accent",
+      "label": "Red Pennant Flag Accent",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_color_palette",
+      "label": "Golden Yellow, Navy, Steel Blue, Red and White Color Palette",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_side_panels",
+      "label": "Side Ear Panels with Circular Bolts",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_shield_silhouette",
+      "label": "Shield-shaped Silhouette",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_pishnam_flat_vector_style",
+      "label": "Flat Vector Illustration Style",
+      "file_type": "concept",
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_robot_head",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_visor_display",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_red_flag_accent",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_color_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_side_panels",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_shield_silhouette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_mascot_logo",
+      "target": "docs_pishnam_flat_vector_style",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_head",
+      "target": "docs_pishnam_visor_display",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_pishnam_robot_head",
+      "target": "docs_pishnam_side_panels",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "docs_pishnam_robot_visual_identity",
+      "label": "Pishnam Robot Visual Identity Elements",
+      "nodes": [
+        "docs_pishnam_robot_mascot_logo",
+        "docs_pishnam_robot_head",
+        "docs_pishnam_visor_display",
+        "docs_pishnam_red_flag_accent",
+        "docs_pishnam_color_palette",
+        "docs_pishnam_side_panels",
+        "docs_pishnam_shield_silhouette"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/Pishnam.png"
+    }
+  ],
+  "partial": true
+}

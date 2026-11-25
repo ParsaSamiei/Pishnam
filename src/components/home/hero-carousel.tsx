@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Pause, Play, type LucideIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import { cn } from "@/lib/utils";
 import { useIsRtl } from "@/components/motion/use-is-rtl";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
+import { CarouselStepButton } from "@/components/ui/carousel-step-button";
 
 export interface HeroCarouselSlide {
   id: string;
@@ -384,14 +385,14 @@ export function HeroCarousel({ slides }: { slides: HeroCarouselSlide[] }) {
         // paints over the whole frame afterwards -- 70% navy across the gold
         // dots would cost them the contrast they were picked for.
         <div data-carousel-controls className="pointer-events-none absolute inset-0 z-10">
-          <StepButton
+          <CarouselStepButton
             label={t("previous")}
             icon={ChevronLeft}
             onClick={scrollPrev}
             onKeyDown={handleKeyDown}
             className="start-3"
           />
-          <StepButton
+          <CarouselStepButton
             label={t("next")}
             icon={ChevronRight}
             onClick={scrollNext}
@@ -404,7 +405,7 @@ export function HeroCarousel({ slides }: { slides: HeroCarouselSlide[] }) {
               sign flip, while `justify-center` is direction-agnostic. */}
           <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-3">
             <div className="relative flex items-center gap-2">
-              {/* Backing plate -- see the equivalent note on StepButton for
+              {/* Backing plate -- see the shared carousel arrow control for
                   why this needs its own explicit fill and can't just borrow
                   contrast from whatever photo happens to sit behind it. */}
               <span
@@ -461,46 +462,5 @@ export function HeroCarousel({ slides }: { slides: HeroCarouselSlide[] }) {
         </div>
       )}
     </div>
-  );
-}
-
-/**
- * Prev/next. One component for both, so the pair can't drift apart in size,
- * contrast, or focus treatment. No boundary state any more -- looping means
- * both directions are always available.
- */
-function StepButton({
-  label,
-  icon: Icon,
-  onClick,
-  onKeyDown,
-  className,
-}: {
-  label: string;
-  icon: LucideIcon;
-  onClick: () => void;
-  onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
-  className: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      aria-label={label}
-      className={cn(
-        "pointer-events-auto absolute top-1/2 -translate-y-1/2",
-        // 44px, and a dark chip so off-white stays past 4.5:1 even where the
-        // photo behind it is blown out.
-        "text-pishnam-off-white bg-pishnam-navy-900/80 flex size-11 items-center justify-center rounded-full ring-1 ring-white/20 backdrop-blur-sm ring-inset",
-        "hover:bg-pishnam-navy-900/90 cursor-pointer transition duration-200 hover:ring-white/40",
-        "focus-visible:outline-pishnam-gold-500 focus-visible:outline-2 focus-visible:outline-offset-2",
-        className,
-      )}
-    >
-      {/* Mirrored for Persian, where the track runs the other way -- same
-          `rtl:-scale-x-100` the hero's CTA arrow uses. */}
-      <Icon className="size-5 rtl:-scale-x-100" aria-hidden="true" />
-    </button>
   );
 }

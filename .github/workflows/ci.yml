@@ -56,6 +56,9 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      - name: Test resumable image transfer helper
+        run: python3 infra/test_ship_image.py
+
       - name: Typecheck
         run: npm run typecheck
 

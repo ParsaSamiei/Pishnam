@@ -11,8 +11,9 @@ import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { getContactSettings } from "@/lib/contact-settings";
-import { contactAddressLabel, toDisplayAddresses } from "@/lib/contact-addresses";
+import { toDisplayAddresses } from "@/lib/contact-addresses";
 import { getSocialLinks } from "@/lib/social-channels";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -49,8 +50,8 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const email = settings?.email ?? null;
   const addresses = settings?.addresses ?? [];
   const displayAddresses = toDisplayAddresses(addresses, isFa);
-  const mapAddresses = addresses.flatMap((address) =>
-    address.mapEmbedUrl ? [address.mapEmbedUrl] : [],
+  const mapAddresses = displayAddresses.flatMap((address) =>
+    address.mapEmbedUrl ? [{ ...address, mapEmbedUrl: address.mapEmbedUrl }] : [],
   );
   const socialLinks = getSocialLinks(settings);
   const hasContactDetails =
@@ -78,9 +79,9 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                     ...(address.address ? { streetAddress: address.address } : {}),
                     ...(address.postalCode ? { postalCode: address.postalCode } : {}),
                   })),
-                  location: displayAddresses.map((address, index) => ({
+                  location: displayAddresses.map((address) => ({
                     "@type": "Place",
-                    name: contactAddressLabel(index, isFa, displayAddresses.length),
+                    name: address.name,
                     ...(address.phones.length ? { telephone: address.phones } : {}),
                     ...(address.address || address.postalCode
                       ? {
@@ -159,17 +160,15 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   </div>
                 ) : null}
 
-                {displayAddresses.map((address, index) => (
+                {displayAddresses.map((address) => (
                   <div
                     key={address.id}
                     role="group"
-                    aria-label={contactAddressLabel(index, isFa, displayAddresses.length)}
+                    aria-label={address.name}
                     className="flex flex-col gap-3"
                   >
                     {!address.address ? (
-                      <p className="text-text-primary text-sm font-semibold">
-                        {contactAddressLabel(index, isFa, displayAddresses.length)}
-                      </p>
+                      <p className="text-text-primary text-sm font-semibold">{address.name}</p>
                     ) : null}
                     {address.address ? (
                       <div className="flex items-start gap-3">
@@ -178,9 +177,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                           aria-hidden="true"
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="text-text-primary text-sm font-semibold">
-                            {contactAddressLabel(index, isFa, displayAddresses.length)}
-                          </p>
+                          <p className="text-text-primary text-sm font-semibold">{address.name}</p>
                           <AddressMapLinks
                             address={address.address}
                             addressClassName="reading-copy text-text-secondary mt-1 text-sm"
@@ -284,21 +281,15 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
         </div>
 
         {mapAddresses.length ? (
-          <div className={`mt-8 grid gap-6 ${mapAddresses.length > 1 ? "lg:grid-cols-2" : ""}`}>
-            {mapAddresses.map((mapUrl, index) => (
-              <div
-                key={`${mapUrl}-${index}`}
-                className="border-border overflow-hidden rounded-xl border"
-              >
+          <div className={cn("mt-8 grid gap-6", mapAddresses.length > 1 && "lg:grid-cols-2")}>
+            {mapAddresses.map((address) => (
+              <div key={address.id} className="border-border overflow-hidden rounded-xl border">
+                <h2 className="border-border bg-bg-surface text-text-primary border-b px-4 py-3 text-sm font-semibold">
+                  {address.name}
+                </h2>
                 <iframe
-                  src={mapUrl}
-                  title={
-                    mapAddresses.length > 1
-                      ? contactAddressLabel(index, isFa, mapAddresses.length)
-                      : isFa
-                        ? "موقعیت روی نقشه"
-                        : "Location on map"
-                  }
+                  src={address.mapEmbedUrl}
+                  title={`${address.name} — ${isFa ? "موقعیت روی نقشه" : "Location on map"}`}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen

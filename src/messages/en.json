@@ -205,6 +205,16 @@
       "status": "{current, number} of {total, number}"
     }
   },
+  "enrollmentSchedule": {
+    "carousel": {
+      "label": "Class times for {course}",
+      "previous": "Previous class time for {course}",
+      "next": "Next class time for {course}",
+      "slide": "class time",
+      "status": "Class {current, number} of {total, number}",
+      "goTo": "Show class time {index, number} for {course}"
+    }
+  },
   "press": {
     "title": "Pishnam in the Media",
     "subtitle": "Press reports and news coverage about Pishnam's work and achievements.",

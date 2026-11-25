@@ -20,12 +20,16 @@ vi.mock("@/lib/contact-settings", () => ({
 vi.mock("next/cache", () => ({ updateTag: mocks.updateTag, revalidatePath: mocks.revalidatePath }));
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
 
-function contactForm(branches: Array<{ address: string; phones: string[] }>) {
+function contactForm(
+  branches: Array<{ address: string; phones: string[]; nameFa?: string; nameEn?: string }>,
+) {
   const data = new FormData();
   data.append("phones", "09120000000");
   data.append("footerTaglineFa", "متن فوتر");
   data.append("footerTaglineEn", "Footer tagline");
   branches.forEach((branch, index) => {
+    data.append("nameFa", branch.nameFa ?? "");
+    data.append("nameEn", branch.nameEn ?? "");
     data.append("addressFa", branch.address);
     data.append("addressEn", "");
     data.append("postalCode", "");
@@ -42,6 +46,45 @@ beforeEach(() => {
 });
 
 describe("updateContactSettings branch phones", () => {
+  it("saves a branch's edited names with that branch's phones and address", async () => {
+    const data = contactForm([
+      {
+        address: "تهران",
+        phones: ["02111111111"],
+        nameFa: " شعبه رسالت ",
+        nameEn: " Resalat branch ",
+      },
+      { address: "شیراز", phones: ["07122222222"], nameFa: "شعبه شیراز" },
+    ]);
+    await expect(updateContactSettings({ status: "idle" }, data)).rejects.toThrow("redirect");
+    const rows = mocks.upsert.mock.calls[0]![0].update.addresses.create;
+    expect(rows[0]).toMatchObject({
+      nameFa: "شعبه رسالت",
+      nameEn: "Resalat branch",
+      phones: ["021 11111111"],
+      addressFa: "تهران",
+    });
+    expect(rows[1]).toMatchObject({
+      nameFa: "شعبه شیراز",
+      nameEn: null,
+      phones: ["071 22222222"],
+      addressFa: "شیراز",
+    });
+    expect(mocks.updateTag).toHaveBeenCalledWith("contact-settings");
+  });
+
+  it("preserves edited and cleared names if another field fails validation", async () => {
+    const data = contactForm([
+      { address: "تهران", phones: ["02111111111"], nameFa: "", nameEn: "Resalat branch" },
+      { address: "شیراز", phones: ["invalid"], nameFa: "شعبه شیراز", nameEn: "Shiraz branch" },
+    ]);
+    const state = await updateContactSettings({ status: "idle" }, data);
+    expect(state.status).toBe("error");
+    expect(JSON.parse(state.values!["nameFa"]!)).toEqual(["", "شعبه شیراز"]);
+    expect(JSON.parse(state.values!["nameEn"]!)).toEqual(["Resalat branch", "Shiraz branch"]);
+    expect(mocks.upsert).not.toHaveBeenCalled();
+  });
+
   it("saves each branch's numbers independently and invalidates the shared cache", async () => {
     const data = contactForm([
       { address: "تهران", phones: ["۰۲۱۱۱۱۱۱۱۱۱"] },
@@ -55,6 +98,8 @@ describe("updateContactSettings branch phones", () => {
     expect(write.update.addresses.deleteMany).toEqual({});
     expect(write.update.addresses.create).toEqual([
       {
+        nameFa: null,
+        nameEn: null,
         addressFa: "تهران",
         addressEn: null,
         postalCode: null,
@@ -63,6 +108,8 @@ describe("updateContactSettings branch phones", () => {
         order: 0,
       },
       {
+        nameFa: null,
+        nameEn: null,
         addressFa: "شیراز",
         addressEn: null,
         postalCode: null,

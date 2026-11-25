@@ -15,6 +15,38 @@ export type ClassSessionCard = {
   coverImage: string;
 };
 
+export type ClassSessionTime = Omit<ClassSessionCard, "courseTitle" | "coverImage">;
+
+/** Shared schedule content for the class list and each course's time slider. */
+export function ClassSessionDetails({
+  session,
+  locale,
+}: {
+  session: ClassSessionTime;
+  locale: AppLocale;
+}) {
+  return (
+    <>
+      <p className="text-text-primary mt-1 font-bold">{formatWeekday(session.weekday, locale)}</p>
+      <div className="text-text-secondary mt-3 flex flex-col gap-1.5 text-sm">
+        <span className="flex items-center gap-1.5">
+          <Clock className="size-4 shrink-0" aria-hidden="true" />
+          <span dir="ltr" className="tabular-nums">
+            {session.startTime} – {session.endTime}
+          </span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <MapPin className="size-4 shrink-0" aria-hidden="true" />
+          {session.location}
+        </span>
+      </div>
+      {session.capacityNote && (
+        <p className="text-pishnam-gold-600 mt-3 text-xs">{session.capacityNote}</p>
+      )}
+    </>
+  );
+}
+
 export function ClassSessionGrid({
   sessions,
   locale,
@@ -51,22 +83,7 @@ export function ClassSessionGrid({
             <p className="text-pishnam-steel-600 text-xs font-semibold tracking-wide uppercase">
               {session.courseTitle}
             </p>
-            <p className="text-text-primary mt-1 font-bold">
-              {formatWeekday(session.weekday, locale)}
-            </p>
-            <div className="text-text-secondary mt-3 flex flex-col gap-1.5 text-sm">
-              <span className="flex items-center gap-1.5">
-                <Clock className="size-4 shrink-0" aria-hidden="true" />
-                {session.startTime} – {session.endTime}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <MapPin className="size-4 shrink-0" aria-hidden="true" />
-                {session.location}
-              </span>
-            </div>
-            {session.capacityNote && (
-              <p className="text-pishnam-gold-600 mt-3 text-xs">{session.capacityNote}</p>
-            )}
+            <ClassSessionDetails session={session} locale={locale} />
           </CardContent>
         </Card>
       ))}

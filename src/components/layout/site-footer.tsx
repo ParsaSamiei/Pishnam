@@ -6,7 +6,7 @@ import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { APP_VERSION } from "@/lib/app-version";
 import { getContactSettings } from "@/lib/contact-settings";
-import { contactAddressLabel, toDisplayAddresses } from "@/lib/contact-addresses";
+import { toDisplayAddresses } from "@/lib/contact-addresses";
 import { Link } from "@/lib/i18n/navigation";
 import { getSocialLinks } from "@/lib/social-channels";
 
@@ -88,23 +88,14 @@ export async function SiteFooter() {
             <span className="text-base font-bold">{t("brand.name")}</span>
           </div>
           <p className="text-pishnam-off-white/70 mt-3 max-w-sm text-sm">{tagline}</p>
-          {addresses.map((address, index) => (
-            <div
-              key={address.id}
-              role="group"
-              aria-label={contactAddressLabel(index, isFa, addresses.length)}
-              className="mt-3 max-w-sm"
-            >
+          {addresses.map((address) => (
+            <div key={address.id} role="group" aria-label={address.name} className="mt-3 max-w-sm">
               {!address.address ? (
-                <p className="text-pishnam-off-white/80 text-xs font-semibold">
-                  {contactAddressLabel(index, isFa, addresses.length)}
-                </p>
+                <p className="text-pishnam-off-white/80 text-xs font-semibold">{address.name}</p>
               ) : null}
               {address.address ? (
                 <>
-                  <p className="text-pishnam-off-white/80 text-xs font-semibold">
-                    {contactAddressLabel(index, isFa, addresses.length)}
-                  </p>
+                  <p className="text-pishnam-off-white/80 text-xs font-semibold">{address.name}</p>
                   <AddressMapLinks
                     address={address.address}
                     className="mt-1"

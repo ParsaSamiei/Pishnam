@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { MAX_CONTACT_ADDRESSES } from "@/lib/contact-addresses";
+import { MAX_CONTACT_ADDRESSES, MAX_CONTACT_BRANCH_NAME_LENGTH } from "@/lib/contact-addresses";
 import { contactSettingsSchema } from "./contact-settings";
 
 const emptyAddress = {
+  nameFa: "",
+  nameEn: "",
   addressFa: "",
   addressEn: "",
   postalCode: "",
@@ -10,6 +12,41 @@ const emptyAddress = {
 };
 
 describe("contactSettingsSchema", () => {
+  it("trims branch names and preserves named branches without an address yet", () => {
+    const parsed = contactSettingsSchema.parse({
+      addresses: [{ ...emptyAddress, nameFa: " شعبه رسالت ", nameEn: " Resalat branch " }],
+    });
+    expect(parsed.addresses[0]).toEqual({
+      nameFa: "شعبه رسالت",
+      nameEn: "Resalat branch",
+      addressFa: null,
+      addressEn: null,
+      postalCode: null,
+      phones: [],
+      mapEmbedUrl: null,
+    });
+  });
+
+  it("normalizes cleared branch names to null without removing the address", () => {
+    const parsed = contactSettingsSchema.parse({
+      addresses: [{ ...emptyAddress, nameFa: "  ", addressFa: "تهران" }],
+    });
+    expect(parsed.addresses[0]?.nameFa).toBeNull();
+    expect(parsed.addresses[0]?.nameEn).toBeNull();
+    expect(parsed.addresses[0]?.addressFa).toBe("تهران");
+  });
+
+  it.each(["nameFa", "nameEn"])("rejects an oversized %s under the correct branch", (field) => {
+    const parsed = contactSettingsSchema.safeParse({
+      addresses: [
+        { ...emptyAddress, addressFa: "تهران" },
+        { ...emptyAddress, [field]: "a".repeat(MAX_CONTACT_BRANCH_NAME_LENGTH + 1) },
+      ],
+    });
+    expect(parsed.success).toBe(false);
+    if (!parsed.success) expect(parsed.error.issues[0]?.path).toEqual(["addresses", 1, field]);
+  });
+
   it("accepts empty fields", () => {
     const parsed = contactSettingsSchema.parse({
       phones: ["", "  "],
@@ -70,6 +107,8 @@ describe("contactSettingsSchema", () => {
     expect(parsed.email).toBe("info@pishnam.ir");
     expect(parsed.addresses).toHaveLength(2);
     expect(parsed.addresses[0]).toEqual({
+      nameFa: null,
+      nameEn: null,
       addressFa: "تهران، خیابان اول",
       addressEn: "Tehran, First Street",
       postalCode: "1234567890",
@@ -77,6 +116,8 @@ describe("contactSettingsSchema", () => {
       mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18",
     });
     expect(parsed.addresses[1]).toEqual({
+      nameFa: null,
+      nameEn: null,
       addressFa: "شیراز، خیابان دوم",
       addressEn: "Shiraz, Second Street",
       postalCode: null,

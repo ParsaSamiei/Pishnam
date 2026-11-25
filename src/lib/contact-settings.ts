@@ -20,7 +20,7 @@ const loadContactSettings = unstable_cache(
       include: { addresses: { orderBy: [{ order: "asc" }, { createdAt: "asc" }] } },
     });
   },
-  ["contact-settings-v3"],
+  ["contact-settings-v4"],
   { tags: [CONTACT_SETTINGS_CACHE_TAG], revalidate: 3600 },
 );
 
@@ -29,6 +29,6 @@ const loadContactSettings = unstable_cache(
  * React `cache` dedupes within one render; `unstable_cache` reuses the
  * row across prerenders so build/runtime don't re-query Neon every time.
  * Bump the cache key when the stored shape changes so cached addresses also
- * include newly added fields such as branch phone numbers.
+ * include newly added fields such as branch names and phone numbers.
  */
 export const getContactSettings = cache(loadContactSettings);

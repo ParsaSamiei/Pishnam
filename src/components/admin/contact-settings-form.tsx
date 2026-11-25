@@ -9,13 +9,19 @@ import { Label } from "@/components/ui/label";
 import { EnFieldLabel } from "@/components/admin/en-field-label";
 import { Textarea } from "@/components/ui/textarea";
 import type { ContactSettingsFormState } from "@/app/admin/(dashboard)/contact/actions";
-import { contactAddressLabel, MAX_CONTACT_ADDRESSES } from "@/lib/contact-addresses";
+import {
+  contactAddressLabel,
+  MAX_CONTACT_ADDRESSES,
+  MAX_CONTACT_BRANCH_NAME_LENGTH,
+} from "@/lib/contact-addresses";
 import { toGoogleMapsEmbedUrl } from "@/lib/google-maps";
 import { IRANIAN_PHONE_HINT_FA } from "@/lib/phone";
 import { SOCIAL_CHANNELS } from "@/lib/social-channels";
 
 type AddressFormValue = {
   id: string;
+  nameFa: string;
+  nameEn: string;
   addressFa: string;
   addressEn: string;
   postalCode: string;
@@ -36,6 +42,8 @@ interface ContactSettingsFormProps {
     footerTaglineFa: string | null;
     footerTaglineEn: string | null;
     addresses: Array<{
+      nameFa: string | null;
+      nameEn: string | null;
       addressFa: string | null;
       addressEn: string | null;
       postalCode: string | null;
@@ -84,6 +92,8 @@ function AddressRow({
   onRemove,
 }: AddressRowProps) {
   const idPrefix = useId();
+  const nameFaId = `${idPrefix}-name-fa`;
+  const nameEnId = `${idPrefix}-name-en`;
   const faId = `${idPrefix}-fa`;
   const enId = `${idPrefix}-en`;
   const postalId = `${idPrefix}-postal`;
@@ -96,6 +106,7 @@ function AddressRow({
     );
   };
   const embedUrl = toGoogleMapsEmbedUrl(value.mapEmbedUrl);
+  const branchLabel = contactAddressLabel(index, true, total, value);
 
   // Every branch keeps at least one input so an empty list is still submitted.
   const phoneValues = value.phones.length ? value.phones : [""];
@@ -110,9 +121,7 @@ function AddressRow({
   return (
     <div className="border-border bg-surface/40 flex flex-col gap-4 rounded-lg border p-4">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-text-primary text-sm font-semibold">
-          {contactAddressLabel(index, true, total)}
-        </p>
+        <p className="text-text-primary text-sm font-semibold">{branchLabel}</p>
         <Button
           type="button"
           variant="outline"
@@ -125,6 +134,59 @@ function AddressRow({
           <Trash2 aria-hidden="true" />
         </Button>
       </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor={nameFaId}>نام شعبه (فارسی)</Label>
+          <Input
+            id={nameFaId}
+            name="nameFa"
+            placeholder="مثلاً شعبه رسالت"
+            maxLength={MAX_CONTACT_BRANCH_NAME_LENGTH}
+            value={value.nameFa}
+            onChange={(event) => onChange("nameFa", event.target.value)}
+            aria-invalid={Boolean(errorFor("nameFa"))}
+            aria-describedby={errorFor("nameFa") ? `${nameFaId}-error` : undefined}
+          />
+          {errorFor("nameFa") ? (
+            <p id={`${nameFaId}-error`} className="text-pishnam-danger text-xs">
+              {errorFor("nameFa")}
+            </p>
+          ) : null}
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <EnFieldLabel
+            htmlFor={nameEnId}
+            sourceName="nameFa"
+            targetName="nameEn"
+            getSourceText={() => value.nameFa}
+            getTargetText={() => value.nameEn}
+            onTranslated={(text) => onChange("nameEn", text)}
+          >
+            Branch name (English)
+          </EnFieldLabel>
+          <Input
+            id={nameEnId}
+            name="nameEn"
+            dir="ltr"
+            placeholder="Resalat branch"
+            maxLength={MAX_CONTACT_BRANCH_NAME_LENGTH}
+            value={value.nameEn}
+            onChange={(event) => onChange("nameEn", event.target.value)}
+            aria-invalid={Boolean(errorFor("nameEn"))}
+            aria-describedby={errorFor("nameEn") ? `${nameEnId}-error` : undefined}
+          />
+          {errorFor("nameEn") ? (
+            <p id={`${nameEnId}-error`} className="text-pishnam-danger text-xs">
+              {errorFor("nameEn")}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <p className="text-text-secondary text-xs">
+        این نام در سراسر سایت جایگزین «آدرس ۱» می‌شود. اگر خالی بماند، عنوان شماره‌دار نمایش داده
+        می‌شود؛ اگر یک زبان خالی باشد، نام زبان دیگر استفاده می‌شود.
+      </p>
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor={faId}>آدرس (فارسی)</Label>
@@ -260,7 +322,7 @@ function AddressRow({
         <div className="border-border overflow-hidden rounded-md border">
           <iframe
             src={embedUrl}
-            title="پیش نمایش نقشه"
+            title={`پیش نمایش نقشه — ${branchLabel}`}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             className="h-56 w-full border-0"
@@ -289,6 +351,14 @@ function ContactSettingsFormFields({
     return phones.map((value, index) => ({ id: `${phoneIdPrefix}-${index}`, value }));
   });
   const [addressRows, setAddressRows] = useState<AddressFormValue[]>(() => {
+    const nameFa = arrayField(
+      "nameFa",
+      defaultValues?.addresses.map((address) => address.nameFa ?? "") ?? [],
+    );
+    const nameEn = arrayField(
+      "nameEn",
+      defaultValues?.addresses.map((address) => address.nameEn ?? "") ?? [],
+    );
     const fa = arrayField(
       "addressFa",
       defaultValues?.addresses.map((a) => a.addressFa ?? "") ?? [],
@@ -305,9 +375,19 @@ function ContactSettingsFormFields({
       "mapEmbedUrl",
       defaultValues?.addresses.map((a) => a.mapEmbedUrl ?? "") ?? [],
     );
-    const count = Math.max(1, fa.length, en.length, postal.length, map.length);
+    const count = Math.max(
+      1,
+      nameFa.length,
+      nameEn.length,
+      fa.length,
+      en.length,
+      postal.length,
+      map.length,
+    );
     return Array.from({ length: count }, (_, index) => ({
       id: `${addressIdPrefix}-${index}`,
+      nameFa: nameFa[index] ?? "",
+      nameEn: nameEn[index] ?? "",
       addressFa: fa[index] ?? "",
       addressEn: en[index] ?? "",
       postalCode: postal[index] ?? "",
@@ -336,6 +416,8 @@ function ContactSettingsFormFields({
       ...current,
       {
         id: `${addressIdPrefix}-${current.length}-${Date.now()}`,
+        nameFa: "",
+        nameEn: "",
         addressFa: "",
         addressEn: "",
         postalCode: "",

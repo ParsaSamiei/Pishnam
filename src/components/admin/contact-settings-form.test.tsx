@@ -25,6 +25,8 @@ const defaults = {
   instagramUrl: null,
   addresses: [
     {
+      nameFa: null,
+      nameEn: null,
       addressFa: "تهران",
       addressEn: "Tehran",
       postalCode: null,
@@ -32,6 +34,8 @@ const defaults = {
       phones: ["021 11111111"],
     },
     {
+      nameFa: null,
+      nameEn: null,
       addressFa: "شیراز",
       addressEn: "Shiraz",
       postalCode: null,
@@ -44,6 +48,84 @@ const defaults = {
 const idleAction = async (): Promise<ContactSettingsFormState> => ({ status: "idle" });
 
 describe("ContactSettingsForm branch phones", () => {
+  it("edits each branch's names without changing its address or phone numbers", () => {
+    const { container } = render(
+      <ContactSettingsForm action={idleAction} defaultValues={defaults} />,
+    );
+    fireEvent.change(screen.getAllByRole("textbox", { name: "نام شعبه (فارسی)" })[0]!, {
+      target: { value: "شعبه رسالت" },
+    });
+    fireEvent.change(screen.getAllByRole("textbox", { name: "Branch name (English)" })[0]!, {
+      target: { value: "Resalat branch" },
+    });
+    fireEvent.change(screen.getAllByRole("textbox", { name: "نام شعبه (فارسی)" })[1]!, {
+      target: { value: "شعبه شیراز" },
+    });
+    expect(screen.getByText("شعبه رسالت")).toBeTruthy();
+    expect(screen.getByText("شعبه شیراز")).toBeTruthy();
+    const data = new FormData(container.querySelector("form")!);
+    expect(data.getAll("nameFa")).toEqual(["شعبه رسالت", "شعبه شیراز"]);
+    expect(data.getAll("nameEn")).toEqual(["Resalat branch", ""]);
+    expect(data.getAll("addressFa")).toEqual(["تهران", "شیراز"]);
+    expect(data.getAll("addressPhones.0")).toEqual(["021 11111111"]);
+    expect(data.getAll("addressPhones.1")).toEqual(["071 22222222", "09121111111"]);
+  });
+
+  it("keeps names with the correct branch when another branch is deleted", () => {
+    const namedDefaults = {
+      ...defaults,
+      addresses: defaults.addresses.map((address, index) => ({
+        ...address,
+        nameFa: index === 0 ? "شعبه رسالت" : "شعبه شیراز",
+        nameEn: index === 0 ? "Resalat branch" : "Shiraz branch",
+      })),
+    };
+    const { container } = render(
+      <ContactSettingsForm action={idleAction} defaultValues={namedDefaults} />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /^حذف آدرس$/ }));
+    const data = new FormData(container.querySelector("form")!);
+    expect(data.getAll("nameFa")).toEqual(["شعبه شیراز"]);
+    expect(data.getAll("nameEn")).toEqual(["Shiraz branch"]);
+    expect(data.getAll("addressPhones.0")).toEqual(["071 22222222", "09121111111"]);
+  });
+
+  it("preserves edited and cleared names after validation errors", async () => {
+    const action = vi.fn(async (_previous: ContactSettingsFormState, data: FormData) =>
+      formActionError({ "addresses.1.nameEn": "نام شعبه معتبر نیست." }, data),
+    );
+    const namedDefaults = {
+      ...defaults,
+      addresses: defaults.addresses.map((address, index) => ({
+        ...address,
+        nameFa: index === 0 ? "شعبه رسالت" : "شعبه قدیمی",
+        nameEn: index === 0 ? "Resalat branch" : "Old branch",
+      })),
+    };
+    const { container } = render(
+      <ContactSettingsForm action={action} defaultValues={namedDefaults} />,
+    );
+    fireEvent.change(screen.getAllByRole("textbox", { name: "نام شعبه (فارسی)" })[0]!, {
+      target: { value: "" },
+    });
+    fireEvent.change(screen.getAllByRole("textbox", { name: "نام شعبه (فارسی)" })[1]!, {
+      target: { value: "شعبه جدید" },
+    });
+    fireEvent.change(screen.getAllByRole("textbox", { name: "Branch name (English)" })[1]!, {
+      target: { value: "New branch" },
+    });
+    fireEvent.submit(container.querySelector("form")!);
+    await waitFor(() => expect(screen.getByText("نام شعبه معتبر نیست.")).toBeTruthy());
+    const data = new FormData(container.querySelector("form")!);
+    expect(data.getAll("nameFa")).toEqual(["", "شعبه جدید"]);
+    expect(data.getAll("nameEn")).toEqual(["Resalat branch", "New branch"]);
+    expect(
+      screen
+        .getAllByRole("textbox", { name: "Branch name (English)" })[1]!
+        .getAttribute("aria-invalid"),
+    ).toBe("true");
+  });
+
   it("submits phone numbers under their own branch and supports newly added branches", () => {
     const { container } = render(
       <ContactSettingsForm action={idleAction} defaultValues={defaults} />,

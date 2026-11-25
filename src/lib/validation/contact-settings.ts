@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MAX_CONTACT_ADDRESSES } from "@/lib/contact-addresses";
+import { MAX_CONTACT_ADDRESSES, MAX_CONTACT_BRANCH_NAME_LENGTH } from "@/lib/contact-addresses";
 import { toGoogleMapsEmbedUrl } from "@/lib/google-maps";
 import { IRANIAN_PHONE_HINT_FA, parseIranianPhone } from "@/lib/phone";
 
@@ -89,6 +89,8 @@ const phoneNumbersSchema = z
   );
 
 export const contactAddressSchema = z.object({
+  nameFa: optionalText(MAX_CONTACT_BRANCH_NAME_LENGTH),
+  nameEn: optionalText(MAX_CONTACT_BRANCH_NAME_LENGTH),
   addressFa: optionalText(500),
   addressEn: optionalText(500),
   postalCode: optionalText(20),
@@ -106,6 +108,8 @@ export const contactAddressesSchema = z
   .transform((rows) =>
     rows.filter(
       (row) =>
+        row.nameFa ||
+        row.nameEn ||
         row.addressFa ||
         row.addressEn ||
         row.postalCode ||

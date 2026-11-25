@@ -36,7 +36,7 @@ export function BranchPhoneNumbers({ phones, isFa, compact = false }: BranchPhon
               <a
                 href={`tel:${toLatinDigits(phone).replace(/[^\d+]/g, "")}`}
                 className={cn(
-                  "inline-flex min-h-11 cursor-pointer items-center rounded-sm text-sm transition-colors duration-200",
+                  "block cursor-pointer rounded-sm text-sm transition-colors duration-200",
                   "focus-visible:ring-pishnam-gold-500 focus-visible:ring-2 focus-visible:outline-none",
                   compact
                     ? "text-pishnam-off-white/60 hover:text-pishnam-gold-500"

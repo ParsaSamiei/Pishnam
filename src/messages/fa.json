@@ -205,6 +205,16 @@
       "status": "{current, number} از {total, number}"
     }
   },
+  "enrollmentSchedule": {
+    "carousel": {
+      "label": "زمان‌های کلاس {course}",
+      "previous": "زمان قبلی کلاس {course}",
+      "next": "زمان بعدی کلاس {course}",
+      "slide": "زمان کلاس",
+      "status": "کلاس {current, number} از {total, number}",
+      "goTo": "مشاهده زمان کلاس {index, number} برای {course}"
+    }
+  },
   "press": {
     "title": "پیشنام در رسانه",
     "subtitle": "گزارش‌ها و خبرهای رسانه‌ای درباره کار و دستاوردهای پیشنام.",

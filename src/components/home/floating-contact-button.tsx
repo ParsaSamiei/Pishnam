@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
 import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
-import { contactAddressLabel, type DisplayContactAddress } from "@/lib/contact-addresses";
+import type { DisplayContactAddress } from "@/lib/contact-addresses";
 import { useReducedMotionSafe } from "@/components/motion/use-reduced-motion-safe";
 import {
   Dialog,
@@ -87,17 +87,15 @@ export function FloatingContactButton({
           </DialogHeader>
 
           <div className="flex flex-col gap-5">
-            {addresses.map((address, index) => (
+            {addresses.map((address) => (
               <div
                 key={address.id}
                 role="group"
-                aria-label={contactAddressLabel(index, isFa, addresses.length)}
+                aria-label={address.name}
                 className="flex flex-col gap-3"
               >
                 {!address.address ? (
-                  <p className="text-text-primary text-sm font-semibold">
-                    {contactAddressLabel(index, isFa, addresses.length)}
-                  </p>
+                  <p className="text-text-primary text-sm font-semibold">{address.name}</p>
                 ) : null}
                 {address.address ? (
                   <div className="flex items-start gap-3">
@@ -106,9 +104,7 @@ export function FloatingContactButton({
                       aria-hidden="true"
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="text-text-primary text-sm font-semibold">
-                        {contactAddressLabel(index, isFa, addresses.length)}
-                      </p>
+                      <p className="text-text-primary text-sm font-semibold">{address.name}</p>
                       <AddressMapLinks
                         address={address.address}
                         addressClassName="text-text-secondary mt-1 text-sm leading-snug"

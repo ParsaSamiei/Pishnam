@@ -17,6 +17,19 @@ a solo project. SSR/SSG/ISR all available in one framework, strong SEO defaults 
 | Admin panel                             | SSR / dynamic, fully server-authenticated    | Always needs fresh data, behind auth                               |
 | Forms (enroll, sponsor inquiry, etc.)   | Client component + server action / API route | Interactive, needs client-side validation feedback                 |
 
+### Enrollment class schedules
+
+`/enroll` fetches active courses with their active `ClassSession` rows, ordered by weekday and
+start time. `CourseScheduleGrid` shows one cover/title per scheduled course; an independent,
+manual `ClassTimesCarousel` inside that card browses the course's days, start/end times,
+locations and capacity notes. It reuses Embla and the shared `CarouselStepButton` extracted from
+the hero/gallery sliders, with swipe, arrows, dots and RTL-aware keyboard navigation. A course
+with only one time is static, and courses with no scheduled times are omitted from this section
+but remain in the enrollment form's dropdown. The form and enrollment-guidelines gate are
+unchanged; browsing a time does not select it or submit an enrollment. Without JavaScript, the
+time track falls back to native horizontal scrolling. `/classes` retains its per-class grid,
+sharing only the `ClassSessionDetails` renderer.
+
 ## Responsiveness
 
 No native mobile app planned, but "fully responsive" is a hard requirement — treat every page as

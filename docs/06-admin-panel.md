@@ -70,8 +70,10 @@ One admin section per content type from the schema:
   required. Listed at `/admin/feedback` with unread/read status; not mixed into Leads because
   there is no phone/email to follow up on.
 - **Contact details**: one settings row for general phone numbers, email, footer tagline and social
-  links, plus an add/remove list of addresses. Each address has FA/EN text, a postal code, its own
-  phone numbers and a Google Maps embed. Branch numbers can be added, edited or removed inside
+  links, plus an add/remove list of addresses. Each address has an editable FA/EN branch name,
+  FA/EN address text, a postal code, its own phone numbers and a Google Maps embed. The branch name
+  replaces the numbered address heading everywhere on the site; blank names retain the numbered
+  fallback. Branch numbers can be added, edited or removed inside
   that branch's address block and stay separate from the general phone list. Edited at
   `/admin/contact`; shown on the public `/contact-us` page, in
   the footer and in the floating contact widget. Paste either the Maps “Embed a map” iframe or the

@@ -11,7 +11,14 @@ import { requireAdminSession } from "@/lib/actions/admin-guard";
 
 export type ContactSettingsFormState = AdminFormState;
 
-const ADDRESS_FIELDS = ["addressFa", "addressEn", "postalCode", "mapEmbedUrl"] as const;
+const ADDRESS_FIELDS = [
+  "nameFa",
+  "nameEn",
+  "addressFa",
+  "addressEn",
+  "postalCode",
+  "mapEmbedUrl",
+] as const;
 type AddressField = (typeof ADDRESS_FIELDS)[number];
 
 /** The repeater submits one value per row under each shared field name. */
@@ -24,6 +31,8 @@ function parseAddressRows(formData: FormData) {
   }
   const rowCount = Math.max(0, ...ADDRESS_FIELDS.map((field) => columns[field].length));
   return Array.from({ length: rowCount }, (_, index) => ({
+    nameFa: columns.nameFa[index] ?? "",
+    nameEn: columns.nameEn[index] ?? "",
     addressFa: columns.addressFa[index] ?? "",
     addressEn: columns.addressEn[index] ?? "",
     postalCode: columns.postalCode[index] ?? "",

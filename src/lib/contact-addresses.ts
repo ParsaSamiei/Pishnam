@@ -2,18 +2,21 @@ import type { ContactAddress } from "@prisma/client";
 
 /** Cap shared by the Zod schema and the admin repeater. */
 export const MAX_CONTACT_ADDRESSES = 10;
+export const MAX_CONTACT_BRANCH_NAME_LENGTH = 100;
 
 export type ContactAddressFields = Pick<
   ContactAddress,
-  "addressFa" | "addressEn" | "postalCode" | "phones" | "mapEmbedUrl"
+  "nameFa" | "nameEn" | "addressFa" | "addressEn" | "postalCode" | "phones" | "mapEmbedUrl"
 >;
 
 /** An address localized for the current locale, with empty rows removed. */
 export type DisplayContactAddress = {
   id: string;
+  name: string;
   address: string;
   postalCode: string | null;
   phones: string[];
+  mapEmbedUrl: string | null;
 };
 
 /**
@@ -34,24 +37,40 @@ export function toDisplayAddresses(
   addresses: ContactAddress[],
   isFa: boolean,
 ): DisplayContactAddress[] {
-  return addresses.flatMap((address) => {
-    const text = localizedAddressText(address, isFa);
-    const phones = address.phones ?? [];
-    // A branch can have only a phone number while its address is being added.
-    if (!text && !address.postalCode && phones.length === 0) return [];
-    return [
-      {
-        id: address.id,
-        address: text ?? "",
-        postalCode: address.postalCode,
-        phones,
-      },
-    ];
-  });
+  const visibleAddresses = addresses.filter(
+    (address) =>
+      address.nameFa?.trim() ||
+      address.nameEn?.trim() ||
+      localizedAddressText(address, isFa) ||
+      address.postalCode ||
+      address.phones?.length ||
+      address.mapEmbedUrl,
+  );
+
+  // Resolve labels before filtering maps, so a map for the second branch never
+  // gets relabeled as the first branch when the first has no embedded map.
+  return visibleAddresses.map((address, index) => ({
+    id: address.id,
+    name: contactAddressLabel(index, isFa, visibleAddresses.length, address),
+    address: localizedAddressText(address, isFa) ?? "",
+    postalCode: address.postalCode,
+    phones: address.phones ?? [],
+    mapEmbedUrl: address.mapEmbedUrl,
+  }));
 }
 
-/** Only worth numbering when there is more than one location. */
-export function contactAddressLabel(index: number, isFa: boolean, total: number): string {
+/** Prefer the localized branch name; number unnamed branches only when needed. */
+export function contactAddressLabel(
+  index: number,
+  isFa: boolean,
+  total: number,
+  names?: Pick<ContactAddress, "nameFa" | "nameEn">,
+): string {
+  const preferred = isFa ? names?.nameFa : names?.nameEn;
+  const fallback = isFa ? names?.nameEn : names?.nameFa;
+  const name = preferred?.trim() || fallback?.trim();
+  if (name) return name;
+
   const number = new Intl.NumberFormat(isFa ? "fa-IR" : "en-US").format(index + 1);
   if (total <= 1) return isFa ? "آدرس" : "Address";
   return isFa ? `آدرس ${number}` : `Address ${number}`;

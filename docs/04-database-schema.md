@@ -514,9 +514,11 @@ model ContactSettings {
 // One physical location, ordered low to high. Edited from /admin/contact;
 // shown on /contact-us, in the footer and in the floating contact widget.
 model ContactAddress {
-  id               String          @id @default(cuid())
+  id                String          @id @default(cuid())
   contactSettingsId String
   contactSettings   ContactSettings @relation(fields: [contactSettingsId], references: [id], onDelete: Cascade)
+  nameFa      String?
+  nameEn      String?
   addressFa   String?
   addressEn   String?
   postalCode  String?
@@ -591,7 +593,10 @@ model HeroSlide {
 - **Contact details are one settings row plus a list of locations** — `ContactSettings` is a
   singleton (`id = "default"`) for general phones, email, footer tagline and social links, while
   `ContactAddress` holds up to ten branches, edited together from `/admin/contact`. Each branch has
-  its own `phones` array (up to ten numbers), shown under that branch in the contact page, footer
+  optional `nameFa` / `nameEn` fields (up to 100 characters), used consistently in the widget,
+  footer, contact page, map captions and structured data. Names use the requested language with
+  fallback to the other language; if both are blank, the existing numbered address label is used.
+  Each branch also has its own `phones` array (up to ten numbers), shown in the contact page, footer
   and floating widget. General numbers remain separate and are not assigned to branches
   automatically. Each address is bilingual (`addressFa` / `addressEn`) with an optional
   `postalCode` and a canonical Google Maps `mapEmbedUrl` (the admin form accepts a pasted iframe or

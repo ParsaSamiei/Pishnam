@@ -210,6 +210,11 @@ For a shell on the box instead, `docker compose exec postgres psql -U pishnam` n
   Archive preparation is bounded to 10 minutes and server-local `docker load` to 15 minutes;
   the overall job allows 90 minutes for slow links. Successfully verified images have only
   their own transfer archives removed. The migration-before-web release gate is unchanged.
+  Read-only checks use `infra/ssh-read.sh`: connection resets/timeouts retry up to five times,
+  with backoff and a 30-second per-attempt limit. Only successful probe output is used; SSH or
+  Docker failures cannot become a missing-image result. Release/migration commands are not
+  blindly re-executed after a connection failure, and host-key verification stays enabled.
+  The runner reuses its authenticated SSH connection between steps to reduce new handshakes.
   Tests use fake Docker/SSH/rsync commands and never contact production.
   These changes require a new workflow commit/deployment; rerunning an older failed Actions
   run uses that run's original workflow. Uploads from the old streaming method cannot be resumed.

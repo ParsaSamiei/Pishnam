@@ -57,10 +57,18 @@ elif name == "timeout":
 elif name == "ssh":
     command = args[-1]
     tokens = shlex.split(command)
-    if tokens[:3] == ["docker", "image", "inspect"]:
-        if not loaded.exists():
+    if tokens[:3] == ["docker", "image", "ls"]:
+        counter = root / "ssh-read-count"
+        calls = int(counter.read_text()) + 1 if counter.exists() else 1
+        counter.write_text(str(calls))
+        if calls <= int(os.environ.get("MOCK_SSH_RESET_COUNT", "0")):
+            print("discard this partial output")
+            print("kex_exchange_identification: Connection reset by peer", file=sys.stderr)
+            sys.exit(255)
+        if os.environ.get("MOCK_REMOTE_DOCKER_FAIL"):
             sys.exit(1)
-        print(loaded.read_text())
+        if loaded.exists():
+            print(loaded.read_text())
     elif tokens[:2] == ["mkdir", "-p"]:
         safe_path(tokens[-1]).mkdir(parents=True, exist_ok=True)
     elif tokens[:2] == ["docker", "load"]:
@@ -125,6 +133,8 @@ class ShipImageTests(unittest.TestCase):
             "SSH_TARGET": "target",
             "SHIP_ATTEMPTS": "2",
             "SHIP_RETRY_DELAY_SECONDS": "0",
+            "SSH_READ_ATTEMPTS": "3",
+            "SSH_READ_RETRY_DELAY_SECONDS": "0",
         }
         self.script = Path(__file__).with_name("ship-image.sh")
 
@@ -162,8 +172,9 @@ class ShipImageTests(unittest.TestCase):
         self.assertIn("--info=progress2", rsync)
         self.assertIn("--timeout=120", rsync)
         timeouts = self.calls("timeout")
-        self.assertEqual(timeouts[0]["args"][1], "10m")
-        self.assertEqual(timeouts[1]["args"][1], "15m")
+        self.assertIn("10m", [call["args"][1] for call in timeouts])
+        self.assertIn("15m", [call["args"][1] for call in timeouts])
+        self.assertIn("30s", [call["args"][1] for call in timeouts])
         self.assertFalse(list((self.remote / ".deploy-images").glob("*.tar.gz")))
         self.assertTrue(self.sentinel.exists())
 
@@ -212,6 +223,26 @@ class ShipImageTests(unittest.TestCase):
         for call in self.calls("ssh"):
             self.assertNotIn("docker tag", call["args"][-1])
             self.assertNotIn("docker compose", call["args"][-1])
+
+    def test_transient_ssh_resets_retry_without_contaminating_the_probe_output(self):
+        result = self.run_ship(MOCK_SSH_RESET_COUNT="2")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertNotIn("discard this partial output", result.stdout)
+        self.assertIn("retrying", result.stderr)
+
+    def test_exhausted_ssh_resets_are_not_treated_as_missing_images(self):
+        result = self.run_ship(MOCK_SSH_RESET_COUNT="10")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("refusing to treat it as missing", result.stdout)
+        self.assertEqual(self.calls("rsync"), [])
+        self.assertFalse(any(call["args"][0] == "save" for call in self.calls("docker")))
+
+    def test_remote_docker_errors_block_transfer_instead_of_becoming_cache_misses(self):
+        result = self.run_ship(MOCK_REMOTE_DOCKER_FAIL="1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("refusing to treat it as missing", result.stdout)
+        self.assertEqual(self.calls("rsync"), [])
+        self.assertEqual((self.root / "ssh-read-count").read_text(), "1")
 
 
 if __name__ == "__main__":

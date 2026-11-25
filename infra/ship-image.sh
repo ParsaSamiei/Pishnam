@@ -12,6 +12,7 @@ retry_delay="${SHIP_RETRY_DELAY_SECONDS:-15}"
 idle_timeout="${SHIP_IDLE_TIMEOUT_SECONDS:-120}"
 prepare_timeout="${SHIP_PREPARE_TIMEOUT:-10m}"
 load_timeout="${SHIP_LOAD_TIMEOUT:-15m}"
+script_dir="$(dirname -- "${BASH_SOURCE[0]}")"
 
 if [[ ! "$attempts" =~ ^[1-9][0-9]*$ ]]; then
   echo "::error::SHIP_ATTEMPTS must be a positive integer."
@@ -47,10 +48,10 @@ quoted_partial="$(shell_quote "$remote_partial")"
 
 image_matches_remote() {
   local remote_id
-  if remote_id="$(ssh "${ssh_args[@]}" "$target" "docker image inspect --format '{{.Id}}' ${quoted_image} 2>/dev/null")"; then
+  if remote_id="$(bash "${script_dir}/ssh-read.sh" "$target" "docker image ls --quiet --no-trunc ${quoted_image}")"; then
     [[ "$remote_id" == "$image_id" ]]
   else
-    return 1
+    return 2
   fi
 }
 
@@ -65,6 +66,12 @@ if image_matches_remote; then
   echo "Already present: ${image} (${image_id}), skipping transfer."
   cleanup_remote_archive
   exit 0
+else
+  probe_status=$?
+  if [[ "$probe_status" == 2 ]]; then
+    echo "::error::Could not inspect the remote image; refusing to treat it as missing."
+    exit 1
+  fi
 fi
 
 archive_dir="${runner_temp}/ship-images"
@@ -95,6 +102,13 @@ for ((attempt = 1; attempt <= attempts; attempt++)); do
     cleanup_remote_archive
     echo "::endgroup::"
     exit 0
+  else
+    probe_status=$?
+    if [[ "$probe_status" == 2 ]]; then
+      echo "::endgroup::"
+      echo "::error::Remote image check failed; release remains blocked."
+      exit 1
+    fi
   fi
 
   if ssh "${ssh_args[@]}" "$target" "mkdir -p -m 700 -- ${quoted_dir}" &&
@@ -110,6 +124,13 @@ for ((attempt = 1; attempt <= attempts; attempt++)); do
         echo "::endgroup::"
         echo "Transferred and verified ${image} (${image_id})."
         exit 0
+      else
+        probe_status=$?
+        if [[ "$probe_status" == 2 ]]; then
+          echo "::endgroup::"
+          echo "::error::Could not verify the loaded image; release remains blocked."
+          exit 1
+        fi
       fi
       echo "::warning::Loaded image does not match the expected ID; release is blocked."
     fi

@@ -879,9 +879,9 @@ model HomepageContent {
   updatedAt DateTime @updatedAt
 }
 
-// One-row site contact details, edited from /admin/contact. Unlike HeroSlide
-// this *is* a settings singleton: there is only one address/email/map to show,
-// so a table of rows would be the wrong shape. The id is always "default"
+// One-row site contact details, edited from /admin/contact. The identity of
+// the site (phones, email, social profiles) is a singleton, but the locations
+// are a collection -- see ContactAddress. The id is always "default"
 // (see CONTACT_SETTINGS_ID); upsert creates the row on first save.
 model ContactSettings {
   id String @id @default("default")
@@ -889,20 +889,13 @@ model ContactSettings {
   phones String[]
   email  String?
 
-  addressFa String?
-  addressEn String?
-  // Optional postal / ZIP code shown with the address on /contact-us.
-  postalCode String?
-
   // Short blurb under the brand mark in the site footer. Empty falls back to
   // the `footer.tagline` string in src/messages/*.json.
   footerTaglineFa String?
   footerTaglineEn String?
 
-  // Canonical Google Maps embed URL only (https://www.google.com/maps/embed?...).
-  // The admin form accepts a full iframe snippet or a bare embed URL and
-  // normalizes it -- see src/lib/google-maps.ts.
-  mapEmbedUrl String?
+  // Ordered low to high; the admin form replaces the whole set on save.
+  addresses ContactAddress[]
 
   // Public social profile URLs shown on /contact-us (empty = hidden).
   telegramUrl  String?
@@ -912,6 +905,35 @@ model ContactSettings {
   instagramUrl String?
 
   updatedAt DateTime @updatedAt
+}
+
+// A physical location shown on /contact-us, in the footer and in the floating
+// contact widget. Bilingual text plus the postal code and map for that one
+// location, so adding a second branch needs no schema change.
+model ContactAddress {
+  id                String          @id @default(cuid())
+  contactSettingsId String
+  contactSettings   ContactSettings @relation(fields: [contactSettingsId], references: [id], onDelete: Cascade)
+
+  addressFa String?
+  addressEn String?
+  // Optional postal / ZIP code shown next to this address.
+  postalCode String?
+
+  // Phones for this branch specifically, in addition to the site-wide ones.
+  phones String[] @default([])
+
+  // Canonical Google Maps embed URL only (https://www.google.com/maps/embed?...).
+  // The admin form accepts a full iframe snippet or a bare embed URL and
+  // normalizes it -- see src/lib/google-maps.ts.
+  mapEmbedUrl String?
+
+  // Display order, low to high -- same convention as HeroSlide.order.
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contactSettingsId, order])
 }
 
 // Slides in the homepage hero carousel. A plain content collection rather than

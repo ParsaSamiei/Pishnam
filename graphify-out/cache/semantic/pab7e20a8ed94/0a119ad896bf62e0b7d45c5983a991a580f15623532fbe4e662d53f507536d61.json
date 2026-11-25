@@ -1,0 +1,158 @@
+{
+  "nodes": [
+    {
+      "id": "docs_02_information_architecture_document",
+      "label": "02-information-architecture.md \u2014 Information Architecture",
+      "file_type": "document",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_02_audience_first_homepage",
+      "label": "Audience-first homepage design principle",
+      "file_type": "rationale",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Unlike the current WordPress feed, surface distinct per-audience entry points above the general content: hero with bilingual pitch/CTAs and optional admin-managed count-up stats, then students/parents, schools, sponsors blocks, then achievements/news/videos/downloads."
+    },
+    {
+      "id": "docs_02_sitemap_v1",
+      "label": "Sitemap (v1)",
+      "file_type": "concept",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_02_navigation_structure",
+      "label": "Navigation structure recommendation (max 2 levels)",
+      "file_type": "rationale",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Restructure the 5-item deep mega-menu into top-level groups matching audience intent; persistent header CTAs (enroll, language switch, search); sponsors/schools/careers/privacy/terms in footer. Cuts ~5 mega-menus with 8-15 items each to something scannable."
+    },
+    {
+      "id": "docs_02_admin_crud_content_types",
+      "label": "Content types requiring admin CRUD",
+      "file_type": "concept",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Any new content type must be added to both 04-database-schema.md and 06-admin-panel.md \u2014 don't hardcode content that should be editable."
+    },
+    {
+      "id": "docs_02_download_center_taxonomy",
+      "label": "Download center taxonomy (split flat categories)",
+      "file_type": "rationale",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Software and posters were split out of flat DownloadResource because one flat row can't represent 'one app, several platform builds' or per-competition poster categories; datasheets became a two-level part/variant catalog."
+    },
+    {
+      "id": "docs_02_confirmed_decisions",
+      "label": "Offline classes confirmed for v1",
+      "file_type": "concept",
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_02_download_center_taxonomy",
+      "target": "docs_04_competition_poster_hierarchy",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_02_download_center_taxonomy",
+      "target": "docs_04_software_product_release_models",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_02_admin_crud_content_types",
+      "target": "docs_04_prisma_schema",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_02_sitemap_v1",
+      "target": "docs_02_navigation_structure",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_02_sitemap_v1",
+      "target": "docs_02_admin_crud_content_types",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_02_download_center_taxonomy",
+      "target": "docs_06_admin_crud_surfaces",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_02_confirmed_decisions",
+      "target": "docs_04_class_session_model",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/02-information-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

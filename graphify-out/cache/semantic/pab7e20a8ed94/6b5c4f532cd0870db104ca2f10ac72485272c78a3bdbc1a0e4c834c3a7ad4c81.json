@@ -1,0 +1,207 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_pishnam_logo_logo",
+      "label": "Pishnam robot-badge logo",
+      "file_type": "image",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The existing Pishnam Robotics Researchers robot-badge logo is kept as-is in the site rebuild to preserve brand continuity; the brand doc explicitly says not to design a new logo and to use only a temporary placeholder until the final production file arrives."
+    },
+    {
+      "id": "public_brand_pishnam_logo_robot_mascot",
+      "label": "Friendly robot-face mascot",
+      "file_type": "concept",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A cartoon robot face gives a robotics education club a playful, kid-friendly identity suitable for first-grade learners, while the mechanical panel lines keep it readable as an engineering/robotics emblem for older students and sponsors."
+    },
+    {
+      "id": "public_brand_pishnam_logo_shield_badge",
+      "label": "Shield / badge enclosure",
+      "file_type": "concept",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The rounded shield silhouette frames the mascot as an emblem, reinforcing credibility and achievement signaling used by sponsor, school and competition-results pages."
+    },
+    {
+      "id": "public_brand_pishnam_logo_twin_eye_plate",
+      "label": "Twin circular eyes on gold faceplate",
+      "file_type": "concept",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Two large off-white circular pupils inside dark navy rings on a gold faceplate are the logo's primary focal point and the main source of its friendly, approachable character."
+    },
+    {
+      "id": "public_brand_pishnam_logo_cassette_mouth",
+      "label": "Cassette / card-slot mouth element",
+      "file_type": "concept",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A trapezoidal lower panel with a horizontal slot reads as either a cassette tape or a card slot forming the robot's mouth; the exact intended object is AMBIGUOUS, but it clearly functions as the face's lower feature."
+    },
+    {
+      "id": "public_brand_pishnam_logo_flag_crown",
+      "label": "Red-and-white flag-like crown motif",
+      "file_type": "concept",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A stepped cap above the face carries white and red bands plus steel blue, echoing the colors of the Iranian flag and suggesting an Iranian robotics club; whether it is meant as a cap or a flag is AMBIGUOUS."
+    },
+    {
+      "id": "public_brand_pishnam_logo_brand_palette",
+      "label": "Gold, navy and steel-blue brand palette",
+      "file_type": "concept",
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The logo is the source of the site's locked primary palette: gold #E6A817, navy #18222D, steel blue #3B5E82, off-white #F2F2F0 and red #E5001A, all visible in this mark."
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_pishnam_logo_logo",
+      "target": "public_brand_pishnam_logo_robot_mascot",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_logo",
+      "target": "public_brand_pishnam_logo_shield_badge",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_logo",
+      "target": "public_brand_pishnam_logo_brand_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_robot_mascot",
+      "target": "public_brand_pishnam_logo_shield_badge",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_robot_mascot",
+      "target": "public_brand_pishnam_logo_twin_eye_plate",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_robot_mascot",
+      "target": "public_brand_pishnam_logo_cassette_mouth",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_robot_mascot",
+      "target": "public_brand_pishnam_logo_flag_crown",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_flag_crown",
+      "target": "public_brand_pishnam_logo_brand_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_twin_eye_plate",
+      "target": "public_brand_pishnam_logo_brand_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishnam_logo_shield_badge",
+      "target": "public_brand_pishnam_logo_brand_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/pishnam-logo.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "pishnam_logo_identity_system",
+      "label": "Pishnam logo visual identity system",
+      "nodes": [
+        "public_brand_pishnam_logo_logo",
+        "public_brand_pishnam_logo_robot_mascot",
+        "public_brand_pishnam_logo_shield_badge",
+        "public_brand_pishnam_logo_brand_palette"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/pishnam-logo.png"
+    }
+  ],
+  "partial": true
+}

@@ -1,0 +1,361 @@
+{
+  "nodes": [
+    {
+      "id": "docs_04_database_schema_document",
+      "label": "04-database-schema.md \u2014 Database Schema",
+      "file_type": "document",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_04_prisma_schema",
+      "label": "Prisma schema (draft) \u2014 PostgreSQL data model",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Content volume is small (dozens per type); no separate search engine needed, no payments, no user progress-tracking. Use prisma migrate from day one, committed to the repo."
+    },
+    {
+      "id": "docs_04_locale_tier_lead_enums",
+      "label": "Locale / Tier / LeadType / LeadStatus enums",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_04_course_translation_models",
+      "label": "Course + CourseTranslation models",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Rich text uses a per-locale translation table with @@unique([courseId, locale]) so adding a locale later doesn't require a parent-table migration."
+    },
+    {
+      "id": "docs_04_article_translation_models",
+      "label": "Article + ArticleTranslation models",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_04_class_session_model",
+      "label": "ClassSession model (offline class schedule)",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Confirmed for v1; course/tier ref, weekday, start/end time, location, capacity note, active flag."
+    },
+    {
+      "id": "docs_04_achievement_tag_models",
+      "label": "Achievement + AchievementTag models",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_04_lead_model",
+      "label": "Lead model (lead submissions)",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Visitors interact via Lead forms expecting a name and a way to reply; metadata JSON holds e.g. courseSlug/tier for enroll leads, status defaults NEW."
+    },
+    {
+      "id": "docs_04_feedback_model",
+      "label": "Feedback model (criticisms & suggestions)",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Anonymous-allowed from /contact-us; name optional because there is no phone/email to follow up on, and it is not mixed into Leads."
+    },
+    {
+      "id": "docs_04_admin_user_model",
+      "label": "AdminUser model (owner/editor roles)",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Custom admin, not public accounts; disabledAt lets an owner suspend an account; an owner cannot disable themselves or the last enabled owner."
+    },
+    {
+      "id": "docs_04_download_resource_model",
+      "label": "DownloadResource model (flat categories)",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Fully public, no gating; source HOSTED vs EXTERNAL changes how fileUrl is validated; cadTool replaces former separate SolidWorks/Altium categories."
+    },
+    {
+      "id": "docs_04_competition_poster_hierarchy",
+      "label": "Competition \u2192 League \u2192 PosterCategory \u2192 CompetitionPoster hierarchy",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Replaces flat POSTERS DownloadResource rows so admins manage categories per competition/league and the public page groups accordingly."
+    },
+    {
+      "id": "docs_04_software_product_release_models",
+      "label": "SoftwareProduct + SoftwareRelease models",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "One product per app/plugin with a picture and own page; one release row per platform/version \u2014 the one download category not a flat DownloadResource list because a single row can't represent one product with several files."
+    },
+    {
+      "id": "docs_04_datasheet_part_tree",
+      "label": "DatasheetPart two-level tree + media children",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A part is a stand-alone module or a family with variant children (nesting capped at two levels); children hold documents, videos, images, and code samples."
+    },
+    {
+      "id": "docs_04_contact_settings_singleton",
+      "label": "ContactSettings singleton",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "One row (id='default'), not a list of locations; phones is String[]; mapEmbedUrl stores only a canonical Google Maps embed URL; missing fields are omitted on /contact-us rather than showing placeholder copy."
+    },
+    {
+      "id": "docs_04_homepage_stats_singleton",
+      "label": "HomepageStats singleton",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Manual marketing numbers driving the hero count-up strip, not derived from Lead or Achievement rows; strip hidden until the row is saved."
+    },
+    {
+      "id": "docs_04_hero_slide_collection",
+      "label": "HeroSlide collection",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A table rather than columns on a settings singleton because 'how many photos does the hero show?' is a question a table answers; alt text lives on the slide because only the uploader can describe it; zero rows renders the hero fallback."
+    },
+    {
+      "id": "docs_04_tsvector_search",
+      "label": "Postgres tsvector search plan",
+      "file_type": "concept",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Use tsvector columns on CourseTranslation, ArticleTranslation, and Faq rather than adding a new search service."
+    },
+    {
+      "id": "docs_04_no_public_user_accounts",
+      "label": "No public User model in v1",
+      "file_type": "rationale",
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "No accounts, no public auth; visitor interaction is via Lead and Feedback only."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_04_prisma_schema",
+      "target": "docs_05_local_disk_media_storage",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_lead_model",
+      "target": "docs_09_event_plan",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_feedback_model",
+      "target": "docs_09_event_plan",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_admin_user_model",
+      "target": "docs_06_admin_auth",
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_contact_settings_singleton",
+      "target": "docs_06_admin_crud_surfaces",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_homepage_stats_singleton",
+      "target": "docs_02_audience_first_homepage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_hero_slide_collection",
+      "target": "docs_02_audience_first_homepage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_no_public_user_accounts",
+      "target": "docs_06_custom_admin_decision",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_tsvector_search",
+      "target": "docs_04_prisma_schema",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_competition_poster_hierarchy",
+      "target": "docs_04_software_product_release_models",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_datasheet_part_tree",
+      "target": "docs_04_competition_poster_hierarchy",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_contact_settings_singleton",
+      "target": "docs_04_homepage_stats_singleton",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_04_lead_model",
+      "target": "docs_04_feedback_model",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/04-database-schema.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

@@ -1,0 +1,84 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_youtube_youtube_logo",
+      "label": "YouTube Logo SVG",
+      "file_type": "image",
+      "source_file": "public/brand/youtube.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_youtube_red_rounded_rectangle",
+      "label": "Red Rounded Rectangle (video body)",
+      "file_type": "concept",
+      "source_file": "public/brand/youtube.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_youtube_white_play_triangle",
+      "label": "White Play Triangle",
+      "file_type": "concept",
+      "source_file": "public/brand/youtube.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_youtube_red_rounded_rectangle",
+      "target": "public_brand_youtube_youtube_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/youtube.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_youtube_white_play_triangle",
+      "target": "public_brand_youtube_youtube_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/youtube.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_youtube_white_play_triangle",
+      "target": "public_brand_youtube_red_rounded_rectangle",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/youtube.svg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "youtube_logo_composition",
+      "label": "YouTube logo composition",
+      "nodes": [
+        "public_brand_youtube_youtube_logo",
+        "public_brand_youtube_red_rounded_rectangle",
+        "public_brand_youtube_white_play_triangle"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/youtube.svg"
+    }
+  ]
+}

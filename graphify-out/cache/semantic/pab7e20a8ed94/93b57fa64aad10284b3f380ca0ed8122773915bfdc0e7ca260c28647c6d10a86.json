@@ -1,0 +1,157 @@
+{
+  "nodes": [
+    {
+      "id": "docs_06_admin_panel_document",
+      "label": "06-admin-panel.md \u2014 Admin Panel Spec",
+      "file_type": "document",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_06_custom_admin_decision",
+      "label": "Custom admin decision (not Strapi/headless CMS)",
+      "file_type": "rationale",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Content volume is small (dozens of items), solo project with a single-repo requirement, added manually. A separate CMS adds infrastructure, a second auth system, and upgrade overhead not justified at this scale; a custom /admin backed by Prisma is faster to build and simpler to run. Revisit Strapi/Payload if editors or workflows grow."
+    },
+    {
+      "id": "docs_06_admin_auth",
+      "label": "Admin auth (NextAuth Credentials; owner/editor roles)",
+      "file_type": "concept",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Single AdminUser table, no public accounts; NextAuth recommended over hand-rolling session security; /admin/** gated in the segment root layout, redirecting to /admin/login."
+    },
+    {
+      "id": "docs_06_admin_crud_surfaces",
+      "label": "Admin CRUD surfaces per content type",
+      "file_type": "concept",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "One section per schema model, including courses, products/tags, class sessions, achievements/tags, licenses, team, FAQs, videos, downloads hierarchy, software, datasheets, articles, jobs, leads, feedback, contact, homepage stats."
+    },
+    {
+      "id": "docs_06_admin_ui_pattern",
+      "label": "Reusable AdminForm / DataTable CRUD pattern (Tiptap)",
+      "file_type": "concept",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "One config-driven AdminForm instead of a bespoke form per type; side-by-side FA/EN fields reduce the chance of shipping half-translated content; every image upload goes through the 05 upload security checklist."
+    },
+    {
+      "id": "docs_06_leads_dashboard",
+      "label": "Leads dashboard as notification surface",
+      "file_type": "concept",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Landing page of /admin shows recent leads with a prominent new count; there is no email notification pipeline, so the dashboard itself is the notification surface."
+    },
+    {
+      "id": "docs_06_v1_out_of_scope",
+      "label": "Admin explicitly out of scope for v1",
+      "file_type": "concept",
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "No multi-level approvals, no public accounts, no analytics dashboards inside admin (use Umami directly), no payment/order management."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_06_admin_ui_pattern",
+      "target": "docs_05_upload_security_checklist",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_06_custom_admin_decision",
+      "target": "docs_04_prisma_schema",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_06_leads_dashboard",
+      "target": "docs_04_lead_model",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_06_v1_out_of_scope",
+      "target": "docs_09_umami_analytics",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_06_custom_admin_decision",
+      "target": "docs_06_admin_crud_surfaces",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/06-admin-panel.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "lead_capture_flow",
+      "label": "Lead-capture forms to admin notification surface",
+      "nodes": [
+        "docs_01_lead_capture_business_model",
+        "docs_04_lead_model",
+        "docs_04_feedback_model",
+        "docs_06_leads_dashboard",
+        "docs_09_event_plan",
+        "docs_05_data_fetching"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/06-admin-panel.md"
+    }
+  ]
+}

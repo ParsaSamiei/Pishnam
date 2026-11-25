@@ -1,0 +1,95 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_telegram_telegram_logo",
+      "label": "Telegram Logo",
+      "file_type": "image",
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_telegram_paper_plane",
+      "label": "White Paper Plane Icon",
+      "file_type": "concept",
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_telegram_blue_gradient_circle",
+      "label": "Blue Gradient Circle Background",
+      "file_type": "concept",
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_telegram_brand_identity",
+      "label": "Telegram Brand Identity",
+      "file_type": "concept",
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_telegram_paper_plane",
+      "target": "public_brand_telegram_telegram_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_telegram_blue_gradient_circle",
+      "target": "public_brand_telegram_telegram_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_telegram_telegram_logo",
+      "target": "public_brand_telegram_brand_identity",
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/telegram.svg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "telegram_logo_composition",
+      "label": "Telegram Logo Visual Composition",
+      "nodes": [
+        "public_brand_telegram_telegram_logo",
+        "public_brand_telegram_paper_plane",
+        "public_brand_telegram_blue_gradient_circle"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/telegram.svg"
+    }
+  ]
+}

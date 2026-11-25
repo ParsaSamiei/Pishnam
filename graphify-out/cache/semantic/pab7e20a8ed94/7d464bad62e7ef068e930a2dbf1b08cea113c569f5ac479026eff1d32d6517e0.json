@@ -1,0 +1,139 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_balad_logo",
+      "label": "Balad brand logo icon",
+      "file_type": "image",
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_balad_concentric_ring_motif",
+      "label": "Concentric ring (bullseye) motif",
+      "file_type": "concept",
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_balad_gradient_background",
+      "label": "Violet-to-indigo diagonal gradient background",
+      "file_type": "concept",
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_balad_rounded_square_canvas",
+      "label": "Rounded-square (squircle) app-icon canvas",
+      "file_type": "concept",
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_balad_color_palette",
+      "label": "Balad icon color palette (purple, amber, orange, white)",
+      "file_type": "concept",
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_balad_logo",
+      "target": "public_brand_balad_concentric_ring_motif",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_balad_logo",
+      "target": "public_brand_balad_gradient_background",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_balad_logo",
+      "target": "public_brand_balad_rounded_square_canvas",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_balad_logo",
+      "target": "public_brand_balad_color_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_balad_concentric_ring_motif",
+      "target": "public_brand_balad_color_palette",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_balad_gradient_background",
+      "target": "public_brand_balad_color_palette",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/balad.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "balad_icon_design_system",
+      "label": "Balad icon visual identity elements",
+      "nodes": [
+        "public_brand_balad_logo",
+        "public_brand_balad_concentric_ring_motif",
+        "public_brand_balad_gradient_background",
+        "public_brand_balad_rounded_square_canvas",
+        "public_brand_balad_color_palette"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/balad.png"
+    }
+  ],
+  "partial": true
+}

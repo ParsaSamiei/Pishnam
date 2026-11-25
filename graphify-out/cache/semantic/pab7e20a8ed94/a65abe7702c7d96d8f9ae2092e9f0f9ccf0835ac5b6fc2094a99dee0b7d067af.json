@@ -1,0 +1,18 @@
+{
+  "nodes": [
+    {
+      "id": "agents_agents_md",
+      "label": "AGENTS.md \u2014 Next.js 16 agent rules",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "This Next.js version has breaking changes; read the relevant guide in node_modules/next/dist/docs/ before writing code. The block is written and re-added by next dev (see node_modules/next/dist/server/lib/generate-agent-files.js), so removing it from a diff only recreates the uncommitted change."
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}

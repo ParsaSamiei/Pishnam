@@ -1,0 +1,97 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_pishtalk_icon",
+      "label": "PishTalk Brand Icon",
+      "file_type": "image",
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishtalk_icon_chat_bubble",
+      "label": "Chat Speech Bubble Motif",
+      "file_type": "concept",
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishtalk_icon_bot_face",
+      "label": "Bot Face Motif",
+      "file_type": "concept",
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishtalk_icon_network_nodes",
+      "label": "Network Node Graph Motif",
+      "file_type": "concept",
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_pishtalk_icon",
+      "target": "public_brand_pishtalk_icon_chat_bubble",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishtalk_icon",
+      "target": "public_brand_pishtalk_icon_bot_face",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishtalk_icon",
+      "target": "public_brand_pishtalk_icon_network_nodes",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishtalk-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "pishtalk_brand_identity",
+      "label": "PishTalk Brand Identity",
+      "nodes": [
+        "public_brand_pishtalk_icon",
+        "public_brand_pishtalk_icon_chat_bubble",
+        "public_brand_pishtalk_icon_bot_face",
+        "public_brand_pishtalk_icon_network_nodes"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishtalk-icon.png"
+    }
+  ],
+  "partial": true
+}

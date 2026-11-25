@@ -1,0 +1,97 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_instagram_logo",
+      "label": "Instagram Logo Brand Asset",
+      "file_type": "image",
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_instagram_brand",
+      "label": "Instagram Brand / Social Media Platform",
+      "file_type": "concept",
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_instagram_gradient",
+      "label": "Signature Vibrant Gradient Color Scheme",
+      "file_type": "concept",
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_instagram_camera_glyph",
+      "label": "Camera Pictogram Outline with Lens and Dot",
+      "file_type": "concept",
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_instagram_logo",
+      "target": "public_brand_instagram_brand",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_instagram_logo",
+      "target": "public_brand_instagram_gradient",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_instagram_logo",
+      "target": "public_brand_instagram_camera_glyph",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "public/brand/instagram.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "public_brand_instagram_brand_identity",
+      "label": "Instagram Brand Identity",
+      "nodes": [
+        "public_brand_instagram_logo",
+        "public_brand_instagram_brand",
+        "public_brand_instagram_gradient",
+        "public_brand_instagram_camera_glyph"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "public/brand/instagram.png"
+    }
+  ],
+  "partial": true
+}

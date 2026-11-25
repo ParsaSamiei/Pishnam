@@ -1,0 +1,61 @@
+{
+  "nodes": [
+    {
+      "id": "src_app_icon_appicon",
+      "label": "Pishnam app icon (favicon) \u2014 pixel-art robotic helmet mascot inside a gold shield badge",
+      "file_type": "image",
+      "source_file": "src/app/icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "src_app_icon_robotmascot",
+      "label": "Robotic helmet mascot with twin circular crosshair eyes, antenna and lower visor/grill",
+      "file_type": "concept",
+      "source_file": "src/app/icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "src_app_icon_indonesianflag",
+      "label": "Indonesian flag (red over white) mounted on the mascot's antenna",
+      "file_type": "concept",
+      "source_file": "src/app/icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "src_app_icon_appicon",
+      "target": "src_app_icon_robotmascot",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "src_app_icon_appicon",
+      "target": "src_app_icon_indonesianflag",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/icon.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "partial": true
+}

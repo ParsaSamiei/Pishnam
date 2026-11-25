@@ -2,9 +2,11 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExternalLink, Heart, MapPin, Mailbox, Phone } from "lucide-react";
 import { AddressMapLinks } from "@/components/contact/address-map-links";
+import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { APP_VERSION } from "@/lib/app-version";
 import { getContactSettings } from "@/lib/contact-settings";
+import { contactAddressLabel, toDisplayAddresses } from "@/lib/contact-addresses";
 import { Link } from "@/lib/i18n/navigation";
 import { getSocialLinks } from "@/lib/social-channels";
 
@@ -62,14 +64,11 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
   const settings = await getContactSettings();
   const socialLinks = getSocialLinks(settings);
-  const address =
-    (isFa ? settings?.addressFa : settings?.addressEn) ||
-    (isFa ? settings?.addressEn : settings?.addressFa) ||
-    null;
   const tagline =
     (isFa ? settings?.footerTaglineFa : settings?.footerTaglineEn) ||
     (isFa ? settings?.footerTaglineEn : settings?.footerTaglineFa) ||
     t("footer.tagline");
+  const addresses = toDisplayAddresses(settings?.addresses ?? [], isFa);
   const phones = settings?.phones ?? [];
 
   return (
@@ -89,39 +88,66 @@ export async function SiteFooter() {
             <span className="text-base font-bold">{t("brand.name")}</span>
           </div>
           <p className="text-pishnam-off-white/70 mt-3 max-w-sm text-sm">{tagline}</p>
-          {address ? (
-            <AddressMapLinks
-              address={address}
+          {addresses.map((address, index) => (
+            <div
+              key={address.id}
+              role="group"
+              aria-label={contactAddressLabel(index, isFa, addresses.length)}
               className="mt-3 max-w-sm"
-              addressClassName="text-pishnam-off-white/60 text-sm leading-snug"
-              icon={<MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />}
-            />
-          ) : null}
-          {settings?.postalCode ? (
-            <p className="text-pishnam-off-white/60 mt-2 flex max-w-sm items-center gap-1.5 text-sm">
-              <Mailbox className="size-3.5 shrink-0 opacity-70" aria-hidden="true" />
-              <span>
-                {isFa ? "کد پستی: " : "Postal code: "}
-                <span dir="ltr">
-                  {isFa ? toPersianDigits(settings.postalCode) : settings.postalCode}
-                </span>
-              </span>
-            </p>
-          ) : null}
+            >
+              {!address.address ? (
+                <p className="text-pishnam-off-white/80 text-xs font-semibold">
+                  {contactAddressLabel(index, isFa, addresses.length)}
+                </p>
+              ) : null}
+              {address.address ? (
+                <>
+                  <p className="text-pishnam-off-white/80 text-xs font-semibold">
+                    {contactAddressLabel(index, isFa, addresses.length)}
+                  </p>
+                  <AddressMapLinks
+                    address={address.address}
+                    className="mt-1"
+                    addressClassName="text-pishnam-off-white/60 text-sm leading-snug"
+                    icon={
+                      <MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />
+                    }
+                  />
+                </>
+              ) : null}
+              {address.postalCode ? (
+                <p className="text-pishnam-off-white/60 mt-2 flex items-center gap-1.5 text-sm">
+                  <Mailbox className="size-3.5 shrink-0 opacity-70" aria-hidden="true" />
+                  <span>
+                    {isFa ? "کد پستی: " : "Postal code: "}
+                    <span dir="ltr">
+                      {isFa ? toPersianDigits(address.postalCode) : address.postalCode}
+                    </span>
+                  </span>
+                </p>
+              ) : null}
+              <BranchPhoneNumbers phones={address.phones} isFa={isFa} compact />
+            </div>
+          ))}
           {phones.length > 0 ? (
-            <ul className="text-pishnam-off-white/60 mt-2 flex max-w-sm flex-col gap-1.5 text-sm">
-              {phones.map((phone) => (
-                <li key={phone}>
-                  <a
-                    href={toTelHref(phone)}
-                    className="hover:text-pishnam-gold-500 inline-flex cursor-pointer items-center gap-1.5 transition-colors duration-200"
-                  >
-                    <Phone className="size-3.5 shrink-0 opacity-70" aria-hidden="true" />
-                    <span dir="ltr">{isFa ? toPersianDigits(phone) : phone}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-3 max-w-sm">
+              <p className="text-pishnam-off-white/80 text-xs font-semibold">
+                {isFa ? "تلفن عمومی" : "General phone"}
+              </p>
+              <ul className="text-pishnam-off-white/60 mt-2 flex flex-col gap-1.5 text-sm">
+                {phones.map((phone) => (
+                  <li key={phone}>
+                    <a
+                      href={toTelHref(phone)}
+                      className="hover:text-pishnam-gold-500 inline-flex cursor-pointer items-center gap-1.5 transition-colors duration-200"
+                    >
+                      <Phone className="size-3.5 shrink-0 opacity-70" aria-hidden="true" />
+                      <span dir="ltr">{isFa ? toPersianDigits(phone) : phone}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : null}
         </div>
 

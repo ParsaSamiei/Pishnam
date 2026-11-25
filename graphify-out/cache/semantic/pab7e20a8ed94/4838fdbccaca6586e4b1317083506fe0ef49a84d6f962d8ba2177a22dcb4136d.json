@@ -1,0 +1,161 @@
+{
+  "nodes": [
+    {
+      "id": "docs_08_development_guidelines_document",
+      "label": "08-development-guidelines.md \u2014 Development Guidelines",
+      "file_type": "document",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_08_single_repo",
+      "label": "Single-repo structure (no separate CMS repo)",
+      "file_type": "concept",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_08_typescript_strict_tooling",
+      "label": "TypeScript strict + ESLint/Prettier + husky hooks",
+      "file_type": "concept",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Strict mode catches mistakes solo with no reviewer; pre-commit hooks catch issues before CI; path aliases keep imports clean."
+    },
+    {
+      "id": "docs_08_testing_strategy",
+      "label": "Right-sized testing strategy (Vitest / RTL / Playwright)",
+      "file_type": "rationale",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Unit tests for zod/utilities/lead-status transitions, component tests for LeadCaptureForm/AdminForm, and a small high-value Playwright smoke suite (homepage both locales, course page, enroll submit, admin login) \u2014 not yet written, so the CI job was removed."
+    },
+    {
+      "id": "docs_08_git_conventions",
+      "label": "Git conventions (trunk-based, Conventional Commits)",
+      "file_type": "concept",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Short-lived feature branches, merge to main via PR even solo so CI gates everything, Conventional Commits for scannable history."
+    },
+    {
+      "id": "docs_08_ci_cd",
+      "label": "CI/CD workflows (ci.yml, deploy.yml)",
+      "file_type": "concept",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "ci.yml runs Prisma migration checks (validate/diff) to catch schema drift; deploy.yml builds app/migrator/seeder images, pushes to GHCR, then SSHes to the VPS to pull and restart (same shape as PishTalk's deploy)."
+    },
+    {
+      "id": "docs_08_definition_of_done",
+      "label": "Definition of done (development guidelines)",
+      "file_type": "rationale",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Both locales, responsive, no console errors, lint/typecheck/tests pass, admin-editable content, metadata per 07, and every item of the upload security checklist re-verified on every PR touching an upload path."
+    },
+    {
+      "id": "docs_08_documentation_habits",
+      "label": "Documentation habits (docs/ as source of truth)",
+      "file_type": "concept",
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Update docs alongside code changes, especially 04-database-schema.md whenever schema.prisma changes; inline comments reserved for why, not what."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_08_documentation_habits",
+      "target": "docs_04_database_schema_document",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_08_definition_of_done",
+      "target": "docs_07_metadata_api",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_08_definition_of_done",
+      "target": "docs_05_upload_security_checklist",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_08_definition_of_done",
+      "target": "docs_00_definition_of_done",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_08_testing_strategy",
+      "target": "readme_ci_yml",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_08_git_conventions",
+      "target": "readme_ci_yml",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/08-development-guidelines.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

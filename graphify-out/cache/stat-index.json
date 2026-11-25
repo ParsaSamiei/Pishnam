@@ -1,0 +1,3232 @@
+{
+  ".github/workflows/ci.yml": {
+    "size": 3150,
+    "mtime_ns": 1787889009970000029,
+    "indexed_at_ns": 1795634956259505000,
+    "word_count": 415,
+    "hashes": {
+      ".github/workflows/ci.yml": "a0c81330b617921a8d8f67e6e572af5c8180a8b6493c048475848546219e8da6"
+    }
+  },
+  ".github/workflows/deploy.yml": {
+    "size": 9467,
+    "mtime_ns": 1787866728490000010,
+    "indexed_at_ns": 1795634956265368000,
+    "word_count": 1123,
+    "hashes": {
+      ".github/workflows/deploy.yml": "86ded09c0acc36f9c80cd229b760b0e9349af2a8d980090c50516c6f24c52318"
+    }
+  },
+  ".prettierrc.json": {
+    "size": 136,
+    "mtime_ns": 1787866728490000010,
+    "indexed_at_ns": 1795634956265499000,
+    "word_count": 12,
+    "hashes": {
+      ".prettierrc.json": "3b20d854b8ca681ff51b1d811c5625e68f0649782581cfe7269dc8a0a0e84186"
+    }
+  },
+  "AGENTS.md": {
+    "size": 678,
+    "mtime_ns": 1787254763639999986,
+    "indexed_at_ns": 1795634956087788000,
+    "word_count": 95,
+    "hashes": { "agents.md": "a65abe7702c7d96d8f9ae2092e9f0f9ccf0835ac5b6fc2094a99dee0b7d067af" }
+  },
+  "README.md": {
+    "size": 12719,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956088417000,
+    "word_count": 1805,
+    "hashes": { "readme.md": "1463bb94754b58c198cca79b75fdfed9d197359c8d2f03a911015ce96c938b3a" }
+  },
+  "docker-compose.yml": {
+    "size": 5420,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956265612000,
+    "word_count": 702,
+    "hashes": {
+      "docker-compose.yml": "0fcc1d292c7ba1d740dedacba8ad7f9c40a77f97f134c05772823a51a0859b43"
+    }
+  },
+  "docs/00-ai-instructions.md": {
+    "size": 4916,
+    "mtime_ns": 1786883602759999990,
+    "indexed_at_ns": 1795634956088635000,
+    "word_count": 660,
+    "hashes": {
+      "docs/00-ai-instructions.md": "cc2dd73c60de8a481e113863213cc307a22dd044c3dd95d4a46b78fdc517a287"
+    }
+  },
+  "docs/01-product-brand.md": {
+    "size": 4652,
+    "mtime_ns": 1786885154110000014,
+    "indexed_at_ns": 1795634956088814000,
+    "word_count": 642,
+    "hashes": {
+      "docs/01-product-brand.md": "6faed7d261bee899c4e74e418659718fd8a3a0094e11e7b18398fbb8657f885a"
+    }
+  },
+  "docs/02-information-architecture.md": {
+    "size": 11456,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956088994000,
+    "word_count": 1127,
+    "hashes": {
+      "docs/02-information-architecture.md": "0a119ad896bf62e0b7d45c5983a991a580f15623532fbe4e662d53f507536d61"
+    }
+  },
+  "docs/03-design-system.md": {
+    "size": 6651,
+    "mtime_ns": 1786881242970000029,
+    "indexed_at_ns": 1795634956089174000,
+    "word_count": 892,
+    "hashes": {
+      "docs/03-design-system.md": "e58eeb071260e6786ac786eaf1618bb6e6ebf5c66c201fd66a6ec3bd04324d37"
+    }
+  },
+  "docs/04-database-schema.md": {
+    "size": 21140,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956089350000,
+    "word_count": 2391,
+    "hashes": {
+      "docs/04-database-schema.md": "969f13de029b85b0d1a68939ae957d4d76ef86ba662d57b3696d7ad23dbeb5d4"
+    }
+  },
+  "docs/05-frontend-architecture.md": {
+    "size": 10401,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956089570000,
+    "word_count": 1386,
+    "hashes": {
+      "docs/05-frontend-architecture.md": "92a36a2e905e6264b9addc6791c3067aacca01eee8195619e22849f070fab93e"
+    }
+  },
+  "docs/06-admin-panel.md": {
+    "size": 7053,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956089756000,
+    "word_count": 1027,
+    "hashes": {
+      "docs/06-admin-panel.md": "93b57fa64aad10284b3f380ca0ed8122773915bfdc0e7ca260c28647c6d10a86"
+    }
+  },
+  "docs/07-seo-guidelines.md": {
+    "size": 3325,
+    "mtime_ns": 1787867630250000000,
+    "indexed_at_ns": 1795634956089926000,
+    "word_count": 464,
+    "hashes": {
+      "docs/07-seo-guidelines.md": "d63c9e7a523c82d368b3cb76ad7af2c98274a39b10861712f6af34513ff6f736"
+    }
+  },
+  "docs/08-development-guidelines.md": {
+    "size": 4408,
+    "mtime_ns": 1787889009970000029,
+    "indexed_at_ns": 1795634956090093000,
+    "word_count": 637,
+    "hashes": {
+      "docs/08-development-guidelines.md": "4838fdbccaca6586e4b1317083506fe0ef49a84d6f962d8ba2177a22dcb4136d"
+    }
+  },
+  "docs/09-analytics-i18n.md": {
+    "size": 4631,
+    "mtime_ns": 1787866728490000010,
+    "indexed_at_ns": 1795634956090259000,
+    "word_count": 615,
+    "hashes": {
+      "docs/09-analytics-i18n.md": "4139f56849d2c051bcb790b33342496a32cd42cd36468d0f3ee59bfb0595fdc8"
+    }
+  },
+  "eslint.config.mjs": {
+    "size": 1054,
+    "mtime_ns": 1787866728490000010,
+    "indexed_at_ns": 1795634919800573000,
+    "word_count": 125
+  },
+  "infra/db-tunnel.sh": {
+    "size": 2469,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956265731000,
+    "word_count": 374,
+    "hashes": {
+      "infra/db-tunnel.sh": "8833847dbaa97d916d38c8495d837fba749e7e8ebd43aab61c5ee4601a7de19a"
+    }
+  },
+  "next.config.ts": {
+    "size": 4539,
+    "mtime_ns": 1787871230100000024,
+    "indexed_at_ns": 1795634919801121000,
+    "word_count": 581
+  },
+  "package.json": {
+    "size": 3246,
+    "mtime_ns": 1790330707960000038,
+    "indexed_at_ns": 1795634956265843000,
+    "word_count": 236,
+    "hashes": { "package.json": "dcec14aabde2785d06b0a0ab2cd2beb0e3faee287b9393c61d2d06f7ac7cb75e" }
+  },
+  "postcss.config.mjs": {
+    "size": 146,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634919801390000,
+    "word_count": 17
+  },
+  "prisma/migrations/20260823104123_init/migration.sql": {
+    "size": 11087,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956265972000,
+    "word_count": 1239,
+    "hashes": {
+      "prisma/migrations/20260823104123_init/migration.sql": "f8942852dbbca24c4882aa14f4643ba749b20ff6f6f977e664d6d40fd6b9a98d"
+    }
+  },
+  "prisma/migrations/20260825120000_competition_posters/migration.sql": {
+    "size": 5886,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956266097000,
+    "word_count": 590,
+    "hashes": {
+      "prisma/migrations/20260825120000_competition_posters/migration.sql": "548190dce301a545ce3d3ce25045e0aa6cea4a3506f831d07189c03153c3c14a"
+    }
+  },
+  "prisma/migrations/20260826120000_feedback_approve_votes/migration.sql": {
+    "size": 1164,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956266215000,
+    "word_count": 125,
+    "hashes": {
+      "prisma/migrations/20260826120000_feedback_approve_votes/migration.sql": "50df51da50cdf2f0814ae07864620abfd378c64df95d0857166e38b134214606"
+    }
+  },
+  "prisma/migrations/20260826140000_contact_social_urls/migration.sql": {
+    "size": 267,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956266334000,
+    "word_count": 30,
+    "hashes": {
+      "prisma/migrations/20260826140000_contact_social_urls/migration.sql": "3b7e05aff840b2ce7f4cf4c9b2e2f9783512d69244810c92c45c93fb259f4ecf"
+    }
+  },
+  "prisma/migrations/20260826150000_contact_instagram_url/migration.sql": {
+    "size": 80,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956266454000,
+    "word_count": 9,
+    "hashes": {
+      "prisma/migrations/20260826150000_contact_instagram_url/migration.sql": "e009b8a0b4a918af6cb142a911352fb5c79e084eee0c7416e307f3eb24ec03e8"
+    }
+  },
+  "prisma/migrations/20260901120000_team_member_alumni_resume/migration.sql": {
+    "size": 298,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956266576000,
+    "word_count": 38,
+    "hashes": {
+      "prisma/migrations/20260901120000_team_member_alumni_resume/migration.sql": "aea29e78559730df6c8ceac5635616b05a842bfb1b706a4660f3320dc2b90f0b"
+    }
+  },
+  "prisma/migrations/20260901160000_download_sections/migration.sql": {
+    "size": 1879,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956266691000,
+    "word_count": 177,
+    "hashes": {
+      "prisma/migrations/20260901160000_download_sections/migration.sql": "d6ac680945c1f2b8e3a9afcc8c9a6c9cc3ae60336deb0d7ac0f1b4ec490a5c5b"
+    }
+  },
+  "prisma/migrations/20260901170000_download_section_custom/migration.sql": {
+    "size": 1168,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956266803000,
+    "word_count": 124,
+    "hashes": {
+      "prisma/migrations/20260901170000_download_section_custom/migration.sql": "40d5f30e01cb9880a5f3efcaabec9bbe97c4771c6fc90a02c576f210d6fb7587"
+    }
+  },
+  "prisma/migrations/20260901180000_gallery_images/migration.sql": {
+    "size": 421,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956266914000,
+    "word_count": 47,
+    "hashes": {
+      "prisma/migrations/20260901180000_gallery_images/migration.sql": "4fadd2eb6a77ce72a72643f8a009e6621fa09c73629ed1e217bcc2b3ac63f908"
+    }
+  },
+  "prisma/migrations/20260901193516_add_enrollment_guidelines/migration.sql": {
+    "size": 772,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267025000,
+    "word_count": 99,
+    "hashes": {
+      "prisma/migrations/20260901193516_add_enrollment_guidelines/migration.sql": "329f7daf3e7c76c9155962a265682df9949f9d1ffee88ac8c93bce7ea7fcd476"
+    }
+  },
+  "prisma/migrations/20260901210000_course_video/migration.sql": {
+    "size": 119,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267136000,
+    "word_count": 16,
+    "hashes": {
+      "prisma/migrations/20260901210000_course_video/migration.sql": "9134ecb0874f7e508946d644636994a8badd2ecd0887ccac572ebdba32300e98"
+    }
+  },
+  "prisma/migrations/20260901220000_course_hosted_video/migration.sql": {
+    "size": 66,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267246000,
+    "word_count": 9,
+    "hashes": {
+      "prisma/migrations/20260901220000_course_hosted_video/migration.sql": "ca1cfab9b89cdbc816dc847ca0531869469ccfa2fc74a327890985f213189e20"
+    }
+  },
+  "prisma/migrations/20260901230000_gallery_video/migration.sql": {
+    "size": 298,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267359000,
+    "word_count": 38,
+    "hashes": {
+      "prisma/migrations/20260901230000_gallery_video/migration.sql": "905045bdc502cf73566e8dcc36e121c82a3e1819eca6702d24b182190950a7ad"
+    }
+  },
+  "prisma/migrations/20260901240000_video_entry_hosted/migration.sql": {
+    "size": 135,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267469000,
+    "word_count": 18,
+    "hashes": {
+      "prisma/migrations/20260901240000_video_entry_hosted/migration.sql": "3c6158f758553e052348765fd1542212944d85ba29b171c40870369ae37c04db"
+    }
+  },
+  "prisma/migrations/20260902010000_media_mentions/migration.sql": {
+    "size": 693,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267579000,
+    "word_count": 77,
+    "hashes": {
+      "prisma/migrations/20260902010000_media_mentions/migration.sql": "56dae967139ae1773640315ed9b6009411d0ad8e787aa5f83c8a72b4f336d129"
+    }
+  },
+  "prisma/migrations/20260905120000_course_outcomes_docs/migration.sql": {
+    "size": 1083,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267688000,
+    "word_count": 114,
+    "hashes": {
+      "prisma/migrations/20260905120000_course_outcomes_docs/migration.sql": "6794b088efafbfbfba4630d05d7e7a6cc2c78eab6cbee09a15b227d866874c53"
+    }
+  },
+  "prisma/migrations/20260905140000_course_images/migration.sql": {
+    "size": 733,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267797000,
+    "word_count": 80,
+    "hashes": {
+      "prisma/migrations/20260905140000_course_images/migration.sql": "356fe619a259ea7390b9c1f072a49e52bc1113054d2b55ca59aef774f9e90c15"
+    }
+  },
+  "prisma/migrations/20260905220000_achievement_scope/migration.sql": {
+    "size": 272,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956267907000,
+    "word_count": 29,
+    "hashes": {
+      "prisma/migrations/20260905220000_achievement_scope/migration.sql": "02725d36dea888743cbb145755238b6a2586d0ff3d8b2a5a600e947b10200339"
+    }
+  },
+  "prisma/migrations/20260905230000_datasheet_parts/migration.sql": {
+    "size": 4652,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956268017000,
+    "word_count": 495,
+    "hashes": {
+      "prisma/migrations/20260905230000_datasheet_parts/migration.sql": "e99392f92c5c5690cda7cf6383695668395a09caf0b7b96eebcb6034a7a39dc7"
+    }
+  },
+  "prisma/migrations/20260906180000_team_tags/migration.sql": {
+    "size": 1171,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956268130000,
+    "word_count": 131,
+    "hashes": {
+      "prisma/migrations/20260906180000_team_tags/migration.sql": "db4b6fc8a697f7e1a42abb724139e76f309e40622b3181a6656b817cce7de7dd"
+    }
+  },
+  "prisma/migrations/20260906190000_achievement_tags/migration.sql": {
+    "size": 1777,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956268241000,
+    "word_count": 192,
+    "hashes": {
+      "prisma/migrations/20260906190000_achievement_tags/migration.sql": "78db94fdc53390da8aacc0d691a1a3f34aaad23cef6a4bc08ded407826cce1dc"
+    }
+  },
+  "prisma/migrations/20260906200000_products/migration.sql": {
+    "size": 4545,
+    "mtime_ns": 1790061095720000029,
+    "indexed_at_ns": 1795634956268352000,
+    "word_count": 496,
+    "hashes": {
+      "prisma/migrations/20260906200000_products/migration.sql": "9a75bb693b878eb8dbd50eff4cd2adbf73260cbb3ac0cc634f3857035f541bb2"
+    }
+  },
+  "prisma/migrations/20260906210000_licenses/migration.sql": {
+    "size": 593,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956268464000,
+    "word_count": 68,
+    "hashes": {
+      "prisma/migrations/20260906210000_licenses/migration.sql": "0a960b9a2918b7951fe1ef7f0fcf2f5d955bb9f10285bef87493f9329222575a"
+    }
+  },
+  "prisma/migrations/20260906220000_contact_postal_code/migration.sql": {
+    "size": 78,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956268573000,
+    "word_count": 9,
+    "hashes": {
+      "prisma/migrations/20260906220000_contact_postal_code/migration.sql": "23a4d3aba5b8dee06ce1f4f9457ad270c392e12067492ccba62105baede25dcb"
+    }
+  },
+  "prisma/migrations/20260907120000_team_member_optional_photo_gender/migration.sql": {
+    "size": 239,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634956268685000,
+    "word_count": 31,
+    "hashes": {
+      "prisma/migrations/20260907120000_team_member_optional_photo_gender/migration.sql": "e32213e83cc413b3359521010ab809a70f543c5c37a33f69c6f0e678fd87cdc2"
+    }
+  },
+  "prisma/migrations/20260907140000_admin_user_disabled_at/migration.sql": {
+    "size": 76,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956268800000,
+    "word_count": 9,
+    "hashes": {
+      "prisma/migrations/20260907140000_admin_user_disabled_at/migration.sql": "f75f0bdce7848cec8788bdcf7457a594da5af5ee3237fbb67505216767725a10"
+    }
+  },
+  "prisma/migrations/20260907143000_product_price_int/migration.sql": {
+    "size": 276,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956268925000,
+    "word_count": 40,
+    "hashes": {
+      "prisma/migrations/20260907143000_product_price_int/migration.sql": "e81f8fd2581ee57bef2fcd45338c498778ff28f819783e17bcb0c5c32f99c057"
+    }
+  },
+  "prisma/migrations/20260907150000_homepage_stats/migration.sql": {
+    "size": 310,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956269038000,
+    "word_count": 38,
+    "hashes": {
+      "prisma/migrations/20260907150000_homepage_stats/migration.sql": "22220a63b6c6e956567a6c146485fd98f22b55a2ed42b741ac17413694a76eb0"
+    }
+  },
+  "prisma/migrations/20260907153000_product_currency/migration.sql": {
+    "size": 118,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956269148000,
+    "word_count": 16,
+    "hashes": {
+      "prisma/migrations/20260907153000_product_currency/migration.sql": "59c469bafad346105b02b851acb57667b2717f8fd4ff162df999d343e908872a"
+    }
+  },
+  "prisma/migrations/20260907160000_gallery_tags/migration.sql": {
+    "size": 1206,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956269259000,
+    "word_count": 131,
+    "hashes": {
+      "prisma/migrations/20260907160000_gallery_tags/migration.sql": "ff68f30d5aacb0bf9e241bd073e32c607162168e9226005adcc07d9867005cd0"
+    }
+  },
+  "prisma/migrations/20260908200000_homepage_content/migration.sql": {
+    "size": 199,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956269374000,
+    "word_count": 24,
+    "hashes": {
+      "prisma/migrations/20260908200000_homepage_content/migration.sql": "ef910525c39885bf41ff75044f50ec7a0a011e8553b45639111b5028c2b82aad"
+    }
+  },
+  "prisma/migrations/20260922100000_homepage_stats_labels/migration.sql": {
+    "size": 633,
+    "mtime_ns": 1790061212190000057,
+    "indexed_at_ns": 1795634956269484000,
+    "word_count": 72,
+    "hashes": {
+      "prisma/migrations/20260922100000_homepage_stats_labels/migration.sql": "fadd333cb6f3c15abbda0924e450635bd531a3d73730c38041009e1d848177c6"
+    }
+  },
+  "prisma/seed.ts": {
+    "size": 1269,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634919806976000,
+    "word_count": 158
+  },
+  "public/brand/aparat.svg": {
+    "size": 378,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956090794000,
+    "word_count": 38,
+    "hashes": {
+      "public/brand/aparat.svg": "8862ec8d942c7bf852640a37b235a2e2801cbf33f2f3e016cf4890f4911b507b"
+    }
+  },
+  "public/brand/google-maps.svg": {
+    "size": 765,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956091333000,
+    "word_count": 88,
+    "hashes": {
+      "public/brand/google-maps.svg": "cca2a2707e1ec9bf2f5e7e7a1da7fe936a15a3d793e9fb3fbf2a71e311d02251"
+    }
+  },
+  "public/brand/telegram.svg": {
+    "size": 1235,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956092670000,
+    "word_count": 29,
+    "hashes": {
+      "public/brand/telegram.svg": "701b3db72ef5aadbe73982d145d4e9cc29cd9f34e8af3726bb7a04153a54c532"
+    }
+  },
+  "public/brand/youtube.svg": {
+    "size": 643,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956092846000,
+    "word_count": 70,
+    "hashes": {
+      "public/brand/youtube.svg": "bf7223a0574f79797f797626c7644edb7585ab37ed7d64e68873ccdc1be410d6"
+    }
+  },
+  "public/favicon.svg": {
+    "size": 397623,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956093201000,
+    "word_count": 15,
+    "hashes": {
+      "public/favicon.svg": "cb4d902ada79b1e6a4a35e573acc3c9cff6fe064b4d9f387aa428c56d8b1f562"
+    }
+  },
+  "public/team/placeholder-female.svg": {
+    "size": 962,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634956093577000,
+    "word_count": 141,
+    "hashes": {
+      "public/team/placeholder-female.svg": "3be57be11d35e12ddbd98959e90fd4c63fe9e50e7bb15bd05813bbf7d59ea801"
+    }
+  },
+  "public/team/placeholder-male.svg": {
+    "size": 268,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634956093737000,
+    "word_count": 27,
+    "hashes": {
+      "public/team/placeholder-male.svg": "8a9e76d85cbb086b2bfd1233a09394a03a949a71d0e96d78cba3221d0b301c8e"
+    }
+  },
+  "src/app/[locale]/(home)/loading.tsx": {
+    "size": 143,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634919809210000,
+    "word_count": 15
+  },
+  "src/app/[locale]/(home)/page.tsx": {
+    "size": 3376,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919809379000,
+    "word_count": 314
+  },
+  "src/app/[locale]/[...rest]/page.tsx": {
+    "size": 329,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919809554000,
+    "word_count": 48
+  },
+  "src/app/[locale]/about-us/achievements/page.tsx": {
+    "size": 5231,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919809729000,
+    "word_count": 467
+  },
+  "src/app/[locale]/about-us/faq/page.tsx": {
+    "size": 2818,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919809918000,
+    "word_count": 290
+  },
+  "src/app/[locale]/about-us/licenses/page.tsx": {
+    "size": 3625,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919810094000,
+    "word_count": 349
+  },
+  "src/app/[locale]/about-us/page.tsx": {
+    "size": 4488,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919810263000,
+    "word_count": 460
+  },
+  "src/app/[locale]/about-us/team/[slug]/page.tsx": {
+    "size": 395,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919810463000,
+    "word_count": 49
+  },
+  "src/app/[locale]/about-us/team/page.tsx": {
+    "size": 2203,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919810632000,
+    "word_count": 251
+  },
+  "src/app/[locale]/blog/[slug]/page.tsx": {
+    "size": 3578,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919810810000,
+    "word_count": 328
+  },
+  "src/app/[locale]/blog/page.tsx": {
+    "size": 2793,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919810981000,
+    "word_count": 289
+  },
+  "src/app/[locale]/careers/page.tsx": {
+    "size": 5440,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919811148000,
+    "word_count": 517
+  },
+  "src/app/[locale]/classes/page.tsx": {
+    "size": 5997,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919811324000,
+    "word_count": 517
+  },
+  "src/app/[locale]/contact-us/page.tsx": {
+    "size": 11577,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919811498000,
+    "word_count": 884
+  },
+  "src/app/[locale]/courses/[slug]/page.tsx": {
+    "size": 9131,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919811703000,
+    "word_count": 764
+  },
+  "src/app/[locale]/courses/page.tsx": {
+    "size": 4615,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919811889000,
+    "word_count": 456
+  },
+  "src/app/[locale]/downloads/[category]/page.tsx": {
+    "size": 6181,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919812073000,
+    "word_count": 505
+  },
+  "src/app/[locale]/downloads/datasheets/[slug]/[variant]/page.tsx": {
+    "size": 3213,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919812285000,
+    "word_count": 284
+  },
+  "src/app/[locale]/downloads/datasheets/[slug]/page.tsx": {
+    "size": 3925,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919812477000,
+    "word_count": 346
+  },
+  "src/app/[locale]/downloads/datasheets/page.tsx": {
+    "size": 3019,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919812723000,
+    "word_count": 321
+  },
+  "src/app/[locale]/downloads/page.tsx": {
+    "size": 3840,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919812924000,
+    "word_count": 346
+  },
+  "src/app/[locale]/downloads/posters/page.tsx": {
+    "size": 10252,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919813105000,
+    "word_count": 715
+  },
+  "src/app/[locale]/downloads/software/[slug]/page.tsx": {
+    "size": 6568,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919813308000,
+    "word_count": 505
+  },
+  "src/app/[locale]/downloads/software/page.tsx": {
+    "size": 2911,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919813494000,
+    "word_count": 282
+  },
+  "src/app/[locale]/enroll/page.tsx": {
+    "size": 6482,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919813659000,
+    "word_count": 630
+  },
+  "src/app/[locale]/feedback/page.tsx": {
+    "size": 5337,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919813837000,
+    "word_count": 567
+  },
+  "src/app/[locale]/gallery/page.tsx": {
+    "size": 4114,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919814011000,
+    "word_count": 403
+  },
+  "src/app/[locale]/layout.tsx": {
+    "size": 6062,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919814171000,
+    "word_count": 710
+  },
+  "src/app/[locale]/not-found.tsx": {
+    "size": 897,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919814340000,
+    "word_count": 94
+  },
+  "src/app/[locale]/press/page.tsx": {
+    "size": 2815,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919814497000,
+    "word_count": 252
+  },
+  "src/app/[locale]/privacy/page.tsx": {
+    "size": 2458,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919814659000,
+    "word_count": 273
+  },
+  "src/app/[locale]/products/[slug]/page.tsx": {
+    "size": 4191,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919814835000,
+    "word_count": 446
+  },
+  "src/app/[locale]/products/page.tsx": {
+    "size": 6074,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919815005000,
+    "word_count": 558
+  },
+  "src/app/[locale]/schools/page.tsx": {
+    "size": 4957,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919815182000,
+    "word_count": 495
+  },
+  "src/app/[locale]/sponsors/page.tsx": {
+    "size": 4373,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919815364000,
+    "word_count": 397
+  },
+  "src/app/[locale]/terms/page.tsx": {
+    "size": 1850,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919815540000,
+    "word_count": 213
+  },
+  "src/app/[locale]/videos/page.tsx": {
+    "size": 4242,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919815705000,
+    "word_count": 405
+  },
+  "src/app/admin/(dashboard)/achievement-tags/[id]/edit/page.tsx": {
+    "size": 1180,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919815914000,
+    "word_count": 111
+  },
+  "src/app/admin/(dashboard)/achievement-tags/actions.ts": {
+    "size": 3005,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919816092000,
+    "word_count": 282
+  },
+  "src/app/admin/(dashboard)/achievement-tags/new/page.tsx": {
+    "size": 811,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919816286000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/achievement-tags/page.tsx": {
+    "size": 3751,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919816457000,
+    "word_count": 271
+  },
+  "src/app/admin/(dashboard)/achievements/[id]/edit/page.tsx": {
+    "size": 1305,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919816669000,
+    "word_count": 126
+  },
+  "src/app/admin/(dashboard)/achievements/actions.ts": {
+    "size": 2278,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919816844000,
+    "word_count": 207
+  },
+  "src/app/admin/(dashboard)/achievements/new/page.tsx": {
+    "size": 934,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919817034000,
+    "word_count": 84
+  },
+  "src/app/admin/(dashboard)/achievements/page.tsx": {
+    "size": 3226,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919817204000,
+    "word_count": 240
+  },
+  "src/app/admin/(dashboard)/actions.ts": {
+    "size": 144,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919817375000,
+    "word_count": 19
+  },
+  "src/app/admin/(dashboard)/articles/[id]/edit/page.tsx": {
+    "size": 1713,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919817567000,
+    "word_count": 168
+  },
+  "src/app/admin/(dashboard)/articles/actions.ts": {
+    "size": 3457,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919817750000,
+    "word_count": 337
+  },
+  "src/app/admin/(dashboard)/articles/new/page.tsx": {
+    "size": 750,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919817941000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/articles/page.tsx": {
+    "size": 3026,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919818110000,
+    "word_count": 220
+  },
+  "src/app/admin/(dashboard)/classes/[id]/edit/page.tsx": {
+    "size": 1456,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919818309000,
+    "word_count": 145
+  },
+  "src/app/admin/(dashboard)/classes/actions.ts": {
+    "size": 1801,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919818479000,
+    "word_count": 152
+  },
+  "src/app/admin/(dashboard)/classes/new/page.tsx": {
+    "size": 1132,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919818665000,
+    "word_count": 109
+  },
+  "src/app/admin/(dashboard)/classes/page.tsx": {
+    "size": 2970,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919818835000,
+    "word_count": 238
+  },
+  "src/app/admin/(dashboard)/competitions/[id]/edit/page.tsx": {
+    "size": 1197,
+    "mtime_ns": 1787866728509999990,
+    "indexed_at_ns": 1795634919819034000,
+    "word_count": 114
+  },
+  "src/app/admin/(dashboard)/competitions/actions.ts": {
+    "size": 2392,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919819205000,
+    "word_count": 201
+  },
+  "src/app/admin/(dashboard)/competitions/new/page.tsx": {
+    "size": 777,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919819395000,
+    "word_count": 64
+  },
+  "src/app/admin/(dashboard)/competitions/page.tsx": {
+    "size": 3290,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919819566000,
+    "word_count": 245
+  },
+  "src/app/admin/(dashboard)/contact/actions.ts": {
+    "size": 1519,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919819783000,
+    "word_count": 119
+  },
+  "src/app/admin/(dashboard)/contact/page.tsx": {
+    "size": 1963,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919820006000,
+    "word_count": 149
+  },
+  "src/app/admin/(dashboard)/courses/[id]/edit/page.tsx": {
+    "size": 3167,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919820286000,
+    "word_count": 274
+  },
+  "src/app/admin/(dashboard)/courses/actions.ts": {
+    "size": 6799,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919820493000,
+    "word_count": 577
+  },
+  "src/app/admin/(dashboard)/courses/new/page.tsx": {
+    "size": 748,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919820729000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/courses/page.tsx": {
+    "size": 2912,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919820918000,
+    "word_count": 219
+  },
+  "src/app/admin/(dashboard)/datasheets/[id]/edit/page.tsx": {
+    "size": 6434,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634919821123000,
+    "word_count": 489
+  },
+  "src/app/admin/(dashboard)/datasheets/[id]/variants/[variantId]/edit/page.tsx": {
+    "size": 3968,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919821358000,
+    "word_count": 340
+  },
+  "src/app/admin/(dashboard)/datasheets/[id]/variants/new/page.tsx": {
+    "size": 1745,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919821562000,
+    "word_count": 157
+  },
+  "src/app/admin/(dashboard)/datasheets/actions.ts": {
+    "size": 6025,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919821725000,
+    "word_count": 596
+  },
+  "src/app/admin/(dashboard)/datasheets/new/page.tsx": {
+    "size": 1156,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919821917000,
+    "word_count": 101
+  },
+  "src/app/admin/(dashboard)/datasheets/page.tsx": {
+    "size": 3941,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919822078000,
+    "word_count": 298
+  },
+  "src/app/admin/(dashboard)/download-sections/[id]/edit/page.tsx": {
+    "size": 1242,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919822271000,
+    "word_count": 116
+  },
+  "src/app/admin/(dashboard)/download-sections/actions.ts": {
+    "size": 3614,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919822436000,
+    "word_count": 325
+  },
+  "src/app/admin/(dashboard)/download-sections/new/page.tsx": {
+    "size": 1443,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919822615000,
+    "word_count": 123
+  },
+  "src/app/admin/(dashboard)/download-sections/page.tsx": {
+    "size": 4224,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919822781000,
+    "word_count": 292
+  },
+  "src/app/admin/(dashboard)/downloads/[id]/edit/page.tsx": {
+    "size": 1401,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919822982000,
+    "word_count": 127
+  },
+  "src/app/admin/(dashboard)/downloads/actions.ts": {
+    "size": 2353,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919823155000,
+    "word_count": 194
+  },
+  "src/app/admin/(dashboard)/downloads/new/page.tsx": {
+    "size": 1014,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919823334000,
+    "word_count": 78
+  },
+  "src/app/admin/(dashboard)/downloads/page.tsx": {
+    "size": 2958,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919823502000,
+    "word_count": 228
+  },
+  "src/app/admin/(dashboard)/enrollment-guidelines/actions.ts": {
+    "size": 1575,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919823668000,
+    "word_count": 110
+  },
+  "src/app/admin/(dashboard)/enrollment-guidelines/page.tsx": {
+    "size": 2002,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919823836000,
+    "word_count": 156
+  },
+  "src/app/admin/(dashboard)/faqs/[id]/edit/page.tsx": {
+    "size": 1080,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919824035000,
+    "word_count": 111
+  },
+  "src/app/admin/(dashboard)/faqs/actions.ts": {
+    "size": 1490,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919824207000,
+    "word_count": 139
+  },
+  "src/app/admin/(dashboard)/faqs/new/page.tsx": {
+    "size": 737,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919824385000,
+    "word_count": 66
+  },
+  "src/app/admin/(dashboard)/faqs/page.tsx": {
+    "size": 2022,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919824555000,
+    "word_count": 166
+  },
+  "src/app/admin/(dashboard)/feedback/actions.ts": {
+    "size": 1178,
+    "mtime_ns": 1788259601549999952,
+    "indexed_at_ns": 1795634919824726000,
+    "word_count": 109
+  },
+  "src/app/admin/(dashboard)/feedback/page.tsx": {
+    "size": 3891,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919824895000,
+    "word_count": 281
+  },
+  "src/app/admin/(dashboard)/gallery-tags/[id]/edit/page.tsx": {
+    "size": 1156,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919825099000,
+    "word_count": 112
+  },
+  "src/app/admin/(dashboard)/gallery-tags/actions.ts": {
+    "size": 2378,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919825275000,
+    "word_count": 219
+  },
+  "src/app/admin/(dashboard)/gallery-tags/new/page.tsx": {
+    "size": 786,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919825464000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/gallery-tags/page.tsx": {
+    "size": 3760,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919825649000,
+    "word_count": 272
+  },
+  "src/app/admin/(dashboard)/gallery/[id]/edit/page.tsx": {
+    "size": 1554,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919825851000,
+    "word_count": 154
+  },
+  "src/app/admin/(dashboard)/gallery/actions.ts": {
+    "size": 2835,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919826027000,
+    "word_count": 265
+  },
+  "src/app/admin/(dashboard)/gallery/new/page.tsx": {
+    "size": 993,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919826219000,
+    "word_count": 95
+  },
+  "src/app/admin/(dashboard)/gallery/page.tsx": {
+    "size": 5003,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919826387000,
+    "word_count": 395
+  },
+  "src/app/admin/(dashboard)/hero-slides/[id]/edit/page.tsx": {
+    "size": 1141,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919826602000,
+    "word_count": 116
+  },
+  "src/app/admin/(dashboard)/hero-slides/actions.ts": {
+    "size": 1928,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919826779000,
+    "word_count": 185
+  },
+  "src/app/admin/(dashboard)/hero-slides/new/page.tsx": {
+    "size": 790,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919826965000,
+    "word_count": 67
+  },
+  "src/app/admin/(dashboard)/hero-slides/page.tsx": {
+    "size": 3485,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919827131000,
+    "word_count": 324
+  },
+  "src/app/admin/(dashboard)/homepage-content/actions.ts": {
+    "size": 1818,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919827307000,
+    "word_count": 164
+  },
+  "src/app/admin/(dashboard)/homepage-content/page.tsx": {
+    "size": 1417,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919827477000,
+    "word_count": 128
+  },
+  "src/app/admin/(dashboard)/homepage-stats/actions.ts": {
+    "size": 1307,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919827651000,
+    "word_count": 106
+  },
+  "src/app/admin/(dashboard)/homepage-stats/page.tsx": {
+    "size": 2303,
+    "mtime_ns": 1790331116700000048,
+    "indexed_at_ns": 1795634919827816000,
+    "word_count": 177
+  },
+  "src/app/admin/(dashboard)/jobs/[id]/edit/page.tsx": {
+    "size": 1140,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919828007000,
+    "word_count": 112
+  },
+  "src/app/admin/(dashboard)/jobs/actions.ts": {
+    "size": 1591,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919828175000,
+    "word_count": 139
+  },
+  "src/app/admin/(dashboard)/jobs/new/page.tsx": {
+    "size": 790,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919828351000,
+    "word_count": 67
+  },
+  "src/app/admin/(dashboard)/jobs/page.tsx": {
+    "size": 2677,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919828517000,
+    "word_count": 203
+  },
+  "src/app/admin/(dashboard)/layout.tsx": {
+    "size": 1190,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919828682000,
+    "word_count": 142
+  },
+  "src/app/admin/(dashboard)/leads/actions.ts": {
+    "size": 1068,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919828850000,
+    "word_count": 101
+  },
+  "src/app/admin/(dashboard)/leads/page.tsx": {
+    "size": 2324,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919829016000,
+    "word_count": 189
+  },
+  "src/app/admin/(dashboard)/leagues/[id]/edit/page.tsx": {
+    "size": 1322,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919829209000,
+    "word_count": 132
+  },
+  "src/app/admin/(dashboard)/leagues/actions.ts": {
+    "size": 2433,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919829377000,
+    "word_count": 214
+  },
+  "src/app/admin/(dashboard)/leagues/new/page.tsx": {
+    "size": 1386,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919829558000,
+    "word_count": 120
+  },
+  "src/app/admin/(dashboard)/leagues/page.tsx": {
+    "size": 3464,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919829725000,
+    "word_count": 261
+  },
+  "src/app/admin/(dashboard)/licenses/[id]/edit/page.tsx": {
+    "size": 1112,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919829920000,
+    "word_count": 114
+  },
+  "src/app/admin/(dashboard)/licenses/actions.ts": {
+    "size": 2155,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919830089000,
+    "word_count": 181
+  },
+  "src/app/admin/(dashboard)/licenses/new/page.tsx": {
+    "size": 755,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919830268000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/licenses/page.tsx": {
+    "size": 2957,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919830433000,
+    "word_count": 217
+  },
+  "src/app/admin/(dashboard)/media-mentions/[id]/edit/page.tsx": {
+    "size": 1227,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919830628000,
+    "word_count": 117
+  },
+  "src/app/admin/(dashboard)/media-mentions/actions.ts": {
+    "size": 1986,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919830796000,
+    "word_count": 166
+  },
+  "src/app/admin/(dashboard)/media-mentions/new/page.tsx": {
+    "size": 810,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919830974000,
+    "word_count": 67
+  },
+  "src/app/admin/(dashboard)/media-mentions/page.tsx": {
+    "size": 2917,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919831139000,
+    "word_count": 219
+  },
+  "src/app/admin/(dashboard)/page.tsx": {
+    "size": 3699,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919831299000,
+    "word_count": 262
+  },
+  "src/app/admin/(dashboard)/poster-categories/[id]/edit/page.tsx": {
+    "size": 1982,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919831495000,
+    "word_count": 171
+  },
+  "src/app/admin/(dashboard)/poster-categories/actions.ts": {
+    "size": 2544,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919831668000,
+    "word_count": 213
+  },
+  "src/app/admin/(dashboard)/poster-categories/new/page.tsx": {
+    "size": 1707,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919831848000,
+    "word_count": 141
+  },
+  "src/app/admin/(dashboard)/poster-categories/page.tsx": {
+    "size": 3796,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919832017000,
+    "word_count": 271
+  },
+  "src/app/admin/(dashboard)/posters/[id]/edit/page.tsx": {
+    "size": 2534,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919832211000,
+    "word_count": 206
+  },
+  "src/app/admin/(dashboard)/posters/actions.ts": {
+    "size": 2185,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919832391000,
+    "word_count": 178
+  },
+  "src/app/admin/(dashboard)/posters/new/page.tsx": {
+    "size": 1970,
+    "mtime_ns": 1787866728519999981,
+    "indexed_at_ns": 1795634919832577000,
+    "word_count": 159
+  },
+  "src/app/admin/(dashboard)/posters/page.tsx": {
+    "size": 4469,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919832752000,
+    "word_count": 332
+  },
+  "src/app/admin/(dashboard)/product-tags/[id]/edit/page.tsx": {
+    "size": 1143,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919832960000,
+    "word_count": 112
+  },
+  "src/app/admin/(dashboard)/product-tags/actions.ts": {
+    "size": 2692,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919833134000,
+    "word_count": 261
+  },
+  "src/app/admin/(dashboard)/product-tags/new/page.tsx": {
+    "size": 773,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919833318000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/product-tags/page.tsx": {
+    "size": 3728,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919833496000,
+    "word_count": 271
+  },
+  "src/app/admin/(dashboard)/products/[id]/edit/page.tsx": {
+    "size": 3312,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919833690000,
+    "word_count": 294
+  },
+  "src/app/admin/(dashboard)/products/actions.ts": {
+    "size": 5312,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919833866000,
+    "word_count": 545
+  },
+  "src/app/admin/(dashboard)/products/new/page.tsx": {
+    "size": 1274,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919834068000,
+    "word_count": 119
+  },
+  "src/app/admin/(dashboard)/products/page.tsx": {
+    "size": 3830,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919834240000,
+    "word_count": 288
+  },
+  "src/app/admin/(dashboard)/software-releases/[id]/edit/page.tsx": {
+    "size": 1423,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919834439000,
+    "word_count": 133
+  },
+  "src/app/admin/(dashboard)/software-releases/actions.ts": {
+    "size": 2412,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919834617000,
+    "word_count": 206
+  },
+  "src/app/admin/(dashboard)/software-releases/new/page.tsx": {
+    "size": 1496,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919834799000,
+    "word_count": 123
+  },
+  "src/app/admin/(dashboard)/software-releases/page.tsx": {
+    "size": 3397,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919834968000,
+    "word_count": 266
+  },
+  "src/app/admin/(dashboard)/software/[id]/edit/page.tsx": {
+    "size": 1251,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919835165000,
+    "word_count": 116
+  },
+  "src/app/admin/(dashboard)/software/actions.ts": {
+    "size": 2991,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919835339000,
+    "word_count": 261
+  },
+  "src/app/admin/(dashboard)/software/new/page.tsx": {
+    "size": 833,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919835523000,
+    "word_count": 66
+  },
+  "src/app/admin/(dashboard)/software/page.tsx": {
+    "size": 3962,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919835691000,
+    "word_count": 290
+  },
+  "src/app/admin/(dashboard)/team-tags/[id]/edit/page.tsx": {
+    "size": 1130,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919835899000,
+    "word_count": 111
+  },
+  "src/app/admin/(dashboard)/team-tags/actions.ts": {
+    "size": 2337,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919836070000,
+    "word_count": 219
+  },
+  "src/app/admin/(dashboard)/team-tags/new/page.tsx": {
+    "size": 774,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919836255000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/team-tags/page.tsx": {
+    "size": 3716,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919836477000,
+    "word_count": 270
+  },
+  "src/app/admin/(dashboard)/team/[id]/edit/page.tsx": {
+    "size": 1600,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919836753000,
+    "word_count": 157
+  },
+  "src/app/admin/(dashboard)/team/actions.ts": {
+    "size": 2988,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919836950000,
+    "word_count": 291
+  },
+  "src/app/admin/(dashboard)/team/new/page.tsx": {
+    "size": 1084,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919837147000,
+    "word_count": 95
+  },
+  "src/app/admin/(dashboard)/team/page.tsx": {
+    "size": 3579,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919837321000,
+    "word_count": 280
+  },
+  "src/app/admin/(dashboard)/translate/actions.ts": {
+    "size": 1105,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919837508000,
+    "word_count": 139
+  },
+  "src/app/admin/(dashboard)/users/actions.ts": {
+    "size": 3566,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919837690000,
+    "word_count": 385
+  },
+  "src/app/admin/(dashboard)/users/new/page.tsx": {
+    "size": 1576,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919837890000,
+    "word_count": 140
+  },
+  "src/app/admin/(dashboard)/users/page.tsx": {
+    "size": 4030,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919838075000,
+    "word_count": 325
+  },
+  "src/app/admin/(dashboard)/videos/[id]/edit/page.tsx": {
+    "size": 1122,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919838278000,
+    "word_count": 114
+  },
+  "src/app/admin/(dashboard)/videos/actions.ts": {
+    "size": 2917,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919838459000,
+    "word_count": 271
+  },
+  "src/app/admin/(dashboard)/videos/new/page.tsx": {
+    "size": 772,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919838645000,
+    "word_count": 65
+  },
+  "src/app/admin/(dashboard)/videos/page.tsx": {
+    "size": 2239,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919838813000,
+    "word_count": 173
+  },
+  "src/app/admin/clear-session/route.ts": {
+    "size": 274,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919838981000,
+    "word_count": 43
+  },
+  "src/app/admin/layout.tsx": {
+    "size": 917,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919839136000,
+    "word_count": 105
+  },
+  "src/app/admin/login/actions.ts": {
+    "size": 1062,
+    "mtime_ns": 1790061095740000010,
+    "indexed_at_ns": 1795634919839305000,
+    "word_count": 119
+  },
+  "src/app/admin/login/login-form.tsx": {
+    "size": 2315,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919839476000,
+    "word_count": 188
+  },
+  "src/app/admin/login/page.tsx": {
+    "size": 2039,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919839649000,
+    "word_count": 214
+  },
+  "src/app/api/admin/upload/route.ts": {
+    "size": 2513,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919839831000,
+    "word_count": 300
+  },
+  "src/app/api/search/route.ts": {
+    "size": 885,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919839997000,
+    "word_count": 103
+  },
+  "src/app/manifest.ts": {
+    "size": 848,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919840379000,
+    "word_count": 77
+  },
+  "src/app/robots.ts": {
+    "size": 346,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919840528000,
+    "word_count": 36
+  },
+  "src/app/sitemap.ts": {
+    "size": 3821,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919840670000,
+    "word_count": 372
+  },
+  "src/app/uploads/[...path]/route.ts": {
+    "size": 4202,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919840845000,
+    "word_count": 442
+  },
+  "src/components/about/faq-list.tsx": {
+    "size": 2143,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919841011000,
+    "word_count": 172
+  },
+  "src/components/admin/achievement-form.tsx": {
+    "size": 6457,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919841170000,
+    "word_count": 426
+  },
+  "src/components/admin/achievement-tag-form.tsx": {
+    "size": 4024,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919841339000,
+    "word_count": 274
+  },
+  "src/components/admin/admin-list-header.tsx": {
+    "size": 685,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919841497000,
+    "word_count": 66
+  },
+  "src/components/admin/admin-sidebar.tsx": {
+    "size": 2466,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634919841644000,
+    "word_count": 204
+  },
+  "src/components/admin/admin-user-form.tsx": {
+    "size": 2676,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919841798000,
+    "word_count": 205
+  },
+  "src/components/admin/article-form.tsx": {
+    "size": 6657,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919841949000,
+    "word_count": 404
+  },
+  "src/components/admin/class-session-form.tsx": {
+    "size": 5098,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919842110000,
+    "word_count": 343
+  },
+  "src/components/admin/competition-form.tsx": {
+    "size": 4283,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919842268000,
+    "word_count": 288
+  },
+  "src/components/admin/competition-poster-form.tsx": {
+    "size": 11678,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919842427000,
+    "word_count": 769
+  },
+  "src/components/admin/contact-settings-form.tsx": {
+    "size": 9695,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919842622000,
+    "word_count": 662
+  },
+  "src/components/admin/course-documents-fields.tsx": {
+    "size": 10621,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919842802000,
+    "word_count": 750
+  },
+  "src/components/admin/course-form.tsx": {
+    "size": 13494,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919842981000,
+    "word_count": 817
+  },
+  "src/components/admin/course-images-fields.tsx": {
+    "size": 7057,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919843167000,
+    "word_count": 530
+  },
+  "src/components/admin/course-video-fields.tsx": {
+    "size": 4877,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919843342000,
+    "word_count": 360
+  },
+  "src/components/admin/data-table.tsx": {
+    "size": 1834,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919843509000,
+    "word_count": 163
+  },
+  "src/components/admin/datasheet-code-fields.tsx": {
+    "size": 11292,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919843666000,
+    "word_count": 781
+  },
+  "src/components/admin/datasheet-documents-fields.tsx": {
+    "size": 10013,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919843845000,
+    "word_count": 692
+  },
+  "src/components/admin/datasheet-images-fields.tsx": {
+    "size": 5889,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919844019000,
+    "word_count": 461
+  },
+  "src/components/admin/datasheet-part-form.tsx": {
+    "size": 7807,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919844195000,
+    "word_count": 503
+  },
+  "src/components/admin/datasheet-videos-fields.tsx": {
+    "size": 9226,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919844365000,
+    "word_count": 673
+  },
+  "src/components/admin/delete-button.tsx": {
+    "size": 2496,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919844536000,
+    "word_count": 231
+  },
+  "src/components/admin/disable-admin-user-button.tsx": {
+    "size": 3067,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919844691000,
+    "word_count": 245
+  },
+  "src/components/admin/download-resource-form.tsx": {
+    "size": 9269,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919844848000,
+    "word_count": 634
+  },
+  "src/components/admin/download-section-form.tsx": {
+    "size": 8273,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919845016000,
+    "word_count": 572
+  },
+  "src/components/admin/en-field-label.tsx": {
+    "size": 1235,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919845183000,
+    "word_count": 118
+  },
+  "src/components/admin/enrollment-guidelines-form.tsx": {
+    "size": 5882,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919845332000,
+    "word_count": 415
+  },
+  "src/components/admin/faq-form.tsx": {
+    "size": 4156,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919845494000,
+    "word_count": 286
+  },
+  "src/components/admin/feedback-detail-dialog.tsx": {
+    "size": 3627,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919845651000,
+    "word_count": 262
+  },
+  "src/components/admin/file-upload-field.tsx": {
+    "size": 4675,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919845809000,
+    "word_count": 428
+  },
+  "src/components/admin/gallery-image-form.tsx": {
+    "size": 7460,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919845971000,
+    "word_count": 520
+  },
+  "src/components/admin/gallery-media-fields.tsx": {
+    "size": 4918,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919846136000,
+    "word_count": 361
+  },
+  "src/components/admin/gallery-tag-form.tsx": {
+    "size": 3719,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919846297000,
+    "word_count": 260
+  },
+  "src/components/admin/hero-slide-form.tsx": {
+    "size": 4179,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919846452000,
+    "word_count": 313
+  },
+  "src/components/admin/homepage-content-form.tsx": {
+    "size": 15617,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919846611000,
+    "word_count": 938
+  },
+  "src/components/admin/homepage-stats-form.tsx": {
+    "size": 8831,
+    "mtime_ns": 1790331114669999957,
+    "indexed_at_ns": 1795634919846803000,
+    "word_count": 485
+  },
+  "src/components/admin/image-upload-field.tsx": {
+    "size": 4564,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919846967000,
+    "word_count": 431
+  },
+  "src/components/admin/job-posting-form.tsx": {
+    "size": 4372,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919847126000,
+    "word_count": 299
+  },
+  "src/components/admin/lead-detail-dialog.tsx": {
+    "size": 4083,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919847281000,
+    "word_count": 310
+  },
+  "src/components/admin/lead-status-badge.tsx": {
+    "size": 1458,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919847438000,
+    "word_count": 162
+  },
+  "src/components/admin/league-form.tsx": {
+    "size": 4563,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919847589000,
+    "word_count": 308
+  },
+  "src/components/admin/license-form.tsx": {
+    "size": 6975,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919847752000,
+    "word_count": 433
+  },
+  "src/components/admin/media-mention-form.tsx": {
+    "size": 6417,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919847920000,
+    "word_count": 392
+  },
+  "src/components/admin/persian-date-field.tsx": {
+    "size": 4380,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919848086000,
+    "word_count": 480
+  },
+  "src/components/admin/poster-category-form.tsx": {
+    "size": 7022,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919848252000,
+    "word_count": 478
+  },
+  "src/components/admin/product-form.tsx": {
+    "size": 12328,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919848418000,
+    "word_count": 797
+  },
+  "src/components/admin/product-specs-fields.tsx": {
+    "size": 6834,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919848602000,
+    "word_count": 512
+  },
+  "src/components/admin/product-tag-form.tsx": {
+    "size": 3822,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919848769000,
+    "word_count": 268
+  },
+  "src/components/admin/rich-text-editor.test.tsx": {
+    "size": 2801,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919848927000,
+    "word_count": 344
+  },
+  "src/components/admin/rich-text-editor.tsx": {
+    "size": 9036,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919849087000,
+    "word_count": 843
+  },
+  "src/components/admin/software-product-form.tsx": {
+    "size": 5224,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919849264000,
+    "word_count": 343
+  },
+  "src/components/admin/software-release-form.tsx": {
+    "size": 7800,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919849423000,
+    "word_count": 523
+  },
+  "src/components/admin/team-member-form.tsx": {
+    "size": 9917,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919849588000,
+    "word_count": 667
+  },
+  "src/components/admin/team-tag-form.tsx": {
+    "size": 3683,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919849761000,
+    "word_count": 259
+  },
+  "src/components/admin/translate-to-en-button.tsx": {
+    "size": 3630,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919849915000,
+    "word_count": 359
+  },
+  "src/components/admin/video-entry-form.tsx": {
+    "size": 4901,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919850076000,
+    "word_count": 334
+  },
+  "src/components/admin/video-entry-source-fields.tsx": {
+    "size": 5851,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919850236000,
+    "word_count": 422
+  },
+  "src/components/admin/video-upload-field.tsx": {
+    "size": 4416,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919850400000,
+    "word_count": 357
+  },
+  "src/components/analytics-script.tsx": {
+    "size": 522,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919850558000,
+    "word_count": 61
+  },
+  "src/components/blog/article-card.tsx": {
+    "size": 2103,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919850709000,
+    "word_count": 185
+  },
+  "src/components/classes/class-session-grid.tsx": {
+    "size": 2508,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919850864000,
+    "word_count": 194
+  },
+  "src/components/contact/address-map-links.tsx": {
+    "size": 1944,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851018000,
+    "word_count": 150
+  },
+  "src/components/contact/map-provider-icon.tsx": {
+    "size": 939,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851167000,
+    "word_count": 108
+  },
+  "src/components/contact/social-channel-icon.tsx": {
+    "size": 892,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851316000,
+    "word_count": 85
+  },
+  "src/components/courses/course-card.tsx": {
+    "size": 1535,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851464000,
+    "word_count": 123
+  },
+  "src/components/courses/course-documents.tsx": {
+    "size": 3297,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851613000,
+    "word_count": 246
+  },
+  "src/components/courses/course-learning-outcomes.tsx": {
+    "size": 1706,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851768000,
+    "word_count": 141
+  },
+  "src/components/courses/course-past-results.tsx": {
+    "size": 1239,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919851919000,
+    "word_count": 98
+  },
+  "src/components/courses/course-photos.tsx": {
+    "size": 2823,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919852068000,
+    "word_count": 232
+  },
+  "src/components/courses/hosted-video-player.tsx": {
+    "size": 530,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919852221000,
+    "word_count": 46
+  },
+  "src/components/datasheets/datasheet-catalog.tsx": {
+    "size": 2725,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919852367000,
+    "word_count": 223
+  },
+  "src/components/datasheets/datasheet-code-block.tsx": {
+    "size": 4429,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919852522000,
+    "word_count": 361
+  },
+  "src/components/datasheets/datasheet-content.tsx": {
+    "size": 7454,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919852680000,
+    "word_count": 625
+  },
+  "src/components/datasheets/datasheet-part-card.tsx": {
+    "size": 2253,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919852849000,
+    "word_count": 185
+  },
+  "src/components/datasheets/datasheet-spec-strip.tsx": {
+    "size": 1507,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919853004000,
+    "word_count": 146
+  },
+  "src/components/errors/circuit-break-illustration.tsx": {
+    "size": 2820,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919853165000,
+    "word_count": 295
+  },
+  "src/components/errors/not-found-view.tsx": {
+    "size": 3945,
+    "mtime_ns": 1790061095750000000,
+    "indexed_at_ns": 1795634919853382000,
+    "word_count": 292
+  },
+  "src/components/feedback/feedback-vote-buttons.tsx": {
+    "size": 4182,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919853573000,
+    "word_count": 302
+  },
+  "src/components/feedback/public-feedback-wall.tsx": {
+    "size": 2948,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919853752000,
+    "word_count": 207
+  },
+  "src/components/forms/enrollment-application.tsx": {
+    "size": 10076,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919853922000,
+    "word_count": 781
+  },
+  "src/components/forms/feedback-form.tsx": {
+    "size": 4061,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919854108000,
+    "word_count": 317
+  },
+  "src/components/forms/lead-capture-form.tsx": {
+    "size": 7644,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919854274000,
+    "word_count": 575
+  },
+  "src/components/gallery/gallery-carousel.tsx": {
+    "size": 8063,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919854450000,
+    "word_count": 663
+  },
+  "src/components/gallery/gallery-grid.tsx": {
+    "size": 2417,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919854635000,
+    "word_count": 182
+  },
+  "src/components/gallery/gallery-lightbox.tsx": {
+    "size": 6168,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919854801000,
+    "word_count": 507
+  },
+  "src/components/gallery/gallery-media-thumb.tsx": {
+    "size": 2009,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919854989000,
+    "word_count": 158
+  },
+  "src/components/gallery/gallery-video-player.tsx": {
+    "size": 649,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919855152000,
+    "word_count": 59
+  },
+  "src/components/home/achievement-card.tsx": {
+    "size": 4700,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919855308000,
+    "word_count": 355
+  },
+  "src/components/home/achievements-highlight.tsx": {
+    "size": 2634,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919855480000,
+    "word_count": 222
+  },
+  "src/components/home/audience-entry-card.tsx": {
+    "size": 2261,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919855636000,
+    "word_count": 204
+  },
+  "src/components/home/audience-entry-section.tsx": {
+    "size": 2202,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919855790000,
+    "word_count": 131
+  },
+  "src/components/home/downloads-teaser-section.tsx": {
+    "size": 3187,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919855956000,
+    "word_count": 251
+  },
+  "src/components/home/floating-contact-button.tsx": {
+    "size": 7034,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919856122000,
+    "word_count": 470
+  },
+  "src/components/home/gallery-teaser-section.tsx": {
+    "size": 2287,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919856302000,
+    "word_count": 207
+  },
+  "src/components/home/hero-carousel.tsx": {
+    "size": 21436,
+    "mtime_ns": 1787871230100000024,
+    "indexed_at_ns": 1795634919856447000,
+    "word_count": 2366
+  },
+  "src/components/home/hero-section.tsx": {
+    "size": 8643,
+    "mtime_ns": 1790061250549999952,
+    "indexed_at_ns": 1795634919856659000,
+    "word_count": 859
+  },
+  "src/components/home/hero-showcase.tsx": {
+    "size": 9420,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919856826000,
+    "word_count": 1099
+  },
+  "src/components/home/hero-stats.tsx": {
+    "size": 2783,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919856991000,
+    "word_count": 296
+  },
+  "src/components/home/landing-skeleton.tsx": {
+    "size": 2670,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919857150000,
+    "word_count": 227
+  },
+  "src/components/home/media-mentions-section.tsx": {
+    "size": 2814,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919857304000,
+    "word_count": 216
+  },
+  "src/components/home/news-teaser-section.tsx": {
+    "size": 2704,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919857450000,
+    "word_count": 228
+  },
+  "src/components/home/related-sites-banner.tsx": {
+    "size": 10690,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919857594000,
+    "word_count": 821
+  },
+  "src/components/home/scroll-to-top-button.tsx": {
+    "size": 1839,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919857760000,
+    "word_count": 166
+  },
+  "src/components/home/video-embed-card.tsx": {
+    "size": 3640,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919857904000,
+    "word_count": 313
+  },
+  "src/components/home/videos-teaser-section.tsx": {
+    "size": 2432,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919858050000,
+    "word_count": 201
+  },
+  "src/components/json-ld.tsx": {
+    "size": 189,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919858185000,
+    "word_count": 22
+  },
+  "src/components/layout/brand-cursor.tsx": {
+    "size": 10018,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919858324000,
+    "word_count": 1071
+  },
+  "src/components/layout/circuit-background.tsx": {
+    "size": 4325,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919858505000,
+    "word_count": 428
+  },
+  "src/components/layout/language-switch.tsx": {
+    "size": 1253,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919858668000,
+    "word_count": 149
+  },
+  "src/components/layout/page-header.tsx": {
+    "size": 501,
+    "mtime_ns": 1787866728539999962,
+    "indexed_at_ns": 1795634919858821000,
+    "word_count": 44
+  },
+  "src/components/layout/site-footer.tsx": {
+    "size": 10470,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919858973000,
+    "word_count": 733
+  },
+  "src/components/layout/site-header.tsx": {
+    "size": 10522,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919859149000,
+    "word_count": 795
+  },
+  "src/components/layout/theme-reconciler.tsx": {
+    "size": 760,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919859322000,
+    "word_count": 104
+  },
+  "src/components/layout/theme-script.tsx": {
+    "size": 4170,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919859472000,
+    "word_count": 603
+  },
+  "src/components/layout/theme-toggle.tsx": {
+    "size": 632,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919859636000,
+    "word_count": 73
+  },
+  "src/components/layout/use-brand-cursor.ts": {
+    "size": 878,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919859786000,
+    "word_count": 108
+  },
+  "src/components/licenses/license-certificate.tsx": {
+    "size": 4746,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919859938000,
+    "word_count": 349
+  },
+  "src/components/media/app-video-player.tsx": {
+    "size": 16329,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919860099000,
+    "word_count": 1330
+  },
+  "src/components/media/view-media-hint.tsx": {
+    "size": 811,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919860290000,
+    "word_count": 76
+  },
+  "src/components/motion/animated-link.tsx": {
+    "size": 3043,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919860441000,
+    "word_count": 313
+  },
+  "src/components/motion/card-hover.tsx": {
+    "size": 2867,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919860597000,
+    "word_count": 437
+  },
+  "src/components/motion/hero-backdrop.tsx": {
+    "size": 4420,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919860757000,
+    "word_count": 555
+  },
+  "src/components/motion/pop.tsx": {
+    "size": 1206,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919860921000,
+    "word_count": 176
+  },
+  "src/components/motion/reveal.tsx": {
+    "size": 1974,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919861070000,
+    "word_count": 270
+  },
+  "src/components/motion/scroll-spine.tsx": {
+    "size": 6660,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919861222000,
+    "word_count": 841
+  },
+  "src/components/motion/stagger.tsx": {
+    "size": 2686,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919861390000,
+    "word_count": 349
+  },
+  "src/components/motion/tilt-card.tsx": {
+    "size": 2720,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919861543000,
+    "word_count": 345
+  },
+  "src/components/motion/use-is-rtl.ts": {
+    "size": 463,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919861698000,
+    "word_count": 67
+  },
+  "src/components/motion/use-reduced-motion-safe.ts": {
+    "size": 1948,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919861847000,
+    "word_count": 283
+  },
+  "src/components/motion/use-scrolled-past.ts": {
+    "size": 759,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919862000000,
+    "word_count": 112
+  },
+  "src/components/press/media-mention-item.tsx": {
+    "size": 2969,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919862151000,
+    "word_count": 221
+  },
+  "src/components/press/media-mention-panel.tsx": {
+    "size": 615,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919862307000,
+    "word_count": 62
+  },
+  "src/components/products/product-card.tsx": {
+    "size": 2144,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919862457000,
+    "word_count": 185
+  },
+  "src/components/products/product-content.tsx": {
+    "size": 8635,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919862617000,
+    "word_count": 718
+  },
+  "src/components/rich-text.tsx": {
+    "size": 962,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919862788000,
+    "word_count": 71
+  },
+  "src/components/search/site-search.tsx": {
+    "size": 16009,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919862942000,
+    "word_count": 1158
+  },
+  "src/components/software/release-download-button.tsx": {
+    "size": 1587,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919863196000,
+    "word_count": 157
+  },
+  "src/components/software/software-product-card.tsx": {
+    "size": 2054,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919863380000,
+    "word_count": 165
+  },
+  "src/components/team/team-member-card.tsx": {
+    "size": 10680,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919863536000,
+    "word_count": 850
+  },
+  "src/components/team/team-member-grid.tsx": {
+    "size": 4140,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634919863712000,
+    "word_count": 349
+  },
+  "src/components/team/team-tag-nav.tsx": {
+    "size": 1722,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919863873000,
+    "word_count": 164
+  },
+  "src/components/ui/accordion.tsx": {
+    "size": 2117,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919864027000,
+    "word_count": 148
+  },
+  "src/components/ui/button.tsx": {
+    "size": 1909,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919864179000,
+    "word_count": 173
+  },
+  "src/components/ui/card.tsx": {
+    "size": 1876,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919864329000,
+    "word_count": 178
+  },
+  "src/components/ui/dialog.tsx": {
+    "size": 3364,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919864478000,
+    "word_count": 254
+  },
+  "src/components/ui/input.tsx": {
+    "size": 827,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919864631000,
+    "word_count": 64
+  },
+  "src/components/ui/label.tsx": {
+    "size": 612,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919864777000,
+    "word_count": 56
+  },
+  "src/components/ui/native-select.tsx": {
+    "size": 971,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919864923000,
+    "word_count": 80
+  },
+  "src/components/ui/skeleton.tsx": {
+    "size": 583,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919865070000,
+    "word_count": 72
+  },
+  "src/components/ui/textarea.tsx": {
+    "size": 1081,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919865217000,
+    "word_count": 104
+  },
+  "src/lib/actions/admin-guard.ts": {
+    "size": 1845,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919865373000,
+    "word_count": 258
+  },
+  "src/lib/actions/feedback-vote.ts": {
+    "size": 3979,
+    "mtime_ns": 1787866728549999952,
+    "indexed_at_ns": 1795634919865533000,
+    "word_count": 448
+  },
+  "src/lib/actions/feedback.ts": {
+    "size": 1574,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919865696000,
+    "word_count": 165
+  },
+  "src/lib/actions/lead.ts": {
+    "size": 4076,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919865850000,
+    "word_count": 409
+  },
+  "src/lib/admin-nav.ts": {
+    "size": 3894,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919866002000,
+    "word_count": 430
+  },
+  "src/lib/admin-session.ts": {
+    "size": 1650,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919866156000,
+    "word_count": 216
+  },
+  "src/lib/analytics.ts": {
+    "size": 894,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919866300000,
+    "word_count": 105
+  },
+  "src/lib/aparat.ts": {
+    "size": 2880,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919866446000,
+    "word_count": 375
+  },
+  "src/lib/app-version.ts": {
+    "size": 181,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919866594000,
+    "word_count": 23
+  },
+  "src/lib/auth.config.ts": {
+    "size": 913,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919866732000,
+    "word_count": 128
+  },
+  "src/lib/auth.ts": {
+    "size": 1224,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919866871000,
+    "word_count": 128
+  },
+  "src/lib/auth.types.d.ts": {
+    "size": 387,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919867017000,
+    "word_count": 51
+  },
+  "src/lib/contact-settings.ts": {
+    "size": 982,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919867153000,
+    "word_count": 123
+  },
+  "src/lib/datasheet-languages.ts": {
+    "size": 1406,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919867292000,
+    "word_count": 156
+  },
+  "src/lib/datasheet-parts.ts": {
+    "size": 2446,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919867435000,
+    "word_count": 302
+  },
+  "src/lib/download-categories.ts": {
+    "size": 3249,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919867580000,
+    "word_count": 398
+  },
+  "src/lib/download-sections.ts": {
+    "size": 6118,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919867730000,
+    "word_count": 635
+  },
+  "src/lib/enrollment-guidelines.shared.ts": {
+    "size": 911,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919867893000,
+    "word_count": 100
+  },
+  "src/lib/enrollment-guidelines.ts": {
+    "size": 878,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919868034000,
+    "word_count": 76
+  },
+  "src/lib/feedback-voter.ts": {
+    "size": 708,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919868173000,
+    "word_count": 92
+  },
+  "src/lib/form-state.ts": {
+    "size": 2322,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919868310000,
+    "word_count": 285
+  },
+  "src/lib/format.ts": {
+    "size": 4148,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919868454000,
+    "word_count": 526
+  },
+  "src/lib/free-translate.test.ts": {
+    "size": 2342,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919868614000,
+    "word_count": 204
+  },
+  "src/lib/free-translate.ts": {
+    "size": 4933,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919868764000,
+    "word_count": 525
+  },
+  "src/lib/gallery.ts": {
+    "size": 584,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919868926000,
+    "word_count": 71
+  },
+  "src/lib/google-maps.test.ts": {
+    "size": 1717,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919869072000,
+    "word_count": 120
+  },
+  "src/lib/google-maps.ts": {
+    "size": 1631,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919869216000,
+    "word_count": 207
+  },
+  "src/lib/homepage-content.defaults.ts": {
+    "size": 7772,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919869362000,
+    "word_count": 778
+  },
+  "src/lib/homepage-content.ts": {
+    "size": 3673,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919869535000,
+    "word_count": 332
+  },
+  "src/lib/homepage-stats.ts": {
+    "size": 869,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919869691000,
+    "word_count": 111
+  },
+  "src/lib/hooks/use-preserved-form-action.ts": {
+    "size": 1938,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919869859000,
+    "word_count": 214
+  },
+  "src/lib/i18n/alternates.ts": {
+    "size": 911,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919870050000,
+    "word_count": 137
+  },
+  "src/lib/i18n/navigation.ts": {
+    "size": 393,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919870253000,
+    "word_count": 52
+  },
+  "src/lib/i18n/pick.ts": {
+    "size": 308,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919870458000,
+    "word_count": 49
+  },
+  "src/lib/i18n/request.ts": {
+    "size": 734,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919870621000,
+    "word_count": 88
+  },
+  "src/lib/i18n/resolve-request-locale.test.ts": {
+    "size": 602,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919870805000,
+    "word_count": 49
+  },
+  "src/lib/i18n/resolve-request-locale.ts": {
+    "size": 1524,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919870965000,
+    "word_count": 171
+  },
+  "src/lib/i18n/routing.ts": {
+    "size": 714,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919871127000,
+    "word_count": 89
+  },
+  "src/lib/jalali.test.ts": {
+    "size": 888,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919871279000,
+    "word_count": 106
+  },
+  "src/lib/jalali.ts": {
+    "size": 4332,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919871419000,
+    "word_count": 764
+  },
+  "src/lib/map-navigation.test.ts": {
+    "size": 1476,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919871581000,
+    "word_count": 102
+  },
+  "src/lib/map-navigation.ts": {
+    "size": 1072,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919871720000,
+    "word_count": 95
+  },
+  "src/lib/motion.ts": {
+    "size": 4306,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919871857000,
+    "word_count": 678
+  },
+  "src/lib/phone.test.ts": {
+    "size": 1182,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919872011000,
+    "word_count": 86
+  },
+  "src/lib/phone.ts": {
+    "size": 1205,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919872149000,
+    "word_count": 155
+  },
+  "src/lib/prisma.ts": {
+    "size": 2417,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919872286000,
+    "word_count": 297
+  },
+  "src/lib/rate-limit.ts": {
+    "size": 2130,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919872429000,
+    "word_count": 293
+  },
+  "src/lib/rich-text-set-event.ts": {
+    "size": 415,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919872574000,
+    "word_count": 50
+  },
+  "src/lib/sanitize-html.ts": {
+    "size": 972,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919872704000,
+    "word_count": 114
+  },
+  "src/lib/search/build-index.ts": {
+    "size": 18554,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634919872853000,
+    "word_count": 1691
+  },
+  "src/lib/search/match.test.ts": {
+    "size": 2093,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919873070000,
+    "word_count": 209
+  },
+  "src/lib/search/match.ts": {
+    "size": 1664,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919873227000,
+    "word_count": 187
+  },
+  "src/lib/search/normalize.ts": {
+    "size": 1139,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919873387000,
+    "word_count": 127
+  },
+  "src/lib/search/pages.ts": {
+    "size": 4742,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919873540000,
+    "word_count": 478
+  },
+  "src/lib/search/types.ts": {
+    "size": 496,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919873708000,
+    "word_count": 57
+  },
+  "src/lib/social-channels.test.ts": {
+    "size": 815,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919873850000,
+    "word_count": 76
+  },
+  "src/lib/social-channels.ts": {
+    "size": 2010,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919873990000,
+    "word_count": 222
+  },
+  "src/lib/software-platforms.ts": {
+    "size": 1528,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919874136000,
+    "word_count": 195
+  },
+  "src/lib/team-member-photo.ts": {
+    "size": 593,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634919874281000,
+    "word_count": 64
+  },
+  "src/lib/tier-labels.ts": {
+    "size": 616,
+    "mtime_ns": 1787866728559999943,
+    "indexed_at_ns": 1795634919874420000,
+    "word_count": 66
+  },
+  "src/lib/translate-format.ts": {
+    "size": 47,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919874559000,
+    "word_count": 7
+  },
+  "src/lib/upload-policies.ts": {
+    "size": 4913,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919874695000,
+    "word_count": 548
+  },
+  "src/lib/upload.ts": {
+    "size": 8483,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919874847000,
+    "word_count": 1171
+  },
+  "src/lib/uploads-dir.ts": {
+    "size": 530,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919875016000,
+    "word_count": 65
+  },
+  "src/lib/use-theme.ts": {
+    "size": 3147,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919875159000,
+    "word_count": 421
+  },
+  "src/lib/utils.ts": {
+    "size": 169,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919875317000,
+    "word_count": 22
+  },
+  "src/lib/validation/achievement-tag.ts": {
+    "size": 653,
+    "mtime_ns": 1790061095759999990,
+    "indexed_at_ns": 1795634919875471000,
+    "word_count": 56
+  },
+  "src/lib/validation/achievement.ts": {
+    "size": 858,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919875630000,
+    "word_count": 69
+  },
+  "src/lib/validation/admin-user.ts": {
+    "size": 519,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919875782000,
+    "word_count": 50
+  },
+  "src/lib/validation/article.ts": {
+    "size": 1299,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919875931000,
+    "word_count": 106
+  },
+  "src/lib/validation/class-session.ts": {
+    "size": 834,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919876085000,
+    "word_count": 64
+  },
+  "src/lib/validation/competition-poster.ts": {
+    "size": 1241,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919876239000,
+    "word_count": 92
+  },
+  "src/lib/validation/competition.ts": {
+    "size": 834,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919876391000,
+    "word_count": 74
+  },
+  "src/lib/validation/contact-settings.test.ts": {
+    "size": 2870,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919876543000,
+    "word_count": 214
+  },
+  "src/lib/validation/contact-settings.ts": {
+    "size": 3101,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919876700000,
+    "word_count": 294
+  },
+  "src/lib/validation/course.ts": {
+    "size": 8122,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919876860000,
+    "word_count": 662
+  },
+  "src/lib/validation/datasheet-part.ts": {
+    "size": 11206,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919877041000,
+    "word_count": 915
+  },
+  "src/lib/validation/download-resource.ts": {
+    "size": 1735,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919877226000,
+    "word_count": 136
+  },
+  "src/lib/validation/download-section.ts": {
+    "size": 2385,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919877379000,
+    "word_count": 212
+  },
+  "src/lib/validation/enrollment-guidelines.ts": {
+    "size": 899,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919877542000,
+    "word_count": 81
+  },
+  "src/lib/validation/faq.ts": {
+    "size": 650,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919877694000,
+    "word_count": 49
+  },
+  "src/lib/validation/feedback.test.ts": {
+    "size": 1093,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919877844000,
+    "word_count": 111
+  },
+  "src/lib/validation/feedback.ts": {
+    "size": 577,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919877995000,
+    "word_count": 59
+  },
+  "src/lib/validation/gallery-image.ts": {
+    "size": 2785,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919878152000,
+    "word_count": 254
+  },
+  "src/lib/validation/gallery-tag.ts": {
+    "size": 641,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919878315000,
+    "word_count": 56
+  },
+  "src/lib/validation/hero-slide.ts": {
+    "size": 1481,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919878471000,
+    "word_count": 179
+  },
+  "src/lib/validation/homepage-content.ts": {
+    "size": 15352,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919878630000,
+    "word_count": 1281
+  },
+  "src/lib/validation/homepage-stats.test.ts": {
+    "size": 1926,
+    "mtime_ns": 1790061250720000029,
+    "indexed_at_ns": 1795634919878839000,
+    "word_count": 152
+  },
+  "src/lib/validation/homepage-stats.ts": {
+    "size": 2088,
+    "mtime_ns": 1790331119700000048,
+    "indexed_at_ns": 1795634919878997000,
+    "word_count": 184
+  },
+  "src/lib/validation/job-posting.ts": {
+    "size": 722,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919879153000,
+    "word_count": 58
+  },
+  "src/lib/validation/lead.test.ts": {
+    "size": 1420,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919879306000,
+    "word_count": 139
+  },
+  "src/lib/validation/lead.ts": {
+    "size": 2802,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919879464000,
+    "word_count": 268
+  },
+  "src/lib/validation/league.ts": {
+    "size": 732,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919879623000,
+    "word_count": 62
+  },
+  "src/lib/validation/license.ts": {
+    "size": 1221,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919879773000,
+    "word_count": 96
+  },
+  "src/lib/validation/media-mention.ts": {
+    "size": 1010,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919879927000,
+    "word_count": 84
+  },
+  "src/lib/validation/poster-category.ts": {
+    "size": 745,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919880080000,
+    "word_count": 62
+  },
+  "src/lib/validation/product-tag.ts": {
+    "size": 641,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919880228000,
+    "word_count": 56
+  },
+  "src/lib/validation/product.ts": {
+    "size": 8639,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919880379000,
+    "word_count": 709
+  },
+  "src/lib/validation/software-product.ts": {
+    "size": 886,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919880554000,
+    "word_count": 65
+  },
+  "src/lib/validation/software-release.ts": {
+    "size": 1253,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919880703000,
+    "word_count": 99
+  },
+  "src/lib/validation/team-member.ts": {
+    "size": 1479,
+    "mtime_ns": 1790331073590000033,
+    "indexed_at_ns": 1795634919880854000,
+    "word_count": 115
+  },
+  "src/lib/validation/team-tag.ts": {
+    "size": 632,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919881005000,
+    "word_count": 56
+  },
+  "src/lib/validation/video-entry.ts": {
+    "size": 2505,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634919881154000,
+    "word_count": 211
+  },
+  "src/messages/en.json": {
+    "size": 9043,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634956271303000,
+    "word_count": 986,
+    "hashes": {
+      "src/messages/en.json": "810c6c787917eff9de9555211948ac1997f4d17179da9c93ccf9ef4010aba11d"
+    }
+  },
+  "src/messages/fa.json": {
+    "size": 11974,
+    "mtime_ns": 1790061095769999981,
+    "indexed_at_ns": 1795634956271454000,
+    "word_count": 1014,
+    "hashes": {
+      "src/messages/fa.json": "199a73d3d0c3044c15155ad23b9fe93ae2d3a15cd03ee8af3eb0f647bab1bd10"
+    }
+  },
+  "src/proxy.ts": {
+    "size": 1498,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919881671000,
+    "word_count": 210
+  },
+  "tsconfig.json": {
+    "size": 1013,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634956271584000,
+    "word_count": 74,
+    "hashes": {
+      "tsconfig.json": "ea17ad2b1b85c559fa94a14b1c5e83762aabf88b1e2054c7c493f852b8eb7d4b"
+    }
+  },
+  "vitest.config.ts": {
+    "size": 475,
+    "mtime_ns": 1787866728570000052,
+    "indexed_at_ns": 1795634919882043000,
+    "word_count": 58
+  },
+  "docs/Pishnam.png": {
+    "size": 297837,
+    "mtime_ns": 1786454133440000057,
+    "indexed_at_ns": 1795634956090453000,
+    "hashes": {
+      "docs/pishnam.png": "e4f7219f9fc6a441fc2ab77c5fa503861a062875a947009d36b830e2362836d0"
+    }
+  },
+  "public/brand/balad.png": {
+    "size": 1190,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956090969000,
+    "hashes": {
+      "public/brand/balad.png": "7d464bad62e7ef068e930a2dbf1b08cea113c569f5ac479026eff1d32d6517e0"
+    }
+  },
+  "public/brand/bale.png": {
+    "size": 1245,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956091146000,
+    "hashes": {
+      "public/brand/bale.png": "b80ee4f2779e9464186d03f60b7421a588806eff75e771d494bb6775dd3a10c3"
+    }
+  },
+  "public/brand/instagram.png": {
+    "size": 8100,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956091503000,
+    "hashes": {
+      "public/brand/instagram.png": "06fd3f92fe212a8f9b32ce15ae4d5a62cd0d6e694046710005cdff46a29b2734"
+    }
+  },
+  "public/brand/neshan.png": {
+    "size": 5191,
+    "mtime_ns": 1790061095730000019,
+    "indexed_at_ns": 1795634956091687000,
+    "hashes": {
+      "public/brand/neshan.png": "a0f869db0238e1a74d0a778f375f9b7fbbd91b7ecca9cdf4b99670945c0344b6"
+    }
+  },
+  "public/brand/pishcup-icon.png": {
+    "size": 69215,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956091874000,
+    "hashes": {
+      "public/brand/pishcup-icon.png": "e72ef618f8b9cb61526a046d9fffff49e8ffe74640b55118e1aeb7dbeaf5ce8e"
+    }
+  },
+  "public/brand/pishnam-logo.png": {
+    "size": 297837,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956092091000,
+    "hashes": {
+      "public/brand/pishnam-logo.png": "6b5c4f532cd0870db104ca2f10ac72485272c78a3bdbc1a0e4c834c3a7ad4c81"
+    }
+  },
+  "public/brand/pishtalk-icon.png": {
+    "size": 59684,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956092468000,
+    "hashes": {
+      "public/brand/pishtalk-icon.png": "c2b6a5d78d4138a72fc4306806ea026e8a5401006f15385f3fee0f2d0cad2c56"
+    }
+  },
+  "public/favicon-96x96.png": {
+    "size": 1700,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956093013000,
+    "hashes": {
+      "public/favicon-96x96.png": "e7f1cc620738f894a8a42799c415b61a0485fa23b607436f0cf47a02384855ff"
+    }
+  },
+  "public/web-app-manifest-192x192.png": {
+    "size": 4657,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956093900000,
+    "hashes": {
+      "public/web-app-manifest-192x192.png": "7f1d2b1dda2ba82d462aad590f472fea2655017268a2b20a1fb1257bb481b653"
+    }
+  },
+  "public/web-app-manifest-512x512.png": {
+    "size": 22361,
+    "mtime_ns": 1787866728500000000,
+    "indexed_at_ns": 1795634956094076000,
+    "hashes": {
+      "public/web-app-manifest-512x512.png": "99b19b05b6a71594407f17e83aac5deffa50661171adc79383a840643254489a"
+    }
+  },
+  "src/app/apple-icon.png": {
+    "size": 4194,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634956094259000,
+    "hashes": {
+      "src/app/apple-icon.png": "a97a43e21c2400a609b491efec5834865374d585fa3fa53f9506342a442d5356"
+    }
+  },
+  "src/app/icon.png": {
+    "size": 1700,
+    "mtime_ns": 1787866728529999971,
+    "indexed_at_ns": 1795634956094428000,
+    "hashes": {
+      "src/app/icon.png": "6226c0410578d790de5db566880c1c3353cfd724f50be30d25f7fd9ec712dc5a"
+    }
+  }
+}

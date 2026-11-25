@@ -1,0 +1,148 @@
+{
+  "nodes": [
+    {
+      "id": "docs_05_frontend_architecture_document",
+      "label": "05-frontend-architecture.md \u2014 Frontend Architecture",
+      "file_type": "document",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_05_nextjs_16_confirmed",
+      "label": "Framework decision: Next.js 16 App Router (CONFIRMED)",
+      "file_type": "rationale",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Covers marketing site and admin in one app/repo (single-repo requirement), builds on existing Next.js experience (most important for a solo project), and gives SSR/SSG/ISR plus strong SEO defaults."
+    },
+    {
+      "id": "docs_05_rendering_strategy",
+      "label": "Rendering strategy per page type (SSG/ISR/SSR)",
+      "file_type": "concept",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Static marketing pages SSG; courses/videos/downloads ISR every few hours; blog ISR ~10-30 min; admin SSR behind auth; forms client component + server action/API route."
+    },
+    {
+      "id": "docs_05_folder_structure",
+      "label": "Folder structure (src/app/[locale], admin, api)",
+      "file_type": "concept",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_05_data_fetching",
+      "label": "Server Components + Server Actions data fetching",
+      "file_type": "concept",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Server Components fetch directly via Prisma (no internal API layer for the frontend); forms submit to Server Actions writing to Lead with no email notification; admin uses Server Actions/Components behind session checks. Keeps business logic reachable as a future mobile API surface."
+    },
+    {
+      "id": "docs_05_upload_security_checklist",
+      "label": "Upload security checklist (10 mandatory server-side checks)",
+      "file_type": "rationale",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Local disk lacks managed-object-store protections, so: auth first, type allowlist not blocklist, magic-byte verification, re-encode images via jimp, max file size, random filenames, store/serve with no execute permission, rate limit, malware scan if feasible, log every upload. Applies uniformly \u2014 public-facing files are the higher-risk case."
+    },
+    {
+      "id": "docs_05_local_disk_media_storage",
+      "label": "Local-disk media storage (persistent Docker volume)",
+      "file_type": "rationale",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Named volume mounted at /app/uploads or files are lost on every rebuild; nginx serving statically is recommended; back up the volume with Postgres. Paths are plain strings so a later S3/R2/MinIO migration needs no schema change."
+    },
+    {
+      "id": "docs_05_performance_targets",
+      "label": "Performance targets (Lighthouse \u2265 90 mobile, lazy Aparat embeds)",
+      "file_type": "concept",
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Mobile-first testing at ~360-414px; self-hosted Vazirmatn via next/font/local; Aparat embeds lazy-loaded because the current WP site loads them eagerly."
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_05_rendering_strategy",
+      "target": "docs_07_performance_as_seo",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_05_data_fetching",
+      "target": "docs_06_custom_admin_decision",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "docs_05_folder_structure",
+      "target": "docs_02_sitemap_v1",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "docs/05-frontend-architecture.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "upload_security_checklist",
+      "label": "Upload security checklist enforced across every upload",
+      "nodes": [
+        "docs_00_non_negotiable_constraints",
+        "readme_upload_security_checklist",
+        "readme_jimp_reencoding",
+        "docs_05_upload_security_checklist",
+        "docs_06_admin_ui_pattern",
+        "docs_05_local_disk_media_storage"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "docs/05-frontend-architecture.md"
+    }
+  ]
+}

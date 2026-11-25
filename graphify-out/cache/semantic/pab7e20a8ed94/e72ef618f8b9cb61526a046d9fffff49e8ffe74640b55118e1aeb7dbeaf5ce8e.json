@@ -1,0 +1,171 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_pishcup_icon_brand_icon",
+      "label": "Pishcup Brand Icon",
+      "file_type": "image",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishcup_icon_trophy_cup",
+      "label": "Gold Trophy Cup",
+      "file_type": "image",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishcup_icon_circuit_traces",
+      "label": "Circuit Board Traces Motif",
+      "file_type": "image",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishcup_icon_trophy_handles",
+      "label": "Trophy Side Handles",
+      "file_type": "image",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishcup_icon_pedestal",
+      "label": "Trophy Pedestal / Base",
+      "file_type": "image",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishcup_icon_circular_badge",
+      "label": "Dark Navy Circular Badge Background",
+      "file_type": "image",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_pishcup_icon_tech_achievement_symbolism",
+      "label": "Technology Achievement Symbolism",
+      "file_type": "concept",
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_pishcup_icon_brand_icon",
+      "target": "public_brand_pishcup_icon_trophy_cup",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishcup_icon_brand_icon",
+      "target": "public_brand_pishcup_icon_circuit_traces",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishcup_icon_brand_icon",
+      "target": "public_brand_pishcup_icon_trophy_handles",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishcup_icon_brand_icon",
+      "target": "public_brand_pishcup_icon_pedestal",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishcup_icon_brand_icon",
+      "target": "public_brand_pishcup_icon_circular_badge",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishcup_icon_trophy_cup",
+      "target": "public_brand_pishcup_icon_circuit_traces",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_pishcup_icon_tech_achievement_symbolism",
+      "target": "public_brand_pishcup_icon_brand_icon",
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "public/brand/pishcup-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "public_brand_pishcup_icon_trophy_components",
+      "label": "Visual Components Forming the Brand Icon",
+      "nodes": [
+        "public_brand_pishcup_icon_trophy_cup",
+        "public_brand_pishcup_icon_circuit_traces",
+        "public_brand_pishcup_icon_trophy_handles",
+        "public_brand_pishcup_icon_pedestal",
+        "public_brand_pishcup_icon_circular_badge"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/pishcup-icon.png"
+    }
+  ],
+  "partial": true
+}

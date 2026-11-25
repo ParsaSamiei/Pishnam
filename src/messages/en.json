@@ -179,7 +179,8 @@
       "description": "Reach the Pishnam team by phone, visit us, or follow us online.",
       "address": "Address",
       "postalCode": "Postal code",
-      "phone": "Phone"
+      "phone": "Phone",
+      "generalPhone": "General phone"
     }
   },
   "gallery": {

@@ -69,9 +69,13 @@ One admin section per content type from the schema:
 - **Feedback** (انتقادات و پیشنهادات from the public `/contact-us` page): name optional, message
   required. Listed at `/admin/feedback` with unread/read status; not mixed into Leads because
   there is no phone/email to follow up on.
-- **Contact details** (singleton, not a list): phone numbers (any number of them), email, FA/EN
-  address, postal code, and a Google Maps embed. Edited at `/admin/contact`; shown on the public
-  `/contact-us` page. Paste either the Maps “Embed a map” iframe or the embed URL itself.
+- **Contact details**: one settings row for general phone numbers, email, footer tagline and social
+  links, plus an add/remove list of addresses. Each address has FA/EN text, a postal code, its own
+  phone numbers and a Google Maps embed. Branch numbers can be added, edited or removed inside
+  that branch's address block and stay separate from the general phone list. Edited at
+  `/admin/contact`; shown on the public `/contact-us` page, in
+  the footer and in the floating contact widget. Paste either the Maps “Embed a map” iframe or the
+  embed URL itself.
 - **Homepage stats** (singleton): boys enrolled, girls enrolled, and achievements counts for the
   hero count-up strip. Edited at `/admin/homepage-stats`. Manual marketing numbers — not live
   database counts. Until saved once, the public strip stays hidden.

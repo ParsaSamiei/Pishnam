@@ -1,0 +1,70 @@
+{
+  "nodes": [
+    {
+      "id": "public_brand_google_maps_google_maps_pin_icon",
+      "label": "Google Maps Pin Icon (SVG brand logo)",
+      "file_type": "image",
+      "source_file": "public/brand/google-maps.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_google_maps_google_brand_color_palette",
+      "label": "Google brand color palette used in the Maps pin",
+      "file_type": "concept",
+      "source_file": "public/brand/google-maps.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "public_brand_google_maps_map_pin_marker_shape",
+      "label": "Map pin / location marker silhouette",
+      "file_type": "concept",
+      "source_file": "public/brand/google-maps.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "public_brand_google_maps_google_maps_pin_icon",
+      "target": "public_brand_google_maps_google_brand_color_palette",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/google-maps.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_google_maps_google_maps_pin_icon",
+      "target": "public_brand_google_maps_map_pin_marker_shape",
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "public/brand/google-maps.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "public_brand_google_maps_google_brand_color_palette",
+      "target": "public_brand_google_maps_map_pin_marker_shape",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.65,
+      "source_file": "public/brand/google-maps.svg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": []
+}

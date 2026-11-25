@@ -191,7 +191,7 @@ For a shell on the box instead, `docker compose exec postgres psql -U pishnam` n
 ### CI/CD (`.github/workflows/`)
 
 - **`ci.yml`** -- every PR and push to `main`: install, `prisma validate`, migrate a throwaway
-  test DB, lint, format check, typecheck, unit/component tests, build.
+  test DB, lint, format check, mocked transfer-helper tests, typecheck, unit/component tests, build.
 
   No E2E step. `@playwright/test` is installed and `npm run test:e2e` exists, but the suite
   itself has not been written -- there is no `playwright.config.ts` and no specs, so the command
@@ -199,15 +199,27 @@ For a shell on the box instead, `docker compose exec postgres psql -U pishnam` n
   comment at the bottom of `ci.yml` lists what restoring it takes.
 
 - **`deploy.yml`** -- on push to `main` (or manual dispatch): builds the web image (and the
-  `migrator` image, only when its inputs actually changed), `docker save`s them, streams them to
-  the server over SSH, retags to `:current`, and rolls the stack at `/opt/pishnam`. Finishes by
+  `migrator` image, only when its inputs actually changed), prepares compressed `docker save`
+  archives, transfers them over SSH with rsync progress/resume, verifies the loaded image IDs,
+  retags to `:current`, and rolls the stack at `/opt/pishnam`. Finishes by
   polling `/robots.txt` through the published port and failing the job if the stack never answers.
+
+  `infra/ship-image.sh` skips identical images already loaded on the server. Uploads use a
+  120-second inactivity timeout and retain partial files under `/opt/pishnam/.deploy-images/`
+  for retry; a rerun of the same image tag can reuse those bytes instead of starting over.
+  Archive preparation is bounded to 10 minutes and server-local `docker load` to 15 minutes;
+  the overall job allows 90 minutes for slow links. Successfully verified images have only
+  their own transfer archives removed. The migration-before-web release gate is unchanged.
+  Tests use fake Docker/SSH/rsync commands and never contact production.
+  These changes require a new workflow commit/deployment; rerunning an older failed Actions
+  run uses that run's original workflow. Uploads from the old streaming method cannot be resumed.
 
   Required Actions secrets: `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`.
   Optional Actions _variables_: `UMAMI_SCRIPT_URL`, `UMAMI_WEBSITE_ID`.
 
 `/opt/pishnam/.env` is managed by hand on the server and deliberately not synced by CI — it holds
-the real secrets. Only `docker-compose.yml` and `infra/nginx.conf` are copied up on each deploy.
+the real secrets. Only `docker-compose.yml` and `infra/nginx.conf` are synced as repo configuration,
+alongside the transferred image archives.
 
 ### Build-time vs runtime config
 

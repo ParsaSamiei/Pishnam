@@ -1,6 +1,6 @@
 name: Deploy
 
-# Build on GitHub, ship the finished image to the server over SSH.
+# Build on GitHub, resumably ship compressed images to the server over SSH.
 #
 # Why not `docker compose pull` on the server (what this workflow used to do)?
 # ghcr.io is heavily filtered from that host -- measured 1 of 5 TLS handshakes
@@ -14,8 +14,8 @@ name: Deploy
 # during a build would take the neighbours down with it.
 #
 # So: build in Actions (fast, unfiltered, no load on the box), `docker save`
-# the result, stream it over SSH, `docker load` on the far end. Outbound SSH to
-# the server is reliable, unlike ghcr.io.
+# the result into a compressed archive, rsync it over SSH, then `docker load`
+# the server-local file. Partial uploads survive slow links and failed runs.
 
 on:
   push:
@@ -39,7 +39,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
 
     steps:
       - uses: actions/checkout@v4
@@ -52,26 +52,30 @@ jobs:
       # (more importantly) re-transferring it on the vast majority of deploys.
       - name: Compute image tags
         id: tags
+        shell: bash
         run: |
           echo "web=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-          migrator_hash=$(cat package-lock.json infra/Dockerfile prisma/schema.prisma prisma/seed.ts $(find prisma/migrations -type f | sort) | sha256sum | cut -c1-16)
+          migrator_hash=$(cat package.json package-lock.json infra/Dockerfile prisma/schema.prisma prisma/seed.ts $(find prisma/migrations -type f | sort) | sha256sum | cut -c1-16)
           echo "migrator=${migrator_hash}" >> "$GITHUB_OUTPUT"
           echo "Migrator inputs hash: ${migrator_hash}"
 
       - name: Configure SSH
+        shell: bash
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -T 15 -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
           cat >> ~/.ssh/config <<EOF
           Host target
             HostName ${{ secrets.SSH_HOST }}
             User ${{ secrets.SSH_USER }}
             IdentityFile ~/.ssh/id_deploy
             IdentitiesOnly yes
+            BatchMode yes
+            ConnectTimeout 15
             ServerAliveInterval 30
-            ServerAliveCountMax 10
+            ServerAliveCountMax 3
           EOF
           ssh target 'echo "SSH OK on $(hostname)"'
 
@@ -94,8 +98,11 @@ jobs:
       # --- migrator image (only when its inputs changed) ------------------
       - name: Check whether migrator image is already on the server
         id: migrator_check
+        shell: bash
         run: |
-          if ssh target "docker image inspect pishnam-migrator:${{ steps.tags.outputs.migrator }} >/dev/null 2>&1"; then
+          # An SSH error must fail, not masquerade as a missing image.
+          remote_state=$(ssh target "if docker image inspect pishnam-migrator:${{ steps.tags.outputs.migrator }} >/dev/null 2>&1; then echo present; else echo missing; fi")
+          if [ "$remote_state" = "present" ]; then
             echo "needed=false" >> "$GITHUB_OUTPUT"
             echo "Migrator image already present on server, skipping build and transfer."
           else
@@ -116,32 +123,18 @@ jobs:
           cache-to: type=gha,scope=migrator,mode=max
 
       # --- transfer -------------------------------------------------------
-      # `docker load` detects the gzip stream itself. Retried because the link
-      # to this host is not dependable and a dropped transfer is cheap to
-      # repeat -- `docker load` is idempotent.
+      # rsync is already installed on the server. Install it on the disposable
+      # runner only if a future ubuntu-latest image does not include it.
       - name: Ship images to server
+        shell: bash
         run: |
-          ship() {
-            local image="$1"
-            local attempt
-            for attempt in 1 2 3; do
-              echo "::group::Transfer ${image} (attempt ${attempt})"
-              if docker save "$image" | gzip -1 | ssh target 'docker load'; then
-                echo "::endgroup::"
-                echo "Transferred ${image}"
-                return 0
-              fi
-              echo "::endgroup::"
-              echo "Attempt ${attempt} for ${image} failed."
-              sleep 15
-            done
-            echo "Giving up on ${image} after 3 attempts."
-            return 1
-          }
-
-          ship "pishnam-web:${{ steps.tags.outputs.web }}"
+          if ! command -v rsync >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y rsync
+          fi
+          bash infra/ship-image.sh "pishnam-web:${{ steps.tags.outputs.web }}"
           if [ "${{ steps.migrator_check.outputs.needed }}" = "true" ]; then
-            ship "pishnam-migrator:${{ steps.tags.outputs.migrator }}"
+            bash infra/ship-image.sh "pishnam-migrator:${{ steps.tags.outputs.migrator }}"
           fi
 
       # Compose and the container nginx config are the only repo files the

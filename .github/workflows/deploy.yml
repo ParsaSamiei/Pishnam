@@ -65,7 +65,23 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -T 15 -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+          # Key exchange is occasionally reset on this link. Keep normal host
+          # verification, and only append a successfully scanned host key.
+          host_keys=$(mktemp)
+          for attempt in 1 2 3 4 5; do
+            if ssh-keyscan -T 15 -H "${{ secrets.SSH_HOST }}" > "$host_keys" 2>/dev/null && [ -s "$host_keys" ]; then
+              cat "$host_keys" >> ~/.ssh/known_hosts
+              rm -f "$host_keys"
+              break
+            fi
+            if [ "$attempt" = 5 ]; then
+              rm -f "$host_keys"
+              echo "::error::Could not read the SSH host key after 5 attempts."
+              exit 1
+            fi
+            echo "::warning::SSH host-key scan failed (attempt ${attempt}/5); retrying."
+            sleep 5
+          done
           cat >> ~/.ssh/config <<EOF
           Host target
             HostName ${{ secrets.SSH_HOST }}
@@ -74,10 +90,13 @@ jobs:
             IdentitiesOnly yes
             BatchMode yes
             ConnectTimeout 15
+            ControlMaster auto
+            ControlPath ~/.ssh/ctl-%C
+            ControlPersist 15m
             ServerAliveInterval 30
             ServerAliveCountMax 3
           EOF
-          ssh target 'echo "SSH OK on $(hostname)"'
+          bash infra/ssh-read.sh target 'echo "SSH OK on $(hostname)"'
 
       # --- web image ------------------------------------------------------
       - name: Build web image
@@ -100,14 +119,18 @@ jobs:
         id: migrator_check
         shell: bash
         run: |
-          # An SSH error must fail, not masquerade as a missing image.
-          remote_state=$(ssh target "if docker image inspect pishnam-migrator:${{ steps.tags.outputs.migrator }} >/dev/null 2>&1; then echo present; else echo missing; fi")
-          if [ "$remote_state" = "present" ]; then
+          # Retry read-only transport failures; failed SSH/Docker checks must
+          # fail this step. Successful empty output alone means image missing.
+          remote_id=$(bash infra/ssh-read.sh target "docker image ls --quiet --no-trunc pishnam-migrator:${{ steps.tags.outputs.migrator }}")
+          if [[ "$remote_id" =~ ^sha256:[0-9a-f]{64}$ ]]; then
             echo "needed=false" >> "$GITHUB_OUTPUT"
             echo "Migrator image already present on server, skipping build and transfer."
-          else
+          elif [ -z "$remote_id" ]; then
             echo "needed=true" >> "$GITHUB_OUTPUT"
             echo "Migrator image missing on server, will build and ship."
+          else
+            echo "::error::Unexpected remote image-check response; refusing to assume a cache hit or miss."
+            exit 1
           fi
 
       - name: Build migrator image

@@ -30,10 +30,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # No domain yet, so the public URL is the bare IP. This is baked into the
-  # image at build time (NEXT_PUBLIC_*, see infra/Dockerfile) -- when the real
-  # domain lands, change it here and redeploy; an .env edit is not enough.
-  SITE_URL: http://194.180.11.200
+  # Baked into the image at build time (NEXT_PUBLIC_*, see infra/Dockerfile),
+  # so canonical URLs, hreflang and the sitemap all use the real HTTPS domain.
+  # Changing the server's .env would not affect this -- a rebuild is required.
+  SITE_URL: https://pishnam.com
   DEPLOY_DIR: /opt/pishnam
 
 jobs:

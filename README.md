@@ -70,7 +70,10 @@ Admin panel: `http://localhost:3000/admin/login`.
 > networks — the same filtering that makes ghcr.io pulls fail _from_ the box (see
 > `.github/workflows/deploy.yml`). It is not the server being down; retrying gets through, usually
 > within a few tries. `npm run db:tunnel` retries for you and reconnects if the tunnel drops
-> mid-session.
+> mid-session. If SSH works from your machine but Actions still fails after the deploy workflow's
+> retries, the block is upstream of sshd: check the VPS firewall for a rule dropping GitHub's
+> egress ranges, or move sshd to a port that is not shaped / route the deploy through a tunnel
+> with cleaner connectivity.
 
 > **Note on this checkout**: `npx prisma generate` needs to reach
 > `binaries.prisma.sh` to download its query-engine binary. If you're behind a
@@ -210,11 +213,16 @@ For a shell on the box instead, `docker compose exec postgres psql -U pishnam` n
   Archive preparation is bounded to 10 minutes and server-local `docker load` to 15 minutes;
   the overall job allows 90 minutes for slow links. Successfully verified images have only
   their own transfer archives removed. The migration-before-web release gate is unchanged.
-  Read-only checks use `infra/ssh-read.sh`: connection resets/timeouts retry up to five times,
-  with backoff and a 30-second per-attempt limit. Only successful probe output is used; SSH or
-  Docker failures cannot become a missing-image result. Release/migration commands are not
-  blindly re-executed after a connection failure, and host-key verification stays enabled.
-  The runner reuses its authenticated SSH connection between steps to reduce new handshakes.
+  `infra/ssh-connect.sh` establishes one authenticated, multiplexed SSH connection with up to 20
+  attempts before anything else runs; every later ssh/scp/rsync call reuses it, with a preflight
+  reconnect before the release and verify steps. This is load-bearing: TCP 22 to this VPS accepts,
+  but a large share of SSH handshakes stall or are reset from GitHub's network, so opening a fresh
+  connection for every command made the flaky link almost certain to fail somewhere in the deploy.
+  Stale master sockets are discarded between attempts and IPv4 is forced to avoid unreachable AAAA
+  records. Read-only checks use `infra/ssh-read.sh`: resets/timeouts retry up to ten times, with
+  backoff and a 30-second per-attempt limit. Only successful probe output is used; SSH or Docker
+  failures cannot become a missing-image result. Release/migration commands are not blindly
+  re-executed after a connection failure, and host-key verification stays enabled.
   Tests use fake Docker/SSH/rsync commands and never contact production.
   These changes require a new workflow commit/deployment; rerunning an older failed Actions
   run uses that run's original workflow. Uploads from the old streaming method cannot be resumed.

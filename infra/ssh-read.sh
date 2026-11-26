@@ -10,7 +10,7 @@ if (($# == 0)); then
   exit 1
 fi
 
-attempts="${SSH_READ_ATTEMPTS:-5}"
+attempts="${SSH_READ_ATTEMPTS:-10}"
 delay="${SSH_READ_RETRY_DELAY_SECONDS:-5}"
 read_timeout="${SSH_READ_TIMEOUT:-30s}"
 if [[ ! "$attempts" =~ ^[1-9][0-9]*$ || ! "$delay" =~ ^[0-9]+$ ]]; then
@@ -22,8 +22,8 @@ for ((attempt = 1; attempt <= attempts; attempt++)); do
   # Capture each attempt separately: partial output from a failed connection
   # must not contaminate a successful image-ID/presence check.
   if output="$(timeout --kill-after=5s "$read_timeout" \
-    ssh -n -T -o BatchMode=yes -o ConnectTimeout=15 \
-      -o ServerAliveInterval=30 -o ServerAliveCountMax=3 "$target" "$@")"; then
+    ssh -n -T -o BatchMode=yes -o ConnectTimeout=15 -o AddressFamily=inet \
+      -o ServerAliveInterval=15 -o ServerAliveCountMax=8 "$target" "$@")"; then
     printf '%s\n' "$output"
     exit 0
   else
@@ -44,5 +44,5 @@ for ((attempt = 1; attempt <= attempts; attempt++)); do
   echo "::warning::SSH read check attempt ${attempt}/${attempts} failed (exit ${status}); retrying in ${delay}s." >&2
   sleep "$delay"
   delay=$((delay * 2))
-  if ((delay > 20)); then delay=20; fi
+  if ((delay > 15)); then delay=15; fi
 done

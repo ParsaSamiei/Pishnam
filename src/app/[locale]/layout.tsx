@@ -68,10 +68,10 @@ export async function generateMetadata({
     // shared value here would be wrong for anything but "/".
     alternates: buildAlternates(""),
     icons: {
-      icon: [
-        { url: "/favicon.svg", type: "image/svg+xml" },
-        { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      ],
+      // No SVG icon: the exported one is ~388 KB of Illustrator path data and
+      // browsers request it in preference to the tiny PNG/favicon.ico. The
+      // auto-detected favicon.ico plus this 1.7 KB PNG cover the same need.
+      icon: [{ url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" }],
     },
     openGraph: {
       type: "website",

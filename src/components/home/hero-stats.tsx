@@ -48,7 +48,12 @@ function AnimatedStatValue({
   const finalLabel = `${formatStatCount(value, locale)}+`;
 
   return (
-    <span className="tabular-nums" aria-label={finalLabel}>
+    <span className="tabular-nums">
+      {/* The visible number is aria-hidden because it animates from 0, so a
+          screen reader would otherwise announce intermediate values. Put the
+          final value in real text instead of aria-label: generic spans don't
+          support aria-label (Lighthouse: prohibited ARIA attribute). */}
+      <span className="sr-only">{finalLabel}</span>
       <span aria-hidden="true">
         {formatted}
         <span className="text-pishnam-gold-500/80 ms-0.5 text-[0.65em] font-bold">+</span>

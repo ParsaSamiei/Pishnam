@@ -113,7 +113,9 @@ export function AchievementCard({
                 fill
                 className="object-contain p-2"
                 sizes="(min-width: 768px) 720px, 100vw"
-                priority
+                // Inside a closed dialog: nothing here is visible on page
+                // load, so `priority` only spent bandwidth preloading a photo
+                // the visitor may never open.
               />
             </div>
           </DialogContent>

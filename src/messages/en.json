@@ -223,6 +223,7 @@
   },
   "footer": {
     "tagline": "Progressive robotics and electronics education, from elementary school to international competitions.",
+    "branches": "Branches",
     "sections": {
       "explore": "Explore",
       "about": "About Pishnam",

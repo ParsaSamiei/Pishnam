@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ExternalLink, Heart, MapPin, Mailbox, Phone } from "lucide-react";
-import { AddressMapLinks } from "@/components/contact/address-map-links";
-import { BranchPhoneNumbers } from "@/components/contact/branch-phone-numbers";
+import { ExternalLink, Heart, Phone } from "lucide-react";
+import { FooterBranches } from "@/components/contact/footer-branches";
 import { SocialChannelIcon } from "@/components/contact/social-channel-icon";
 import { APP_VERSION } from "@/lib/app-version";
 import { getContactSettings } from "@/lib/contact-settings";
@@ -88,38 +87,11 @@ export async function SiteFooter() {
             <span className="text-base font-bold">{t("brand.name")}</span>
           </div>
           <p className="text-pishnam-off-white/70 mt-3 max-w-sm text-sm">{tagline}</p>
-          {addresses.map((address) => (
-            <div key={address.id} role="group" aria-label={address.name} className="mt-3 max-w-sm">
-              {!address.address ? (
-                <p className="text-pishnam-off-white/80 text-xs font-semibold">{address.name}</p>
-              ) : null}
-              {address.address ? (
-                <>
-                  <p className="text-pishnam-off-white/80 text-xs font-semibold">{address.name}</p>
-                  <AddressMapLinks
-                    address={address.address}
-                    className="mt-1"
-                    addressClassName="text-pishnam-off-white/60 text-sm leading-snug"
-                    icon={
-                      <MapPin className="mt-0.5 size-3.5 shrink-0 opacity-70" aria-hidden="true" />
-                    }
-                  />
-                </>
-              ) : null}
-              {address.postalCode ? (
-                <p className="text-pishnam-off-white/60 mt-2 flex items-center gap-1.5 text-sm">
-                  <Mailbox className="size-3.5 shrink-0 opacity-70" aria-hidden="true" />
-                  <span>
-                    {isFa ? "کد پستی: " : "Postal code: "}
-                    <span dir="ltr">
-                      {isFa ? toPersianDigits(address.postalCode) : address.postalCode}
-                    </span>
-                  </span>
-                </p>
-              ) : null}
-              <BranchPhoneNumbers phones={address.phones} isFa={isFa} compact />
-            </div>
-          ))}
+          <FooterBranches
+            addresses={addresses}
+            isFa={isFa}
+            label={`${t("footer.branches")} (${new Intl.NumberFormat(isFa ? "fa-IR" : "en-US").format(addresses.length)})`}
+          />
           {phones.length > 0 ? (
             <div className="mt-3 max-w-sm">
               <p className="text-pishnam-off-white/80 text-xs font-semibold">

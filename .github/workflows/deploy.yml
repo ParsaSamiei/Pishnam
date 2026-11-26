@@ -67,19 +67,20 @@ jobs:
           chmod 600 ~/.ssh/id_deploy
           # Key exchange is occasionally reset on this link. Keep normal host
           # verification, and only append a successfully scanned host key.
+          # -4 avoids stalling on an unreachable AAAA record, if SSH_HOST is a name.
           host_keys=$(mktemp)
-          for attempt in 1 2 3 4 5; do
-            if ssh-keyscan -T 15 -H "${{ secrets.SSH_HOST }}" > "$host_keys" 2>/dev/null && [ -s "$host_keys" ]; then
+          for attempt in {1..12}; do
+            if ssh-keyscan -4 -T 10 -H "${{ secrets.SSH_HOST }}" > "$host_keys" 2>/dev/null && [ -s "$host_keys" ]; then
               cat "$host_keys" >> ~/.ssh/known_hosts
               rm -f "$host_keys"
               break
             fi
-            if [ "$attempt" = 5 ]; then
+            if [ "$attempt" = 12 ]; then
               rm -f "$host_keys"
-              echo "::error::Could not read the SSH host key after 5 attempts."
+              echo "::error::Could not read the SSH host key after 12 attempts."
               exit 1
             fi
-            echo "::warning::SSH host-key scan failed (attempt ${attempt}/5); retrying."
+            echo "::warning::SSH host-key scan failed (attempt ${attempt}/12); retrying."
             sleep 5
           done
           cat >> ~/.ssh/config <<EOF
@@ -89,13 +90,21 @@ jobs:
             IdentityFile ~/.ssh/id_deploy
             IdentitiesOnly yes
             BatchMode yes
+            AddressFamily inet
             ConnectTimeout 15
+            # One handshake for the whole job. Every ssh/scp/rsync call below
+            # uses the target alias and reuses this connection.
             ControlMaster auto
             ControlPath ~/.ssh/ctl-%C
-            ControlPersist 15m
-            ServerAliveInterval 30
-            ServerAliveCountMax 3
+            ControlPersist 2h
+            TCPKeepAlive yes
+            ServerAliveInterval 15
+            ServerAliveCountMax 8
           EOF
+          # The link to this VPS drops most SSH handshakes on the first try, so
+          # establish (and verify) a single reusable connection with a generous
+          # retry budget instead of letting each later step dial on its own.
+          bash infra/ssh-connect.sh target
           bash infra/ssh-read.sh target 'echo "SSH OK on $(hostname)"'
 
       # --- web image ------------------------------------------------------
@@ -164,10 +173,23 @@ jobs:
       # server needs. `.env` is deliberately NOT synced -- it holds the real
       # secrets and is managed on the box by hand.
       - name: Sync compose and nginx config
+        shell: bash
         run: |
-          ssh target "mkdir -p ${{ env.DEPLOY_DIR }}/infra"
-          scp docker-compose.yml target:${{ env.DEPLOY_DIR }}/docker-compose.yml
-          scp infra/nginx.conf target:${{ env.DEPLOY_DIR }}/infra/nginx.conf
+          # These ride the master connection, so no new handshake is needed.
+          bash infra/ssh-read.sh target "mkdir -p ${{ env.DEPLOY_DIR }}/infra"
+          for attempt in {1..3}; do
+            if scp docker-compose.yml target:${{ env.DEPLOY_DIR }}/docker-compose.yml &&
+               scp infra/nginx.conf target:${{ env.DEPLOY_DIR }}/infra/nginx.conf; then
+              break
+            fi
+            if [ "$attempt" = 3 ]; then
+              echo "::error::Could not sync compose/nginx config after 3 attempts."
+              exit 1
+            fi
+            echo "::warning::Config sync failed (attempt ${attempt}/3); reconnecting."
+            bash infra/ssh-connect.sh target
+            sleep 5
+          done
 
       # --- release --------------------------------------------------------
       # Retagging to :current is what actually promotes the build -- compose
@@ -175,6 +197,10 @@ jobs:
       # rollback targets (see "Rolling back" in README.md).
       - name: Release
         run: |
+          # A long transfer can outlive the master's TCP session. Reconnect if
+          # needed (a no-op when healthy) before running anything stateful, so
+          # a dropped connection can never be mistaken for a failed release.
+          bash infra/ssh-connect.sh target
           ssh target bash -euo pipefail <<EOF
             cd ${{ env.DEPLOY_DIR }}
             docker tag pishnam-web:${{ steps.tags.outputs.web }} pishnam-web:current
@@ -191,6 +217,7 @@ jobs:
 
       - name: Verify deployment
         run: |
+          bash infra/ssh-connect.sh target
           ssh target bash -euo pipefail <<'EOF'
             cd /opt/pishnam
             echo "--- migrator output ---"

@@ -7,7 +7,7 @@ image="${1:?Usage: bash infra/ship-image.sh IMAGE}"
 target="${SSH_TARGET:-target}"
 deploy_dir="${DEPLOY_DIR:?Set DEPLOY_DIR}"
 runner_temp="${RUNNER_TEMP:?Set RUNNER_TEMP}"
-attempts="${SHIP_ATTEMPTS:-3}"
+attempts="${SHIP_ATTEMPTS:-5}"
 retry_delay="${SHIP_RETRY_DELAY_SECONDS:-15}"
 idle_timeout="${SHIP_IDLE_TIMEOUT_SECONDS:-120}"
 prepare_timeout="${SHIP_PREPARE_TIMEOUT:-10m}"
@@ -19,8 +19,8 @@ if [[ ! "$attempts" =~ ^[1-9][0-9]*$ ]]; then
   exit 1
 fi
 
-ssh_args=(-T -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=3)
-rsync_ssh="ssh -T -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=3"
+ssh_args=(-T -o BatchMode=yes -o ConnectTimeout=15 -o AddressFamily=inet -o ServerAliveInterval=15 -o ServerAliveCountMax=8)
+rsync_ssh="ssh -T -o BatchMode=yes -o ConnectTimeout=15 -o AddressFamily=inet -o ServerAliveInterval=15 -o ServerAliveCountMax=8"
 
 shell_quote() {
   printf '%q' "$1"

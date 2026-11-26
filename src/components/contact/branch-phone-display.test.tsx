@@ -76,6 +76,14 @@ function renderContact(node: ReactNode, locale: "en" | "fa" = "en") {
   );
 }
 
+function footerBranchTriggers() {
+  return within(screen.getByRole("group", { name: /^footer\.branches/ })).getAllByRole("button");
+}
+
+function openFooterBranches() {
+  footerBranchTriggers().forEach((trigger) => fireEvent.click(trigger));
+}
+
 function expectBranchPhones() {
   const first = within(screen.getByRole("group", { name: "Address 1" }));
   const second = within(screen.getByRole("group", { name: "Address 2" }));
@@ -105,8 +113,10 @@ describe("branch phone display", () => {
       settings.addresses[1]!.nameEn = locale === "fa" ? "Shiraz branch" : null;
       settings.addresses[1]!.mapEmbedUrl = "https://www.google.com/maps/embed?pb=second";
 
-      if (view === "footer") renderContact(await SiteFooter(), locale);
-      else if (view === "page")
+      if (view === "footer") {
+        renderContact(await SiteFooter(), locale);
+        openFooterBranches();
+      } else if (view === "page")
         renderContact(await ContactPage({ params: Promise.resolve({ locale }) }), locale);
       else {
         renderContact(
@@ -159,8 +169,29 @@ describe("branch phone display", () => {
     expect(screen.queryByTitle("Address 1 — Location on map")).toBeNull();
   });
 
+  it("keeps each footer branch collapsed until opened, independently", async () => {
+    renderContact(await SiteFooter());
+    const [first, second] = footerBranchTriggers();
+    expect(first!.getAttribute("aria-expanded")).toBe("false");
+    expect(second!.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("group", { name: "Address 1" })).toBeNull();
+
+    fireEvent.click(first!);
+
+    expect(first!.getAttribute("aria-expanded")).toBe("true");
+    expect(second!.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.getByRole("group", { name: "Address 1" })).toBeTruthy();
+    expect(screen.queryByRole("group", { name: "Address 2" })).toBeNull();
+
+    fireEvent.click(second!);
+
+    expect(second!.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByRole("group", { name: "Address 2" })).toBeTruthy();
+  });
+
   it("shows branch numbers under their own addresses in the footer and preserves the tagline", async () => {
     renderContact(await SiteFooter());
+    openFooterBranches();
     expectBranchPhones();
     expect(screen.getByText("General phone")).toBeTruthy();
     expect(screen.getByText("Custom footer tagline")).toBeTruthy();
